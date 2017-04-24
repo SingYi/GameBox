@@ -131,7 +131,7 @@
     
     newController.view.transform = CGAffineTransformMakeTranslation(floatx, 0);
     
-    [self transitionFromViewController:oldController toViewController:newController duration:0.3 options:UIViewAnimationOptionPreferredFramesPerSecond30 animations:^{
+    [self transitionFromViewController:oldController toViewController:newController duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
       
         newController.view.transform = CGAffineTransformIdentity;
         oldController.view.transform = CGAffineTransformMakeTranslation(-floatx, 0);
