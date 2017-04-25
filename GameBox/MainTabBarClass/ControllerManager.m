@@ -12,7 +12,7 @@ static ControllerManager *manager = nil;
 
 @implementation ControllerManager
 
-//单例
+/**< 单利 */
 + (ControllerManager *)shareManager {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -22,6 +22,7 @@ static ControllerManager *manager = nil;
 }
 
 #pragma mark - getter 
+/**< 根视图 */
 - (UINavigationController *)rootViewController {
     if (!_rootViewController) {
         _rootViewController = [[UINavigationController alloc]initWithRootViewController:self.tabbarController];
@@ -30,6 +31,7 @@ static ControllerManager *manager = nil;
     return _rootViewController;
 }
 
+/**< tabbar控制器 */
 - (MainTabBarController *)tabbarController {
     if (!_tabbarController) {
         _tabbarController = [[MainTabBarController alloc]init];
@@ -38,7 +40,7 @@ static ControllerManager *manager = nil;
 }
 
 
-//我的礼包视图
+/**< 我的礼包视图 */
 - (MyGiftBagViewController *)myGiftBagView {
     if (!_myGiftBagView) {
         _myGiftBagView = [MyGiftBagViewController new];

@@ -43,7 +43,9 @@
 
 
 - (IBAction)downLoad:(UIButton *)sender {
-    NSLog(@"下载第%ld个游戏",(long)self.selectIndex);
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectCellRowAtIndexpath:)]) {
+        [self.delegate didSelectCellRowAtIndexpath:self.selectIndex];
+    }
 }
 
 

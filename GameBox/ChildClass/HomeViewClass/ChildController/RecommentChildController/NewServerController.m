@@ -81,6 +81,10 @@
     
 }
 
+- (void)didselectRowAtIndexpath:(NSIndexPath *)index {
+    
+}
+
 
 #pragma mark - headerDelegate
 - (void)didSelectBtnAtIndexPath:(NSInteger)idx {

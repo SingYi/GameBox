@@ -9,6 +9,7 @@
 #import "GiftBagModel.h"
 #import "RequestUtils.h"
 #import <CommonCrypto/CommonDigest.h>
+#import <UIKit/UIKit.h>
 
 #define MAIN_URL @"http://www.9344.net"
 #define LISTURL @"http://www.9344.net/api-packs-get_list"
@@ -227,6 +228,21 @@
     
     [RequestUtils postRequestWithURL:BAGROLLING params:@{@"channel_id":channelID} completion:completion];
     
+}
+
+
++ (void)showAlertWithMessage:(NSString *)message dismiss:(void(^)(void))dismiss {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertController animated:YES completion:nil];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [alertController dismissViewControllerAnimated:YES completion:^{
+            if (dismiss) {
+                dismiss();
+            }
+        }];
+    });
 }
 
 

@@ -16,14 +16,13 @@
 @interface ControllerManager : NSObject
 
 
-//根视图
+/**< 根视图 */
 @property (nonatomic, strong) UINavigationController *rootViewController;
 
 //tabbar
 @property (nonatomic, strong) MainTabBarController *tabbarController;
 
-
-//我的礼包视图
+/**< 我的礼包 */
 @property (nonatomic, strong) MyGiftBagViewController *myGiftBagView;
 
 /**游戏详情页面*/
@@ -32,6 +31,7 @@
 /**网页视图*/
 @property (nonatomic, strong) WebViewController *webController;
 
+/**< manager的单利 */
 + (ControllerManager *)shareManager;
 
 

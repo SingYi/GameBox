@@ -78,6 +78,7 @@
 		B5E2C81B1E9E2E6F002CEC61 /* SettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C81A1E9E2E6F002CEC61 /* SettingView.m */; };
 		B5E2C81E1E9E2E96002CEC61 /* AboutUsView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C81D1E9E2E96002CEC61 /* AboutUsView.m */; };
 		B5E2C8241E9F2A27002CEC61 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8231E9F2A27002CEC61 /* HomeViewController.m */; };
+		B5F10BDE1EAF272C0061B43E /* RGiftBagController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5F10BDD1EAF272C0061B43E /* RGiftBagController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -211,6 +212,8 @@
 		B5E2C81D1E9E2E96002CEC61 /* AboutUsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutUsView.m; sourceTree = "<group>"; };
 		B5E2C8221E9F2A27002CEC61 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		B5E2C8231E9F2A27002CEC61 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		B5F10BDC1EAF272C0061B43E /* RGiftBagController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RGiftBagController.h; sourceTree = "<group>"; };
+		B5F10BDD1EAF272C0061B43E /* RGiftBagController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RGiftBagController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -406,6 +409,8 @@
 				B554162F1EA89A7B0043A36D /* NewServerController.m */,
 				B554162C1EA89A7B0043A36D /* ActivityController.h */,
 				B554162D1EA89A7B0043A36D /* ActivityController.m */,
+				B5F10BDC1EAF272C0061B43E /* RGiftBagController.h */,
+				B5F10BDD1EAF272C0061B43E /* RGiftBagController.m */,
 				B55416301EA89A7B0043A36D /* StrategyController.h */,
 				B55416311EA89A7B0043A36D /* StrategyController.m */,
 			);
@@ -809,6 +814,7 @@
 				B5C5D4DC1EA0C484008A46DE /* DetialTableHeader.m in Sources */,
 				B5E2C8091E9E0AB2002CEC61 /* RegisterViewController.m in Sources */,
 				B5420F741EA6005A0068AEE1 /* GiftBagModel.m in Sources */,
+				B5F10BDE1EAF272C0061B43E /* RGiftBagController.m in Sources */,
 				B554161E1EA853F40043A36D /* GameOpenServerViewController.m in Sources */,
 				B5E2C8071E9E0AB2002CEC61 /* LoginViewController.m in Sources */,
 				B55416271EA88E900043A36D /* HomeHotGameController.m in Sources */,

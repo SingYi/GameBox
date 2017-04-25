@@ -53,8 +53,6 @@
 #pragma mark - setter
 - (void)setRollingArray:(NSArray *)rollingArray {
     
-    //停止计时器
-//    [self stopTimer];
     
     _rollingArray = [rollingArray mutableCopy];
     [_rollingArray insertObject:rollingArray[_rollingArray.count - 1] atIndex:0];
@@ -64,10 +62,6 @@
     [self.collectionView reloadData];
     [self.collectionView setContentOffset:CGPointMake(kSCREEN_WIDTH, 0)];
     
-    //设置计时器
-//    [self startTimer];
-    
-//    NSLog(@"启动定时器");
     
     self.pageControl.numberOfPages = rollingArray.count;
     
@@ -80,7 +74,7 @@
     CGFloat offset = self.collectionView.contentOffset.x;
     
     [self.collectionView setContentOffset:CGPointMake(offset + kSCREEN_WIDTH, 0) animated:YES];
-//    NSLog(@"%lf",offset);
+
 }
 
 // 开启定时器

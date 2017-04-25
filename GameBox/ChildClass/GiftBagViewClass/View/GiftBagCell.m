@@ -12,8 +12,6 @@
 
 
 
-
-
 @end
 
 @implementation GiftBagCell
@@ -25,7 +23,14 @@
     self.packProgress.layer.masksToBounds = YES;
     [self.packProgress addSubview:self.progressView];
     [self.packProgress addSubview:self.titlelabel];
+    [self.getBtn addTarget:self action:@selector(clickGetBtn) forControlEvents:(UIControlEventTouchUpInside)];
     
+}
+
+- (void)clickGetBtn {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(getGiftBagCellAtIndex:)]) {
+        [self.delegate getGiftBagCellAtIndex:_currentIdx];
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -39,6 +44,7 @@
     if (!_titlelabel) {
         _titlelabel = [[UILabel alloc] initWithFrame:self.packProgress.bounds];
         _titlelabel.textAlignment = NSTextAlignmentCenter;
+        _titlelabel.font = [UIFont systemFontOfSize:14];
     }
     return _titlelabel;
 }

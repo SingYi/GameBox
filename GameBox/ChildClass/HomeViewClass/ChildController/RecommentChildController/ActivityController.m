@@ -12,6 +12,9 @@
 
 #import "ControllerManager.h"
 
+#import <UIImageView+WebCache.h>
+#import <MJRefresh.h>
+
 #define CELLIDE @"ActivityCell"
 
 @interface ActivityController ()
@@ -24,36 +27,57 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    [self initDataSource];
+//    [self initDataSource];
     [self initUserInterface];
 }
 
 - (void)initDataSource {
-    [ActivityModel postWithType:ActivityList Page:@"1" ChannelId:@"185" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        _showArray = content[@"data"][@"list"];
-        [self.tableView reloadData];
-//        NSLog(@"%@",content);
-    }];
+    [self.tableView.mj_header beginRefreshing];
 }
 
 - (void)initUserInterface {
     self.navigationItem.title = @"活动";
-//    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CELLIDE];
     
+    //注册cell
     [self.tableView registerNib:[UINib nibWithNibName:@"ActivityCell" bundle:nil] forCellReuseIdentifier:CELLIDE];
+    
+    //设置刷新
+    //下拉刷新
+    MJRefreshNormalHeader *customRef = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
+    
+    [customRef setTitle:@"数据已加载" forState:MJRefreshStateIdle];
+    [customRef setTitle:@"刷新数据" forState:MJRefreshStatePulling];
+    [customRef setTitle:@"正在刷新" forState:MJRefreshStateRefreshing];
+    [customRef setTitle:@"即将刷新" forState:MJRefreshStateWillRefresh];
+    [customRef setTitle:@"所有数据加载完毕，没有更多的数据了" forState:MJRefreshStateNoMoreData];
+    
+    
+    //自动更改透明度
+    self.tableView.mj_header = customRef;
+    self.tableView.mj_header.automaticallyChangeAlpha = YES;
+    
+    //下拉加载
+    self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+
+    self.tableView.tableFooterView = [UIView new];
+    [self initDataSource];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+#pragma mark - refresh
+/**< 刷新数据 */
+- (void)refreshData {
+    [ActivityModel postWithType:ActivityList Page:@"1" ChannelId:@"185" Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        _showArray = content[@"data"][@"list"];
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView reloadData];
+    }];
 }
+
+/**< 加载数据 */
+- (void)loadMoreData {
+    
+}
+
 
 #pragma mark - Table view data source
 
@@ -73,6 +97,8 @@
     cell.activityTime.text = _showArray[indexPath.row][@"release_time"];
     cell.activitySummary.text = _showArray[indexPath.row][@"abstract"];
     
+    [cell.activityLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] placeholderImage:nil];
+    
     return cell;
 }
 
@@ -83,7 +109,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [ControllerManager shareManager].webController.webURL = _showArray[indexPath.row][@"info_url"];
-    NSLog(@"%@",_showArray[indexPath.row][@"info_url"]);
+    
+    self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:[ControllerManager shareManager].webController animated:YES];
 }
 

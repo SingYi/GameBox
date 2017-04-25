@@ -122,7 +122,8 @@
     switch (indexPath.row) {
         case 0:
         {
-            [self.navigationController pushViewController:[AppManagerView new] animated:YES];
+//            [self.navigationController pushViewController:[AppManagerView new] animated:YES];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-services://?action=download-manifest&url=https%3A%2F%2Fdownload.fir.im%2Fapps%2F58c78f29ca87a86ab50000ee%2Finstall%3Fdownload_token%3Dfb0f242cdf75f7007568a491321dac4d%26release_id%3D58c78faeca87a86b4c00012e"]];
         }
             break;
         case 1:

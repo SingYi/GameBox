@@ -24,7 +24,7 @@
 #define ClassifyCellIDE @"ClassifyCell"
 
 
-@interface HomeViewController ()<HomeHeaderDelegate>
+@interface HomeViewController ()<HomeHeaderDelegate,UISearchResultsUpdating,UISearchControllerDelegate>
 
 
 /**头部选择标签视图*/
@@ -55,6 +55,9 @@
 /**向左滑*/
 @property (nonatomic, assign) BOOL isLeft;
 
+/**< 搜索 */
+@property (nonatomic, strong) UISearchController  *searchController;
+
 
 @end
 
@@ -76,12 +79,14 @@
     _isAnimation = NO;
     _isLeft = NO;
     
+    //请求数据总借口
     [RequestUtils postRequestWithURL:URLMAP params:nil completion:^(NSDictionary *content, BOOL success) {
-//        NSLog(@"%@",content);
+        
     }];
 
 }
 
+/**< 初始化用户界面 */
 - (void)initUserInterface {
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
@@ -89,6 +94,8 @@
     [self.view addSubview:self.selectView];
     self.automaticallyAdjustsScrollViewInsets = NO;
     
+    
+    //页面添加左右轻扫手势
     UISwipeGestureRecognizer *leftSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(respondsToSwipe:)];
     leftSwipe.direction = UISwipeGestureRecognizerDirectionLeft;
     UISwipeGestureRecognizer *rightSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(respondsToSwipe:)];
@@ -96,28 +103,59 @@
     
     [self.view addGestureRecognizer:rightSwipe];
     [self.view addGestureRecognizer:leftSwipe];
+#warning 导航栏的两个按钮,还没有做处理
+    self.navigationItem.titleView = self.searchController.searchBar;
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"应用" style:0 target:self action:nil];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"应用" style:0 target:self action:nil];
+    
+    
 }
 
+/**< 手势的响应事件 */
 - (void)respondsToSwipe:(UISwipeGestureRecognizer *)sender {
-    
     
     if (sender.direction == UISwipeGestureRecognizerDirectionLeft && _currentIndex >= 0 && _currentIndex < 3) {
         
-        [self didselectViewAtIndexPath:_currentIndex + 1];
-        self.selectView.index = _currentIndex;
+        [self didselectViewAtIndexPath:_currentIndex + 1];  //切换视图
+        self.selectView.index = _currentIndex;  //切换标签
 
     } else if (sender.direction == UISwipeGestureRecognizerDirectionRight && _currentIndex > 0 && _currentIndex <= 3) {
 
-        [self didselectViewAtIndexPath:_currentIndex - 1];
-        self.selectView.index = _currentIndex;
+        [self didselectViewAtIndexPath:_currentIndex - 1];  //切换视图
+        self.selectView.index = _currentIndex;  //切换标签
     }
+}
+
+#warning 还未处理,搜索的代理事件,
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+    
+}
+
+- (void)willPresentSearchController:(UISearchController *)searchController {
+    self.navigationItem.leftBarButtonItem = nil;
+    self.navigationItem.rightBarButtonItem = nil;
+    
+}
+
+- (void)didPresentSearchController:(UISearchController *)searchController {
+    
+}
+
+- (void)willDismissSearchController:(UISearchController *)searchController {
+    
+}
+
+- (void)didDismissSearchController:(UISearchController *)searchController {
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"应用" style:0 target:self action:nil];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"应用" style:0 target:self action:nil];
+    
 }
 
 
 #pragma mark - method
 //  切换各个标签内容
-- (void)replaceController:(UIViewController *)oldController newController:(UIViewController *)newController
-{
+- (void)replaceController:(UIViewController *)oldController newController:(UIViewController *)newController {
+    
     [self addChildViewController:newController];
     
     self.isAnimation = YES;
@@ -155,6 +193,8 @@
     }];
 }
 
+
+/**< 选择了哪个页面 */
 - (void)didselectViewAtIndexPath:(NSInteger)idx {
     if (idx > _currentIndex) {
         _isLeft = YES;
@@ -197,10 +237,12 @@
 
 
 #pragma mark - headerDelegate
+/**< 标签按钮的响应 */
 - (void)didSelectBtnAtIndexPath:(NSInteger)idx {
     [self didselectViewAtIndexPath:idx];
 }
 
+/**< 是否在动画中(如果在动画中则不能切换视图) */
 - (void)setIsAnimation:(BOOL)isAnimation {
     _isAnimation = isAnimation;
     self.selectView.isAnimation = isAnimation;
@@ -260,6 +302,26 @@
         
     }
     return _hClassifyController;
+}
+
+/**< 搜索控制器 */
+- (UISearchController *)searchController {
+    if (!_searchController) {
+        _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+        
+        _searchController.searchResultsUpdater = self;
+        _searchController.delegate = self;
+        
+        _searchController.dimsBackgroundDuringPresentation = false;
+        [_searchController.searchBar sizeToFit];
+        _searchController.searchBar.backgroundColor = [UIColor clearColor];
+        _searchController.searchBar.placeholder= @"请输入关键字搜索";
+        _searchController.searchBar.barStyle = UISearchBarStyleDefault;
+        
+        //隐藏导航栏
+        _searchController.hidesNavigationBarDuringPresentation = NO;
+    }
+    return _searchController;
 }
 
 - (void)didReceiveMemoryWarning {

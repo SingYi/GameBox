@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+
+@protocol SearchCellDelelgate <NSObject>
+
+- (void)didSelectCellRowAtIndexpath:(NSInteger)idx;
+
+@end
+
 @interface SearchCell : UITableViewCell
 
 @property (nonatomic, assign) NSInteger selectIndex;
@@ -15,5 +22,7 @@
 @property (nonatomic, strong) NSDictionary *dict;
 
 @property (weak, nonatomic) IBOutlet UIImageView *gameLogo;
+
+@property (nonatomic, weak) id<SearchCellDelelgate> delegate;
 
 @end

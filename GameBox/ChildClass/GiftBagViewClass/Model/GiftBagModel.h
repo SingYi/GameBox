@@ -72,9 +72,11 @@
                           Page:(NSString * _Nullable)page
                     Completion:(void(^_Nonnull)( NSDictionary  * _Nullable content,BOOL success))completion;
 
-
+/**< 获取礼包首页滚动轮播图 */
 + (void)postGiftRollingViewWithChannelID:(NSString *_Nonnull)channelID
                               Completion:(void(^_Nonnull)( NSDictionary  * _Nullable content,BOOL success))completion;
 
+/**< 提示信息 */
++ (void)showAlertWithMessage:(NSString *_Nullable)message dismiss:(void(^_Nullable)(void))dismiss;
 
 @end

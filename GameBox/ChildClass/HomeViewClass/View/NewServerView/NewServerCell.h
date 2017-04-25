@@ -10,8 +10,10 @@
 
 @protocol NewServerCellDelegate <NSObject>
 
+/**< 点击了对应的行数 */
 - (void)didselectRowAtIndexpath:(NSIndexPath *)index;
 
+/**< 刷新对应视图 */
 - (void)newServerCellRefreshDataWithIndex:(NSInteger)index;
 
 @end

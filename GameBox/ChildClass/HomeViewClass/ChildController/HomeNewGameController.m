@@ -9,6 +9,8 @@
 #import "HomeNewGameController.h"
 #import "SearchCell.h"
 #import "GameModel.h"
+#import "ControllerManager.h"
+
 #import "MJRefresh.h"
 #import <UIImageView+WebCache.h>
 
@@ -18,13 +20,20 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, strong) NSArray *showArray;
+/**< 数据 */
+@property (nonatomic, strong) NSMutableArray *dataArray;
 
 /**时间数组*/
 @property (nonatomic, strong) NSArray<NSString *> * timeArray;
 
 /**游戏数组*/
 @property (nonatomic, strong) NSMutableDictionary * dataDictionary;
+
+/**< 当前页数 */
+@property (nonatomic, assign) NSInteger currentPage;
+
+/**< 是否加载了全部 */
+@property (nonatomic, assign) BOOL isAll;
 
 @end
 
@@ -42,23 +51,49 @@
 }
 
 - (void)initUserInterface {
-    
+    _isAll = NO;
     [self.view addSubview:self.tableView];
 }
 
 #pragma markr - method
 - (void)refreshData {
     [GameModel postNewGameListWithChannelID:@"185" Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        
         if (success) {
-            [self clearUpData:content[@"data"]];
+            _dataArray = [NSMutableArray arrayWithArray:content[@"data"]];
+            [self clearUpData:_dataArray];
+            _isAll = NO;
+            _currentPage = 1;
+            [self.tableView.mj_footer endRefreshing];
         }
         [self.tableView.mj_header endRefreshing];
         [self.tableView reloadData];
     }];
 }
 
+- (void)loadMoreData {
+    if (_isAll) {
+        [self.tableView.mj_footer endRefreshingWithNoMoreData];
+    } else {
+        _currentPage++;
+        [GameModel postNewGameListWithChannelID:@"185" Page:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            if (success) {
+                NSArray *array = content[@"data"];
+                if (array.count == 0) {
+                    _isAll = YES;
+                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+                } else {
+                    [_dataArray addObjectsFromArray:array];
+                    [self clearUpData:_dataArray];
+                    [self.tableView reloadData];
+                    [self.tableView.mj_footer endRefreshing];
+                }
+            }
+        }];
+    }
+}
+
 - (NSMutableArray *)clearUpData:(NSArray *)array {
+    
     NSMutableSet *set = [NSMutableSet set];
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     
@@ -86,7 +121,7 @@
     NSArray *sortDesc = @[[[NSSortDescriptor alloc] initWithKey:nil ascending:NO]];
     self.timeArray = [set sortedArrayUsingDescriptors:sortDesc];
     
-    
+
     self.dataDictionary = [dict mutableCopy];
 //    NSLog(@"%@",dict);
     
@@ -138,6 +173,14 @@
     return label;
 }
 
+/**< cell的点击事件 */
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    self.parentViewController.hidesBottomBarWhenPushed = YES;
+    [ControllerManager shareManager].detailView.gameID = self.dataDictionary[self.timeArray[indexPath.section]][indexPath.row][@"id"];
+    [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
+    self.parentViewController.hidesBottomBarWhenPushed = NO;
+}
 
 #pragma mark - getter
 - (UITableView *)tableView {
@@ -174,8 +217,9 @@
         
         _tableView.mj_header = customRef;
         
-        //进入刷新状态
-//        [_tableView.mj_header beginRefreshing];
+        //上拉刷新
+        _tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+
         
         _tableView.tableFooterView = [UIView new];
         

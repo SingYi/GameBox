@@ -20,9 +20,6 @@
 
 @interface GiftBagViewController ()<UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate>
 
-//头部视图
-
-
 /**列表*/
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -81,7 +78,6 @@
 - (void)refreshData {
     [GiftBagModel postGiftBagListWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         _showArray = content[@"data"][@"list"];
-//        NSLog(@"%@",content);
         [self.tableView.mj_header endRefreshing];
         [self.tableView reloadData];
     }];

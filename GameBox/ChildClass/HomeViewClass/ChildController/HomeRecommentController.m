@@ -14,7 +14,7 @@
 
 #import "NewServerController.h"
 #import "ActivityController.h"
-#import "GiftBagViewController.h"
+#import "RGiftBagController.h"
 #import "StrategyController.h"
 
 #import "RequestUtils.h"
@@ -24,12 +24,12 @@
 #define CELLIDENTIFIER @"SearchCell"
 #define BTNTAG 1300
 
-@interface HomeRecommentController ()<UITableViewDelegate,UITableViewDataSource>
+@interface HomeRecommentController ()<UITableViewDelegate,UITableViewDataSource,SearchCellDelelgate>
 
 /**推荐游戏列表*/
 @property (nonatomic, strong) UITableView *tableView;
 /**推荐游戏数据*/
-@property (nonatomic, strong) NSArray *showArray;
+@property (nonatomic, strong) NSMutableArray *showArray;
 /**轮播图*/
 @property (nonatomic, strong) RecommentTableHeader *rollHeader;
 /**头部视图*/
@@ -40,20 +40,24 @@
 /**活动*/
 @property (nonatomic, strong) ActivityController *rActivityController;
 /**礼包*/
-@property (nonatomic, strong) GiftBagViewController *rGiftBagController;
+@property (nonatomic, strong) RGiftBagController *rGiftBagController;
 /**攻略*/
 @property (nonatomic, strong) StrategyController *rStrategyController;
 
 /**子视图数组*/
 @property (nonatomic, strong) NSArray<UIViewController *> * childControllers;
 
+/**< 总共的页数 */
+@property (nonatomic, assign) NSInteger totalPage;
 
-
+/**< 当前页数 */
+@property (nonatomic, assign) NSInteger currentPage;
 
 @end
 
 @implementation HomeRecommentController
 
+#pragma mark - life cycle
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.rollHeader startTimer];
@@ -71,16 +75,12 @@
     [self initUserInterface];
 }
 
+
 - (void)initDataSource {
-
-    [GameModel postRecommendGameListWithChannelID:@"185" Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        _showArray = content[@"data"][@"gamelist"];
-        self.rollHeader.rollingArray = content[@"data"][@"banner"];
-        [self.tableView reloadData];
-//        NSLog(@"首页 ============================ %@",content[@"data"][@"banner"]);
-    }];
-
     _childControllers = @[self.rNewServerController,self.rActivityController,self.rGiftBagController,self.rStrategyController];
+    
+    //刷新视图
+    [self.tableView.mj_header beginRefreshing];
 }
 
 - (void)initUserInterface {
@@ -90,9 +90,10 @@
 }
 
 #pragma mkar - method
+/**< 根据页面数和渠道请求数据 */
 - (void)getDataWithChannelID:(NSString *)channelID Page:(NSString *)page {
     [GameModel postRecommendGameListWithChannelID:channelID Page:page Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        _showArray = content[@"data"][@"gamelist"];
+        _showArray = [content[@"data"][@"gamelist"] mutableCopy];
         self.rollHeader.rollingArray = content[@"data"][@"banner"];
         [self.tableView reloadData];
     }];
@@ -101,12 +102,26 @@
 /**刷新数据*/
 - (void)refreshData {
     [GameModel postRecommendGameListWithChannelID:@"185" Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        _showArray = content[@"data"][@"gamelist"];
+        _showArray = [content[@"data"][@"gamelist"] mutableCopy];
         self.rollHeader.rollingArray = content[@"data"][@"banner"];
         [self.tableView.mj_header endRefreshing];
+        _currentPage = 1;
         [self.tableView reloadData];
     }];
-//    NSLog(@"刷新数据");
+}
+
+/**< 加载更多数据 */
+- (void)loadMoreData {
+    _currentPage++;
+    [GameModel postRecommendGameListWithChannelID:@"185" Page:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        NSLog(@"%@",content);
+        _showArray = [content[@"data"][@"gamelist"] mutableCopy];
+        [self.tableView.mj_footer endRefreshing];
+
+        [self.tableView reloadData];
+    }];
+    
+//    [self.tableView.mj_footer endRefreshing];
 }
 
 
@@ -128,6 +143,9 @@
     [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.9344.net%@",_showArray[indexPath.row][@"logo"]]]];
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
     
+    cell.selectIndex = indexPath.row;
+    
+    cell.delegate = self;
     
     return cell;
 }
@@ -143,16 +161,26 @@
     
     self.parentViewController.hidesBottomBarWhenPushed = YES;
     [ControllerManager shareManager].detailView.gameID = self.showArray[indexPath.row][@"id"];
+    
     [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
     self.parentViewController.hidesBottomBarWhenPushed = NO;
 }
 
 #pragma mark - respondsToBtn
+/**< 按钮的响应事件(推送出子视图) */
 - (void)respondsToBtn:(UIButton *)sender {
     self.parentViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:self.childControllers[sender.tag - BTNTAG] animated:YES];
     self.parentViewController.hidesBottomBarWhenPushed = NO;
 }
+
+#pragma mark - cellDelegete
+/**< cell的代理  */
+- (void)didSelectCellRowAtIndexpath:(NSInteger)idx {
+    NSLog(@"下载第 %ld 游戏",idx);
+
+}
+
 
 #pragma mark - getter
 - (UITableView *)tableView {
@@ -166,10 +194,6 @@
         _tableView.delegate = self;
         
         _tableView.backgroundColor = [UIColor whiteColor];
-        
-        
-        //        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-//        _tableView.backgroundColor = [UIColor blackColor];
         
         _tableView.showsVerticalScrollIndicator = NO;
         _tableView.showsHorizontalScrollIndicator = NO;
@@ -192,16 +216,8 @@
         
         _tableView.mj_header = customRef;
         
-        //进入刷新状态
-        [_tableView.mj_header beginRefreshing];
-
         //上拉刷新
-//        self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreTopic)];
-//        //结束头部刷新
-//        [weakSelf.tableView.mj_header endRefreshing];
-//        
-//        //结束尾部刷新
-//        [weakSelf.tableView.mj_footer endRefreshing];
+        _tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
         
         _tableView.tableHeaderView = self.headerView;
         _tableView.tableFooterView = [UIView new];
@@ -210,7 +226,7 @@
 }
 
 
-
+/**< 滚动轮播图 */
 - (RecommentTableHeader *)rollHeader {
     if (!_rollHeader) {
         _rollHeader = [[RecommentTableHeader alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_WIDTH * 0.4)];
@@ -218,11 +234,15 @@
     return _rollHeader;
 }
 
+/**< tableview的头部视图 */
 - (UIView *)headerView {
     if (!_headerView) {
         _headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_WIDTH * 0.618)];
+        
+        //添加滚动轮播图
         [_headerView addSubview:self.rollHeader];
 
+        //添加子视图跳转的按钮
         NSArray *array = @[@"开服表",@"活动",@"礼包",@"攻略"];
         NSArray *imageArray = @[@"homePage_newServer",@"homePage_rankList",@"homePage_giftBag",@"homePage_strategy"];
         [array enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -251,13 +271,12 @@
             
             [_headerView addSubview:button];
             
-            
         }];
-        
     }
     return _headerView;
 }
 
+/**< 新服视图 */
 - (NewServerController *)rNewServerController {
     if (!_rNewServerController) {
         _rNewServerController = [NewServerController new];
@@ -265,6 +284,7 @@
     return _rNewServerController;
 }
 
+/**< 活动视图 */
 - (ActivityController *)rActivityController {
     if (!_rActivityController) {
         _rActivityController = [ActivityController new];
@@ -272,13 +292,16 @@
     return _rActivityController;
 }
 
-- (GiftBagViewController *)rGiftBagController {
+
+/**< 礼包视图 */
+- (RGiftBagController *)rGiftBagController {
     if (!_rGiftBagController) {
-        _rGiftBagController = [GiftBagViewController new];
+        _rGiftBagController = [RGiftBagController new];
     }
     return _rGiftBagController;
 }
 
+/**< 攻略视图 */
 - (StrategyController *)rStrategyController {
     if (!_rStrategyController) {
         _rStrategyController = [StrategyController new];
@@ -289,21 +312,21 @@
 
 
 
-
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
+
+
+
+
+
+
+
+
+
+

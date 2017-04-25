@@ -63,11 +63,11 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ulk-UY-iY8">
-                                <rect key="frame" x="90" y="60" width="150" height="18"/>
+                                <rect key="frame" x="90" y="66" width="150" height="12"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="Ltm-ez-q2O"/>
-                                    <constraint firstAttribute="height" constant="18" id="rwU-zY-CV3"/>
+                                    <constraint firstAttribute="height" constant="12" id="rwU-zY-CV3"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -97,6 +97,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="getBtn" destination="KGk-sm-ve0" id="dsO-B4-9Zq"/>
                 <outlet property="name" destination="Rzy-7h-OMa" id="EGX-v7-fnp"/>
                 <outlet property="packCounts" destination="Q77-tt-poy" id="CcC-SU-cAw"/>
                 <outlet property="packLogo" destination="BFY-hn-SfA" id="T0L-WU-jFg"/>
