@@ -65,7 +65,12 @@ static ControllerManager *manager = nil;
     return _webController;
 }
 
-
+- (LoginViewController *)loginViewController {
+    if (!_loginViewController) {
+        _loginViewController = [[LoginViewController alloc] init];
+    }
+    return _loginViewController;
+}
 
 
 

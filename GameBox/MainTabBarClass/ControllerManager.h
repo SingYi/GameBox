@@ -12,6 +12,7 @@
 #import "MyGiftBagViewController.h"
 #import "DetailViewController.h"
 #import "WebViewController.h"
+#import "LoginViewController.h"
 
 @interface ControllerManager : NSObject
 
@@ -30,6 +31,9 @@
 
 /**网页视图*/
 @property (nonatomic, strong) WebViewController *webController;
+
+/**< 登录页面 */
+@property (nonatomic, strong) LoginViewController *loginViewController;
 
 /**< manager的单利 */
 + (ControllerManager *)shareManager;

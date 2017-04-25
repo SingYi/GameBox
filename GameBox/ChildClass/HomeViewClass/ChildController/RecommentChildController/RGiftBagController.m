@@ -10,6 +10,7 @@
 #import "GiftBagCell.h"
 #import "GiftBagModel.h"
 #import "RecommentTableHeader.h" //滚动轮播图
+#import "ControllerManager.h"
 
 #import <UIImageView+WebCache.h>
 #import <MJRefresh.h>
@@ -62,7 +63,7 @@
     self.navigationItem.title = @"礼包";
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
-    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"我的礼包" style:(UIBarButtonItemStyleDone) target:self action:@selector(clickMineGiftBag)];
 }
 
 #pragma mark - method
@@ -72,6 +73,18 @@
         [self.tableView.mj_header endRefreshing];
         [self.tableView reloadData];
     }];
+}
+
+- (void)clickMineGiftBag {
+    NSString *uid = GETUSERID;
+    
+    if (uid) {
+        [self.navigationController pushViewController:[ControllerManager shareManager].myGiftBagView animated:YES];
+    } else {
+        self.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:[ControllerManager shareManager].loginViewController animated:YES];
+    }
+    
 }
 
 #pragma mark - cell delelgate
