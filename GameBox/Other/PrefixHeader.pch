@@ -17,6 +17,6 @@
 #define IMAGEURL @"http://www.9344.net%@"
 
 #define GETUSERID [[NSUserDefaults standardUserDefaults] objectForKey:@"USERID"]
-
+#define SAVEUSERID(uid) [[NSUserDefaults standardUserDefaults] setObject:uid forKey:@"USERID"];
 
 #endif /* PrefixHeader_pch */

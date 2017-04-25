@@ -17,7 +17,7 @@
 
 #define CELLIDE @"GiftBagCell"
 
-@interface RGiftBagController ()<UITableViewDataSource,UITableViewDelegate,GiftBagCellDelegate>
+@interface RGiftBagController ()<UITableViewDataSource,UITableViewDelegate,GiftBagCellDelegate,UISearchControllerDelegate,UISearchResultsUpdating,UISearchBarDelegate>
 
 /**< 列表 */
 @property (nonatomic, strong) UITableView *tableView;
@@ -27,6 +27,10 @@
 
 /**< 滚动轮播图 */
 @property (nonatomic, strong) RecommentTableHeader *rollingHeader;
+
+@property (nonatomic, strong) UISearchController *searchController;
+
+@property (nonatomic, strong) UISearchBar *searchBar;
 
 @end
 
@@ -66,6 +70,54 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"我的礼包" style:(UIBarButtonItemStyleDone) target:self action:@selector(clickMineGiftBag)];
 }
 
+#pragma mark - search updateing 
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+    
+}
+
+#pragma mark - searchBar delegate
+//即将开始搜索
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
+    //开始搜索
+    searchBar.showsCancelButton = YES;
+    return YES;
+}
+
+//开始搜索
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    NSLog(@"searchBarTextDidBeginEditing");
+}
+
+//即将结束搜索
+- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
+    NSLog(@"searchBarShouldEndEditing");
+    return YES;
+}
+
+//结束搜索
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+    NSLog(@"searchBarTextDidEndEditing");
+}
+
+//文本已经改变
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    NSLog(@"textDidChange");
+}
+
+//文编即将改变
+- (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    NSLog(@"shouldChangeTextInRange");
+    return YES;
+}
+
+//点击cancel按钮的响应事件
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    //点击cancel按钮
+    [searchBar resignFirstResponder];
+    searchBar.showsCancelButton = NO;
+    
+}
+
 #pragma mark - method
 - (void)refreshData {
     [GiftBagModel postGiftBagListWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
@@ -91,10 +143,7 @@
 /**< 点击cell的领取按钮的响应事件 */
 - (void)getGiftBagCellAtIndex:(NSInteger)idx {
     NSString *str = _showArray[idx][@"card"];
-    
-    
 
-    
     if ([str isKindOfClass:[NSNull class]]) {
         
         NSString *uid = [[NSUserDefaults standardUserDefaults] objectForKey:@"USERID"];
@@ -186,6 +235,14 @@
     return 80;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return kSCREEN_WIDTH * 0.4;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return self.searchBar;
+}
+
 #pragma mark - getter
 - (UITableView *)tableView {
     if (!_tableView) {
@@ -211,8 +268,10 @@
         _tableView.mj_header.automaticallyChangeAlpha = YES;
         _tableView.mj_header = customRef;
         
-        _tableView.tableHeaderView = self.rollingHeader;
+//        _tableView.tableHeaderView = self.searchController.searchBar;
         _tableView.tableFooterView = [UIView new];
+        
+    
 
     }
     return _tableView;
@@ -223,6 +282,35 @@
         _rollingHeader = [[RecommentTableHeader alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_WIDTH * 0.4)];
     }
     return _rollingHeader;
+}
+
+/**< 搜索控制器 */
+- (UISearchController *)searchController {
+    if (!_searchController) {
+        _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+        
+        _searchController.searchResultsUpdater = self;
+        _searchController.delegate = self;
+        
+        _searchController.dimsBackgroundDuringPresentation = false;
+        [_searchController.searchBar sizeToFit];
+        _searchController.searchBar.backgroundColor = [UIColor clearColor];
+        _searchController.searchBar.placeholder= @"搜索礼包";
+        _searchController.searchBar.barStyle = UISearchBarStyleDefault;
+        
+        //隐藏导航栏
+//        _searchController.hidesNavigationBarDuringPresentation = NO;
+    }
+    return _searchController;
+}
+
+- (UISearchBar *)searchBar {
+    if (!_searchBar) {
+        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 20)];
+        
+        _searchBar.delegate = self;
+    }
+    return _searchBar;
 }
 
 
