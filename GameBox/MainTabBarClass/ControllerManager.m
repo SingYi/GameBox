@@ -72,7 +72,12 @@ static ControllerManager *manager = nil;
     return _loginViewController;
 }
 
-
+- (SearchResultViewController *)searchResultController {
+    if (!_searchResultController) {
+        _searchResultController = [[SearchResultViewController alloc] init];
+    }
+    return _searchResultController;
+}
 
 
 

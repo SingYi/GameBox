@@ -13,9 +13,12 @@
 #import "DetailViewController.h"
 #import "WebViewController.h"
 #import "LoginViewController.h"
+#import "SearchResultViewController.h"
 
 @interface ControllerManager : NSObject
 
+/**< manager的单利 */
++ (ControllerManager *)shareManager;
 
 /**< 根视图 */
 @property (nonatomic, strong) UINavigationController *rootViewController;
@@ -35,8 +38,10 @@
 /**< 登录页面 */
 @property (nonatomic, strong) LoginViewController *loginViewController;
 
-/**< manager的单利 */
-+ (ControllerManager *)shareManager;
+/**< 搜索结果页面 */
+@property (nonatomic, strong) SearchResultViewController *searchResultController;
+
+
 
 
 @end

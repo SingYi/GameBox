@@ -213,8 +213,6 @@
         //自动更改透明度
         _tableView.mj_header.automaticallyChangeAlpha = YES;
         
-        [customRef.lastUpdatedTimeLabel setText:@"0"];
-        
         _tableView.mj_header = customRef;
         
         //上拉刷新

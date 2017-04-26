@@ -19,7 +19,7 @@
  * uid:账号id,未登录为0,(必选)
  * deiviceID:设备id(必填写)
  */
-+ (void)getGiftBagListWithUid:(NSString *_Nonnull)uid
++ (void)postGiftBagListWithUid:(NSString *_Nonnull)uid
                     ChannelID:(NSString *_Nullable)channelID
                     Search:(NSString *_Nullable)search
                      Order:(NSString *_Nullable)order

@@ -22,8 +22,6 @@
 /**< 列表 */
 @property (nonatomic, strong) UITableView *tableView;
 
-/**< 显示数据的数组 */
-@property (nonatomic, strong) NSMutableArray * showArray;
 
 /**< 滚动轮播图 */
 @property (nonatomic, strong) RecommentTableHeader *rollingHeader;
@@ -31,6 +29,23 @@
 @property (nonatomic, strong) UISearchController *searchController;
 
 @property (nonatomic, strong) UISearchBar *searchBar;
+
+/**< 我的礼包按钮 */
+@property (nonatomic, strong) UIBarButtonItem *mineGiftBagBtn;
+
+/**< 取消搜索按钮 */
+@property (nonatomic, strong) UIBarButtonItem *cancelSearchBtn;
+
+/**< 是否搜索 */
+@property (nonatomic, assign) BOOL isSearch;
+
+
+/**< 显示数据的数组 */
+@property (nonatomic, strong) NSMutableArray * showArray;
+/**< 数据请求数组 */
+@property (nonatomic, strong) NSArray *dataArray;
+/**< 搜索结果数组 */
+@property (nonatomic, strong) NSArray *resultArray;
 
 @end
 
@@ -43,13 +58,20 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    [self clickCancelSearchBtn];
     [self.rollingHeader stopTimer];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [self clickCancelSearchBtn];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initDataSource];
     [self initUserInterface];
+    _isSearch = NO;
 }
 
 - (void)initDataSource {
@@ -67,7 +89,7 @@
     self.navigationItem.title = @"礼包";
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"我的礼包" style:(UIBarButtonItemStyleDone) target:self action:@selector(clickMineGiftBag)];
+    self.navigationItem.rightBarButtonItem = self.mineGiftBagBtn;
 }
 
 #pragma mark - search updateing 
@@ -79,34 +101,37 @@
 //即将开始搜索
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     //开始搜索
-    searchBar.showsCancelButton = YES;
+//    searchBar.showsCancelButton = YES;
+    _isSearch = YES;
+    [self.tableView reloadData];
+    self.navigationItem.rightBarButtonItem = self.cancelSearchBtn;
     return YES;
 }
 
 //开始搜索
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-    NSLog(@"searchBarTextDidBeginEditing");
+//    NSLog(@"searchBarTextDidBeginEditing");
 }
 
 //即将结束搜索
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
-    NSLog(@"searchBarShouldEndEditing");
+//    NSLog(@"searchBarShouldEndEditing");
     return YES;
 }
 
 //结束搜索
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-    NSLog(@"searchBarTextDidEndEditing");
+//    NSLog(@"searchBarTextDidEndEditing");
 }
 
 //文本已经改变
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    NSLog(@"textDidChange");
+//    NSLog(@"textDidChange");
 }
 
 //文编即将改变
 - (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    NSLog(@"shouldChangeTextInRange");
+//    NSLog(@"shouldChangeTextInRange");
     return YES;
 }
 
@@ -118,10 +143,38 @@
     
 }
 
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+    
+    NSString *uid = GETUSERID;
+    if (!uid) {
+        uid = @"0";
+    }
+    
+    [GiftBagModel postGiftBagListWithUid:uid ChannelID:@"185" Search:searchBar.text Order:nil OrderType:nil Page:@"1" Andcompletion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success) {
+            _resultArray = content[@"data"][@"list"];
+            if (_resultArray.count != 0) {
+                _showArray = [_resultArray mutableCopy];
+                [self.tableView reloadData];
+            } else {
+                [GiftBagModel showAlertWithMessage:@"未查询到相关礼包" dismiss:nil];
+            }
+        } else {
+            [GiftBagModel showAlertWithMessage:@"网络不知道飞到哪里去了" dismiss:nil];
+        }
+//        NSLog(@"%@",content);
+    }];
+//    NSLog(@"search");
+}
+
 #pragma mark - method
 - (void)refreshData {
     [GiftBagModel postGiftBagListWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        _showArray = [content[@"data"][@"list"] mutableCopy];
+        _dataArray = [content[@"data"][@"list"] mutableCopy];
+        if (!_isSearch) {
+            _showArray = [_dataArray mutableCopy];
+        }
         [self.tableView.mj_header endRefreshing];
         [self.tableView reloadData];
     }];
@@ -136,7 +189,15 @@
         self.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:[ControllerManager shareManager].loginViewController animated:YES];
     }
-    
+}
+
+- (void)clickCancelSearchBtn {
+    self.searchBar.text = @"";
+    [self.searchBar resignFirstResponder];
+    self.navigationItem.rightBarButtonItem = self.mineGiftBagBtn;
+    _showArray = [_dataArray mutableCopy];
+    _isSearch = NO;
+    [self.tableView reloadData];
 }
 
 #pragma mark - cell delelgate
@@ -236,7 +297,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return kSCREEN_WIDTH * 0.4;
+    return 40;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -268,7 +329,7 @@
         _tableView.mj_header.automaticallyChangeAlpha = YES;
         _tableView.mj_header = customRef;
         
-//        _tableView.tableHeaderView = self.searchController.searchBar;
+        _tableView.tableHeaderView = self.rollingHeader;
         _tableView.tableFooterView = [UIView new];
         
     
@@ -307,11 +368,39 @@
 - (UISearchBar *)searchBar {
     if (!_searchBar) {
         _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 20)];
+//        [_searchBar sizeToFit];
+        
+        UITextField *searchField = [_searchBar valueForKey:@"searchField"];
+        if (searchField) {
+            [searchField setBackgroundColor:[UIColor whiteColor]];
+            searchField.layer.cornerRadius = 14.0f;
+//            searchField.layer.borderColor = [UIColor colorWithRed:247/255.0 green:75/255.0 blue:31/255.0 alpha:1].CGColor;
+//            searchField.layer.borderWidth = 1;
+            searchField.layer.masksToBounds = YES;
+        }
+        _searchBar.placeholder = @"搜索礼包";
         
         _searchBar.delegate = self;
     }
     return _searchBar;
 }
+
+- (UIBarButtonItem *)mineGiftBagBtn {
+    if (!_mineGiftBagBtn) {
+        _mineGiftBagBtn = [[UIBarButtonItem alloc] initWithTitle:@"我的礼包" style:(UIBarButtonItemStyleDone) target:self action:@selector(clickMineGiftBag)];
+    }
+    return _mineGiftBagBtn;
+}
+
+- (UIBarButtonItem *)cancelSearchBtn {
+    if (!_cancelSearchBtn) {
+        _cancelSearchBtn = [[UIBarButtonItem alloc] initWithTitle:@"取消搜索" style:(UIBarButtonItemStyleDone) target:self action:@selector(clickCancelSearchBtn)];
+    }
+    return _cancelSearchBtn;
+}
+
+
+
 
 
 @end

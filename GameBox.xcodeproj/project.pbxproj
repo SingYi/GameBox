@@ -34,6 +34,7 @@
 		B55416331EA89A7B0043A36D /* NewServerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B554162F1EA89A7B0043A36D /* NewServerController.m */; };
 		B55416341EA89A7B0043A36D /* StrategyController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416311EA89A7B0043A36D /* StrategyController.m */; };
 		B55416361EA8B12D0043A36D /* UrlMap.plist in Resources */ = {isa = PBXBuildFile; fileRef = B55416351EA8B12D0043A36D /* UrlMap.plist */; };
+		B57DB6DC1EB08E9B00A0D8A0 /* SearchResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B57DB6DB1EB08E9B00A0D8A0 /* SearchResultViewController.m */; };
 		B5824FB41EA0594400966640 /* NewServerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5824FB31EA0594400966640 /* NewServerCell.m */; };
 		B5824FB81EA05B6800966640 /* NewServerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5824FB61EA05B6800966640 /* NewServerTableViewCell.m */; };
 		B5824FB91EA05B6800966640 /* NewServerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5824FB71EA05B6800966640 /* NewServerTableViewCell.xib */; };
@@ -135,6 +136,8 @@
 		B55416301EA89A7B0043A36D /* StrategyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrategyController.h; sourceTree = "<group>"; };
 		B55416311EA89A7B0043A36D /* StrategyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StrategyController.m; sourceTree = "<group>"; };
 		B55416351EA8B12D0043A36D /* UrlMap.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = UrlMap.plist; sourceTree = "<group>"; };
+		B57DB6DA1EB08E9B00A0D8A0 /* SearchResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultViewController.h; sourceTree = "<group>"; };
+		B57DB6DB1EB08E9B00A0D8A0 /* SearchResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultViewController.m; sourceTree = "<group>"; };
 		B5824FB21EA0594400966640 /* NewServerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewServerCell.h; sourceTree = "<group>"; };
 		B5824FB31EA0594400966640 /* NewServerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewServerCell.m; sourceTree = "<group>"; };
 		B5824FB51EA05B6800966640 /* NewServerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewServerTableViewCell.h; sourceTree = "<group>"; };
@@ -274,9 +277,9 @@
 		5E8DE53D1E9BD255007E719D /* ChildClass */ = {
 			isa = PBXGroup;
 			children = (
+				5E8DE5411E9BD255007E719D /* SearchViewClass */,
 				B5C5D4B61EA09A90008A46DE /* DetailViewClass */,
 				B5E2C81F1E9F2991002CEC61 /* HomeViewClass */,
-				5E8DE5411E9BD255007E719D /* SearchViewClass */,
 				5E8DE5401E9BD255007E719D /* RankingListViewClass */,
 				5E8DE53E1E9BD255007E719D /* GiftBagViewClass */,
 				5E8DE53F1E9BD255007E719D /* MineViewClass */,
@@ -322,6 +325,8 @@
 			children = (
 				5E8DE55D1E9BD786007E719D /* SearchViewController.h */,
 				5E8DE55E1E9BD786007E719D /* SearchViewController.m */,
+				B57DB6DA1EB08E9B00A0D8A0 /* SearchResultViewController.h */,
+				B57DB6DB1EB08E9B00A0D8A0 /* SearchResultViewController.m */,
 				5E8DE56D1E9BDBD4007E719D /* Model */,
 				5E8DE56E1E9BDBDD007E719D /* View */,
 			);
@@ -830,6 +835,7 @@
 				B55416211EA88E690043A36D /* HomeRecommentController.m in Sources */,
 				5E8DE55F1E9BD786007E719D /* SearchViewController.m in Sources */,
 				B54378CD1EADD35200B25D47 /* WebViewController.m in Sources */,
+				B57DB6DC1EB08E9B00A0D8A0 /* SearchResultViewController.m in Sources */,
 				B5C5D4C11EA0AC64008A46DE /* DetailFooter.m in Sources */,
 				B5E2C8151E9E2E0C002CEC61 /* MyNewsView.m in Sources */,
 				B5824FB81EA05B6800966640 /* NewServerTableViewCell.m in Sources */,

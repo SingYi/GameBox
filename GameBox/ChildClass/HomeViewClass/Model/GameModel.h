@@ -70,6 +70,11 @@ typedef enum : NSInteger {
 + (void)postImageWithUrl:(NSString * _Nonnull)url
               Completion:(void (^ _Nullable)(NSData * _Nullable content, BOOL success))completion;
 
+
++ (void)showAlertWithMessage:(NSString *_Nullable)message dismiss:(void(^_Nullable)(void))dismiss;
+
+
+
 @end
 
 

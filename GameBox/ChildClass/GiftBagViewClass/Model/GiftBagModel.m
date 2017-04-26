@@ -29,7 +29,7 @@
  *  orderType:升降序
  *  page:页码
  */
-+ (void)getGiftBagListWithUid:(NSString *_Nonnull)uid
++ (void)postGiftBagListWithUid:(NSString *_Nonnull)uid
                     ChannelID:(NSString *_Nullable)channelID
                        Search:(NSString *_Nullable)search
                         Order:(NSString *_Nullable)order
@@ -80,7 +80,7 @@
 + (void)postGiftBagListWithPage:(NSString *)page
                      Completion:(void(^_Nonnull)( NSDictionary  * _Nullable content,BOOL success))completion {
     
-    [GiftBagModel getGiftBagListWithUid:@"0" ChannelID:@"185" Search:nil Order:nil OrderType:nil Page:page Andcompletion:^(NSDictionary * _Nullable content, BOOL success) {
+    [GiftBagModel postGiftBagListWithUid:@"0" ChannelID:@"185" Search:nil Order:nil OrderType:nil Page:page Andcompletion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success) {
             if (completion) {
                 completion(content,true);

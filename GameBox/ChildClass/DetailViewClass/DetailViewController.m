@@ -53,6 +53,15 @@
 
 @implementation DetailViewController
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.navigationItem.title = @"";
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initDataSource];
@@ -68,7 +77,6 @@
 
 - (void)initUserInterface {
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationItem.title = @"诛仙";
     self.detailHeader.btnArray = @[@"详情",@"攻略",@"礼包",@"开服"];
     [self.view addSubview:self.detailHeader];
     [self.view addSubview:self.gameDetail.view];
@@ -90,6 +98,7 @@
         if (success) {
             self.gameinfo = content[@"data"][@"gameinfo"];
             self.likes = content[@"data"][@"like"];
+            self.navigationItem.title = self.gameinfo[@"gamename"];
         }
 //        NSLog(@"game  =========================================== \n %@",content);
     }];

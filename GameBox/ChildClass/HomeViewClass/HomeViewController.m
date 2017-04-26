@@ -10,6 +10,7 @@
 #import "HomeHeader.h"
 #import "ControllerManager.h"
 
+
 #import "HomeRecommentController.h"
 #import "HomeNewGameController.h"
 #import "HomeHotGameController.h"
@@ -24,7 +25,7 @@
 #define ClassifyCellIDE @"ClassifyCell"
 
 
-@interface HomeViewController ()<HomeHeaderDelegate,UISearchResultsUpdating,UISearchControllerDelegate>
+@interface HomeViewController ()<HomeHeaderDelegate,UISearchControllerDelegate,UISearchBarDelegate>
 
 
 /**头部选择标签视图*/
@@ -57,6 +58,16 @@
 
 /**< 搜索 */
 @property (nonatomic, strong) UISearchController  *searchController;
+@property (nonatomic, strong) UISearchBar *searchBar;
+
+/**< 应用按钮(左边按钮) */
+@property (nonatomic, strong) UIBarButtonItem *downLoadBtn;
+
+/**< 消息按钮(右边按钮) */
+@property (nonatomic, strong) UIBarButtonItem *messageBtn;
+
+/**< 取消按钮(右边按钮) */
+@property (nonatomic, strong) UIBarButtonItem *cancelBtn;
 
 
 @end
@@ -64,6 +75,17 @@
 
 
 @implementation HomeViewController
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationItem.titleView = self.searchBar;
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.navigationItem.titleView = nil;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -89,10 +111,15 @@
 /**< 初始化用户界面 */
 - (void)initUserInterface {
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+//    [self.navigationController.navigationBar setTranslucent:NO];
+    self.navigationController.navigationBar.backgroundColor = [UIColor blackColor];
+
+
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     [self.view addSubview:self.selectView];
     self.automaticallyAdjustsScrollViewInsets = NO;
+    
     
     
     //页面添加左右轻扫手势
@@ -103,14 +130,18 @@
     
     [self.view addGestureRecognizer:rightSwipe];
     [self.view addGestureRecognizer:leftSwipe];
+    
 #warning 导航栏的两个按钮,还没有做处理
-    self.navigationItem.titleView = self.searchController.searchBar;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"应用" style:0 target:self action:nil];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"应用" style:0 target:self action:nil];
+
+//    self.navigationItem.titleView = self.searchController.searchBar;
+    
+    self.navigationItem.leftBarButtonItem = self.downLoadBtn;
+    self.navigationItem.rightBarButtonItem = self.messageBtn;
     
     
 }
 
+#pragma mark- responds
 /**< 手势的响应事件 */
 - (void)respondsToSwipe:(UISwipeGestureRecognizer *)sender {
     
@@ -126,29 +157,48 @@
     }
 }
 
-#warning 还未处理,搜索的代理事件,
-- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+- (void)clickDownloadBtn {
     
 }
 
+- (void)clickMessageBtn {
+    
+}
+
+- (void)clickCancelBtn {
+    
+}
+
+#warning 还未处理,搜索的代理事件,
 - (void)willPresentSearchController:(UISearchController *)searchController {
     self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = nil;
-    
+    NSLog(@"willPresentSearchController");
 }
 
 - (void)didPresentSearchController:(UISearchController *)searchController {
-    
+    NSLog(@"didPresentSearchController");
 }
 
 - (void)willDismissSearchController:(UISearchController *)searchController {
-    
+    NSLog(@"willDismissSearchController");
 }
 
 - (void)didDismissSearchController:(UISearchController *)searchController {
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"应用" style:0 target:self action:nil];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"应用" style:0 target:self action:nil];
+    NSLog(@"didDismissSearchController");
     
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+//    // 创建出搜索使用的表示图控制器
+//
+//    [self presentViewController:self.searchController animated:YES completion:^{
+//        // 当模态推出这个searchController的时候,需要把之前的searchBar隐藏,如果希望搜索的时候看不到热门搜索什么的,可以把这个页面给隐藏
+//
+//        
+//    }];
 }
 
 
@@ -307,21 +357,68 @@
 /**< 搜索控制器 */
 - (UISearchController *)searchController {
     if (!_searchController) {
-        _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+        _searchController = [[UISearchController alloc] initWithSearchResultsController:[ControllerManager shareManager].searchResultController];
         
-        _searchController.searchResultsUpdater = self;
+        _searchController.searchResultsUpdater = (id)[ControllerManager shareManager].searchResultController;
         _searchController.delegate = self;
         
-        _searchController.dimsBackgroundDuringPresentation = false;
         [_searchController.searchBar sizeToFit];
         _searchController.searchBar.backgroundColor = [UIColor clearColor];
         _searchController.searchBar.placeholder= @"请输入关键字搜索";
         _searchController.searchBar.barStyle = UISearchBarStyleDefault;
         
+//        _searchController.searchBar.backgroundColor = [UIColor blackColor];
+//        _searchController.searchBar.barStyle = UIBarStyleBlack;
+        [_searchController.searchBar setBarTintColor:[UIColor blackColor]];
+        [_searchController.searchBar setTintColor:[UIColor whiteColor]];
+        
         //隐藏导航栏
         _searchController.hidesNavigationBarDuringPresentation = NO;
+        _searchController.obscuresBackgroundDuringPresentation = NO;
+        _searchController.dimsBackgroundDuringPresentation = NO;
     }
     return _searchController;
+}
+
+- (UISearchBar *)searchBar {
+    if (!_searchBar) {
+        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 20)];
+        //        [_searchBar sizeToFit];
+        
+        UITextField *searchField = [_searchBar valueForKey:@"searchField"];
+        if (searchField) {
+            [searchField setBackgroundColor:[UIColor whiteColor]];
+            searchField.layer.cornerRadius = 14.0f;
+            searchField.layer.masksToBounds = YES;
+        }
+        
+//        _searchBar.backgroundColor = [UIColor blackColor];
+        _searchBar.placeholder = @"搜索游戏";
+        
+        _searchBar.delegate = self;
+    }
+    return _searchBar;
+}
+
+- (UIBarButtonItem *)downLoadBtn {
+    if (!_downLoadBtn) {
+        _downLoadBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"homePage_download"] style:(UIBarButtonItemStyleDone) target:self action:@selector(clickDownloadBtn)];
+    }
+    return _downLoadBtn;
+}
+
+- (UIBarButtonItem *)messageBtn {
+    if (!_messageBtn) {
+        _messageBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"homePage_message"] style:(UIBarButtonItemStyleDone) target:self action:@selector(clickMessageBtn)];
+    }
+    return _messageBtn;
+}
+
+- (UIBarButtonItem *)cancelBtn {
+    if (!_cancelBtn) {
+        _cancelBtn = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:(UIBarButtonItemStyleDone) target:self action:@selector(clickCancelBtn)];
+    }
+    return _cancelBtn;
 }
 
 - (void)didReceiveMemoryWarning {
