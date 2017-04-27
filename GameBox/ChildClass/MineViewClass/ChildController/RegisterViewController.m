@@ -7,6 +7,7 @@
 //
 
 #import "RegisterViewController.h"
+#import "MineModel.h"
 
 @interface RegisterViewController ()<UITextFieldDelegate>
 
@@ -27,6 +28,9 @@
 
 //注册按钮
 @property (nonatomic, strong) UIButton *registerBtn;
+
+/**< 发送验证码按钮 */
+@property (nonatomic, strong) UIButton *sendMessageBtn;
 
 @end
 
@@ -77,8 +81,22 @@
 }
 
 #pragma mark - responds
+/** 注册 */
 - (void)respondsToRegisterBtn {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [MineModel postRegisterWithAccount:self.userName.text PassWord:self.passWord.text PhoneNumber:self.phoneNumber.text PhoneCode:self.securityCode.text email:nil Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        NSLog(@"%@",content);
+        NSLog(@"%@",content[@"msg"]);
+    }];
+}
+
+/** 响应发送验证码按钮 */
+- (void)respondsToSendMessageBtn {
+    if (self.phoneNumber.text) {
+        [MineModel postPhoneCodeWithPhoneNumber:self.phoneNumber.text isVerify:nil Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            NSLog(@"%@",content[@"msg"]);
+        }];
+    }
+    
 }
 
 
@@ -124,6 +142,10 @@
 - (UITextField *)securityCode {
     if (!_securityCode) {
         _securityCode = [self creatTextFieldWithLeftView:nil WithRightView:nil WithPlaceholder:@"请输入验证码" WithBounds:CGRectMake(0, 0, kSCREEN_WIDTH * 0.8, 44) WithsecureTextEntry:NO];
+        
+        _securityCode.rightView = self.sendMessageBtn;
+        _securityCode.rightViewMode = UITextFieldViewModeAlways;
+        
         _securityCode.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT * 0.5);
     }
     return _securityCode;
@@ -154,6 +176,17 @@
     return _registerBtn;
 }
 
+- (UIButton *)sendMessageBtn {
+    if (!_sendMessageBtn) {
+        _sendMessageBtn = [UIButton buttonWithType:(UIButtonTypeCustom)];
+        _sendMessageBtn.backgroundColor = [UIColor orangeColor];
+        [_sendMessageBtn setTitle:@"发送验证码" forState:(UIControlStateNormal)];
+        [_sendMessageBtn addTarget:self action:@selector(respondsToSendMessageBtn) forControlEvents:(UIControlEventTouchUpInside)];
+        _sendMessageBtn.bounds = CGRectMake(0, 0, kSCREEN_WIDTH * 0.3, 44);
+    }
+    
+    return _sendMessageBtn;
+}
 
 
 

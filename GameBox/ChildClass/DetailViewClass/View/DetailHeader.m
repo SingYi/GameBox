@@ -55,6 +55,9 @@
     _selectView.btnNameArray = btnArray;
 }
 
+- (void)setIndex:(NSInteger)index {
+    self.selectView.index = index;
+}
 
 #pragma mark - getter
 - (HomeHeader *)selectView {

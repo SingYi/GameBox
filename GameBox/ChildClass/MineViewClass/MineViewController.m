@@ -10,7 +10,9 @@
 #import "LoginViewController.h"
 #import "ControllerManager.h"
 #import "MineCell.h"
+#import "MineModel.h"
 
+#import "UserModel.h"
 
 //我的页面的7个子视图
 #import "AppManagerView.h"
@@ -46,6 +48,8 @@
 /**修改密码*/
 @property (nonatomic, strong) ResetPassWordViewController *resetPassWordView;
 
+
+
 @end
 
 @implementation MineViewController
@@ -70,13 +74,17 @@
 - (void)initDataSource {
     _showArray = @[@"应用管理",@"我的礼包",@"我的消息",@"修改密码",@"我的关注",@"设置",@"关于",@"",@""];
     _imageArray = @[@"mine_yingyongguanli",@"mine_libao",@"mine_wodexiaoxi",@"mine_xiugaimima",@"mine_guanzhu",@"mine_shezhi",@"mine_guanyu"];
+
+    
 }
 
 - (void)initUserInterface {
     self.navigationController.navigationBar.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    self.navigationController.navigationBar.backgroundColor = [UIColor blackColor];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    
     [self.view addSubview:self.headerview];
     [self.view addSubview:self.loginBtn];
     [self.view addSubview:self.collectionView];

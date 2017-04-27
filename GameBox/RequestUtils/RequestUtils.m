@@ -81,13 +81,15 @@
         [request setHTTPBody:[strP dataUsingEncoding:NSUTF8StringEncoding]];
     }
     
+    request.timeoutInterval = 10.f;
+    
     [request setHTTPMethod:@"POST"];
     
     NSURLSessionTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error == nil) {
             NSError * fail = nil;
             id obj = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&fail];
-//            NSLog(@"%@",obj);
+//            NSLog(@"obj === %@",obj);
             if (fail) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (completion) {

@@ -8,6 +8,7 @@
 
 #import "NewPassWordView.h"
 #import "LoginViewController.h"
+#import "MineModel.h"
 
 //@class LoginViewController;
 
@@ -42,7 +43,13 @@
 
 #pragma mark - responds
 - (void)respondsToCompleteBtn {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    
+    [MineModel postResetPassWordWithUserID:@"3103" PassWord:self.passWord.text ConfirmPassWord:self.affimPassWord.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        NSLog(@"%@",content);
+        NSLog(@"%@",content[@"msg"]);
+    }];
+    
+//    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark - getter

@@ -79,6 +79,13 @@ static ControllerManager *manager = nil;
     return _searchResultController;
 }
 
+- (MyAppViewController *)myAppViewController {
+    if (!_myAppViewController) {
+        _myAppViewController = [[MyAppViewController alloc] init];
+    }
+    return _myAppViewController;
+}
+
 
 
 @end

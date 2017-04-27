@@ -9,6 +9,7 @@
 #import "LoginViewController.h"
 #import "RegisterViewController.h"
 #import "ForgetPassWordView.h"
+#import "MineModel.h"
 
 @interface LoginViewController ()<UITextFieldDelegate>
 
@@ -43,7 +44,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-//    self.navigationController.navigationBar.hidden = YES;
+
 }
 
 - (void)viewDidLoad {
@@ -80,16 +81,13 @@
     //释放第一响应者
     [self.passWord resignFirstResponder];
     
-    if ([self.userName.text isEqualToString:@"123"] && [self.passWord.text isEqualToString:@"123"]) {
-        __weak UIViewController *weakSelf = self;
-        [self showAlertWithMessage:@"登录成功" dissmiss:^{
-            [weakSelf.navigationController popViewControllerAnimated:YES];
-        }];
+    [MineModel postLoginWithAccount:self.userName.text PassWord:self.passWord.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
         
-        [self.navigationController popViewControllerAnimated:YES];
-    } else {
-        [self showAlertWithMessage:@"账号或者密码有误" dissmiss:nil];
-    }
+        
+        
+        
+        NSLog(@"%@",content);
+    }];
     
     
     

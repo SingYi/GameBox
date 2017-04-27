@@ -38,12 +38,12 @@
 		B5824FB41EA0594400966640 /* NewServerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5824FB31EA0594400966640 /* NewServerCell.m */; };
 		B5824FB81EA05B6800966640 /* NewServerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5824FB61EA05B6800966640 /* NewServerTableViewCell.m */; };
 		B5824FB91EA05B6800966640 /* NewServerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5824FB71EA05B6800966640 /* NewServerTableViewCell.xib */; };
+		B58A5C021EB181C700CC1D00 /* MineModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C011EB181C700CC1D00 /* MineModel.m */; };
+		B58A5C061EB1C0B400CC1D00 /* UserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C051EB1C0B400CC1D00 /* UserModel.m */; };
+		B58A5C0A1EB1DF1D00CC1D00 /* MyAppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C091EB1DF1D00CC1D00 /* MyAppViewController.m */; };
+		B58A5C0D1EB1DFBC00CC1D00 /* AppModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C0C1EB1DFBC00CC1D00 /* AppModel.m */; };
 		B59FEDA01E9C614B00A64D84 /* ControllerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FED9F1E9C614B00A64D84 /* ControllerManager.m */; };
 		B59FEDA31E9C6B4A00A64D84 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FEDA21E9C6B4A00A64D84 /* HeaderView.m */; };
-		B59FEDB21E9C837D00A64D84 /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = B59FEDAD1E9C837D00A64D84 /* 1.png */; };
-		B59FEDB31E9C837D00A64D84 /* 2.png in Resources */ = {isa = PBXBuildFile; fileRef = B59FEDAE1E9C837D00A64D84 /* 2.png */; };
-		B59FEDB41E9C837D00A64D84 /* 3.png in Resources */ = {isa = PBXBuildFile; fileRef = B59FEDAF1E9C837D00A64D84 /* 3.png */; };
-		B59FEDB51E9C837D00A64D84 /* 4.png in Resources */ = {isa = PBXBuildFile; fileRef = B59FEDB01E9C837D00A64D84 /* 4.png */; };
 		B59FEDBC1E9C8AF300A64D84 /* SearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FEDBA1E9C8AF300A64D84 /* SearchCell.m */; };
 		B59FEDBD1E9C8AF300A64D84 /* SearchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B59FEDBB1E9C8AF300A64D84 /* SearchCell.xib */; };
 		B59FEDC31E9CC97600A64D84 /* GiftBagCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FEDC11E9CC97600A64D84 /* GiftBagCell.m */; };
@@ -143,15 +143,19 @@
 		B5824FB51EA05B6800966640 /* NewServerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewServerTableViewCell.h; sourceTree = "<group>"; };
 		B5824FB61EA05B6800966640 /* NewServerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewServerTableViewCell.m; sourceTree = "<group>"; };
 		B5824FB71EA05B6800966640 /* NewServerTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewServerTableViewCell.xib; sourceTree = "<group>"; };
+		B58A5C001EB181C700CC1D00 /* MineModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineModel.h; sourceTree = "<group>"; };
+		B58A5C011EB181C700CC1D00 /* MineModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineModel.m; sourceTree = "<group>"; };
+		B58A5C041EB1C0B400CC1D00 /* UserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserModel.h; sourceTree = "<group>"; };
+		B58A5C051EB1C0B400CC1D00 /* UserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserModel.m; sourceTree = "<group>"; };
+		B58A5C081EB1DF1D00CC1D00 /* MyAppViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAppViewController.h; sourceTree = "<group>"; };
+		B58A5C091EB1DF1D00CC1D00 /* MyAppViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAppViewController.m; sourceTree = "<group>"; };
+		B58A5C0B1EB1DFBC00CC1D00 /* AppModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppModel.h; sourceTree = "<group>"; };
+		B58A5C0C1EB1DFBC00CC1D00 /* AppModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppModel.m; sourceTree = "<group>"; };
 		B59FED9E1E9C614B00A64D84 /* ControllerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControllerManager.h; sourceTree = "<group>"; };
 		B59FED9F1E9C614B00A64D84 /* ControllerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ControllerManager.m; sourceTree = "<group>"; };
 		B59FEDA11E9C6B4A00A64D84 /* HeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderView.h; sourceTree = "<group>"; };
 		B59FEDA21E9C6B4A00A64D84 /* HeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderView.m; sourceTree = "<group>"; };
 		B59FEDA91E9C70EB00A64D84 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
-		B59FEDAD1E9C837D00A64D84 /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
-		B59FEDAE1E9C837D00A64D84 /* 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2.png; sourceTree = "<group>"; };
-		B59FEDAF1E9C837D00A64D84 /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
-		B59FEDB01E9C837D00A64D84 /* 4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 4.png; sourceTree = "<group>"; };
 		B59FEDB91E9C8AF300A64D84 /* SearchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchCell.h; sourceTree = "<group>"; };
 		B59FEDBA1E9C8AF300A64D84 /* SearchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchCell.m; sourceTree = "<group>"; };
 		B59FEDBB1E9C8AF300A64D84 /* SearchCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchCell.xib; sourceTree = "<group>"; };
@@ -262,10 +266,11 @@
 			isa = PBXGroup;
 			children = (
 				5E8DE5441E9BD255007E719D /* ControllerManager */,
+				B58A5C031EB1C09B00CC1D00 /* UserModel */,
+				B58A5C071EB1DEF600CC1D00 /* AppManager */,
 				5E8DE5691E9BDA3C007E719D /* RequestUtils */,
 				5E8DE53D1E9BD255007E719D /* ChildClass */,
 				B59FEDA81E9C6DAB00A64D84 /* Other */,
-				B59FEDAC1E9C837D00A64D84 /* TestResource */,
 				5E8DE54C1E9BD35A007E719D /* SupportingFiles */,
 				5E8DE53A1E9BD255007E719D /* Assets.xcassets */,
 				5E8DE53B1E9BD255007E719D /* LaunchScreen.storyboard */,
@@ -434,6 +439,26 @@
 			path = NewServerView;
 			sourceTree = "<group>";
 		};
+		B58A5C031EB1C09B00CC1D00 /* UserModel */ = {
+			isa = PBXGroup;
+			children = (
+				B58A5C041EB1C0B400CC1D00 /* UserModel.h */,
+				B58A5C051EB1C0B400CC1D00 /* UserModel.m */,
+			);
+			path = UserModel;
+			sourceTree = "<group>";
+		};
+		B58A5C071EB1DEF600CC1D00 /* AppManager */ = {
+			isa = PBXGroup;
+			children = (
+				B58A5C081EB1DF1D00CC1D00 /* MyAppViewController.h */,
+				B58A5C091EB1DF1D00CC1D00 /* MyAppViewController.m */,
+				B58A5C0B1EB1DFBC00CC1D00 /* AppModel.h */,
+				B58A5C0C1EB1DFBC00CC1D00 /* AppModel.m */,
+			);
+			path = AppManager;
+			sourceTree = "<group>";
+		};
 		B59FEDA81E9C6DAB00A64D84 /* Other */ = {
 			isa = PBXGroup;
 			children = (
@@ -441,17 +466,6 @@
 				B55416351EA8B12D0043A36D /* UrlMap.plist */,
 			);
 			path = Other;
-			sourceTree = "<group>";
-		};
-		B59FEDAC1E9C837D00A64D84 /* TestResource */ = {
-			isa = PBXGroup;
-			children = (
-				B59FEDAD1E9C837D00A64D84 /* 1.png */,
-				B59FEDAE1E9C837D00A64D84 /* 2.png */,
-				B59FEDAF1E9C837D00A64D84 /* 3.png */,
-				B59FEDB01E9C837D00A64D84 /* 4.png */,
-			);
-			path = TestResource;
 			sourceTree = "<group>";
 		};
 		B59FEDBE1E9CC94C00A64D84 /* View */ = {
@@ -486,6 +500,8 @@
 		B59FEDCB1E9CD8F700A64D84 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				B58A5C001EB181C700CC1D00 /* MineModel.h */,
+				B58A5C011EB181C700CC1D00 /* MineModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -721,16 +737,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B59FEDB51E9C837D00A64D84 /* 4.png in Resources */,
 				B5C5D4B51EA078BF008A46DE /* ActivityCell.xib in Resources */,
-				B59FEDB41E9C837D00A64D84 /* 3.png in Resources */,
 				B5824FB91EA05B6800966640 /* NewServerTableViewCell.xib in Resources */,
-				B59FEDB21E9C837D00A64D84 /* 1.png in Resources */,
 				5E8DE5461E9BD255007E719D /* Assets.xcassets in Resources */,
 				B59FEDC41E9CC97600A64D84 /* GiftBagCell.xib in Resources */,
 				B59FEDBD1E9C8AF300A64D84 /* SearchCell.xib in Resources */,
 				B5D35BA31E9F6F9E00902B04 /* ClassfiyTableViewCell.xib in Resources */,
-				B59FEDB31E9C837D00A64D84 /* 2.png in Resources */,
 				B5C5D4AC1EA073AA008A46DE /* StrategyCell.xib in Resources */,
 				B59FEDD01E9CD91400A64D84 /* MineCell.xib in Resources */,
 				B55416361EA8B12D0043A36D /* UrlMap.plist in Resources */,
@@ -800,6 +812,7 @@
 				B554162A1EA88E9F0043A36D /* HomeClassifyController.m in Sources */,
 				B52A06D01EA70CF9007179F9 /* ActivityModel.m in Sources */,
 				B52A06D31EA711B5007179F9 /* GameModel.m in Sources */,
+				B58A5C0A1EB1DF1D00CC1D00 /* MyAppViewController.m in Sources */,
 				B55416241EA88E7B0043A36D /* HomeNewGameController.m in Sources */,
 				B5C5D4AB1EA073AA008A46DE /* StrategyCell.m in Sources */,
 				5E8DE5551E9BD3AB007E719D /* main.m in Sources */,
@@ -826,11 +839,13 @@
 				B5C5D4BB1EA09AC8008A46DE /* DetailViewController.m in Sources */,
 				B5C5D4BE1EA09E44008A46DE /* DetailHeader.m in Sources */,
 				B5C5D4D51EA0B6B3008A46DE /* DetailTableCell.m in Sources */,
+				B58A5C061EB1C0B400CC1D00 /* UserModel.m in Sources */,
 				B5C5D4E51EA0C951008A46DE /* DetailTableFooter.m in Sources */,
 				5E8DE5561E9BD3AB007E719D /* AppDelegate.m in Sources */,
 				5E8DE5651E9BD7BC007E719D /* GiftBagViewController.m in Sources */,
 				B59FEDCF1E9CD91400A64D84 /* MineCell.m in Sources */,
 				B59FEDA01E9C614B00A64D84 /* ControllerManager.m in Sources */,
+				B58A5C0D1EB1DFBC00CC1D00 /* AppModel.m in Sources */,
 				B59FEDBC1E9C8AF300A64D84 /* SearchCell.m in Sources */,
 				B55416211EA88E690043A36D /* HomeRecommentController.m in Sources */,
 				5E8DE55F1E9BD786007E719D /* SearchViewController.m in Sources */,
@@ -844,6 +859,7 @@
 				B55416181EA853AD0043A36D /* GameStrategyViewController.m in Sources */,
 				B5E2C8181E9E2E59002CEC61 /* MyAttentionView.m in Sources */,
 				B5E2C8121E9E2DED002CEC61 /* AppManagerView.m in Sources */,
+				B58A5C021EB181C700CC1D00 /* MineModel.m in Sources */,
 				B5E2C81E1E9E2E96002CEC61 /* AboutUsView.m in Sources */,
 				B5E2C8241E9F2A27002CEC61 /* HomeViewController.m in Sources */,
 				B5A266681E9F480300F0C38E /* HomeHeader.m in Sources */,

@@ -8,6 +8,7 @@
 
 #import "ForgetPassWordView.h"
 #import "NewPassWordView.h"
+#import "MineModel.h"
 
 
 @interface ForgetPassWordView ()<UITextFieldDelegate>
@@ -55,10 +56,23 @@
 }
 
 #pragma mark - responds
+/** 下一步 */
 - (void)respondsToNext {
-    [self.navigationController pushViewController:self.newPassWordView animated:YES];
+//    [self.navigationController pushViewController:self.newPassWordView animated:YES];
+    
+    [MineModel postCheckPhoneCodeWithPhoneNumber:self.phoneNumber.text PhoneCode:self.securityCode.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        NSLog(@"%@",content);
+        NSLog(@"%@",content[@"msg"]);
+    }];
 }
 
+/** 发送验证码 */
+- (void)respondsToSendCodeBtn {
+    [MineModel postPhoneCodeWithPhoneNumber:self.phoneNumber.text isVerify:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        NSLog(@"%@",content);
+        NSLog(@"%@",content[@"msg"]);
+    }];
+}
 
 #pragma mark - getter
 - (UITextField *)phoneNumber {
@@ -100,6 +114,7 @@
         [_sendCodeBtn setBackgroundColor:[UIColor orangeColor]];
         _sendCodeBtn.layer.cornerRadius = 4;
         _sendCodeBtn.layer.masksToBounds = YES;
+        [_sendCodeBtn addTarget:self action:@selector(respondsToSendCodeBtn) forControlEvents:(UIControlEventTouchUpInside)];
     }
     return _sendCodeBtn;
 }

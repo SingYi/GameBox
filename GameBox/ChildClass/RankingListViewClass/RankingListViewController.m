@@ -151,7 +151,7 @@
 }
 
 - (void)clickDownloadBtn {
-    
+    [self.navigationController pushViewController:[ControllerManager shareManager].myAppViewController animated:YES];
 }
 
 - (void)clickMessageBtn {

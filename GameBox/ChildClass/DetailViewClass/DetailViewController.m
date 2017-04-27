@@ -40,12 +40,17 @@
 @property (nonatomic, strong) UIViewController *currentViewController;
 /**当前下标*/
 @property (nonatomic, assign) NSInteger currentIndex;
+/**动画效果状态*/
+@property (nonatomic, assign) BOOL isAnimation;
+/**向左滑*/
+@property (nonatomic, assign) BOOL isLeft;
 
 /**游戏数据*/
 @property (nonatomic, strong) NSDictionary * gameinfo;
 /**猜你喜欢*/
 @property (nonatomic, strong) NSArray *likes;
 
+/** 游戏logo */
 @property (nonatomic, strong) UIImage * dataImage;
 
 
@@ -72,6 +77,8 @@
     [self addChildViewController:self.gameDetail];
     self.currentViewController = self.gameDetail;
     _currentIndex = 0;
+    _isAnimation = NO;
+    _isLeft = NO;
     [self.view addSubview:self.gameDetail.view];
 }
 
@@ -81,12 +88,32 @@
     [self.view addSubview:self.detailHeader];
     [self.view addSubview:self.gameDetail.view];
     [self.view addSubview:self.detailFooter];
+    
+    
+    //页面添加左右轻扫手势
+    UISwipeGestureRecognizer *leftSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(respondsToSwipe:)];
+    leftSwipe.direction = UISwipeGestureRecognizerDirectionLeft;
+    UISwipeGestureRecognizer *rightSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(respondsToSwipe:)];
+    rightSwipe.direction = UISwipeGestureRecognizerDirectionRight;
+    
+    [self.view addGestureRecognizer:rightSwipe];
+    [self.view addGestureRecognizer:leftSwipe];
 }
 
 #pragma mark - respondsToSwipe
+/**< 手势的响应事件 */
 - (void)respondsToSwipe:(UISwipeGestureRecognizer *)sender {
     
-//    NSLog(@"1");
+    if (sender.direction == UISwipeGestureRecognizerDirectionLeft && _currentIndex >= 0 && _currentIndex < 3) {
+        
+        [self didselectBtnAtIndex:_currentIndex + 1];  //切换视图
+        self.detailHeader.index = _currentIndex;  //切换标签
+        
+    } else if (sender.direction == UISwipeGestureRecognizerDirectionRight && _currentIndex > 0 && _currentIndex <= 3) {
+        
+        [self didselectBtnAtIndex:_currentIndex - 1];  //切换视图
+        self.detailHeader.index = _currentIndex;  //切换标签
+    }
 }
 
 #pragma mark - setter
@@ -128,22 +155,38 @@
     
     [self addChildViewController:newController];
     
+    self.isAnimation = YES;
     
-    [self transitionFromViewController:oldController toViewController:newController duration:0 options:UIViewAnimationOptionTransitionNone animations:nil completion:^(BOOL finished) {
+    CGFloat floatx = 0;
+    if (_isLeft) {
+        floatx = kSCREEN_WIDTH;
+    } else {
+        floatx = -kSCREEN_WIDTH;
+    }
+    
+    newController.view.transform = CGAffineTransformMakeTranslation(floatx, 0);
+    
+    [self transitionFromViewController:oldController toViewController:newController duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
+        
+        newController.view.transform = CGAffineTransformIdentity;
+        oldController.view.transform = CGAffineTransformMakeTranslation(-floatx, 0);
+        
+    } completion:^(BOOL finished) {
         
         if (finished) {
             
             [newController didMoveToParentViewController:self];
             [oldController willMoveToParentViewController:nil];
             [oldController removeFromParentViewController];
-            
             self.currentViewController = newController;
-//            [self.view bringSubviewToFront:self.detailFooter];
+            
         }else{
             
             self.currentViewController = oldController;
             
         }
+        
+        self.isAnimation = NO;
     }];
 }
 
@@ -152,7 +195,14 @@
 #pragma mark - detailHeaderDelegate
 - (void)didselectBtnAtIndex:(NSInteger)index {
     
-    if (index == _currentIndex) {
+    if (index > _currentIndex) {
+        _isLeft = YES;
+    } else {
+        _isLeft = NO;
+    }
+    
+    
+    if (index == _currentIndex || _isAnimation) {
         
     } else {
         _currentIndex = index;
@@ -181,6 +231,8 @@
                 break;
         }
     }
+    
+
 }
 
 

@@ -7,6 +7,7 @@
 //
 
 #import "ResetPassWordViewController.h"
+#import "MineModel.h"
 
 @interface ResetPassWordViewController ()
 
@@ -36,6 +37,16 @@
     [self.view addSubview:self.reSetWord];
     [self.view addSubview:self.affirmWord];
     [self.view addSubview:self.sureBtn];
+}
+
+#pragma mark - responds
+- (void)respondsToSureBtn {
+    [MineModel postModifyPassWordWithUserID:@"3103" OldPassword:self.oriPassWord.text NewPassword:self.reSetWord.text ConfirmPassword:self.affirmWord.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
+       
+        NSLog(@"%@",content);
+        NSLog(@"%@",content[@"msg"]);
+        
+    }];
 }
 
 
@@ -85,6 +96,7 @@
         [_sureBtn setBackgroundColor:[UIColor orangeColor]];
         _sureBtn.layer.cornerRadius = 4;
         _sureBtn.layer.masksToBounds = YES;
+        [_sureBtn addTarget:self action:@selector(respondsToSureBtn) forControlEvents:(UIControlEventTouchUpInside)];
     }
     return _sureBtn;
 }

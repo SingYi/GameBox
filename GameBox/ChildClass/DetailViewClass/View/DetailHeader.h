@@ -31,4 +31,7 @@
 /**按钮数组*/
 @property (nonatomic, strong) NSArray *btnArray;
 
+/** 选择的下标 */
+@property (nonatomic, assign) NSInteger index;
+
 @end
