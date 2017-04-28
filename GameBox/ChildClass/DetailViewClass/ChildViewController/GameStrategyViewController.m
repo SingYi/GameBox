@@ -9,6 +9,9 @@
 #import "GameStrategyViewController.h"
 #import "StrategyCell.h"
 
+#import "GameModel.h"
+
+#import <MJRefresh.h>
 
 #define CELLIDE @"StrategyCell"
 
@@ -28,44 +31,67 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-//    NSLog(@"GameStrategyViewController == viewWillAppear");
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-//    NSLog(@"GameStrategyViewController == viewDidAppear");
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUserinterFace];
-    _showArray = @[@"",@"",@"",@"",@"",@""];
 }
 
 - (void)initUserinterFace {
-    self.view.backgroundColor = [UIColor grayColor];
+    self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
 }
 
-#pragma mark - tableviewDataSource
+#pragma mark - setter
+- (void)reloadData {
+    
+    [GameModel postStrategyWithGameID:_gameID Page:@"1" ChannelID:nil Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        
+        if ([content[@"data"][@"list"] isKindOfClass:[NSNull class]]) {
+            _showArray = nil;
+        } else {
+            _showArray = content[@"data"][@"list"];
+        }
+        
+        NSLog(@"%@",content);
+        [self.tableView reloadData];
+    }];
+}
+
+
+#pragma makr - setter
+- (void)setGameID:(NSString *)gameID {
+    _gameID = gameID;
+    [self reloadData];
+}
+
+#pragma mark - tableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _showArray.count;
+    return self.showArray.count;
 }
 
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    StrategyCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDE forIndexPath:indexPath];
-    
-    
-    
-    
+    StrategyCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDE];
+
+    cell.strategyName.text = _showArray[indexPath.row][@"title"];
+    cell.gameName.text = _showArray[indexPath.row][@"gamename"];
+    cell.strategyTime.text = _showArray[indexPath.row][@"release_time"];
+    cell.strategyAuthor.text = _showArray[indexPath.row][@"author"];
+
     return cell;
 }
 
-#pragma mark - tableViewDeleagte
+#pragma mark - tableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 200;
 }
@@ -78,29 +104,12 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         
-        
         [_tableView registerNib:[UINib nibWithNibName:@"StrategyCell" bundle:nil] forCellReuseIdentifier:CELLIDE];
         
-        _tableView.tableFooterView = [UIView new];
+        
     }
     return _tableView;
 }
-
-
-
-
-
-
-
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
-
 
 
 

@@ -216,6 +216,7 @@
         //领取礼包
         [GiftBagModel postGiftBagWithBagID:_showArray[idx][@"id"] Uid:@"0" Completion:^(NSDictionary * _Nullable content, BOOL success) {
             if (success) {
+                NSLog(@"%@",content);
                 NSMutableDictionary *dict = [_showArray[idx] mutableCopy];
                 [dict setObject:content[@"data"] forKey:@"card"];
                 [_showArray replaceObjectAtIndex:idx withObject:dict];

@@ -114,7 +114,7 @@
 - (void)refreshData {
     [GameModel postGameListWithType:RankingGame ChannelID:@"185" Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success) {
-            NSLog(@"%@",content);
+//            NSLog(@"%@",content);
             _showArray = [content[@"data"] mutableCopy];
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];

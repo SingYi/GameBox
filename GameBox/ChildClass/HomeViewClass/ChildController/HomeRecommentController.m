@@ -24,7 +24,7 @@
 #define CELLIDENTIFIER @"SearchCell"
 #define BTNTAG 1300
 
-@interface HomeRecommentController ()<UITableViewDelegate,UITableViewDataSource,SearchCellDelelgate>
+@interface HomeRecommentController ()<UITableViewDelegate,UITableViewDataSource,SearchCellDelelgate,RecommentTableHeaderDeleagte>
 
 /**推荐游戏列表*/
 @property (nonatomic, strong) UITableView *tableView;
@@ -53,6 +53,8 @@
 /**< 当前页数 */
 @property (nonatomic, assign) NSInteger currentPage;
 
+@property (nonatomic, assign) BOOL isAll;
+
 @end
 
 @implementation HomeRecommentController
@@ -78,6 +80,7 @@
 
 - (void)initDataSource {
     _childControllers = @[self.rNewServerController,self.rActivityController,self.rGiftBagController,self.rStrategyController];
+
     
     //刷新视图
     [self.tableView.mj_header beginRefreshing];
@@ -91,37 +94,53 @@
 
 #pragma mkar - method
 /**< 根据页面数和渠道请求数据 */
-- (void)getDataWithChannelID:(NSString *)channelID Page:(NSString *)page {
-    [GameModel postRecommendGameListWithChannelID:channelID Page:page Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        _showArray = [content[@"data"][@"gamelist"] mutableCopy];
-        self.rollHeader.rollingArray = content[@"data"][@"banner"];
-        [self.tableView reloadData];
-    }];
-}
+//- (void)getDataWithChannelID:(NSString *)channelID Page:(NSString *)page {
+//    [GameModel postRecommendGameListWithChannelID:channelID Page:page Completion:^(NSDictionary * _Nullable content, BOOL success) {
+//        _showArray = [content[@"data"][@"gamelist"] mutableCopy];
+//        self.rollHeader.rollingArray = content[@"data"][@"banner"];
+//        _currentPage = 1;
+//        _isAll = NO;
+//        _totalPage = ((NSString *)content[@"data"][@"count"]).integerValue;
+//        NSLog(@"%ld",_totalPage);
+//        [self.tableView reloadData];
+//    }];
+//}
 
 /**刷新数据*/
 - (void)refreshData {
     [GameModel postRecommendGameListWithChannelID:@"185" Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        _showArray = [content[@"data"][@"gamelist"] mutableCopy];
         self.rollHeader.rollingArray = content[@"data"][@"banner"];
-        [self.tableView.mj_header endRefreshing];
+        _showArray = [content[@"data"][@"gamelist"] mutableCopy];
+        
         _currentPage = 1;
+        _isAll = NO;
+        
+//        NSLog(@"%@",content);
+        
+        [self.tableView.mj_header endRefreshing];
         [self.tableView reloadData];
     }];
 }
 
 /**< 加载更多数据 */
 - (void)loadMoreData {
-    _currentPage++;
-    [GameModel postRecommendGameListWithChannelID:@"185" Page:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        NSLog(@"%@",content);
-        _showArray = [content[@"data"][@"gamelist"] mutableCopy];
-        [self.tableView.mj_footer endRefreshing];
+    if (_isAll) {
+        [self.tableView.mj_footer endRefreshingWithNoMoreData];
+    } else {
+        _currentPage++;
+        [GameModel postRecommendGameListWithChannelID:@"185" Page:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
 
-        [self.tableView reloadData];
-    }];
-    
-//    [self.tableView.mj_footer endRefreshing];
+            NSArray *array = content[@"data"][@"gamelist"];
+            if (array.count == 0) {
+                _isAll = YES;
+                [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            } else {
+                [_showArray addObjectsFromArray:array];
+                [self.tableView.mj_footer endRefreshing];
+                [self.tableView reloadData];
+            }
+        }];
+    }
 }
 
 
@@ -181,6 +200,17 @@
 
 }
 
+#pragma mark - rollingDeleagte
+/** 点击轮播图 */
+- (void)RecommentTableHeader:(RecommentTableHeader *)header didSelectImageWithInfo:(NSDictionary *)info {
+    NSString *type = info[@"type"];
+    if (type.integerValue == 1) {
+        [ControllerManager shareManager].detailView.gameID = info[@"gid"];
+        [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
+    }
+    
+}
+
 
 #pragma mark - getter
 - (UITableView *)tableView {
@@ -230,6 +260,7 @@
 - (RecommentTableHeader *)rollHeader {
     if (!_rollHeader) {
         _rollHeader = [[RecommentTableHeader alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_WIDTH * 0.4)];
+        _rollHeader.RecommentTableHeaderDelegate = self;
     }
     return _rollHeader;
 }

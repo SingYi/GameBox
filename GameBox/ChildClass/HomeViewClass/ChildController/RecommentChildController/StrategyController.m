@@ -10,6 +10,8 @@
 #import "StrategyCell.h"
 #import "ActivityModel.h"
 
+#import <UIImageView+WebCache.h>
+
 #define CELLIDE @"StrategyCell"
 
 @interface StrategyController ()<UITableViewDelegate,UITableViewDataSource>
@@ -79,6 +81,7 @@
     cell.gameName.text = _showArray[indexPath.row][@"gamename"];
     cell.strategyTime.text = _showArray[indexPath.row][@"release_time"];
     cell.strategyAuthor.text = _showArray[indexPath.row][@"author"];
+    [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] placeholderImage:nil];
     
     return cell;
 }
@@ -96,30 +99,19 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         
-//        [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CELLIDE];
         [_tableView registerNib:[UINib nibWithNibName:@"StrategyCell" bundle:nil] forCellReuseIdentifier:CELLIDE];
         
-        
-//        _tableView.refreshControl = self.refreshControl;
+        _tableView.tableFooterView = [UIView new];
+
     }
     return _tableView;
 }
 
-- (UIRefreshControl *)refreshControl {
-    if (!_refreshControl) {
-        _refreshControl= [[UIRefreshControl alloc]init];
-        _refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"刷新数据"];
-        [_refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
-//        [_refreshControl beginRefreshing];
-    }
-    return _refreshControl;
-}
 
 - (UISearchController *)searchBar {
     if (!_searchBar) {
         _searchBar = [[UISearchController alloc] initWithSearchResultsController:self];
-        
-        
+    
     }
     return _searchBar;
 }

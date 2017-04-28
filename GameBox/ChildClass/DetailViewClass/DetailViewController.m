@@ -119,16 +119,21 @@
 #pragma mark - setter
 - (void)setGameID:(NSString *)gameID {
     _gameID = gameID;
-    self.gameGiftBag.gameID = gameID;
-    self.gameOpenServer.gameID = gameID;
     [GameModel postGameInfoWithGameID:gameID UserID:@"0" ChannelID:@"185" Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
-        if (success) {
+        
+        if (success && !((NSString *)content[@"status"]).boolValue) {
+            
             self.gameinfo = content[@"data"][@"gameinfo"];
             self.likes = content[@"data"][@"like"];
             self.navigationItem.title = self.gameinfo[@"gamename"];
         }
-//        NSLog(@"game  =========================================== \n %@",content);
+        
+        NSLog(@"??? %@",content[@"msg"]);
     }];
+    
+    self.gameGiftBag.gameID = gameID;
+    self.gameOpenServer.gameID = gameID;
+    self.gameStrategy.gameID = gameID;
 }
 
 - (void)setGameinfo:(NSDictionary *)gameinfo {
@@ -138,7 +143,8 @@
     [self.detailHeader.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_gameinfo[@"logo"]]]];
     self.dataImage = self.detailHeader.imageView.image;
     self.gameDetail.imagasArray = gameinfo[@"imgs"];
-    self.gameDetail.aboutString = gameinfo[@"abstract"];
+    self.gameDetail.abstract = gameinfo[@"abstract"];
+    self.gameDetail.feature = gameinfo[@"feature"];
 }
 
 - (void)setLikes:(NSArray *)likes {

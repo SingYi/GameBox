@@ -37,19 +37,17 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-//    NSLog(@"GameDetailViewController == viewWillAppear");
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-//    NSLog(@"GameDetailViewController == viewDidAppear");
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUserInterFace];
-    _sectionTitleArray = @[@"    游戏简介:",@"    猜你喜欢:",@"    游戏评论:"];
+    _sectionTitleArray = @[@"    游戏简介:",@"    游戏特征:",@"    游戏评论:"];
 }
 
 
@@ -68,9 +66,19 @@
     self.footerView.likesArray = likes;
 }
 
-- (void)setAboutString:(NSString *)aboutString {
-    _aboutString = aboutString;
+- (void)setDict:(NSDictionary *)dict {
+    _dict = dict;
     [self.tableView reloadData];
+}
+
+- (void)setAbstract:(NSString *)abstract {
+    _abstract = abstract;
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:(UITableViewRowAnimationNone)];
+}
+
+- (void)setFeature:(NSString *)feature {
+    _feature = feature;
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:(UITableViewRowAnimationNone)];
 }
 
 #pragma mark - tableviewDataSource
@@ -83,22 +91,17 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-//    if (indexPath.section == 0) {
-//        GameDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DetailTableCellIDE];
-//        cell.textLabel.text = [NSString stringWithFormat:@"游戏简介: \n%@",self.aboutString];
-//        return cell;
-//    } else if (indexPath.section == 1) {
-//        UITableViewCell *cell = nil;
-//        
-//        return cell;
-//    } else if (indexPath.section == 2) {
-//        UITableViewCell *cell = nil;
-//        return cell;
-//    }
+
     
     GameDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DetailTableCellIDE];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@",self.aboutString];
+    
+    if (indexPath.section == 0) {
+        cell.detail.text = self.abstract;
+    } else if (indexPath.section == 1) {
+        cell.detail.text = self.feature;
+    } else {
+        cell.detail.text = @"";
+    }
 
     return cell;
 }
@@ -121,18 +124,23 @@
 
 
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 100;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    return 100;
+//}
 
 #pragma mark - getter
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 230) style:(UITableViewStylePlain)];
+
         
-        [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:DetailTableCellIDE];
+        [_tableView registerNib:[UINib nibWithNibName:@"GameDetailTableViewCell" bundle:nil] forCellReuseIdentifier:DetailTableCellIDE];
+        
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        
+        _tableView.estimatedRowHeight = 80;
+        _tableView.autoresizesSubviews = YES;
         
         _tableView.tableHeaderView = self.headerView;
         _tableView.tableFooterView = self.footerView;

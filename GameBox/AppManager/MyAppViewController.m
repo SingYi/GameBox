@@ -16,6 +16,8 @@
 @property (nonatomic, strong) NSArray *showArray;
 @property (nonatomic, strong) NSMutableDictionary *data;
 
+@property (nonatomic, strong) NSTimer *timer;
+
 @end
 
 @implementation MyAppViewController
@@ -39,13 +41,35 @@
         
     }];
     _showArray = [_data allKeys];
+    
+//    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(task) userInfo:nil repeats:YES];
 }
+
+- (void)task {
+    NSLog(@"刷新");
+    NSMutableDictionary *dict = [AppModel Apps];
+    NSArray *array = [dict allKeys];
+    _data = [NSMutableDictionary dictionary];
+    [array enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([dict[obj][@"applicationType"] isEqualToString:@"System"]) {
+            
+        } else {
+            [_data setObject:dict[obj] forKey:obj];
+        }
+        
+    }];
+    _showArray = [_data allKeys];
+    
+    [self.tableView reloadData];
+}
+
 
 - (void)initUserInterface {
     self.view.backgroundColor = [UIColor whiteColor];
     
     [self.view addSubview:self.tableView];
 }
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -71,11 +95,18 @@
     
     NSNumber *zise = dict[@"staticDiskUsage"];
     
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"大小 :%.2lfM 开发人员ID:%@",zise.integerValue / 1024 / 1024.f,dict[@"teamID"]];
+//    cell.detailTextLabel.text = [NSString stringWithFormat:@"大小 :%.2lfM 开发人员ID:%@",zise.integerValue / 1024 / 1024.f,dict[@"teamID"]];
+    
+    
+    NSProgress *progress = dict[@"installProgress"];
+    
+    
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",progress.localizedDescription];
     
     
     
     NSLog(@"%@",dict);
+    
     
     
     return cell;

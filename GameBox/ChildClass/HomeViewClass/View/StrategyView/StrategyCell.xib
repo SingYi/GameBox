@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -38,7 +38,6 @@
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4SE-dk-try">
                         <rect key="frame" x="8" y="53" width="200" height="126"/>
-                        <color key="backgroundColor" red="1" green="0.43020780809999998" blue="0.30019230959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="200" id="17w-hV-gHL"/>
                         </constraints>
@@ -92,6 +91,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="gameLogo" destination="4SE-dk-try" id="blr-ZD-Fus"/>
                 <outlet property="gameName" destination="cTB-o5-vX9" id="cau-Mj-eQx"/>
                 <outlet property="strategyAuthor" destination="cOz-vl-FSz" id="jU1-OY-J0A"/>
                 <outlet property="strategyName" destination="MhC-Hq-YHz" id="j6A-t3-sKl"/>

@@ -16,6 +16,10 @@
 /** 根据app的bundleID打开app */
 + (void)openAPPWithIde:(NSString *)ide;
 
+
++ (NSObject *)workSpace;
+
+/** test */
 + (void)installAPPWithIDE:(NSString *)ide;
 
 @end

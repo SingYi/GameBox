@@ -29,12 +29,12 @@
 /** 当前的用户 */
 + (UserModel *)CurrentUser;
 
-
 /** 退出登录 */
 + (void)logOut;
 
 /** 用户id */
 + (NSString *)uid;
+
 
 
 @end

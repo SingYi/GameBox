@@ -10,4 +10,7 @@
 
 @interface GameStrategyViewController : UIViewController
 
+/** 游戏ID */
+@property (nonatomic, strong) NSString *gameID;
+
 @end

@@ -56,8 +56,8 @@
 /**向左滑*/
 @property (nonatomic, assign) BOOL isLeft;
 
-/**< 搜索 */
 @property (nonatomic, strong) UISearchController  *searchController;
+/**< 搜索 */
 @property (nonatomic, strong) UISearchBar *searchBar;
 
 /**< 应用按钮(左边按钮) */

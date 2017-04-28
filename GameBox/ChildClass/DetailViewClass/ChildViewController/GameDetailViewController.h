@@ -16,7 +16,13 @@
 /**猜你喜欢数组*/
 @property (nonatomic, strong) NSArray * likes;
 
-/**游戏简介*/
-@property (nonatomic, strong) NSString * aboutString;
+/**游戏相关数据*/
+@property (nonatomic, strong) NSDictionary *dict;
+
+/** 游戏简介 */
+@property (nonatomic, strong) NSString *abstract;
+
+/** 游戏特征 */
+@property (nonatomic, strong) NSString *feature;
 
 @end

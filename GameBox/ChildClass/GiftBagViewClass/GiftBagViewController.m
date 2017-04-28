@@ -18,16 +18,28 @@
 
 #define CELLIDENTIFIER @"GiftBagCell"
 
-@interface GiftBagViewController ()<UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate>
+@interface GiftBagViewController ()<UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate,GiftBagCellDelegate>
 
 /**列表*/
 @property (nonatomic, strong) UITableView *tableView;
 
 /**显示数组*/
-@property (nonatomic, strong) NSArray *showArray;
+@property (nonatomic, strong) NSMutableArray *showArray;
 
 /**我的礼包按钮*/
 @property (nonatomic, strong) UIBarButtonItem *rightBtn;
+
+/**< 搜索 */
+@property (nonatomic, strong) UISearchBar *searchBar;
+
+/**< 应用按钮(左边按钮) */
+@property (nonatomic, strong) UIBarButtonItem *downLoadBtn;
+
+/**< 消息按钮(右边按钮) */
+@property (nonatomic, strong) UIBarButtonItem *messageBtn;
+
+/**< 取消按钮(右边按钮) */
+@property (nonatomic, strong) UIBarButtonItem *cancelBtn;
 
 
 @end
@@ -35,6 +47,17 @@
 @implementation GiftBagViewController
 
 #pragma mark - life cycle
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationItem.titleView = self.searchBar;
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.navigationItem.titleView = nil;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -48,9 +71,6 @@
     //进入刷新状态
     [self.tableView.mj_header beginRefreshing];
     
-    [GiftBagModel postGiftRollingViewWithChannelID:@"185" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        NSLog(@"%@",content);
-    }];
 
 }
 
@@ -58,29 +78,80 @@
 /**初始化用户界面*/
 - (void)initUserInterface {
     self.view.backgroundColor = [UIColor whiteColor];
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    self.navigationController.navigationBar.backgroundColor = [UIColor blackColor];
     
-    self.rightBtn = [[UIBarButtonItem alloc]initWithTitle:@"我的礼包" style:(UIBarButtonItemStyleDone) target:self action:@selector(respondsToRightBtn:)];
     
-    self.navigationItem.rightBarButtonItem = self.rightBtn;
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    
+    self.navigationItem.leftBarButtonItem = self.downLoadBtn;
+    self.navigationItem.rightBarButtonItem = self.messageBtn;
     
     [self.view addSubview:self.tableView];
 }
 
 #pragma mark - respond
-/**我的礼包按钮响应事件*/
-- (void)respondsToRightBtn:(UITabBarItem *)sender {
-    [self.navigationController pushViewController:[ControllerManager shareManager].myGiftBagView animated:YES];
+- (void)clickDownloadBtn {
+    
 }
+
+- (void)clickMessageBtn {
+    
+}
+
+- (void)clickCancelBtn {
+    
+}
+
 
 /**刷新数据*/
 - (void)refreshData {
     [GiftBagModel postGiftBagListWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        _showArray = content[@"data"][@"list"];
+        _showArray = [content[@"data"][@"list"] mutableCopy];
         [self.tableView.mj_header endRefreshing];
         [self.tableView reloadData];
     }];
+}
+
+
+/**< 点击cell的领取按钮的响应事件 */
+- (void)getGiftBagCellAtIndex:(NSInteger)idx {
+    NSString *str = _showArray[idx][@"card"];
+    
+    if ([str isKindOfClass:[NSNull class]]) {
+        
+        NSString *uid = [[NSUserDefaults standardUserDefaults] objectForKey:@"USERID"];
+        
+        if (!uid) {
+            uid = @"0";
+        }
+        
+        //领取礼包
+        [GiftBagModel postGiftBagWithBagID:_showArray[idx][@"id"] Uid:@"0" Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            if (success) {
+                NSMutableDictionary *dict = [_showArray[idx] mutableCopy];
+                [dict setObject:content[@"data"] forKey:@"card"];
+                [_showArray replaceObjectAtIndex:idx withObject:dict];
+                
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:(UITableViewRowAnimationNone)];
+                
+                [GiftBagModel showAlertWithMessage:@"已领取礼包兑换码" dismiss:^{
+                    
+                }];
+            }
+        }];
+        
+    } else {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        
+        pasteboard.string = str;
+        
+        [GiftBagModel showAlertWithMessage:@"已复制礼包兑换码" dismiss:^{
+            
+        }];
+    }
 }
 
 
@@ -100,12 +171,38 @@
     GiftBagCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDENTIFIER forIndexPath:indexPath];
     
 
+    cell.delegate = self;
+    cell.currentIdx = indexPath.row;
     
     cell.name.text = _showArray[indexPath.row][@"pack_name"];
     cell.packCounts.text = _showArray[indexPath.row][@"pack_counts"];
     [cell.packLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"pack_logo"]]] placeholderImage:nil];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    NSString *total = _showArray[indexPath.row][@"pack_counts"];
+    NSString *current = _showArray[indexPath.row][@"pack_used_counts"];
+    CGFloat tc = current.floatValue / total.floatValue;
+    
+    NSString *tcStr = [NSString stringWithFormat:@"%.0lf%%",(100 - tc * 100)];
+    
+    cell.titlelabel.text = tcStr;
+    
+    CGRect rect = cell.packProgress.bounds;
+    
+    cell.progressView.frame = CGRectMake(0, 0, rect.size.width * tc, rect.size.height);
+    
+    NSString *str = _showArray[indexPath.row][@"card"];
+    
+    if ([str isKindOfClass:[NSNull class]]) {
+        [cell.getBtn setTitle:@"领取" forState:(UIControlStateNormal)];
+        [cell.getBtn setBackgroundColor:[UIColor orangeColor]];
+        [cell.getBtn setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
+    } else {
+        [cell.getBtn setTitle:@"复制" forState:(UIControlStateNormal)];
+        [cell.getBtn setBackgroundColor:[UIColor grayColor]];
+        [cell.getBtn setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
+    }
     
     
     
@@ -118,16 +215,16 @@
 }
 
 #pragma mark - tableViewDeleagate
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UISearchBar *searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 44)];
-    searchBar.delegate = self;
-    
-    return searchBar;
-}
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+////    UISearchBar *searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 44)];
+//    searchBar.delegate = self;
+//    
+//    return searchBar;
+//}
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 44;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+//    return 44;
+//}
 
 #pragma mark - searchBarDelegate
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
@@ -141,7 +238,7 @@
 #pragma mark - getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT) style:(UITableViewStylePlain)];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, kSCREEN_WIDTH, kSCREEN_HEIGHT) style:(UITableViewStylePlain)];
         
         _tableView.dataSource = self;
         _tableView.delegate = self;
@@ -168,9 +265,52 @@
         
         _tableView.mj_header = customRef;
         
+        _tableView.tableFooterView = [UIView new];
+        
         
     }
     return _tableView;
+}
+
+- (UISearchBar *)searchBar {
+    if (!_searchBar) {
+        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 20)];
+        //        [_searchBar sizeToFit];
+        
+        UITextField *searchField = [_searchBar valueForKey:@"searchField"];
+        if (searchField) {
+            [searchField setBackgroundColor:[UIColor whiteColor]];
+            searchField.layer.cornerRadius = 14.0f;
+            searchField.layer.masksToBounds = YES;
+        }
+        
+        //        _searchBar.backgroundColor = [UIColor blackColor];
+        _searchBar.placeholder = @"搜索游戏";
+        
+        _searchBar.delegate = self;
+    }
+    return _searchBar;
+}
+
+- (UIBarButtonItem *)downLoadBtn {
+    if (!_downLoadBtn) {
+        _downLoadBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"homePage_download"] style:(UIBarButtonItemStyleDone) target:self action:@selector(clickDownloadBtn)];
+    }
+    return _downLoadBtn;
+}
+
+- (UIBarButtonItem *)messageBtn {
+    if (!_messageBtn) {
+        _messageBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"homePage_message"] style:(UIBarButtonItemStyleDone) target:self action:@selector(clickMessageBtn)];
+    }
+    return _messageBtn;
+}
+
+- (UIBarButtonItem *)cancelBtn {
+    if (!_cancelBtn) {
+        _cancelBtn = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:(UIBarButtonItemStyleDone) target:self action:@selector(clickCancelBtn)];
+    }
+    return _cancelBtn;
 }
 
 

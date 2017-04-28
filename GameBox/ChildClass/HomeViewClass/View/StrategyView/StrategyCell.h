@@ -18,4 +18,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *gameName;
 
+@property (weak, nonatomic) IBOutlet UIImageView *gameLogo;
+
 @end

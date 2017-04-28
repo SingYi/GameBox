@@ -8,10 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
+@class RecommentTableHeader;
+
+@protocol  RecommentTableHeaderDeleagte <NSObject>
+
+- (void)RecommentTableHeader:(RecommentTableHeader *)header didSelectImageWithInfo:(NSDictionary *)info;
+
+@end
+
 @interface RecommentTableHeader : UIView
 
 /**轮播视图数组*/
 @property (nonatomic, strong) NSMutableArray * rollingArray;
+
+/** delegate */
+@property (nonatomic, weak) id<RecommentTableHeaderDeleagte> RecommentTableHeaderDelegate;
 
 - (instancetype)init;
 

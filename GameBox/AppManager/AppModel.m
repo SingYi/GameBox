@@ -12,61 +12,86 @@
 #import <spawn.h>
 #import <sys/wait.h>
 
+#define WORKSPACE [AppModel workSpace]
+
 @implementation AppModel
 
-+ (NSMutableDictionary *)Apps {
-
++ (NSObject *)workSpace {
+    
     Class LSApplicationWorkspace_class = objc_getClass("LSApplicationWorkspace");
     
     NSObject* workspace = [LSApplicationWorkspace_class performSelector:@selector(defaultWorkspace)];
     
-    NSArray *appList = [workspace performSelector:@selector(allApplications)];
+    return workspace;
+}
+
++ (NSMutableDictionary *)Apps {
+
+
+    
+    NSArray *appList = [WORKSPACE performSelector:@selector(allApplications)];
     
     Class LSApplicationProxy_class = object_getClass(@"LSApplicationProxy");
-    
     
     
     NSMutableDictionary *list = [NSMutableDictionary new];
     
     NSMutableArray *appBundleID = [NSMutableArray arrayWithCapacity:appList.count];
     
+    
     for (LSApplicationProxy_class in appList) {
         
-        
+        /** bundleID */
         NSString *bundleID = [LSApplicationProxy_class performSelector:@selector(applicationIdentifier)];
         
+        /** 开发版本 */
         NSString *version = [LSApplicationProxy_class performSelector:@selector(bundleVersion)];
         
+        //开发人员
         NSString *teamID = [LSApplicationProxy_class performSelector:@selector(teamID)];
+        
+        //发布版本
+        NSString *shortVersionString = [LSApplicationProxy_class performSelector:@selector(shortVersionString)];
+        
+        //本地简写名称
+        NSObject *localizedShortName = [LSApplicationProxy_class performSelector:@selector(localizedShortName)];
+        //本地名称
+        NSObject *localizedName = [LSApplicationProxy_class performSelector:@selector(localizedName)];
+        
+        //文件路径
+        NSObject *resourcesDirectoryURL = [LSApplicationProxy_class performSelector:@selector(resourcesDirectoryURL)];
+        
+        //安装进度
+        NSObject *installProgress = [LSApplicationProxy_class performSelector:@selector(installProgress)];
+        
+        //安装类型(用户还是系统)
+        NSInteger installType = [LSApplicationProxy_class performSelector:@selector(installType)];
+        //app大小
+        NSNumber *staticDiskUsage = [LSApplicationProxy_class performSelector:@selector(staticDiskUsage)];
+        
+        //用户安装还是系统安装
+        NSString *applicationType = [LSApplicationProxy_class performSelector:@selector(applicationType)];
+        
         
         NSInteger originalInstallType = [LSApplicationProxy_class performSelector:@selector(originalInstallType)];
         
-        NSInteger installType = [LSApplicationProxy_class performSelector:@selector(installType)];
         
         NSNumber *itemID = [LSApplicationProxy_class performSelector:@selector(itemID)];
         
-        NSString *shortVersionString = [LSApplicationProxy_class performSelector:@selector(shortVersionString)];
         NSObject *description = [LSApplicationProxy_class performSelector:@selector(description)];
         
         NSObject *iconStyleDomain = [LSApplicationProxy_class performSelector:@selector(iconStyleDomain)];
         
-        NSObject *localizedShortName = [LSApplicationProxy_class performSelector:@selector(localizedShortName)];
-        
-        NSObject *localizedName = [LSApplicationProxy_class performSelector:@selector(localizedName)];
         
         NSObject *privateDocumentTypeOwner = [LSApplicationProxy_class performSelector:@selector(privateDocumentTypeOwner)];
         
         NSObject *privateDocumentIconNames = [LSApplicationProxy_class performSelector:@selector(privateDocumentIconNames)];
-        
-        NSObject *resourcesDirectoryURL = [LSApplicationProxy_class performSelector:@selector(resourcesDirectoryURL)];
-        
-        NSObject *installProgress = [LSApplicationProxy_class performSelector:@selector(installProgress)];
+    
         
         NSObject *appStoreReceiptURL = [LSApplicationProxy_class performSelector:@selector(appStoreReceiptURL)];
         
-        NSNumber *storeFront = [LSApplicationProxy_class performSelector:@selector(storeFront)];
         
-        NSNumber *staticDiskUsage = [LSApplicationProxy_class performSelector:@selector(staticDiskUsage)];
+        NSNumber *storeFront = [LSApplicationProxy_class performSelector:@selector(storeFront)];
         
         NSObject *deviceIdentifierForVendor = [LSApplicationProxy_class performSelector:@selector(deviceIdentifierForVendor)];
         
@@ -86,15 +111,15 @@
         
         NSArray *directionsModes = [LSApplicationProxy_class performSelector:@selector(directionsModes)];
         
-        //        NSDictionary *groupContaixners = [LSApplicationProxy_class performSelector:@selector(groupContainers)];
+//        NSDictionary *groupContaixners = [LSApplicationProxy_class performSelector:@selector(groupContainers)];
         
         NSString *vendorName = [LSApplicationProxy_class performSelector:@selector(vendorName)];
-        
-        NSString *applicationType = [LSApplicationProxy_class performSelector:@selector(applicationType)];
         
         NSString *sdkVersion = [LSApplicationProxy_class performSelector:@selector(sdkVersion)];
         
         NSMutableDictionary *dict = [NSMutableDictionary new];
+        
+        
         //版本信息
         [dict setValue:version forKey:@"bundleVersion"];
         //开发团队信息
@@ -157,6 +182,13 @@
         [dict setObject:icon forKey:@"appIcon"];
         
         
+        //安装进度
+
+        
+        
+        
+        
+        
         [list setValue:dict forKey:bundleID];
         
         [appBundleID addObject:bundleID];
@@ -178,18 +210,18 @@
 }
 
 + (void)installAPPWithIDE:(NSString *)ide {
-//    Class LSApplicationWorkspace_class = objc_getClass("LSApplicationWorkspace");
-//    NSObject* workspace = [LSApplicationWorkspace_class performSelector:@selector(defaultWorkspace)];
-////    [workspace performSelector:@selector(uninstallApplication:withOptions:) withObject:@"XXX" withObject:nil];
-////    [workspace performSelector:NSSelectorFromString(@"uninstallApplication:withOptions:") withObject:ide];
-//    [workspace performSelector:@selector(uninstallApplication:withOptions:) withObject:ide withObject:nil];
+    Class LSApplicationWorkspace_class = objc_getClass("LSApplicationWorkspace");
+    NSObject* workspace = [LSApplicationWorkspace_class performSelector:@selector(defaultWorkspace)];
+//    [workspace performSelector:@selector(uninstallApplication:withOptions:) withObject:@"XXX" withObject:nil];
+//    [workspace performSelector:NSSelectorFromString(@"uninstallApplication:withOptions:") withObject:ide];
+    [workspace performSelector:@selector(uninstallApplication:withOptions:) withObject:ide withObject:nil];
     
     
-    CFStringRef identifier = CFStringCreateWithCString(kCFAllocatorDefault, ide, kCFStringEncodingUTF8);
-    if (identifier != NULL) {
-        MobileInstallationUninstallForLaunchServices(identifier, NULL, NULL, NULL);
-        CFRelease(identifier);
-    }
+//    CFStringRef identifier = CFStringCreateWithCString(kCFAllocatorDefault, ide, kCFStringEncodingUTF8);
+//    if (identifier != NULL) {
+//        MobileInstallationUninstallForLaunchServices(identifier, NULL, NULL, NULL);
+//        CFRelease(identifier);
+//    }
     
     
 }

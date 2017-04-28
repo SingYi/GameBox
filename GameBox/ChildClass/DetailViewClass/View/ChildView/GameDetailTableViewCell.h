@@ -2,12 +2,14 @@
 //  GameDetailTableViewCell.h
 //  GameBox
 //
-//  Created by 石燚 on 2017/4/21.
+//  Created by 石燚 on 2017/4/28.
 //  Copyright © 2017年 SingYi. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
 @interface GameDetailTableViewCell : UITableViewCell
+
+@property (weak, nonatomic) IBOutlet UILabel *detail;
 
 @end

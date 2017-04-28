@@ -151,6 +151,15 @@
     return cell;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (self.RecommentTableHeaderDelegate && [self.RecommentTableHeaderDelegate respondsToSelector:@selector(RecommentTableHeader:didSelectImageWithInfo:)]) {
+        
+        [self.RecommentTableHeaderDelegate RecommentTableHeader:self didSelectImageWithInfo:_rollingArray[indexPath.item]];
+    }
+    
+}
+
 #pragma mark - getter
 - (UICollectionView *)collectionView {
     if (!_collectionView) {

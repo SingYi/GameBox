@@ -18,6 +18,7 @@
 #define CLASSIFYURL @"http://www.9344.net/api-game-gameClass"
 #define CLASSINFOURL @"http://www.9344.net/api-game-gameClassInfo"
 #define GAMEOPENURL @"http://www.9344.net/api-game-gameOpenServer"
+#define GAMESTRAURL @"http://www.9344.net/api-article-get_list_by_game"
 
 @implementation GameModel
 
@@ -173,6 +174,29 @@
     
     [RequestUtils postDataWithUrl:[NSString stringWithFormat:@"%@%@",IMAGEURL,url] params:nil completion:completion];
     
+}
+
++ (void)postStrategyWithGameID:(NSString *)gameID
+                          Page:(NSString *)page
+                     ChannelID:(NSString *)channelID
+                    Completion:(void (^)(NSDictionary * _Nullable, BOOL))completion {
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObject:gameID forKey:@"game_id"];
+    [dict setObject:@"1" forKey:@"type"];
+    if (page) {
+        [dict setObject:page forKey:@"page"];
+    } else {
+        [dict setObject:@"1" forKey:@"page"];
+    }
+    
+    if (channelID) {
+        [dict setObject:channelID forKey:@"channel_id"];
+    } else {
+        [dict setObject:@"185" forKey:@"channel_id"];
+    }
+    
+    [RequestUtils postRequestWithURL:GAMESTRAURL params:dict completion:completion];
 }
 
 + (void)showAlertWithMessage:(NSString *)message dismiss:(void(^)(void))dismiss {

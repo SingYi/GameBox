@@ -13,6 +13,7 @@
 #define DTServicerCELL @"NewServerTableViewCell"
 
 
+
 @interface GameOpenServerViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
