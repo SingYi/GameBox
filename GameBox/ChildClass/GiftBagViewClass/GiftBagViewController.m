@@ -176,17 +176,22 @@
     cell.delegate = self;
     cell.currentIdx = indexPath.row;
     
+    //礼包名称
     cell.name.text = _showArray[indexPath.row][@"pack_name"];
+    //礼包数量
     cell.packCounts.text = _showArray[indexPath.row][@"pack_counts"];
+    //礼包logo
     [cell.packLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"pack_logo"]]] placeholderImage:nil];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     
     NSString *total = _showArray[indexPath.row][@"pack_counts"];
     NSString *current = _showArray[indexPath.row][@"pack_used_counts"];
     CGFloat tc = current.floatValue / total.floatValue;
     
-    NSString *tcStr = [NSString stringWithFormat:@"%.0lf%%",(100 - tc * 100)];
+
+    NSString *tcStr = [NSString stringWithFormat:@"%.02f%%",(100.f - tc * 100.f)];
     
     cell.titlelabel.text = tcStr;
     

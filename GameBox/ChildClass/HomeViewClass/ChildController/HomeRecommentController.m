@@ -93,19 +93,6 @@
 }
 
 #pragma mkar - method
-/**< 根据页面数和渠道请求数据 */
-//- (void)getDataWithChannelID:(NSString *)channelID Page:(NSString *)page {
-//    [GameModel postRecommendGameListWithChannelID:channelID Page:page Completion:^(NSDictionary * _Nullable content, BOOL success) {
-//        _showArray = [content[@"data"][@"gamelist"] mutableCopy];
-//        self.rollHeader.rollingArray = content[@"data"][@"banner"];
-//        _currentPage = 1;
-//        _isAll = NO;
-//        _totalPage = ((NSString *)content[@"data"][@"count"]).integerValue;
-//        NSLog(@"%ld",_totalPage);
-//        [self.tableView reloadData];
-//    }];
-//}
-
 /**刷新数据*/
 - (void)refreshData {
     [GameModel postRecommendGameListWithChannelID:@"185" Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
@@ -115,7 +102,7 @@
         _currentPage = 1;
         _isAll = NO;
         
-//        NSLog(@"%@",content);
+        CLog(@"%@",content);
         
         [self.tableView.mj_header endRefreshing];
         [self.tableView reloadData];
@@ -161,6 +148,9 @@
     
     [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.9344.net%@",_showArray[indexPath.row][@"logo"]]]];
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
+   
+ 
+    
     
     cell.selectIndex = indexPath.row;
     

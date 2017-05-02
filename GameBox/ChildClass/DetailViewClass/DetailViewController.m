@@ -148,14 +148,13 @@
     listCommentViewBtn.frame = CGRectMake(215, 450, 100, 40);
     [listCommentViewBtn addTarget:self action:@selector(listCommentView) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:listCommentViewBtn];
-    
-    
+
 }
 
 - (void)listCommentView {
     UIViewController *listViewController = [ChangyanSDK getListCommentViewController:@""
                                                                              topicID:nil
-                                                                       topicSourceID:_gameID
+                                                                       topicSourceID:[NSString stringWithFormat:@"game_%@",_gameID]
                                                                           categoryID:nil
                                                                           topicTitle:nil];
     UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:listViewController];
