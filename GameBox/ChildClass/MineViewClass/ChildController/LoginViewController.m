@@ -83,10 +83,36 @@
     
     [MineModel postLoginWithAccount:self.userName.text PassWord:self.passWord.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
         
+        NSNumber *status = content[@"status"];
         
-        
-        
-        NSLog(@"%@",content);
+        if (success && status.integerValue == 0) {
+            
+            SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:YES], @"isLogin");
+            
+            SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"id"], @"userID");
+            SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"nicename"], @"naceName");
+            SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"user_longin"], @"userLogin");
+            SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"user_email"], @"email");
+            if ([(content[@"data"][@"avatar"]) isKindOfClass:[NSNull class]]) {
+                
+            } else {
+                
+                SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"avatar"], @"avatar");
+            }
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            [MineModel showAlertWithMessage:@"登录成功" dismiss:^{
+
+                [self.navigationController popViewControllerAnimated:YES];
+            }];
+            
+        } else if (success && status.integerValue == 1) {
+            
+            [MineModel showAlertWithMessage:content[@"msg"] dismiss:nil];
+        } else {
+        }
+
+        CLog(@"interesting%@",content);
     }];
     
     

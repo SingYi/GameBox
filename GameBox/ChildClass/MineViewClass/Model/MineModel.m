@@ -7,6 +7,7 @@
 //
 
 #import "MineModel.h"
+#import <UIKit/UIKit.h>
 
 
 
@@ -94,6 +95,7 @@
 + (void)postResetPassWordWithUserID:(NSString *)uid
                            PassWord:(NSString *)passWord
                     ConfirmPassWord:(NSString *)confirmPassword
+                              Token:(NSString *)token
                          Completion:(void (^)(NSDictionary * _Nullable, BOOL))completion {
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -102,6 +104,8 @@
     [dict setObject:passWord forKey:@"password"];
     
     [dict setObject:confirmPassword forKey:@"repassword"];
+    
+    [dict setObject:token forKey:@"token"];
     
     [RequestUtils postRequestWithURL:RESETPASSWORDURL params:dict completion:completion];
     
@@ -127,6 +131,20 @@
     
 }
 
+
++ (void)showAlertWithMessage:(NSString *)message dismiss:(void(^)(void))dismiss {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertController animated:YES completion:nil];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [alertController dismissViewControllerAnimated:YES completion:^{
+            if (dismiss) {
+                dismiss();
+            }
+        }];
+    });
+}
 
 
 

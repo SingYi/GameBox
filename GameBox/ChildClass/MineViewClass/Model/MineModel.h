@@ -49,6 +49,7 @@
 + (void)postResetPassWordWithUserID:(NSString * _Nonnull)uid
                            PassWord:(NSString * _Nonnull)passWord
                     ConfirmPassWord:(NSString * _Nonnull)confirmPassword
+                              Token:(NSString * _Nonnull)token
                          Completion:(void(^_Nonnull)( NSDictionary  * _Nullable content,BOOL success))completion;
 
 /** 修改密码 */
@@ -57,6 +58,9 @@
                          NewPassword:(NSString * _Nonnull)newPassword
                      ConfirmPassword:(NSString * _Nonnull)confirmPassword
                           Completion:(void(^_Nonnull)( NSDictionary  * _Nullable content,BOOL success))completion;
+
+/** 显示提示信息 */
++ (void)showAlertWithMessage:(NSString *_Nullable)message dismiss:(void(^_Nullable)(void))dismiss;
 
 @end
 

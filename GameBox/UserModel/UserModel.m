@@ -22,29 +22,35 @@ static UserModel *currentUser = nil;
 
 /** 当前用户 */
 + (UserModel *)CurrentUser {
-    NSNumber *isLogin = OBJECT_FOR_USERDEFAULTS(ISLOGIN);
-    //未登录返回空
-    if (isLogin.boolValue == NO) {
-        return nil;
-    } else {
+    NSNumber *isLogin = OBJECT_FOR_USERDEFAULTS(@"isLogin");
+
+    if (isLogin.boolValue) {
         //登录返回用户数据
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             currentUser = [[UserModel alloc] init];
         });
-        
-        currentUser.uid = @"123";
 
+        currentUser.uid = OBJECT_FOR_USERDEFAULTS(@"userID");
+        currentUser.avatar = OBJECT_FOR_USERDEFAULTS(@"avatar");
+
+        
+        
         return currentUser;
+
+    } else {
+        return nil;
+        //登录返回用户数据
     }
-    return currentUser;
+}
+
++ (void)logIn {
+    USERLOGIN;
 }
 
 /** 退出登录 */
 + (void)logOut {
-    
     USERLOGOUT;
-    
 }
 
 + (NSString *)uid {
@@ -54,6 +60,9 @@ static UserModel *currentUser = nil;
         return @"0";
     }
 }
+
+#pragma mark - setter
+
 
 
 

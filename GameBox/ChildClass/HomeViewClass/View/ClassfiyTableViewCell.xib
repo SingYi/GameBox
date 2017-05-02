@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,38 +18,34 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="idF-bd-YT2">
-                        <rect key="frame" x="-1.5" y="9.5" width="60" height="60.5"/>
+                        <rect key="frame" x="-1.5" y="9.5" width="60" height="60"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </stackView>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZDn-3w-lnS">
-                        <rect key="frame" x="377" y="10" width="60" height="60"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4ou-cX-cIq">
+                        <rect key="frame" x="38" y="10" width="60" height="60"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" red="1" green="0.43020780809999998" blue="0.30019230959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </button>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="otY-BW-JRV">
-                        <rect key="frame" x="268" y="11" width="60" height="60"/>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kg8-nE-tni">
+                        <rect key="frame" x="258" y="10" width="60" height="60"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" red="1" green="0.43020780809999998" blue="0.30019230959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </button>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kHG-nT-yUK">
-                        <rect key="frame" x="30" y="10" width="60" height="61"/>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dma-az-YPw">
+                        <rect key="frame" x="365" y="10" width="60" height="60"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" red="1" green="0.43020780809999998" blue="0.30019230959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </button>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vIU-yI-n9T">
-                        <rect key="frame" x="139" y="10" width="60" height="60"/>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hd8-8U-Roq">
+                        <rect key="frame" x="129" y="10" width="60" height="60"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" red="1" green="0.43020780809999998" blue="0.30019230959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </button>
+                    </imageView>
                 </subviews>
             </tableViewCellContentView>
             <connections>
-                <outlet property="btn1" destination="kHG-nT-yUK" id="g7Z-cO-gWw"/>
-                <outlet property="btn2" destination="vIU-yI-n9T" id="sOT-Yj-X2u"/>
-                <outlet property="btn3" destination="otY-BW-JRV" id="tIP-if-669"/>
-                <outlet property="btn4" destination="ZDn-3w-lnS" id="iI7-OB-fKk"/>
+                <outlet property="imageView1" destination="4ou-cX-cIq" id="sWf-z7-L2L"/>
+                <outlet property="imageView2" destination="hd8-8U-Roq" id="Iqy-8e-Gs1"/>
+                <outlet property="imageView3" destination="kg8-nE-tni" id="FFk-nk-hkK"/>
+                <outlet property="imageView4" destination="Dma-az-YPw" id="eMj-pe-iqE"/>
             </connections>
-            <point key="canvasLocation" x="-270" y="69"/>
+            <point key="canvasLocation" x="-270.5" y="69"/>
         </tableViewCell>
     </objects>
 </document>

@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "ControllerManager.h"
 
+#import "ChangyanSDK.h"
+
 
 @interface AppDelegate ()
 
@@ -26,7 +28,20 @@
     ControllerManager *manager = [[ControllerManager alloc]init];
     
     self.window.rootViewController = manager.rootViewController;
-
+    
+    [ChangyanSDK registerApp:@"cysXjYB6V"
+                      appKey:@"f6b34b898c39f5ff7f95828c78126d4f"
+                 redirectUrl:nil
+        anonymousAccessToken:nil];
+    
+    
+    [ChangyanSDK getUserInfo:^(CYStatusCode statusCode, NSString *responseStr) {
+        
+        NSLog(@"%@",responseStr);
+    }];
+  
+    
+    [ChangyanSDK setLoginViewController:[ControllerManager shareManager].loginViewController];
     
 //    Class cls = NSClassFromString(@"LSApplicationWorkspace");
 //    id s = [(id)cls performSelector:NSSelectorFromString(@"defaultWorkspace")];

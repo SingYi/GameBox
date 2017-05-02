@@ -9,10 +9,15 @@
 #import "MyGiftBagViewController.h"
 #import "GiftBagCell.h"
 
+#import "GiftBagModel.h"
+#import "UserModel.h"
+
+#import <MJRefresh.h>
+#import <UIImageView+WebCache.h>
 
 #define CELLIDE @"GiftBagCell"
 
-@interface MyGiftBagViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface MyGiftBagViewController ()<UITableViewDelegate,UITableViewDataSource,GiftBagCellDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -35,14 +40,44 @@
 }
 
 - (void)initDataSource {
-    _showArray = @[@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@""];
+    [self.tableView.mj_header beginRefreshing];
+}
+
+- (void)refreshData {
+    CLog(@"%@",[UserModel CurrentUser].uid);
+    [GiftBagModel postGiftListWihtUserID:[UserModel CurrentUser].uid ChannelID:@"185" Order:nil OrderType:nil Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        self.showArray = content[@"data"][@"list"];
+        CLog(@"%@",content);
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView reloadData];
+    }];
 }
 
 - (void)initUserInterface {
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.title = @"我的礼包";
     [self.view addSubview:self.tableView];
+}
+
+
+#pragma mark - cellDelegate
+/**< 点击cell的领取按钮的响应事件 */
+- (void)getGiftBagCellAtIndex:(NSInteger)idx {
+    NSString *str = _showArray[idx][@"card"];
     
+    if ([str isKindOfClass:[NSNull class]]) {
+        
+        
+        
+    } else {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        
+        pasteboard.string = str;
+        
+        [GiftBagModel showAlertWithMessage:@"已复制礼包兑换码" dismiss:^{
+            
+        }];
+    }
 }
 
 #pragma mark - tableViewDataSource
@@ -57,6 +92,38 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     GiftBagCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDE forIndexPath:indexPath];
     
+    cell.delegate = self;
+    cell.currentIdx = indexPath.row;
+    
+    cell.name.text = _showArray[indexPath.row][@"pack_name"];
+    cell.packCounts.text = _showArray[indexPath.row][@"pack_counts"];
+    [cell.packLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"pack_logo"]]] placeholderImage:nil];
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    NSString *total = _showArray[indexPath.row][@"pack_counts"];
+    NSString *current = _showArray[indexPath.row][@"pack_used_counts"];
+    CGFloat tc = current.floatValue / total.floatValue;
+    
+    NSString *tcStr = [NSString stringWithFormat:@"%.0lf%%",(100 - tc * 100)];
+    
+    cell.titlelabel.text = tcStr;
+    
+    CGRect rect = cell.packProgress.bounds;
+    
+    cell.progressView.frame = CGRectMake(0, 0, rect.size.width * tc, rect.size.height);
+    
+    NSString *str = _showArray[indexPath.row][@"card"];
+    
+    if ([str isKindOfClass:[NSNull class]]) {
+        [cell.getBtn setTitle:@"领取" forState:(UIControlStateNormal)];
+        [cell.getBtn setBackgroundColor:[UIColor orangeColor]];
+        [cell.getBtn setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
+    } else {
+        [cell.getBtn setTitle:@"复制" forState:(UIControlStateNormal)];
+        [cell.getBtn setBackgroundColor:[UIColor grayColor]];
+        [cell.getBtn setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
+    }
     
     
     return cell;
@@ -81,6 +148,30 @@
         
         _tableView.showsVerticalScrollIndicator = NO;
         _tableView.showsHorizontalScrollIndicator = NO;
+        
+        //下拉刷新
+        MJRefreshNormalHeader *customRef = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
+        
+        [customRef setTitle:@"数据已加载" forState:MJRefreshStateIdle];
+        [customRef setTitle:@"刷新数据" forState:MJRefreshStatePulling];
+        [customRef setTitle:@"正在刷新" forState:MJRefreshStateRefreshing];
+        [customRef setTitle:@"即将刷新" forState:MJRefreshStateWillRefresh];
+        [customRef setTitle:@"所有数据加载完毕，没有更多的数据了" forState:MJRefreshStateNoMoreData];
+        
+        
+        //自动更改透明度
+        _tableView.mj_header.automaticallyChangeAlpha = YES;
+
+        
+        _tableView.mj_header = customRef;
+        
+        
+        
+        
+        
+        
+        
+        _tableView.tableFooterView = [UIView new];
 
     }
     return _tableView;

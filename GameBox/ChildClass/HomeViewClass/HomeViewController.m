@@ -158,7 +158,9 @@
 }
 
 - (void)clickDownloadBtn {
-    
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:[ControllerManager shareManager].myAppViewController animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 }
 
 - (void)clickMessageBtn {

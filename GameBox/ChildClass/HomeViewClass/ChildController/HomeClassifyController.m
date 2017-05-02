@@ -10,6 +10,8 @@
 #import "ClassfiyTableViewCell.h"
 #import "GameModel.h"
 
+#import <SDWebImageDownloader.h>
+
 #define CellIDE @"ClassfiyTableViewCell"
 #define BTNTAG 1700
 
@@ -39,14 +41,10 @@
     [GameModel postGameClassifyWithChannel:@"185" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         self.classifyArray = content[@"data"][@"class"];
         self.showArry = content[@"data"][@"classData"];
-        //        [self.tableView reloadData];
-        
-//                NSLog(@"classify === %@",content);
+//        CLog(@"%@",content);
     }];
     
-//    [GameModel postGameListWithClassifyID:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-//        NSLog(@"%@",content);
-//    }];
+
     
 }
 
@@ -81,11 +79,19 @@
     
     self.headerView.backgroundColor = [UIColor whiteColor];
     
-    [titleArray enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [_classifyArray enumerateObjectsUsingBlock:^(NSDictionary * obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        NSString *title = obj[@"name"];
         UIButton *button = [UIButton buttonWithType:(UIButtonTypeCustom)];
         
         button.frame = CGRectMake(kSCREEN_WIDTH / 4 * (idx % 4), kSCREEN_WIDTH / 4 * (idx / 4), kSCREEN_WIDTH / 4, kSCREEN_WIDTH / 4);
-        [button setTitle:obj forState:(UIControlStateNormal)];
+        [button setTitle:title forState:(UIControlStateNormal)];
+        
+        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,obj[@"logo"]]] options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+            
+            [button setImage:image forState:(UIControlStateNormal)];
+//            CLog(@"图片加载");
+        }];
         
         button.tag = idx + BTNTAG;
         [button setTitleColor:[UIColor lightGrayColor] forState:(UIControlStateNormal)];
@@ -99,7 +105,7 @@
 
 - (void)respondsToBtn:(UIButton *)sender {
     
-    NSLog(@"%@",sender.titleLabel.text);
+    
     
 }
 
@@ -114,8 +120,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ClassfiyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIDE];
-    
-    
+    NSDictionary *dict = self.showArry[indexPath.section];
+    NSArray *gameArray = dict[@"list"];
+    NSArray<UIImageView *> *ImageArray = @[cell.imageView1,cell.imageView2,cell.imageView3,cell.imageView4];
+    for (NSInteger i = 0; i < gameArray.count; i++) {
+        NSDictionary *gamedict = gameArray[i];
+        [ImageArray[i] sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,gamedict[@"logo"]]]];
+    }
     
     return cell;
 }

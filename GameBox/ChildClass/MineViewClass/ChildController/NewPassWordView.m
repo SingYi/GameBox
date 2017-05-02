@@ -44,12 +44,16 @@
 #pragma mark - responds
 - (void)respondsToCompleteBtn {
     
-    [MineModel postResetPassWordWithUserID:@"3103" PassWord:self.passWord.text ConfirmPassWord:self.affimPassWord.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        NSLog(@"%@",content);
-        NSLog(@"%@",content[@"msg"]);
+    [MineModel postResetPassWordWithUserID:self.userId PassWord:self.passWord.text ConfirmPassWord:self.affimPassWord.text Token:self.userToken Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        
+        if (success) {
+            [self.navigationController popToRootViewControllerAnimated:YES];
+            NSLog(@"%@",content);
+            NSLog(@"%@",content[@"msg"]);
+        }
+        
     }];
     
-//    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark - getter

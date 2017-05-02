@@ -41,7 +41,7 @@
 
 #pragma mark - responds
 - (void)respondsToSureBtn {
-    [MineModel postModifyPassWordWithUserID:@"3103" OldPassword:self.oriPassWord.text NewPassword:self.reSetWord.text ConfirmPassword:self.affirmWord.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
+    [MineModel postModifyPassWordWithUserID:@"" OldPassword:self.oriPassWord.text NewPassword:self.reSetWord.text ConfirmPassword:self.affirmWord.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
        
         NSLog(@"%@",content);
         NSLog(@"%@",content[@"msg"]);

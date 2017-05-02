@@ -23,11 +23,12 @@
 #import "SettingView.h"
 #import "AboutUsView.h"
 
+#import <MobileCoreServices/MobileCoreServices.h>
 
 #define CELLIDENTIFIER @"MineCell"
 
 
-@interface MineViewController ()<UICollectionViewDataSource,UICollectionViewDelegate>
+@interface MineViewController ()<UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @property (nonatomic, strong) UIImageView *headerview;
 
@@ -41,6 +42,9 @@
 
 /**登录按钮*/
 @property (nonatomic, strong) UIButton *loginBtn;
+
+/** 用户头像 */
+@property (nonatomic, strong) UIImageView *avatar;
 
 /**登录页面*/
 @property (nonatomic, strong) LoginViewController *loginView;
@@ -58,6 +62,32 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.hidden = YES;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    
+    NSString *uid = [UserModel CurrentUser].uid;
+    
+    NSNumber *isLogin = OBJECT_FOR_USERDEFAULTS(@"isLogin");
+    
+    CLog(@"MineViewController.uid == %@",[UserModel CurrentUser].uid);
+    CLog(@"MineViewController.isLogin == %d",isLogin.boolValue);
+    
+    if (uid && isLogin.boolValue) {
+        CLog(@"已登录");
+        
+        self.avatar.image = [UIImage imageWithData:[UserModel CurrentUser].avatar];
+        
+        [self.loginBtn removeFromSuperview];
+        [self.headerview addSubview:self.avatar];
+        
+        
+    } else {
+        CLog(@"未登录");
+        
+        self.avatar.image = nil;
+        
+        [self.headerview addSubview:self.loginBtn];
+        [self.avatar removeFromSuperview];
+        
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -75,7 +105,6 @@
     _showArray = @[@"应用管理",@"我的礼包",@"我的消息",@"修改密码",@"我的关注",@"设置",@"关于",@"",@""];
     _imageArray = @[@"mine_yingyongguanli",@"mine_libao",@"mine_wodexiaoxi",@"mine_xiugaimima",@"mine_guanzhu",@"mine_shezhi",@"mine_guanyu"];
 
-    
 }
 
 - (void)initUserInterface {
@@ -86,7 +115,6 @@
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
     [self.view addSubview:self.headerview];
-    [self.view addSubview:self.loginBtn];
     [self.view addSubview:self.collectionView];
 }
 
@@ -96,6 +124,69 @@
     [self.navigationController pushViewController:self.loginView animated:YES];
     self.hidesBottomBarWhenPushed = NO;
 }
+
+- (void)TapaAvatar {
+    
+    CLog(@"1");
+    
+    UIImagePickerController *pickerView = [[UIImagePickerController alloc] init];
+    pickerView.delegate = self;
+    pickerView.allowsEditing = YES;
+    
+    if  ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary] && [UIImagePickerController isSourceTypeAvailable : UIImagePickerControllerSourceTypeCamera] && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum]) {
+        
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"请选择图片来源" preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction *photoLibraryAct = [UIAlertAction actionWithTitle:@"相册" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            pickerView.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            [self presentViewController:pickerView animated:YES completion:nil];
+        }];
+        UIAlertAction *cameraAct = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            pickerView.sourceType = UIImagePickerControllerSourceTypeCamera;
+            pickerView.cameraDevice = UIImagePickerControllerCameraDeviceRear;
+            pickerView.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+            
+            [self presentViewController:pickerView animated:YES completion:nil];
+        }];
+        UIAlertAction *cancelAct = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        [alertController addAction:photoLibraryAct];
+        [alertController addAction:cameraAct];
+        [alertController addAction:cancelAct];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
+
+#pragma mark - pickerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    
+    NSString* type = [info objectForKey:UIImagePickerControllerMediaType];
+    if ([type isEqualToString:(NSString*)kUTTypeImage]) {
+        
+        UIImage  *photo = info[UIImagePickerControllerEditedImage];
+        NSData *data = UIImagePNGRepresentation(photo);
+        
+        SAVEOBJECT_AT_USERDEFAULTS(data, @"avatar");
+        
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        self.avatar.image = photo;
+        
+        
+
+
+        
+     
+    } else {
+        
+    }
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 
 #pragma mark - collectionViewDataSource 
@@ -181,6 +272,7 @@
         _headerview = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 300)];
         _headerview.image = [UIImage imageNamed:@"mineBackground"];
         _headerview.userInteractionEnabled = YES;
+        
     }
     return _headerview;
 }
@@ -218,6 +310,27 @@
         
     }
     return _loginBtn;
+}
+
+- (UIImageView *)avatar {
+    if (!_avatar) {
+        _avatar = [[UIImageView alloc] init];
+        _avatar.bounds = CGRectMake(0, 0, kSCREEN_WIDTH / 3, kSCREEN_WIDTH / 3);
+        _avatar.center = CGPointMake(kSCREEN_WIDTH / 2, 150);
+        
+        _avatar.backgroundColor = [UIColor blueColor];
+        _avatar.layer.cornerRadius = kSCREEN_WIDTH / 6;
+        _avatar.layer.masksToBounds = YES;
+        
+        _avatar.userInteractionEnabled = YES;
+        _avatar.layer.borderWidth = 4.0f;//边框宽度
+        _avatar.layer.borderColor = [UIColor whiteColor].CGColor;//边框颜色
+        UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(TapaAvatar)];
+        tapRecognizer.numberOfTapsRequired = 1;
+        tapRecognizer.numberOfTouchesRequired = 1;
+        [_avatar addGestureRecognizer:tapRecognizer];
+    }
+    return _avatar;
 }
 
 - (LoginViewController *)loginView {

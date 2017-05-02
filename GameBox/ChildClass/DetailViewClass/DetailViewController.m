@@ -19,6 +19,8 @@
 
 #import "UIImageView+WebCache.h"
 
+#import "ChangyanSDK.h"
+
 
 @interface DetailViewController ()<DetailHeaderDelegate>
 
@@ -126,14 +128,42 @@
             self.gameinfo = content[@"data"][@"gameinfo"];
             self.likes = content[@"data"][@"like"];
             self.navigationItem.title = self.gameinfo[@"gamename"];
+            
+//            CLog(@"%@",content);
         }
         
-        NSLog(@"??? %@",content[@"msg"]);
+
     }];
+    
     
     self.gameGiftBag.gameID = gameID;
     self.gameOpenServer.gameID = gameID;
     self.gameStrategy.gameID = gameID;
+    
+    
+    /////评论测试
+    UIButton *listCommentViewBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    listCommentViewBtn.backgroundColor = [UIColor blueColor];
+    [listCommentViewBtn setTitle:@"评论列表页" forState:UIControlStateNormal];
+    listCommentViewBtn.frame = CGRectMake(215, 450, 100, 40);
+    [listCommentViewBtn addTarget:self action:@selector(listCommentView) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:listCommentViewBtn];
+    
+    
+}
+
+- (void)listCommentView {
+    UIViewController *listViewController = [ChangyanSDK getListCommentViewController:@""
+                                                                             topicID:nil
+                                                                       topicSourceID:_gameID
+                                                                          categoryID:nil
+                                                                          topicTitle:nil];
+    UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:listViewController];
+    [self presentViewController:navigation animated:YES completion:^{
+        
+    }];
+    
+//    [self.navigationController pushViewController:listViewController animated:YES];
 }
 
 - (void)setGameinfo:(NSDictionary *)gameinfo {
@@ -154,6 +184,8 @@
 - (void)setDataImage:(UIImage *)dataImage {
     self.gameOpenServer.logoImage = dataImage;
 }
+
+
 
 #pragma mark - childController
 //  切换各个标签内容

@@ -58,11 +58,16 @@
 #pragma mark - responds
 /** 下一步 */
 - (void)respondsToNext {
-//    [self.navigationController pushViewController:self.newPassWordView animated:YES];
     
     [MineModel postCheckPhoneCodeWithPhoneNumber:self.phoneNumber.text PhoneCode:self.securityCode.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success) {
+            
+        }
         NSLog(@"%@",content);
         NSLog(@"%@",content[@"msg"]);
+        self.newPassWordView.userId = content[@"data"][@"id"];
+        self.newPassWordView.userToken = content[@"data"][@"token"];
+        [self.navigationController pushViewController:self.newPassWordView animated:YES];
     }];
 }
 

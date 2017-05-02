@@ -10,4 +10,11 @@
 
 @interface NewPassWordView : UIViewController
 
+/** 用户id */
+@property (nonatomic, strong) NSString *userId;
+
+/** token */
+@property (nonatomic, strong) NSString *userToken;
+
+
 @end

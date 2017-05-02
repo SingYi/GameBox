@@ -29,6 +29,9 @@
 /** 当前的用户 */
 + (UserModel *)CurrentUser;
 
+/** 用户登录 */
++ (void)logIn;
+
 /** 退出登录 */
 + (void)logOut;
 
