@@ -37,26 +37,11 @@
     
     [ChangyanSDK getUserInfo:^(CYStatusCode statusCode, NSString *responseStr) {
         
-        NSLog(@"%@",responseStr);
+        
     }];
   
     
     [ChangyanSDK setLoginViewController:[ControllerManager shareManager].loginViewController];
-    
-//    Class cls = NSClassFromString(@"LSApplicationWorkspace");
-//    id s = [(id)cls performSelector:NSSelectorFromString(@"defaultWorkspace")];
-//    NSArray *arr = [s performSelector:NSSelectorFromString(@"allInstalledApplications")];
-//    NSLog(@"apps: %@", arr);
-    
-//    Class LSApplicationWorkspace_class = objc_getClass("LSApplicationWorkspace");
-//    NSObject* workspace = [LSApplicationWorkspace_class performSelector:@selector(defaultWorkspace)];
-    
-//    NSArray *appList = [workspace performSelector:@selector(allApplications)];
-//
-//    Class LSApplicationProxy_class = object_getClass(@"LSApplicationProxy");
-
-    
-//    NSLog(@"设备上的APP : %ld 个",(unsigned long)appList.count);
     
 
     

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -45,7 +45,6 @@
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KGk-sm-ve0">
                                 <rect key="frame" x="504" y="33" width="60" height="30"/>
-                                <color key="backgroundColor" red="1" green="0.43020780813384485" blue="0.30019230962861621" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="HxB-47-kJq"/>
                                     <constraint firstAttribute="height" constant="30" id="ur9-R4-pGy"/>
@@ -64,7 +63,6 @@
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ulk-UY-iY8">
                                 <rect key="frame" x="90" y="66" width="150" height="12"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="Ltm-ez-q2O"/>
                                     <constraint firstAttribute="height" constant="12" id="rwU-zY-CV3"/>
@@ -97,11 +95,13 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="getBtn" destination="KGk-sm-ve0" id="dsO-B4-9Zq"/>
+                <outlet property="getBtn" destination="KGk-sm-ve0" id="4jo-6b-ZOU"/>
+                <outlet property="leftLayout" destination="Oa3-6s-hfJ" id="9Cu-EO-hWZ"/>
                 <outlet property="name" destination="Rzy-7h-OMa" id="EGX-v7-fnp"/>
                 <outlet property="packCounts" destination="Q77-tt-poy" id="CcC-SU-cAw"/>
                 <outlet property="packLogo" destination="BFY-hn-SfA" id="T0L-WU-jFg"/>
                 <outlet property="packProgress" destination="Ulk-UY-iY8" id="gL4-3A-vFP"/>
+                <outlet property="rightLayout" destination="BGR-gN-395" id="cQC-xb-GLg"/>
             </connections>
             <point key="canvasLocation" x="84" y="41.5"/>
         </tableViewCell>

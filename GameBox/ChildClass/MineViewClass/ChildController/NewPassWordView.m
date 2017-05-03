@@ -48,8 +48,8 @@
         
         if (success) {
             [self.navigationController popToRootViewControllerAnimated:YES];
-            NSLog(@"%@",content);
-            NSLog(@"%@",content[@"msg"]);
+            CLog(@"%@",content);
+            CLog(@"%@",content[@"msg"]);
         }
         
     }];

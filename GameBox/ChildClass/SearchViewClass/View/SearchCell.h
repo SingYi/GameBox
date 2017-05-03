@@ -11,7 +11,7 @@
 
 @protocol SearchCellDelelgate <NSObject>
 
-- (void)didSelectCellRowAtIndexpath:(NSInteger)idx;
+- (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict;
 
 @end
 

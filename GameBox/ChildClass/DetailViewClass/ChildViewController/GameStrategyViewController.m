@@ -58,7 +58,7 @@
             _showArray = content[@"data"][@"list"];
         }
         
-        NSLog(@"%@",content);
+
         [self.tableView reloadData];
     }];
 }

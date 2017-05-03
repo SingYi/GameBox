@@ -73,7 +73,7 @@
 #pragma mark - cellDelegate
 - (void)newServerCellRefreshDataWithIndex:(NSInteger)index {
     [self postCellDataWithIndex:index + 1];
-    NSLog(@"刷新数据");
+    CLog(@"刷新数据");
     
     NewServerCell *cell = (NewServerCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0]];
     

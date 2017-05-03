@@ -10,9 +10,11 @@
 
 @interface MineCell : UICollectionViewCell
 
+/** title */
+@property (nonatomic, strong) UILabel *titleLabel;
 
-@property (weak, nonatomic) IBOutlet UILabel *label;
+/** 图片 */
+@property (nonatomic, strong) UIImageView *titleImageView;
 
-@property (weak, nonatomic) IBOutlet UIImageView *image;
 
 @end

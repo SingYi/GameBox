@@ -10,9 +10,11 @@
 #import "SearchCell.h"
 #import "GameModel.h"
 
+#import "ControllerManager.h"
+
 #define CELLIDENTIFIER @"SearchCell"
 
-@interface HomeHotGameController ()<UITableViewDataSource,UITableViewDelegate>
+@interface HomeHotGameController ()<UITableViewDataSource,UITableViewDelegate,SearchCellDelelgate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -64,6 +66,8 @@
     
     cell.dict = (NSDictionary *)_showArray[indexPath.row];
     
+    cell.delegate = self;
+    
     return cell;
 }
 
@@ -72,7 +76,20 @@
     return 80;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    [ControllerManager shareManager].detailView.gameID = _showArray[indexPath.row][@"id"];
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
+}
 
+#pragma mark - cellDelegate
+- (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
+    
+}
+
+#pragma mark - getter
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 145) style:(UITableViewStylePlain)];
@@ -118,14 +135,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

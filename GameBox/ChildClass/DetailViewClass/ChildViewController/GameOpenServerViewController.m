@@ -41,7 +41,7 @@
 #pragma mark - method
 - (void)getOpenServerData {
     [GameModel postServerListWithGameID:_gameID Copoletion:^(NSDictionary * _Nullable content, BOOL scccess) {
-        NSLog(@"openServer =============       %@",content);
+
         _showArray = content[@"data"];
         [self.tableView reloadData];
     }];

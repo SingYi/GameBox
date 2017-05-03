@@ -44,4 +44,7 @@
 @property (nonatomic, weak) id<GiftBagCellDelegate> delegate;
 
 
+@property (nonatomic, strong) NSDictionary *dict;
+
+
 @end

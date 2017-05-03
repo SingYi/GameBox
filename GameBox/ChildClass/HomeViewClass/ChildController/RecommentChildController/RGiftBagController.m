@@ -40,12 +40,17 @@
 @property (nonatomic, assign) BOOL isSearch;
 
 
-/**< 显示数据的数组 */
+/** 显示数据的数组 */
 @property (nonatomic, strong) NSMutableArray * showArray;
-/**< 数据请求数组 */
+/** 数据请求数组 */
 @property (nonatomic, strong) NSArray *dataArray;
-/**< 搜索结果数组 */
+/** 搜索结果数组 */
 @property (nonatomic, strong) NSArray *resultArray;
+
+/** 当前页数 */
+@property (nonatomic, assign) NSInteger currentPage;
+
+@property (nonatomic, assign) BOOL isAll;
 
 @end
 
@@ -101,32 +106,35 @@
 //即将开始搜索
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     //开始搜索
-//    searchBar.showsCancelButton = YES;
     _isSearch = YES;
-    [self.tableView reloadData];
     self.navigationItem.rightBarButtonItem = self.cancelSearchBtn;
+    
+    self.tableView.mj_footer = nil;
+    self.tableView.mj_header = nil;
+    
+    
     return YES;
 }
 
 //开始搜索
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-//    NSLog(@"searchBarTextDidBeginEditing");
+
 }
 
 //即将结束搜索
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
-//    NSLog(@"searchBarShouldEndEditing");
+    
     return YES;
 }
 
 //结束搜索
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-//    NSLog(@"searchBarTextDidEndEditing");
+    [self clickCancelSearchBtn];
 }
 
 //文本已经改变
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-//    NSLog(@"textDidChange");
+
 }
 
 //文编即将改变
@@ -144,6 +152,12 @@
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    if (searchBar.text.length == 0) {
+        [self clickCancelSearchBtn];
+        searchBar.returnKeyType = UIReturnKeyContinue;
+    }
+    
+    
     [searchBar resignFirstResponder];
     
     NSString *uid = GETUSERID;
@@ -163,9 +177,9 @@
         } else {
             [GiftBagModel showAlertWithMessage:@"网络不知道飞到哪里去了" dismiss:nil];
         }
-//        NSLog(@"%@",content);
+
     }];
-//    NSLog(@"search");
+;
 }
 
 #pragma mark - method
@@ -174,14 +188,40 @@
         _dataArray = [content[@"data"][@"list"] mutableCopy];
         if (!_isSearch) {
             _showArray = [_dataArray mutableCopy];
+            _isAll = NO;
+            _currentPage = 1;
         }
         [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
         [self.tableView reloadData];
     }];
 }
 
+- (void)loadMoreData {
+    if (_isAll) {
+        [self.tableView.mj_footer endRefreshingWithNoMoreData];
+    } else {
+        _currentPage++;
+        
+        [GiftBagModel postGiftBagListWithPage:[NSString stringWithFormat:@"%ld",(long)_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            
+//            CLog(@"%ld  %@",_currentPage,content);
+            
+            NSArray *array = content[@"data"][@"list"];
+            if (array.count == 0) {
+                _isAll = YES;
+                [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            } else {
+                [_showArray addObjectsFromArray:array];
+                [self.tableView.mj_footer endRefreshing];
+                [self.tableView reloadData];
+            }
+        }];
+    }
+}
+
 - (void)clickMineGiftBag {
-    NSString *uid = GETUSERID;
+    NSString *uid = OBJECT_FOR_USERDEFAULTS(@"userID");
     
     if (uid) {
         [self.navigationController pushViewController:[ControllerManager shareManager].myGiftBagView animated:YES];
@@ -252,40 +292,16 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     GiftBagCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDE forIndexPath:indexPath];
-    
-    cell.delegate = self;
-    cell.currentIdx = indexPath.row;
-    
-    cell.name.text = _showArray[indexPath.row][@"pack_name"];
-    cell.packCounts.text = _showArray[indexPath.row][@"pack_counts"];
-    [cell.packLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"pack_logo"]]] placeholderImage:nil];
-    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    NSString *total = _showArray[indexPath.row][@"pack_counts"];
-    NSString *current = _showArray[indexPath.row][@"pack_used_counts"];
-    CGFloat tc = current.floatValue / total.floatValue;
+    cell.delegate = self;
     
-    NSString *tcStr = [NSString stringWithFormat:@"%.0lf%%",(100 - tc * 100)];
+    cell.currentIdx = indexPath.row;
     
-    cell.titlelabel.text = tcStr;
+    //礼包logo
+    [cell.packLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"pack_logo"]]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
     
-    CGRect rect = cell.packProgress.bounds;
-    
-    cell.progressView.frame = CGRectMake(0, 0, rect.size.width * tc, rect.size.height);
-    
-    NSString *str = _showArray[indexPath.row][@"card"];
-
-    if ([str isKindOfClass:[NSNull class]]) {
-        [cell.getBtn setTitle:@"领取" forState:(UIControlStateNormal)];
-        [cell.getBtn setBackgroundColor:[UIColor orangeColor]];
-        [cell.getBtn setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
-    } else {
-        [cell.getBtn setTitle:@"复制" forState:(UIControlStateNormal)];
-        [cell.getBtn setBackgroundColor:[UIColor grayColor]];
-        [cell.getBtn setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
-    }
-    
+    cell.dict = _showArray[indexPath.row];
     
     
     return cell;
@@ -330,8 +346,12 @@
         _tableView.mj_header.automaticallyChangeAlpha = YES;
         _tableView.mj_header = customRef;
         
+        _tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+        
         _tableView.tableHeaderView = self.rollingHeader;
         _tableView.tableFooterView = [UIView new];
+        
+        //上拉刷新
         
     
 

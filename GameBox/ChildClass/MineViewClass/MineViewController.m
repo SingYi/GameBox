@@ -43,6 +43,9 @@
 /**登录按钮*/
 @property (nonatomic, strong) UIButton *loginBtn;
 
+/** 用户昵称 */
+@property (nonatomic, strong) UIButton *nickNameBtn;
+
 /** 用户头像 */
 @property (nonatomic, strong) UIImageView *avatar;
 
@@ -51,7 +54,6 @@
 
 /**修改密码*/
 @property (nonatomic, strong) ResetPassWordViewController *resetPassWordView;
-
 
 
 @end
@@ -77,7 +79,7 @@
         
         [self.loginBtn removeFromSuperview];
         [self.headerview addSubview:self.avatar];
-        
+        [self.headerview addSubview:self.nickNameBtn];
         
     } else {
         CLog(@"未登录");
@@ -86,7 +88,7 @@
         
         [self.headerview addSubview:self.loginBtn];
         [self.avatar removeFromSuperview];
-        
+        [self.nickNameBtn removeFromSuperview];
     }
 }
 
@@ -201,14 +203,17 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MineCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CELLIDENTIFIER forIndexPath:indexPath];
     
-    cell.backgroundColor = [UIColor lightGrayColor];
-    cell.label.text = _showArray[indexPath.row];
+    cell.backgroundColor = [UIColor whiteColor];
+    
+    cell.titleLabel.text = _showArray[indexPath.row];
     
     if ([_showArray[indexPath.row] isEqualToString:@""]) {
-        cell.image.hidden = YES;
+        cell.titleImageView.hidden = YES;
+        cell.hidden = YES;
     } else {
-        cell.image.hidden = NO;
-        cell.image.image = [UIImage imageNamed:_imageArray[indexPath.row]];
+        cell.hidden = NO;
+        cell.titleImageView.hidden = NO;
+        cell.titleImageView.image = [UIImage imageNamed:_imageArray[indexPath.row]];
     }
     
     return cell;
@@ -269,7 +274,7 @@
 #pragma mark - getter 
 - (UIImageView *)headerview {
     if (!_headerview) {
-        _headerview = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 300)];
+        _headerview = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_WIDTH * 0.738)];
         _headerview.image = [UIImage imageNamed:@"mineBackground"];
         _headerview.userInteractionEnabled = YES;
         
@@ -281,16 +286,19 @@
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
         
-        layout.itemSize = CGSizeMake(kSCREEN_WIDTH / 3, (kSCREEN_HEIGHT - 349) / 3);
-        layout.minimumLineSpacing = 0;
-        layout.minimumInteritemSpacing = 0;
+        layout.itemSize = CGSizeMake(kSCREEN_WIDTH / 3 - 1, (kSCREEN_HEIGHT - kSCREEN_WIDTH * 0.738 - 49) / 3 - 2);
         
-        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 300, kSCREEN_WIDTH, kSCREEN_HEIGHT - 349) collectionViewLayout:layout];
+        layout.minimumLineSpacing = 2;
+        layout.minimumInteritemSpacing = 1;
+        
+        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, kSCREEN_WIDTH * 0.738, kSCREEN_WIDTH, kSCREEN_HEIGHT - kSCREEN_WIDTH * 0.738 - 49) collectionViewLayout:layout];
         
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         
-        [_collectionView registerNib:[UINib nibWithNibName:@"MineCell" bundle:nil] forCellWithReuseIdentifier:CELLIDENTIFIER];
+        _collectionView.backgroundColor = RGBCOLOR(200, 200, 200);
+        
+        [_collectionView registerClass:[MineCell class] forCellWithReuseIdentifier:CELLIDENTIFIER];
         
         
     }
@@ -301,13 +309,11 @@
     if (!_loginBtn) {
         _loginBtn = [[UIButton alloc]init];
         _loginBtn.bounds = CGRectMake(0, 0, kSCREEN_WIDTH / 3, kSCREEN_WIDTH / 3);
-        _loginBtn.center = CGPointMake(kSCREEN_WIDTH / 2, 150);
+        _loginBtn.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_WIDTH / 4);
         
         [_loginBtn setImage:[UIImage imageNamed:@"mine_loginBtn_no"] forState:(UIControlStateNormal)];
-        [_loginBtn setTitle:@"" forState:(UIControlStateNormal)];
         
         [_loginBtn addTarget:self action:@selector(respondsToLoginBtn:) forControlEvents:(UIControlEventTouchUpInside)];
-        
     }
     return _loginBtn;
 }
@@ -316,14 +322,14 @@
     if (!_avatar) {
         _avatar = [[UIImageView alloc] init];
         _avatar.bounds = CGRectMake(0, 0, kSCREEN_WIDTH / 3, kSCREEN_WIDTH / 3);
-        _avatar.center = CGPointMake(kSCREEN_WIDTH / 2, 150);
+        _avatar.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_WIDTH / 3);
         
         _avatar.backgroundColor = [UIColor blueColor];
         _avatar.layer.cornerRadius = kSCREEN_WIDTH / 6;
         _avatar.layer.masksToBounds = YES;
         
         _avatar.userInteractionEnabled = YES;
-        _avatar.layer.borderWidth = 4.0f;//边框宽度
+        _avatar.layer.borderWidth = 2.0f;//边框宽度
         _avatar.layer.borderColor = [UIColor whiteColor].CGColor;//边框颜色
         UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(TapaAvatar)];
         tapRecognizer.numberOfTapsRequired = 1;
@@ -331,6 +337,17 @@
         [_avatar addGestureRecognizer:tapRecognizer];
     }
     return _avatar;
+}
+
+- (UIButton *)nickNameBtn {
+    if (!_nickNameBtn) {
+        _nickNameBtn = [UIButton buttonWithType:(UIButtonTypeCustom)];
+        _nickNameBtn.bounds = CGRectMake(0, 0, kSCREEN_WIDTH, 44);
+        _nickNameBtn.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_WIDTH * 0.55);
+        [_nickNameBtn setTitle:@"NickName" forState:(UIControlStateNormal)];
+        _nickNameBtn.titleLabel.font = [UIFont systemFontOfSize:18];
+    }
+    return _nickNameBtn;
 }
 
 - (LoginViewController *)loginView {

@@ -37,7 +37,6 @@
 - (void)setDataArray:(NSArray *)DataArray {
     _DataArray = DataArray;
     _showArray = _DataArray;
-//    NSLog(@"%@",DataArray);
     [self.tableView reloadData];
 }
 

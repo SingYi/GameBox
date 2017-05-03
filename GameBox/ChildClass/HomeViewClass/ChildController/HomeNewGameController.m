@@ -16,7 +16,7 @@
 
 #define CELLIDENTIFIER @"SearchCell"
 
-@interface HomeNewGameController ()<UITableViewDelegate,UITableViewDataSource>
+@interface HomeNewGameController ()<UITableViewDelegate,UITableViewDataSource,SearchCellDelelgate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -123,12 +123,6 @@
     
 
     self.dataDictionary = [dict mutableCopy];
-//    NSLog(@"%@",dict);
-    
-//    NSLog(@"set%@\nsort set%@", set, self.timeArray);
-
-//    NSLog(@"%@",set);
-    
     
     return [array mutableCopy];
 }
@@ -149,6 +143,9 @@
     
     
     [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,array[indexPath.row][@"logo"]]] placeholderImage:nil];
+    
+    cell.delegate = self;
+    
     cell.dict = array[indexPath.row];
     
     return cell;
@@ -166,20 +163,25 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 20)];
     
-    label.backgroundColor = [UIColor lightGrayColor];
+    label.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
     
-    label.text = self.timeArray[section];
+    label.text = [NSString stringWithFormat:@"   %@",self.timeArray[section]];
     
     return label;
 }
 
-/**< cell的点击事件 */
+/** cell的点击事件 */
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     self.parentViewController.hidesBottomBarWhenPushed = YES;
     [ControllerManager shareManager].detailView.gameID = self.dataDictionary[self.timeArray[indexPath.section]][indexPath.row][@"id"];
     [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
     self.parentViewController.hidesBottomBarWhenPushed = NO;
+}
+
+#pragma mark - cellDeleagate 
+- (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
+    CLog(@"下载游戏:%@",dict);
 }
 
 #pragma mark - getter

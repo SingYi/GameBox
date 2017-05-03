@@ -29,7 +29,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-//    NSLog(@"GameGiftBagViewController == viewWillAppear");
+
 }
 
 - (void)viewDidLoad {
@@ -47,7 +47,7 @@
     [GiftBagModel postGiftBagWithGameID:_gameID Order:nil OrderType:nil page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success) {
             _showArray = content[@"data"][@"list"];
-//            NSLog(@"%@",content);
+
             [self.tableView reloadData];
         }
     }];

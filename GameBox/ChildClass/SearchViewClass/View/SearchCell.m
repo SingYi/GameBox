@@ -19,6 +19,10 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *gameSize;
 
+//约束布局
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *lefLayout;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rigthLayout;
+
 @end
 
 @implementation SearchCell
@@ -55,11 +59,7 @@
     self.label3.layer.cornerRadius = 3;
     self.label3.layer.masksToBounds = YES;
     [self.label3 sizeToFit];
-    
-    
-    
-    self.gameName.font = [UIFont systemFontOfSize:14];
-    [self.gameName sizeToFit];
+
     
     self.gameSize.font = [UIFont systemFontOfSize:14];
     self.gameSize.textColor = [UIColor lightGrayColor];
@@ -67,6 +67,24 @@
     [self.gameDownload setBackgroundImage:[UIImage imageNamed:@"downLoadButton"] forState:(UIControlStateNormal)];
     self.gameDownload.layer.cornerRadius = 4;
     self.gameDownload.layer.masksToBounds = YES;
+    
+    //414  375  320
+    if (kSCREEN_WIDTH == 320) {
+        _lefLayout.constant = 8;
+        _rigthLayout.constant = 8;
+        self.gameName.font = [UIFont systemFontOfSize:13];
+        [self.gameName sizeToFit];
+    } else if (kSCREEN_WIDTH == 375) {
+        _lefLayout.constant = 20;
+        _rigthLayout.constant = 20;
+        self.gameName.font = [UIFont systemFontOfSize:14];
+        [self.gameName sizeToFit];
+    } else if (kSCREEN_WIDTH == 414) {
+        _lefLayout.constant = 30;
+        _rigthLayout.constant = 30;
+        self.gameName.font = [UIFont systemFontOfSize:16];
+        [self.gameName sizeToFit];
+    }
     
 }
 
@@ -106,7 +124,7 @@
 
 - (IBAction)downLoad:(UIButton *)sender {
     if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectCellRowAtIndexpath:)]) {
-        [self.delegate didSelectCellRowAtIndexpath:self.selectIndex];
+        [self.delegate didSelectCellRowAtIndexpath:self.dict];
     }
 }
 
