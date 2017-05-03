@@ -155,7 +155,7 @@
 - (void)listCommentView {
     UIViewController *listViewController = [ChangyanSDK getListCommentViewController:@""
                                                                              topicID:nil
-                                                                       topicSourceID:_gameID
+                                                                       topicSourceID:[NSString stringWithFormat:@"game_%@",_gameID]
                                                                           categoryID:nil
                                                                           topicTitle:nil];
     UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:listViewController];
