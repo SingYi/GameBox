@@ -10,14 +10,18 @@
 
 @interface SearchCell ()
 
-@property (weak, nonatomic) IBOutlet UIImageView *gameImage;
-
 @property (weak, nonatomic) IBOutlet UILabel *gameName;
 
 
 @property (weak, nonatomic) IBOutlet UILabel *gameNumber;
 
 @property (weak, nonatomic) IBOutlet UIButton *gameDownload;
+
+@property (weak, nonatomic) IBOutlet UILabel *gameSize;
+
+//约束布局
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *lefLayout;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rigthLayout;
 
 @end
 
@@ -28,6 +32,60 @@
     
     self.gameNumber.font = [UIFont systemFontOfSize:14];
     self.gameNumber.textColor = [UIColor lightGrayColor];
+    
+    self.label1.font = [UIFont systemFontOfSize:12];
+    self.label1.layer.borderColor = RGBCOLOR(197, 188, 100).CGColor;
+    self.label1.layer.borderWidth = 1;
+    self.label1.textColor = RGBCOLOR(197, 188, 100);
+    self.label1.text = @"";
+    self.label1.layer.cornerRadius = 3;
+    self.label1.layer.masksToBounds = YES;
+    [self.label1 sizeToFit];
+    
+    self.label2.font = [UIFont systemFontOfSize:12];
+    self.label2.layer.borderColor = RGBCOLOR(197, 188, 100).CGColor;
+    self.label2.layer.borderWidth = 1;
+    self.label2.textColor = RGBCOLOR(197, 188, 100);
+    self.label2.text = @"";
+    self.label2.layer.cornerRadius = 3;
+    self.label2.layer.masksToBounds = YES;
+    [self.label2 sizeToFit];
+    
+    self.label3.font = [UIFont systemFontOfSize:12];
+    self.label3.layer.borderColor = RGBCOLOR(197, 188, 100).CGColor;
+    self.label3.layer.borderWidth = 1;
+    self.label3.textColor = RGBCOLOR(197, 188, 100);
+    self.label3.text = @"";
+    self.label3.layer.cornerRadius = 3;
+    self.label3.layer.masksToBounds = YES;
+    [self.label3 sizeToFit];
+
+    
+    self.gameSize.font = [UIFont systemFontOfSize:14];
+    self.gameSize.textColor = [UIColor lightGrayColor];
+    
+    [self.gameDownload setBackgroundImage:[UIImage imageNamed:@"downLoadButton"] forState:(UIControlStateNormal)];
+    self.gameDownload.layer.cornerRadius = 4;
+    self.gameDownload.layer.masksToBounds = YES;
+    
+    //414  375  320
+    if (kSCREEN_WIDTH == 320) {
+        _lefLayout.constant = 8;
+        _rigthLayout.constant = 8;
+        self.gameName.font = [UIFont systemFontOfSize:13];
+        [self.gameName sizeToFit];
+    } else if (kSCREEN_WIDTH == 375) {
+        _lefLayout.constant = 20;
+        _rigthLayout.constant = 20;
+        self.gameName.font = [UIFont systemFontOfSize:14];
+        [self.gameName sizeToFit];
+    } else if (kSCREEN_WIDTH == 414) {
+        _lefLayout.constant = 30;
+        _rigthLayout.constant = 30;
+        self.gameName.font = [UIFont systemFontOfSize:16];
+        [self.gameName sizeToFit];
+    }
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -37,14 +95,36 @@
 
 - (void)setDict:(NSDictionary *)dict {
     _dict = dict;
+    //设置名称
     self.gameName.text = _dict[@"gamename"];
-    self.gameNumber.text = [NSString stringWithFormat:@"%@次 下载",_dict[@"download"]];
+    
+    //下载次数
+    NSInteger dlNumber = ((NSString *)_dict[@"download"]).integerValue;
+    if (dlNumber > 10000) {
+        dlNumber = dlNumber / 10000;
+        self.gameNumber.text = [NSString stringWithFormat:@"%ld万+次下载",dlNumber];
+    } else {
+        self.gameNumber.text = [NSString stringWithFormat:@"%ld次下载",dlNumber];
+    }
+    
+    //标签
+    NSString *type = _dict[@"types"];
+    NSArray *types = [type componentsSeparatedByString:@" "];
+    NSInteger i = 0;
+    NSArray<UILabel *> *labels = @[self.label1,self.label2,self.label3];
+    for (; i < types.count; i ++) {
+        labels[i].text = [NSString stringWithFormat:@" %@ ",types[i]];
+    }
+
+
+    self.gameSize.text = [NSString stringWithFormat:@"%@M",_dict[@"size"]];
+    
 }
 
 
 - (IBAction)downLoad:(UIButton *)sender {
     if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectCellRowAtIndexpath:)]) {
-        [self.delegate didSelectCellRowAtIndexpath:self.selectIndex];
+        [self.delegate didSelectCellRowAtIndexpath:self.dict];
     }
 }
 

@@ -11,6 +11,7 @@
 #import "SearchCell.h"
 #import "GameModel.h"
 #import "ControllerManager.h"
+#import "RCCCollectionViewCell.h"
 
 #import "NewServerController.h"
 #import "ActivityController.h"
@@ -24,7 +25,7 @@
 #define CELLIDENTIFIER @"SearchCell"
 #define BTNTAG 1300
 
-@interface HomeRecommentController ()<UITableViewDelegate,UITableViewDataSource,SearchCellDelelgate,RecommentTableHeaderDeleagte>
+@interface HomeRecommentController ()<UITableViewDelegate,UITableViewDataSource,SearchCellDelelgate,RecommentTableHeaderDeleagte,UICollectionViewDelegate,UICollectionViewDataSource>
 
 /**推荐游戏列表*/
 @property (nonatomic, strong) UITableView *tableView;
@@ -34,6 +35,9 @@
 @property (nonatomic, strong) RecommentTableHeader *rollHeader;
 /**头部视图*/
 @property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) NSArray *collectionArray;
+@property (nonatomic, strong) NSArray *collectionImage;
+@property (nonatomic, strong) UICollectionView *collectionView;
 
 /**开服表*/
 @property (nonatomic, strong) NewServerController *rNewServerController;
@@ -81,7 +85,8 @@
 - (void)initDataSource {
     _childControllers = @[self.rNewServerController,self.rActivityController,self.rGiftBagController,self.rStrategyController];
 
-    
+    _collectionArray = @[@"开服表",@"活动",@"礼包",@"攻略"];
+    _collectionImage = @[@"homePage_newServer",@"homePage_rankList",@"homePage_giftBag",@"homePage_strategy"];
     //刷新视图
     [self.tableView.mj_header beginRefreshing];
 }
@@ -93,19 +98,6 @@
 }
 
 #pragma mkar - method
-/**< 根据页面数和渠道请求数据 */
-//- (void)getDataWithChannelID:(NSString *)channelID Page:(NSString *)page {
-//    [GameModel postRecommendGameListWithChannelID:channelID Page:page Completion:^(NSDictionary * _Nullable content, BOOL success) {
-//        _showArray = [content[@"data"][@"gamelist"] mutableCopy];
-//        self.rollHeader.rollingArray = content[@"data"][@"banner"];
-//        _currentPage = 1;
-//        _isAll = NO;
-//        _totalPage = ((NSString *)content[@"data"][@"count"]).integerValue;
-//        NSLog(@"%ld",_totalPage);
-//        [self.tableView reloadData];
-//    }];
-//}
-
 /**刷新数据*/
 - (void)refreshData {
     [GameModel postRecommendGameListWithChannelID:@"185" Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
@@ -115,20 +107,21 @@
         _currentPage = 1;
         _isAll = NO;
         
-//        NSLog(@"%@",content);
+//        CLog(@"%@",content);
         
         [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
         [self.tableView reloadData];
     }];
 }
 
-/**< 加载更多数据 */
+/** 加载更多数据 */
 - (void)loadMoreData {
     if (_isAll) {
         [self.tableView.mj_footer endRefreshingWithNoMoreData];
     } else {
         _currentPage++;
-        [GameModel postRecommendGameListWithChannelID:@"185" Page:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        [GameModel postRecommendGameListWithChannelID:@"185" Page:[NSString stringWithFormat:@"%ld",(long)_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
 
             NSArray *array = content[@"data"][@"gamelist"];
             if (array.count == 0) {
@@ -161,6 +154,9 @@
     
     [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.9344.net%@",_showArray[indexPath.row][@"logo"]]]];
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
+   
+ 
+    
     
     cell.selectIndex = indexPath.row;
     
@@ -185,19 +181,20 @@
     self.parentViewController.hidesBottomBarWhenPushed = NO;
 }
 
-#pragma mark - respondsToBtn
-/**< 按钮的响应事件(推送出子视图) */
-- (void)respondsToBtn:(UIButton *)sender {
-    self.parentViewController.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:self.childControllers[sender.tag - BTNTAG] animated:YES];
-    self.parentViewController.hidesBottomBarWhenPushed = NO;
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return kSCREEN_WIDTH * 0.218;
 }
 
-#pragma mark - cellDelegete
-/**< cell的代理  */
-- (void)didSelectCellRowAtIndexpath:(NSInteger)idx {
-    NSLog(@"下载第 %ld 游戏",idx);
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
+    return self.collectionView;
+}
 
+
+#pragma mark - cellDelegete
+/** cell的代理  */
+- (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
+    CLog(@"下载游戏:%@",dict);
 }
 
 #pragma mark - rollingDeleagte
@@ -211,11 +208,40 @@
     
 }
 
+#pragma mark - collection deleegate And dataSource
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    
+    return _collectionArray.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    RCCCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"RCSELECT" forIndexPath:indexPath];
+    
+    cell.titleLabel.text = _collectionArray[indexPath.item];
+    
+    cell.titleImage.image = [UIImage imageNamed:_collectionImage[indexPath.item]];
+    
+    
+    return cell;
+    
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    self.parentViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:self.childControllers[indexPath.item] animated:YES];
+    self.parentViewController.hidesBottomBarWhenPushed = NO;
+}
+
 
 #pragma mark - getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 145) style:(UITableViewStylePlain)];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 158) style:(UITableViewStylePlain)];
         
         
         [_tableView registerNib:[UINib nibWithNibName:@"SearchCell" bundle:nil] forCellReuseIdentifier:CELLIDENTIFIER];
@@ -242,21 +268,19 @@
         //自动更改透明度
         _tableView.mj_header.automaticallyChangeAlpha = YES;
         
-        [customRef.lastUpdatedTimeLabel setText:@"0"];
-        
         _tableView.mj_header = customRef;
         
         //上拉刷新
         _tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
         
-        _tableView.tableHeaderView = self.headerView;
+        _tableView.tableHeaderView = self.rollHeader;
         _tableView.tableFooterView = [UIView new];
     }
     return _tableView;
 }
 
 
-/**< 滚动轮播图 */
+/** 滚动轮播图 */
 - (RecommentTableHeader *)rollHeader {
     if (!_rollHeader) {
         _rollHeader = [[RecommentTableHeader alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_WIDTH * 0.4)];
@@ -265,46 +289,40 @@
     return _rollHeader;
 }
 
-/**< tableview的头部视图 */
+/** tableview的头部视图 */
 - (UIView *)headerView {
     if (!_headerView) {
         _headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_WIDTH * 0.618)];
         
+        _headerView.backgroundColor = [UIColor lightGrayColor];
         //添加滚动轮播图
         [_headerView addSubview:self.rollHeader];
-
-        //添加子视图跳转的按钮
-        NSArray *array = @[@"开服表",@"活动",@"礼包",@"攻略"];
-        NSArray *imageArray = @[@"homePage_newServer",@"homePage_rankList",@"homePage_giftBag",@"homePage_strategy"];
-        [array enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            UIButton *button = [UIButton buttonWithType:(UIButtonTypeCustom)];
-            
-            button.frame = CGRectMake(kSCREEN_WIDTH / 4 * idx, kSCREEN_WIDTH * 0.4, kSCREEN_WIDTH / 4, kSCREEN_WIDTH * 0.218);
-            
-            [button setTitle:obj forState:(UIControlStateNormal)];
-            
-            [button setBackgroundColor:[UIColor colorWithWhite:1 alpha:1]];
-            
-            [button setTitleColor:[UIColor orangeColor] forState:(UIControlStateNormal)];
-            
-            [button setImage:[UIImage imageNamed:imageArray[idx]] forState:(UIControlStateNormal)];
-            
-            button.titleLabel.backgroundColor = button.backgroundColor;
-            button.imageView.backgroundColor = button.backgroundColor; CGSize titleSize = button.titleLabel.bounds.size;
-            CGSize imageSize = button.imageView.bounds.size;
-            CGFloat interval = 1.0;
-            [button setImageEdgeInsets:UIEdgeInsetsMake(0,0, titleSize.height + interval, -(titleSize.width + interval))];
-            [button setTitleEdgeInsets:UIEdgeInsetsMake(imageSize.height + interval, -(imageSize.width + interval), 0, 0)];
-            
-            button.tag = idx + BTNTAG;
-            
-            [button addTarget:self action:@selector(respondsToBtn:) forControlEvents:(UIControlEventTouchUpInside)];
-            
-            [_headerView addSubview:button];
-            
-        }];
+        
+        [_headerView addSubview:self.collectionView];
     }
     return _headerView;
+}
+
+- (UICollectionView *)collectionView {
+    if (!_collectionView) {
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        
+        layout.itemSize = CGSizeMake(kSCREEN_WIDTH / 4, kSCREEN_WIDTH * 0.218 - 2);
+        
+        layout.minimumLineSpacing = 0;
+        layout.minimumInteritemSpacing = 0;
+        
+        
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, kSCREEN_WIDTH * 0.4 + 1, kSCREEN_WIDTH, kSCREEN_WIDTH * 0.218 - 2) collectionViewLayout:layout];
+        
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        
+        [_collectionView registerClass:[RCCCollectionViewCell class] forCellWithReuseIdentifier:@"RCSELECT"];
+        
+        _collectionView.backgroundColor = RGBCOLOR(247, 247, 247);
+    }
+    return _collectionView;
 }
 
 /**< 新服视图 */
@@ -324,7 +342,7 @@
 }
 
 
-/**< 礼包视图 */
+/** 礼包视图 */
 - (RGiftBagController *)rGiftBagController {
     if (!_rGiftBagController) {
         _rGiftBagController = [RGiftBagController new];
@@ -332,7 +350,7 @@
     return _rGiftBagController;
 }
 
-/**< 攻略视图 */
+/** 攻略视图 */
 - (StrategyController *)rStrategyController {
     if (!_rStrategyController) {
         _rStrategyController = [StrategyController new];

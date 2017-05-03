@@ -57,16 +57,16 @@
 @property (nonatomic, assign) BOOL isLeft;
 
 @property (nonatomic, strong) UISearchController  *searchController;
-/**< 搜索 */
+/** 搜索 */
 @property (nonatomic, strong) UISearchBar *searchBar;
 
-/**< 应用按钮(左边按钮) */
+/** 应用按钮(左边按钮) */
 @property (nonatomic, strong) UIBarButtonItem *downLoadBtn;
 
-/**< 消息按钮(右边按钮) */
+/** 消息按钮(右边按钮) */
 @property (nonatomic, strong) UIBarButtonItem *messageBtn;
 
-/**< 取消按钮(右边按钮) */
+/** 取消按钮(右边按钮) */
 @property (nonatomic, strong) UIBarButtonItem *cancelBtn;
 
 
@@ -79,6 +79,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.navigationItem.titleView = self.searchBar;
+    
     
 }
 
@@ -103,7 +104,7 @@
     
     //请求数据总借口
     [RequestUtils postRequestWithURL:URLMAP params:nil completion:^(NSDictionary *content, BOOL success) {
-        
+
     }];
 
 }
@@ -111,8 +112,8 @@
 /**< 初始化用户界面 */
 - (void)initUserInterface {
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
-//    [self.navigationController.navigationBar setTranslucent:NO];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+
     self.navigationController.navigationBar.backgroundColor = [UIColor blackColor];
 
 
@@ -132,9 +133,6 @@
     [self.view addGestureRecognizer:leftSwipe];
     
 #warning 导航栏的两个按钮,还没有做处理
-
-//    self.navigationItem.titleView = self.searchController.searchBar;
-    
     self.navigationItem.leftBarButtonItem = self.downLoadBtn;
     self.navigationItem.rightBarButtonItem = self.messageBtn;
     
@@ -175,21 +173,21 @@
 - (void)willPresentSearchController:(UISearchController *)searchController {
     self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = nil;
-    NSLog(@"willPresentSearchController");
+    CLog(@"willPresentSearchController");
 }
 
 - (void)didPresentSearchController:(UISearchController *)searchController {
-    NSLog(@"didPresentSearchController");
+    CLog(@"didPresentSearchController");
 }
 
 - (void)willDismissSearchController:(UISearchController *)searchController {
-    NSLog(@"willDismissSearchController");
+    CLog(@"willDismissSearchController");
 }
 
 - (void)didDismissSearchController:(UISearchController *)searchController {
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"应用" style:0 target:self action:nil];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"应用" style:0 target:self action:nil];
-    NSLog(@"didDismissSearchController");
+    CLog(@"didDismissSearchController");
     
 }
 
@@ -303,7 +301,7 @@
 #pragma mark - getter 
 - (HomeHeader *)selectView {
     if (!_selectView) {
-        _selectView = [[HomeHeader alloc]initWithFrame:CGRectMake(0, 64, kSCREEN_WIDTH, 32) WithBtnArray:@[@"推荐",@"新游",@"热门",@"分类"]];
+        _selectView = [[HomeHeader alloc]initWithFrame:CGRectMake(0, 64, kSCREEN_WIDTH, 44) WithBtnArray:@[@"推荐",@"新游",@"热门",@"分类"]];
         _selectView.backgroundColor = [UIColor whiteColor];
         
         _selectView.delegate = self;
@@ -316,12 +314,7 @@
 - (HomeRecommentController *)hRecommentController {
     if (!_hRecommentController) {
         _hRecommentController = [[HomeRecommentController alloc] init];
-        _hRecommentController.view.frame = CGRectMake(0, 96, kSCREEN_WIDTH, kSCREEN_HEIGHT - 145);
-        
-        UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(respondsToSwipe:)];
-        swipe.direction = UISwipeGestureRecognizerDirectionLeft;
-        
-        [_hHotGameController.view addGestureRecognizer:swipe];
+        _hRecommentController.view.frame = CGRectMake(0, 108, kSCREEN_WIDTH, kSCREEN_HEIGHT - 167);
     }
     return _hRecommentController;
 }
@@ -330,7 +323,7 @@
 - (HomeNewGameController *)hNewgameController {
     if (!_hNewgameController) {
         _hNewgameController = [[HomeNewGameController alloc] init];
-        _hNewgameController.view.frame = CGRectMake(0, 96, kSCREEN_WIDTH, kSCREEN_HEIGHT - 145);
+        _hNewgameController.view.frame = CGRectMake(0, 108, kSCREEN_WIDTH, kSCREEN_HEIGHT - 167);
         
     }
     return _hNewgameController;
@@ -340,7 +333,7 @@
 - (HomeHotGameController *)hHotGameController {
     if (!_hHotGameController) {
         _hHotGameController = [[HomeHotGameController alloc] init];
-        _hHotGameController.view.frame = CGRectMake(0, 96, kSCREEN_WIDTH, kSCREEN_HEIGHT - 145);
+        _hHotGameController.view.frame = CGRectMake(0, 108, kSCREEN_WIDTH, kSCREEN_HEIGHT - 167);
         
     }
     return _hHotGameController;
@@ -350,13 +343,13 @@
 - (HomeClassifyController *)hClassifyController {
     if (!_hClassifyController) {
         _hClassifyController = [[HomeClassifyController alloc] init];
-        _hClassifyController.view.frame = CGRectMake(0, 96, kSCREEN_WIDTH, kSCREEN_HEIGHT - 145);
+        _hClassifyController.view.frame = CGRectMake(0, 108, kSCREEN_WIDTH, kSCREEN_HEIGHT - 167);
         
     }
     return _hClassifyController;
 }
 
-/**< 搜索控制器 */
+/** 搜索控制器 */
 - (UISearchController *)searchController {
     if (!_searchController) {
         _searchController = [[UISearchController alloc] initWithSearchResultsController:[ControllerManager shareManager].searchResultController];
@@ -369,8 +362,7 @@
         _searchController.searchBar.placeholder= @"请输入关键字搜索";
         _searchController.searchBar.barStyle = UISearchBarStyleDefault;
         
-//        _searchController.searchBar.backgroundColor = [UIColor blackColor];
-//        _searchController.searchBar.barStyle = UIBarStyleBlack;
+
         [_searchController.searchBar setBarTintColor:[UIColor blackColor]];
         [_searchController.searchBar setTintColor:[UIColor whiteColor]];
         

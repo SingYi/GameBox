@@ -44,10 +44,10 @@
 }
 
 - (void)refreshData {
-    CLog(@"%@",[UserModel CurrentUser].uid);
+//    CLog(@"%@",[UserModel CurrentUser].uid);
     [GiftBagModel postGiftListWihtUserID:[UserModel CurrentUser].uid ChannelID:@"185" Order:nil OrderType:nil Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         self.showArray = content[@"data"][@"list"];
-        CLog(@"%@",content);
+//        CLog(@"%@",content);
         [self.tableView.mj_header endRefreshing];
         [self.tableView reloadData];
     }];
@@ -90,40 +90,18 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     GiftBagCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDE forIndexPath:indexPath];
-    
-    cell.delegate = self;
-    cell.currentIdx = indexPath.row;
-    
-    cell.name.text = _showArray[indexPath.row][@"pack_name"];
-    cell.packCounts.text = _showArray[indexPath.row][@"pack_counts"];
-    [cell.packLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"pack_logo"]]] placeholderImage:nil];
-    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    NSString *total = _showArray[indexPath.row][@"pack_counts"];
-    NSString *current = _showArray[indexPath.row][@"pack_used_counts"];
-    CGFloat tc = current.floatValue / total.floatValue;
+    cell.delegate = self;
     
-    NSString *tcStr = [NSString stringWithFormat:@"%.0lf%%",(100 - tc * 100)];
+    cell.currentIdx = indexPath.row;
     
-    cell.titlelabel.text = tcStr;
+    //礼包logo
+    [cell.packLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"pack_logo"]]] placeholderImage:nil];
     
-    CGRect rect = cell.packProgress.bounds;
-    
-    cell.progressView.frame = CGRectMake(0, 0, rect.size.width * tc, rect.size.height);
-    
-    NSString *str = _showArray[indexPath.row][@"card"];
-    
-    if ([str isKindOfClass:[NSNull class]]) {
-        [cell.getBtn setTitle:@"领取" forState:(UIControlStateNormal)];
-        [cell.getBtn setBackgroundColor:[UIColor orangeColor]];
-        [cell.getBtn setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
-    } else {
-        [cell.getBtn setTitle:@"复制" forState:(UIControlStateNormal)];
-        [cell.getBtn setBackgroundColor:[UIColor grayColor]];
-        [cell.getBtn setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
-    }
+    cell.dict = _showArray[indexPath.row];
     
     
     return cell;

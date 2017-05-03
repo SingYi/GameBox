@@ -47,7 +47,7 @@
 }
 
 - (void)task {
-    NSLog(@"刷新");
+    CLog(@"刷新");
     NSMutableDictionary *dict = [AppModel Apps];
     NSArray *array = [dict allKeys];
     _data = [NSMutableDictionary dictionary];
@@ -105,8 +105,7 @@
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",progress.localizedDescription];
     
     
-    
-//    NSLog(@"%@",dict);
+//    CLog(@"%@",dict);
     
     
     

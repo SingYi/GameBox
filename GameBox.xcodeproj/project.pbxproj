@@ -54,7 +54,6 @@
 		B59FEDC31E9CC97600A64D84 /* GiftBagCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FEDC11E9CC97600A64D84 /* GiftBagCell.m */; };
 		B59FEDC41E9CC97600A64D84 /* GiftBagCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B59FEDC21E9CC97600A64D84 /* GiftBagCell.xib */; };
 		B59FEDCF1E9CD91400A64D84 /* MineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FEDCD1E9CD91400A64D84 /* MineCell.m */; };
-		B59FEDD01E9CD91400A64D84 /* MineCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B59FEDCE1E9CD91400A64D84 /* MineCell.xib */; };
 		B5A266681E9F480300F0C38E /* HomeHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A266671E9F480300F0C38E /* HomeHeader.m */; };
 		B5C5D4AB1EA073AA008A46DE /* StrategyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4A91EA073AA008A46DE /* StrategyCell.m */; };
 		B5C5D4AC1EA073AA008A46DE /* StrategyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5C5D4AA1EA073AA008A46DE /* StrategyCell.xib */; };
@@ -84,6 +83,7 @@
 		B5E2C81E1E9E2E96002CEC61 /* AboutUsView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C81D1E9E2E96002CEC61 /* AboutUsView.m */; };
 		B5E2C8241E9F2A27002CEC61 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8231E9F2A27002CEC61 /* HomeViewController.m */; };
 		B5F10BDE1EAF272C0061B43E /* RGiftBagController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5F10BDD1EAF272C0061B43E /* RGiftBagController.m */; };
+		B5FAB14B1EB97B0E002B29BD /* RCCCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FAB14A1EB97B0E002B29BD /* RCCCollectionViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -175,7 +175,6 @@
 		B59FEDC21E9CC97600A64D84 /* GiftBagCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GiftBagCell.xib; sourceTree = "<group>"; };
 		B59FEDCC1E9CD91400A64D84 /* MineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineCell.h; sourceTree = "<group>"; };
 		B59FEDCD1E9CD91400A64D84 /* MineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineCell.m; sourceTree = "<group>"; };
-		B59FEDCE1E9CD91400A64D84 /* MineCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MineCell.xib; sourceTree = "<group>"; };
 		B5A266661E9F480300F0C38E /* HomeHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeHeader.h; sourceTree = "<group>"; };
 		B5A266671E9F480300F0C38E /* HomeHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeHeader.m; sourceTree = "<group>"; };
 		B5C5D4A81EA073AA008A46DE /* StrategyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrategyCell.h; sourceTree = "<group>"; };
@@ -230,6 +229,8 @@
 		B5E2C8231E9F2A27002CEC61 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		B5F10BDC1EAF272C0061B43E /* RGiftBagController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RGiftBagController.h; sourceTree = "<group>"; };
 		B5F10BDD1EAF272C0061B43E /* RGiftBagController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RGiftBagController.m; sourceTree = "<group>"; };
+		B5FAB1491EB97B0E002B29BD /* RCCCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCCollectionViewCell.h; sourceTree = "<group>"; };
+		B5FAB14A1EB97B0E002B29BD /* RCCCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCCollectionViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -512,7 +513,6 @@
 			children = (
 				B59FEDCC1E9CD91400A64D84 /* MineCell.h */,
 				B59FEDCD1E9CD91400A64D84 /* MineCell.m */,
-				B59FEDCE1E9CD91400A64D84 /* MineCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -601,6 +601,8 @@
 			children = (
 				B5C70F251EA9EA920073FDA4 /* RecommentTableHeader.h */,
 				B5C70F261EA9EA920073FDA4 /* RecommentTableHeader.m */,
+				B5FAB1491EB97B0E002B29BD /* RCCCollectionViewCell.h */,
+				B5FAB14A1EB97B0E002B29BD /* RCCCollectionViewCell.m */,
 			);
 			path = RecommentView;
 			sourceTree = "<group>";
@@ -770,7 +772,6 @@
 				B5D35BA31E9F6F9E00902B04 /* ClassfiyTableViewCell.xib in Resources */,
 				B52CC14C1EB857AE00A1A792 /* changyan.bundle in Resources */,
 				B5C5D4AC1EA073AA008A46DE /* StrategyCell.xib in Resources */,
-				B59FEDD01E9CD91400A64D84 /* MineCell.xib in Resources */,
 				B55416361EA8B12D0043A36D /* UrlMap.plist in Resources */,
 				5E8DE5471E9BD255007E719D /* LaunchScreen.storyboard in Resources */,
 				B5C5D4D61EA0B6B3008A46DE /* DetailTableCell.xib in Resources */,
@@ -860,6 +861,7 @@
 				B5F10BDE1EAF272C0061B43E /* RGiftBagController.m in Sources */,
 				B554161E1EA853F40043A36D /* GameOpenServerViewController.m in Sources */,
 				B5E2C8071E9E0AB2002CEC61 /* LoginViewController.m in Sources */,
+				B5FAB14B1EB97B0E002B29BD /* RCCCollectionViewCell.m in Sources */,
 				B55416271EA88E900043A36D /* HomeHotGameController.m in Sources */,
 				B5C5D4BB1EA09AC8008A46DE /* DetailViewController.m in Sources */,
 				B5C5D4BE1EA09E44008A46DE /* DetailHeader.m in Sources */,

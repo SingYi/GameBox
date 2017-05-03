@@ -55,7 +55,7 @@
     UIImageView *imageView = [[UIImageView alloc]initWithFrame:cell.bounds];
     imageView.backgroundColor = [UIColor orangeColor];
     
-    [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,self.imageArray[indexPath.row]]] placeholderImage:nil];
+    [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,self.imageArray[indexPath.row]]] placeholderImage:[UIImage imageNamed:@"gameDetail_downloading"]];
     
     [cell.contentView addSubview:imageView];
     

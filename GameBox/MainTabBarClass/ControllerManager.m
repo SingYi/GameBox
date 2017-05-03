@@ -27,6 +27,7 @@ static ControllerManager *manager = nil;
     if (!_rootViewController) {
         _rootViewController = [[UINavigationController alloc]initWithRootViewController:self.tabbarController];
         _rootViewController.navigationBarHidden = YES;
+        
     }
     return _rootViewController;
 }

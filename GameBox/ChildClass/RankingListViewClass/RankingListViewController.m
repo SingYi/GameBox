@@ -25,29 +25,24 @@
 /**显示数据的数组*/
 @property (nonatomic, strong) NSMutableArray *showArray;
 
-/**< 搜索框 */
+/** 搜索框 */
 @property (nonatomic, strong) UISearchBar *searchBar;
-@property (nonatomic, strong) UITextField *searchField;
 
-
-/**< 应用按钮(左边按钮) */
+/** 应用按钮(左边按钮) */
 @property (nonatomic, strong) UIBarButtonItem *downLoadBtn;
 
-/**< 消息按钮(右边按钮) */
+/** 消息按钮(右边按钮) */
 @property (nonatomic, strong) UIBarButtonItem *messageBtn;
 
-/**< 取消按钮(右边按钮) */
+/** 取消按钮(右边按钮) */
 @property (nonatomic, strong) UIBarButtonItem *cancelBtn;
 
-/**< 当前页数 */
+/** 当前页数 */
 @property (nonatomic, assign) NSInteger currentPage;
 
-/**< 是否加载了全部 */
+/** 是否加载了全部 */
 @property (nonatomic, assign) BOOL isAll;
 
-//**< 自定义导航栏 */
-@property (nonatomic, strong) UINavigationBar *customNaviBar;
-@property (nonatomic, strong) UINavigationItem *customItem;
 
 
 @end
@@ -109,12 +104,13 @@
     self.navigationItem.leftBarButtonItem = self.downLoadBtn;
     self.navigationItem.rightBarButtonItem = self.messageBtn;
 }
+
 #pragma mark - responsd
 /**刷新数据*/
 - (void)refreshData {
     [GameModel postGameListWithType:RankingGame ChannelID:@"185" Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success) {
-//            NSLog(@"%@",content);
+
             _showArray = [content[@"data"] mutableCopy];
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
@@ -222,23 +218,6 @@
         uid = @"0";
     }
     
-//    [GameModel postgame]
-    //
-//    [GiftBagModel postGiftBagListWithUid:uid ChannelID:@"185" Search:searchBar.text Order:nil OrderType:nil Page:@"1" Andcompletion:^(NSDictionary * _Nullable content, BOOL success) {
-//        if (success) {
-//            _resultArray = content[@"data"][@"list"];
-//            if (_resultArray.count != 0) {
-//                _showArray = [_resultArray mutableCopy];
-//                [self.tableView reloadData];
-//            } else {
-//                [GiftBagModel showAlertWithMessage:@"未查询到相关礼包" dismiss:nil];
-//            }
-//        } else {
-//            [GiftBagModel showAlertWithMessage:@"网络不知道飞到哪里去了" dismiss:nil];
-//        }
-//        //        NSLog(@"%@",content);
-//    }];
-//    //    NSLog(@"search");
 }
 
 
@@ -265,6 +244,19 @@
 //返回的行高
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 80;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 3;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 3)];
+    
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
+    
+    return titleLabel;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -310,7 +302,7 @@
         _tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
         
         
-//        _tableView.tableFooterView = [UIView new];
+        _tableView.tableFooterView = [UIView new];
         
         
     }
@@ -361,34 +353,7 @@
 
 
 
-- (UINavigationBar *)customNaviBar {
-    if (!_customNaviBar) {
-        _customNaviBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 64)];
-        [_customNaviBar setBackgroundImage:[UIImage imageNamed:@"navigationBackground"] forBarMetrics:UIBarMetricsDefault];
-        
-        _customItem = [[UINavigationItem alloc] init];
-        _customItem.leftBarButtonItem = self.downLoadBtn;
-        _customItem.rightBarButtonItem = self.messageBtn;
 
-        _customItem.titleView = self.searchBar;;
-
-        [_customNaviBar pushNavigationItem:_customItem animated:NO];
-        
-        [_customNaviBar setTintColor:[UIColor whiteColor]];
-    }
-    return _customNaviBar;
-}
-
-- (UITextField *)searchField {
-    if (!_searchField) {
-        _searchField = [[UITextField alloc] init];
-        _searchField.backgroundColor = [UIColor purpleColor];
-        _searchField.borderStyle = UITextBorderStyleRoundedRect;
-        _searchField.placeholder = @"搜索游戏";
-        _searchField.accessibilityTraits = UIAccessibilityTraitSearchField;
-    }
-    return _searchField;
-}
 
 
 

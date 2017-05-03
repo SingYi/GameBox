@@ -37,7 +37,7 @@
 - (void)initDataSource {
     [ActivityModel postWithType:StrategList Page:@"1" ChannelId:@"185" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         _showArray = content[@"data"][@"list"];
-        NSLog(@"%@",content);
+        CLog(@"%@",content);
         [self.tableView reloadData];
 
     }];

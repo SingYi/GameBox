@@ -43,10 +43,10 @@
         self.collectionView.contentInset = UIEdgeInsetsMake(0, (_viewHeight - _itemHeight) / 2, 0, (_viewHeight - _itemHeight) / 2);
     }
     
-    if (!_isCenter) {
-        [self.collectionView setContentOffset:CGPointMake(([self.collectionView numberOfItemsInSection:0] / 2 - 2) * kSCREEN_WIDTH / 5, 0)];
-        _isCenter = YES;
-    }
+//    if (!_isCenter) {
+//        [self.collectionView setContentOffset:CGPointMake(([self.collectionView numberOfItemsInSection:0] / 2 - 2) * _itemSize.width / 2, 0)];
+//        _isCenter = YES;
+//    }
     
 }
 

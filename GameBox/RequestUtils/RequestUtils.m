@@ -40,7 +40,7 @@
                         completion(nil,false);
                     }
                 });
-                NSLog(@"NSJSONSerialization error");
+                CLog(@"NSJSONSerialization error");
             } else {
                 if (obj && [obj isKindOfClass:[NSDictionary class]]) {
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -52,7 +52,7 @@
                 }
             }
         } else {
-            NSLog(@"Request Failed...");
+            CLog(@"Request Failed...");
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completion) {
                     completion(nil,false);
@@ -89,15 +89,14 @@
         if (error == nil) {
             NSError * fail = nil;
             id obj = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&fail];
-//            NSLog(@"obj === %@",obj);
             if (fail) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (completion) {
                         completion(nil,false);
                     }
                 });
-                NSLog(@"NSJSONSerialization error");
-//                NSLog(@"%@",error.localizedDescription);
+                CLog(@"NSJSONSerialization error");
+
             } else {
                 if (obj && [obj isKindOfClass:[NSDictionary class]]) {
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -108,7 +107,7 @@
                 }
             }
         } else {
-            NSLog(@"Request Failed...");
+            CLog(@"Request Failed...");
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completion) {
                     completion(nil,false);
@@ -146,7 +145,7 @@
             });
                            
         } else {
-            NSLog(@"Request Failed...");
+            CLog(@"Request Failed...");
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completion) {
                     completion(nil,false);

@@ -16,6 +16,8 @@
 
 @property (nonatomic, strong) UIView *seleView;
 
+@property (nonatomic, strong) UIView *line;
+
 @end
 
 @implementation HomeHeader
@@ -35,7 +37,7 @@
     
     [_btnNameArray enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
         UIButton *button = [UIButton buttonWithType:(UIButtonTypeCustom)];
-        button.frame = CGRectMake(idx * kSCREEN_WIDTH / _btnNameArray.count, 0, kSCREEN_WIDTH / self.btnNameArray.count, 30);
+        button.frame = CGRectMake(idx * kSCREEN_WIDTH / _btnNameArray.count, 0, kSCREEN_WIDTH / self.btnNameArray.count, 44);
         
         [button setTitle:obj forState:(UIControlStateNormal)];
         
@@ -46,22 +48,31 @@
         [button setTitleColor:[UIColor lightGrayColor] forState:(UIControlStateNormal)];
         [self addSubview:button];
     }];
+    [self addSubview:self.line];
     [self addSubview:self.seleView];
 }
 
 - (void)setIndex:(NSInteger)index {
     _index = index;
     [UIView animateWithDuration:0.3 animations:^{
-        self.seleView.frame = CGRectMake(index * kSCREEN_WIDTH / self.btnNameArray.count, 29, kSCREEN_WIDTH / self.btnNameArray.count, 3);
+        self.seleView.frame = CGRectMake(index * kSCREEN_WIDTH / self.btnNameArray.count, 41, kSCREEN_WIDTH / self.btnNameArray.count, 3);
+        UIButton *button;
     }];
 }
 
+- (UIView *)line {
+    if (!_line) {
+        _line = [[UIView alloc] initWithFrame:CGRectMake(0, 41, kSCREEN_WIDTH, 3)];
+        _line.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
+    }
+    return _line;
+}
 
 
 - (UIView *)seleView {
     if (!_seleView) {
         _seleView = [[UIView alloc] init];
-        _seleView.frame = CGRectMake(0, 29, kSCREEN_WIDTH / self.btnNameArray.count, 3);
+        _seleView.frame = CGRectMake(0, 41, kSCREEN_WIDTH / self.btnNameArray.count, 3);
         _seleView.backgroundColor = [UIColor orangeColor];
     }
     return _seleView;
@@ -72,9 +83,7 @@
     if (_isAnimation) {
         
     } else {
-        [UIView animateWithDuration:0.3 animations:^{
-            self.seleView.frame = CGRectMake((sender.tag - BTNTAG) * kSCREEN_WIDTH / self.btnNameArray.count, 29, kSCREEN_WIDTH / self.btnNameArray.count, 3);
-        }];
+        self.index = sender.tag - BTNTAG;
         
         if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectBtnAtIndexPath:)]) {
             [self.delegate didSelectBtnAtIndexPath:sender.tag - BTNTAG];

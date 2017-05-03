@@ -160,9 +160,9 @@
     
     for(int i = 0; i < CC_SHA1_DIGEST_LENGTH; i++)
         [cha1str appendFormat:@"%02x", digest[i]];
-//    NSLog(@"%@",cha1str);
+
     NSString *sign = [cha1str uppercaseString];
-//    NSLog(@"%@",sign);
+
     [dict setObject:sign forKey:@"sign"];
     
     [RequestUtils postRequestWithURL:BAGIDURL params:dict completion:^(NSDictionary *content, BOOL success) {

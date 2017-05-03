@@ -84,8 +84,8 @@
 /** 注册 */
 - (void)respondsToRegisterBtn {
     [MineModel postRegisterWithAccount:self.userName.text PassWord:self.passWord.text PhoneNumber:self.phoneNumber.text PhoneCode:self.securityCode.text email:nil Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        NSLog(@"%@",content);
-        NSLog(@"%@",content[@"msg"]);
+
+
     }];
 }
 

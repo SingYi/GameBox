@@ -63,8 +63,7 @@
         if (success) {
             
         }
-        NSLog(@"%@",content);
-        NSLog(@"%@",content[@"msg"]);
+
         self.newPassWordView.userId = content[@"data"][@"id"];
         self.newPassWordView.userToken = content[@"data"][@"token"];
         [self.navigationController pushViewController:self.newPassWordView animated:YES];
@@ -74,8 +73,7 @@
 /** 发送验证码 */
 - (void)respondsToSendCodeBtn {
     [MineModel postPhoneCodeWithPhoneNumber:self.phoneNumber.text isVerify:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        NSLog(@"%@",content);
-        NSLog(@"%@",content[@"msg"]);
+
     }];
 }
 

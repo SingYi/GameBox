@@ -148,8 +148,7 @@
     listCommentViewBtn.frame = CGRectMake(215, 450, 100, 40);
     [listCommentViewBtn addTarget:self action:@selector(listCommentView) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:listCommentViewBtn];
-    
-    
+
 }
 
 - (void)listCommentView {
