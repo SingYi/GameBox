@@ -82,7 +82,7 @@
 }
 
 - (void)initUserInterface {
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor colorWithWhite:1 alpha:1];
     self.detailHeader.btnArray = @[@"详情",@"攻略",@"礼包",@"开服"];
     
     self.navigationItem.title = @"游戏详情";
@@ -168,11 +168,13 @@
     self.gameStrategy.gameID = gameID;
 }
 
-#pragma markg - setGameInfo
+#pragma markg - gameInfo
 /** 设置游戏信息 */
 - (void)setGameinfo:(NSDictionary *)gameinfo {
     _gameinfo = gameinfo;
     
+    syLog(@"%@",gameinfo);
+
     //设置游戏名称
     self.detailHeader.gameNameLabel.text = _gameinfo[@"gamename"];
     [self.detailHeader.gameNameLabel sizeToFit];
@@ -208,7 +210,7 @@
          [self.detailHeader.downLoadNumber sizeToFit];
     }
     
-    //设置大小
+    //设置游戏大小
     self.detailHeader.sizeLabel.text = [NSString stringWithFormat:@"%@M",_gameinfo[@"size"]];
     [self.detailHeader.sizeLabel sizeToFit];
     
@@ -224,6 +226,9 @@
     //设置游戏返利
     self.gameDetail.rebate = gameinfo[@"rebate"];
     
+    //是否收藏
+    NSString *isCollection = gameinfo[@"collect"];
+    self.detailFooter.isCollection = isCollection.boolValue;
     
     [self.gameDetail goToTop];
 }
@@ -231,7 +236,7 @@
 //设置猜你喜欢
 - (void)setLikes:(NSArray *)likes {
     self.gameDetail.likes = likes;
-    syLog(@"%@",likes);
+//    syLog(@"%@",likes);
 }
 
 
@@ -349,7 +354,12 @@
     if (!_detailHeader) {
         _detailHeader = [[DetailHeader alloc]initWithFrame:CGRectMake(0, 64, kSCREEN_WIDTH, 124)];
 
+        _detailHeader.layer.shadowColor = [UIColor lightGrayColor].CGColor;
+        _detailHeader.layer.shadowOpacity = 1.f;
+        _detailHeader.layer.shadowRadius = 2.f;
+        _detailHeader.layer.shadowOffset = CGSizeMake(2, 2);
         
+
         _detailHeader.detailHeaderDelegate = self;
         
     }
@@ -368,7 +378,12 @@
 - (GameDetailViewController *)gameDetail {
     if (!_gameDetail) {
         _gameDetail = [[GameDetailViewController alloc] init];
-        _gameDetail.view.frame = CGRectMake(0, 188, kSCREEN_WIDTH, kSCREEN_HEIGHT - 237);
+        _gameDetail.view.frame = CGRectMake(0, CGRectGetMaxY(self.detailHeader.frame) + 5, kSCREEN_WIDTH, kSCREEN_HEIGHT - CGRectGetMaxY(self.detailHeader.frame) -  255);
+        
+        _gameDetail.view.layer.shadowColor = [UIColor lightGrayColor].CGColor;
+        _gameDetail.view.layer.shadowOpacity = 1.f;
+        _gameDetail.view.layer.shadowRadius = 2.f;
+        _gameDetail.view.layer.shadowOffset = CGSizeMake(2, 2);
 
     }
     return _gameDetail;
@@ -377,7 +392,7 @@
 - (GameStrategyViewController *)gameStrategy {
     if (!_gameStrategy) {
         _gameStrategy = [[GameStrategyViewController alloc] init];
-        _gameStrategy.view.frame = CGRectMake(0, 188, kSCREEN_WIDTH, kSCREEN_HEIGHT - 237);
+        _gameStrategy.view.frame = CGRectMake(0, CGRectGetMaxY(self.detailHeader.frame) + 5, kSCREEN_WIDTH, kSCREEN_HEIGHT - CGRectGetMaxY(self.detailHeader.frame) -  255);
 
     }
     return _gameStrategy;
@@ -386,7 +401,7 @@
 - (GameGiftBagViewController *)gameGiftBag {
     if (!_gameGiftBag) {
         _gameGiftBag = [[GameGiftBagViewController alloc] init];
-        _gameGiftBag.view.frame = CGRectMake(0, 188, kSCREEN_WIDTH, kSCREEN_HEIGHT - 237);
+        _gameGiftBag.view.frame = CGRectMake(0, CGRectGetMaxY(self.detailHeader.frame) + 5, kSCREEN_WIDTH, kSCREEN_HEIGHT - CGRectGetMaxY(self.detailHeader.frame) -  255);
 
     }
     return _gameGiftBag;
@@ -395,7 +410,7 @@
 - (GameOpenServerViewController *)gameOpenServer {
     if (!_gameOpenServer) {
         _gameOpenServer = [[GameOpenServerViewController alloc] init];
-        _gameOpenServer.view.frame = CGRectMake(0, 188, kSCREEN_WIDTH, kSCREEN_HEIGHT - 237);
+        _gameOpenServer.view.frame = CGRectMake(0, CGRectGetMaxY(self.detailHeader.frame) + 5, kSCREEN_WIDTH, kSCREEN_HEIGHT - CGRectGetMaxY(self.detailHeader.frame) -  255);
 
     }
     return _gameOpenServer;

@@ -9,8 +9,6 @@
 #import "DetailFooter.h"
 
 @interface DetailFooter ()
-
-
 /**收藏按钮*/
 @property (nonatomic, strong) UIButton *collectionBtn;
 
@@ -38,6 +36,16 @@
     [self addSubview:self.collectionBtn];
     [self addSubview:self.downLoadBtn];
     [self addSubview:self.shardBtn];
+}
+
+#pragma mark - setter
+- (void)setIsCollection:(BOOL)isCollection {
+    _isCollection = isCollection;
+    if (_isCollection) {
+        [self.collectionBtn setImage:[UIImage imageNamed:@"detail_collection"] forState:(UIControlStateNormal)];
+    } else {
+        [self.collectionBtn setImage:[UIImage imageNamed:@"detail_unCollection"] forState:(UIControlStateNormal)];
+    }
 }
 
 

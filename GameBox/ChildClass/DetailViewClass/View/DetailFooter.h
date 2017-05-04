@@ -10,4 +10,7 @@
 
 @interface DetailFooter : UIView
 
+/** 是否收藏 */
+@property (nonatomic, assign) BOOL isCollection;
+
 @end

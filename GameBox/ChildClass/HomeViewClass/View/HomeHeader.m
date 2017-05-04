@@ -47,6 +47,7 @@
         [button setTitle:obj forState:(UIControlStateNormal)];
         
         button.tag = BTNTAG + idx;
+        button.backgroundColor = [UIColor whiteColor];
         
         [button addTarget:self action:@selector(respondstoBtn:) forControlEvents:(UIControlEventTouchUpInside)];
         if (idx == 0) {
@@ -90,6 +91,10 @@
     }];
     
     _lastBtn = _buttons[_index];
+}
+
+- (void)setLineColor:(UIColor *)lineColor {
+    self.line.backgroundColor = lineColor;
 }
 
 - (UIView *)line {
