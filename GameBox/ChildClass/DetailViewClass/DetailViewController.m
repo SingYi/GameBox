@@ -120,6 +120,7 @@
 
 #pragma mark - setter
 - (void)setGameID:(NSString *)gameID {
+    
     _gameID = gameID;
     
     //请求游戏详情
@@ -132,6 +133,33 @@
             self.likes = content[@"data"][@"like"];
 
         }
+    }];
+    
+    
+    [ChangyanSDK getTopicComments:[NSString stringWithFormat:@"game_%@",gameID] pageSize:@"3" pageNo:@"1" orderBy:nil style:nil depth:nil subSize:nil completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
+        syLog(@"%d",statusCode);
+        syLog(@"%@",responseStr);
+    }];
+    
+    
+    //请求评论
+    [ChangyanSDK getCommentCount:[NSString stringWithFormat:@"game_%@",gameID] topicSourceID:nil topicUrl:nil completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
+        syLog(@"%d",statusCode);
+        syLog(@"%@",responseStr);
+    
+//        switch (statusCode) {
+//                CYSuccess           = 0,    /* 成功 */
+//                CYParamsError       = 1,    /* 参数错误 */
+//                CYLoginError        = 2,    /* 登录错误 */
+//                CYOtherError        = 3,    /* 其他错误 */
+//            case CYSuccess:
+//                syLog(<#format, ...#>)
+//                break;
+//
+//            default:
+//                break;
+//        }
+    
     }];
     
     

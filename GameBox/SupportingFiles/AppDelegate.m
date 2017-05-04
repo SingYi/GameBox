@@ -34,6 +34,8 @@
                  redirectUrl:nil
         anonymousAccessToken:nil];
     
+//    [ChangyanSDK registerApp:@"cysYKUClL" appKey:@"C66A5BAD9ED000011E5A1F685821111F" redirectUrl:nil anonymousAccessToken:nil];
+    
     
     [ChangyanSDK getUserInfo:^(CYStatusCode statusCode, NSString *responseStr) {
         
@@ -41,7 +43,7 @@
     }];
   
     
-    [ChangyanSDK setLoginViewController:[ControllerManager shareManager].loginViewController];
+//    [ChangyanSDK setLoginViewController:[ControllerManager shareManager].loginViewController];
     
 
     

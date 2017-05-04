@@ -28,6 +28,11 @@
 /** 游戏返利 */
 @property (nonatomic, strong) NSString *rebate;
 
+/** 评论数组 */
+@property (nonatomic, strong) NSArray *commentArray;
+
+
+
 /** 返回顶部 */
 - (void)goToTop;
 
