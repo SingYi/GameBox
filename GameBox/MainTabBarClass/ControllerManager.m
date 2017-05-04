@@ -12,7 +12,7 @@ static ControllerManager *manager = nil;
 
 @implementation ControllerManager
 
-/**< 单利 */
+/** 单利 */
 + (ControllerManager *)shareManager {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -22,7 +22,7 @@ static ControllerManager *manager = nil;
 }
 
 #pragma mark - getter 
-/**< 根视图 */
+/** 根视图 */
 - (UINavigationController *)rootViewController {
     if (!_rootViewController) {
         _rootViewController = [[UINavigationController alloc]initWithRootViewController:self.tabbarController];
