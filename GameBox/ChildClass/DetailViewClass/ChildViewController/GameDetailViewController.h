@@ -25,4 +25,10 @@
 /** 游戏特征 */
 @property (nonatomic, strong) NSString *feature;
 
+/** 游戏返利 */
+@property (nonatomic, strong) NSString *rebate;
+
+/** 返回顶部 */
+- (void)goToTop;
+
 @end

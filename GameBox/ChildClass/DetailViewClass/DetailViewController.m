@@ -52,8 +52,6 @@
 /**猜你喜欢*/
 @property (nonatomic, strong) NSArray *likes;
 
-/** 游戏logo */
-@property (nonatomic, strong) UIImage * dataImage;
 
 
 @end
@@ -66,7 +64,6 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    self.navigationItem.title = @"";
 }
 
 - (void)viewDidLoad {
@@ -87,6 +84,9 @@
 - (void)initUserInterface {
     self.view.backgroundColor = [UIColor whiteColor];
     self.detailHeader.btnArray = @[@"详情",@"攻略",@"礼包",@"开服"];
+    
+    self.navigationItem.title = @"游戏详情";
+    
     [self.view addSubview:self.detailHeader];
     [self.view addSubview:self.gameDetail.view];
     [self.view addSubview:self.detailFooter];
@@ -103,7 +103,7 @@
 }
 
 #pragma mark - respondsToSwipe
-/**< 手势的响应事件 */
+/** 手势的响应事件 */
 - (void)respondsToSwipe:(UISwipeGestureRecognizer *)sender {
     
     if (sender.direction == UISwipeGestureRecognizerDirectionLeft && _currentIndex >= 0 && _currentIndex < 3) {
@@ -121,69 +121,112 @@
 #pragma mark - setter
 - (void)setGameID:(NSString *)gameID {
     _gameID = gameID;
+    
+    //请求游戏详情
     [GameModel postGameInfoWithGameID:gameID UserID:@"0" ChannelID:@"185" Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
         
         if (success && !((NSString *)content[@"status"]).boolValue) {
             
             self.gameinfo = content[@"data"][@"gameinfo"];
-            self.likes = content[@"data"][@"like"];
-            self.navigationItem.title = self.gameinfo[@"gamename"];
             
-//            CLog(@"%@",content);
-        }
-        
+            self.likes = content[@"data"][@"like"];
 
+        }
     }];
     
     
     self.gameGiftBag.gameID = gameID;
     self.gameOpenServer.gameID = gameID;
     self.gameStrategy.gameID = gameID;
-    
-    
-    /////评论测试
-    UIButton *listCommentViewBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    listCommentViewBtn.backgroundColor = [UIColor blueColor];
-    [listCommentViewBtn setTitle:@"评论列表页" forState:UIControlStateNormal];
-    listCommentViewBtn.frame = CGRectMake(215, 450, 100, 40);
-    [listCommentViewBtn addTarget:self action:@selector(listCommentView) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:listCommentViewBtn];
-
 }
 
-- (void)listCommentView {
-    UIViewController *listViewController = [ChangyanSDK getListCommentViewController:@""
-                                                                             topicID:nil
-                                                                       topicSourceID:[NSString stringWithFormat:@"game_%@",_gameID]
-                                                                          categoryID:nil
-                                                                          topicTitle:nil];
-    UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:listViewController];
-    [self presentViewController:navigation animated:YES completion:^{
-        
-    }];
-    
-//    [self.navigationController pushViewController:listViewController animated:YES];
-}
-
+#pragma markg - setGameInfo
+/** 设置游戏信息 */
 - (void)setGameinfo:(NSDictionary *)gameinfo {
     _gameinfo = gameinfo;
+    
+    //设置游戏名称
     self.detailHeader.gameNameLabel.text = _gameinfo[@"gamename"];
-    self.detailHeader.downLoadNumber.text = [NSString stringWithFormat:@"%@ 次下载",_gameinfo[@"download"]];
-    [self.detailHeader.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_gameinfo[@"logo"]]]];
-    self.dataImage = self.detailHeader.imageView.image;
+    [self.detailHeader.gameNameLabel sizeToFit];
+    
+    //设置标签
+    NSArray *types = [((NSString *)_gameinfo[@"types"]) componentsSeparatedByString:@" "];
+    NSInteger j = 0;
+    for (; j < types.count; j++) {
+        self.detailHeader.typeLabels[j].text = [NSString stringWithFormat:@" %@ ",types[j]];
+        if (j == 0) {
+            self.detailHeader.typeLabels[j].frame = CGRectMake(CGRectGetMaxX(self.detailHeader.gameNameLabel.frame) + 4, 15, 15, 15);
+        } else {
+            self.detailHeader.typeLabels[j].frame = CGRectMake(CGRectGetMaxX(self.detailHeader.typeLabels[j - 1].frame) + 2, 15, 15, 15);
+        }
+        [self.detailHeader.typeLabels[j] sizeToFit];
+    }
+    for (; j < self.detailHeader.typeLabels.count; j++) {
+        self.detailHeader.typeLabels[j].text = @"";
+        [self.detailHeader.typeLabels[j] sizeToFit];
+    }
+    
+    
+    //设置游戏评分
+    self.detailHeader.source = 3.5;
+    
+    //设置游戏下载次数
+    NSInteger downLoad = ((NSString *)_gameinfo[@"download"]).integerValue;
+    if (downLoad > 10000) {
+        self.detailHeader.downLoadNumber.text = [NSString stringWithFormat:@"%ld万+次下载",downLoad / 10000];
+        [self.detailHeader.downLoadNumber sizeToFit];
+    } else {
+        self.detailHeader.downLoadNumber.text = [NSString stringWithFormat:@"%ld次下载",downLoad];
+         [self.detailHeader.downLoadNumber sizeToFit];
+    }
+    
+    //设置大小
+    self.detailHeader.sizeLabel.text = [NSString stringWithFormat:@"%@M",_gameinfo[@"size"]];
+    [self.detailHeader.sizeLabel sizeToFit];
+    
+    //设置游戏轮播图
     self.gameDetail.imagasArray = gameinfo[@"imgs"];
+    
+    //设置游戏简介
     self.gameDetail.abstract = gameinfo[@"abstract"];
+    
+    //设置游戏特性
     self.gameDetail.feature = gameinfo[@"feature"];
+    
+    //设置游戏返利
+    self.gameDetail.rebate = gameinfo[@"rebate"];
+    
+    
+    [self.gameDetail goToTop];
 }
 
+//设置猜你喜欢
 - (void)setLikes:(NSArray *)likes {
     self.gameDetail.likes = likes;
+    syLog(@"%@",likes);
 }
 
-- (void)setDataImage:(UIImage *)dataImage {
-    self.gameOpenServer.logoImage = dataImage;
-}
 
+//设置游戏logo
+- (void)setGameLogo:(UIImage *)gameLogo {
+    
+    UIImage *image = [UIImage imageNamed:@"image_downloading"];
+    
+    NSData *data1 = UIImagePNGRepresentation(image);
+    
+    NSData *data2 = UIImagePNGRepresentation(gameLogo);
+    
+    if ([data1 isEqual:data2]) {
+        [self.detailHeader.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_gameinfo[@"lgog"]]] placeholderImage:image];
+    
+    } else {
+        
+        self.detailHeader.imageView.image = gameLogo;
+
+    }
+    
+    self.gameOpenServer.logoImage = self.detailHeader.imageView.image;
+}
 
 
 #pragma mark - childController
@@ -273,11 +316,12 @@
 }
 
 
-
 #pragma mark - getter
 - (DetailHeader *)detailHeader {
     if (!_detailHeader) {
-        _detailHeader = [[DetailHeader alloc]initWithFrame:CGRectMake(0, 64, kSCREEN_WIDTH, 112)];
+        _detailHeader = [[DetailHeader alloc]initWithFrame:CGRectMake(0, 64, kSCREEN_WIDTH, 124)];
+
+        
         _detailHeader.detailHeaderDelegate = self;
         
     }
@@ -296,7 +340,7 @@
 - (GameDetailViewController *)gameDetail {
     if (!_gameDetail) {
         _gameDetail = [[GameDetailViewController alloc] init];
-        _gameDetail.view.frame = CGRectMake(0, 180, kSCREEN_WIDTH, kSCREEN_HEIGHT - 230);
+        _gameDetail.view.frame = CGRectMake(0, 188, kSCREEN_WIDTH, kSCREEN_HEIGHT - 237);
 
     }
     return _gameDetail;
@@ -305,7 +349,7 @@
 - (GameStrategyViewController *)gameStrategy {
     if (!_gameStrategy) {
         _gameStrategy = [[GameStrategyViewController alloc] init];
-        _gameStrategy.view.frame = CGRectMake(0, 180, kSCREEN_WIDTH, kSCREEN_HEIGHT - 230);
+        _gameStrategy.view.frame = CGRectMake(0, 188, kSCREEN_WIDTH, kSCREEN_HEIGHT - 237);
 
     }
     return _gameStrategy;
@@ -314,7 +358,7 @@
 - (GameGiftBagViewController *)gameGiftBag {
     if (!_gameGiftBag) {
         _gameGiftBag = [[GameGiftBagViewController alloc] init];
-        _gameGiftBag.view.frame = CGRectMake(0, 180, kSCREEN_WIDTH, kSCREEN_HEIGHT - 230);
+        _gameGiftBag.view.frame = CGRectMake(0, 188, kSCREEN_WIDTH, kSCREEN_HEIGHT - 237);
 
     }
     return _gameGiftBag;
@@ -323,7 +367,7 @@
 - (GameOpenServerViewController *)gameOpenServer {
     if (!_gameOpenServer) {
         _gameOpenServer = [[GameOpenServerViewController alloc] init];
-        _gameOpenServer.view.frame = CGRectMake(0, 180, kSCREEN_WIDTH, kSCREEN_HEIGHT - 230);
+        _gameOpenServer.view.frame = CGRectMake(0, 188, kSCREEN_WIDTH, kSCREEN_HEIGHT - 237);
 
     }
     return _gameOpenServer;

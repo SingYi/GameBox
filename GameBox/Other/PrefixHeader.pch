@@ -37,5 +37,18 @@
 #define CLog(format, ...)
 #endif
 
+#ifdef DEBUG
+#define syLog(format, ...) NSLog(format, ## __VA_ARGS__)
+#else
+#define syog(format, ...)
+#endif
+
 
 #endif /* PrefixHeader_pch */
+
+
+
+
+
+
+

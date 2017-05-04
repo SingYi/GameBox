@@ -260,7 +260,13 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     [ControllerManager shareManager].detailView.gameID = _showArray[indexPath.row][@"id"];
+    
+    SearchCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    [ControllerManager shareManager].detailView.gameLogo = cell.gameLogo.image;
+    
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
     self.hidesBottomBarWhenPushed = NO;

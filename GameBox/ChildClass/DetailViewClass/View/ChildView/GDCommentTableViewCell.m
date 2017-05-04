@@ -1,23 +1,18 @@
 //
-//  GameDetailTableViewCell.m
+//  GDCommentTableViewCell.m
 //  GameBox
 //
-//  Created by 石燚 on 2017/4/28.
+//  Created by 石燚 on 2017/5/4.
 //  Copyright © 2017年 SingYi. All rights reserved.
 //
 
-#import "GameDetailTableViewCell.h"
+#import "GDCommentTableViewCell.h"
 
-@implementation GameDetailTableViewCell
+@implementation GDCommentTableViewCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-    
-    self.detail.textAlignment = NSTextAlignmentLeft;
-    self.detail.numberOfLines = 0;
-    self.detail.font = [UIFont systemFontOfSize:14];
-
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

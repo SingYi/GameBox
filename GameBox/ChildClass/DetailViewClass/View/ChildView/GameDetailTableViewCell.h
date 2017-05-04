@@ -12,4 +12,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *detail;
 
+@property (nonatomic, assign) BOOL isOpen;
+
 @end

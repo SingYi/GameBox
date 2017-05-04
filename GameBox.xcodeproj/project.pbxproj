@@ -47,6 +47,10 @@
 		B58A5C061EB1C0B400CC1D00 /* UserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C051EB1C0B400CC1D00 /* UserModel.m */; };
 		B58A5C0A1EB1DF1D00CC1D00 /* MyAppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C091EB1DF1D00CC1D00 /* MyAppViewController.m */; };
 		B58A5C0D1EB1DFBC00CC1D00 /* AppModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C0C1EB1DFBC00CC1D00 /* AppModel.m */; };
+		B59A76E91EBB21D200FE2B50 /* GDCommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59A76E71EBB21D200FE2B50 /* GDCommentTableViewCell.m */; };
+		B59A76EA1EBB21D200FE2B50 /* GDCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B59A76E81EBB21D200FE2B50 /* GDCommentTableViewCell.xib */; };
+		B59A76EE1EBB2B9900FE2B50 /* GDLikesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59A76EC1EBB2B9900FE2B50 /* GDLikesTableViewCell.m */; };
+		B59A76EF1EBB2B9900FE2B50 /* GDLikesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B59A76ED1EBB2B9900FE2B50 /* GDLikesTableViewCell.xib */; };
 		B59FEDA01E9C614B00A64D84 /* ControllerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FED9F1E9C614B00A64D84 /* ControllerManager.m */; };
 		B59FEDA31E9C6B4A00A64D84 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FEDA21E9C6B4A00A64D84 /* HeaderView.m */; };
 		B59FEDBC1E9C8AF300A64D84 /* SearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FEDBA1E9C8AF300A64D84 /* SearchCell.m */; };
@@ -162,6 +166,12 @@
 		B58A5C091EB1DF1D00CC1D00 /* MyAppViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAppViewController.m; sourceTree = "<group>"; };
 		B58A5C0B1EB1DFBC00CC1D00 /* AppModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppModel.h; sourceTree = "<group>"; };
 		B58A5C0C1EB1DFBC00CC1D00 /* AppModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppModel.m; sourceTree = "<group>"; };
+		B59A76E61EBB21D200FE2B50 /* GDCommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDCommentTableViewCell.h; sourceTree = "<group>"; };
+		B59A76E71EBB21D200FE2B50 /* GDCommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDCommentTableViewCell.m; sourceTree = "<group>"; };
+		B59A76E81EBB21D200FE2B50 /* GDCommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GDCommentTableViewCell.xib; sourceTree = "<group>"; };
+		B59A76EB1EBB2B9900FE2B50 /* GDLikesTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDLikesTableViewCell.h; sourceTree = "<group>"; };
+		B59A76EC1EBB2B9900FE2B50 /* GDLikesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDLikesTableViewCell.m; sourceTree = "<group>"; };
+		B59A76ED1EBB2B9900FE2B50 /* GDLikesTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GDLikesTableViewCell.xib; sourceTree = "<group>"; };
 		B59FED9E1E9C614B00A64D84 /* ControllerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControllerManager.h; sourceTree = "<group>"; };
 		B59FED9F1E9C614B00A64D84 /* ControllerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ControllerManager.m; sourceTree = "<group>"; };
 		B59FEDA11E9C6B4A00A64D84 /* HeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderView.h; sourceTree = "<group>"; };
@@ -592,6 +602,12 @@
 				B50FD18C1EB314AB00CA5E85 /* GameDetailTableViewCell.h */,
 				B50FD18D1EB314AB00CA5E85 /* GameDetailTableViewCell.m */,
 				B50FD18E1EB314AB00CA5E85 /* GameDetailTableViewCell.xib */,
+				B59A76EB1EBB2B9900FE2B50 /* GDLikesTableViewCell.h */,
+				B59A76EC1EBB2B9900FE2B50 /* GDLikesTableViewCell.m */,
+				B59A76ED1EBB2B9900FE2B50 /* GDLikesTableViewCell.xib */,
+				B59A76E61EBB21D200FE2B50 /* GDCommentTableViewCell.h */,
+				B59A76E71EBB21D200FE2B50 /* GDCommentTableViewCell.m */,
+				B59A76E81EBB21D200FE2B50 /* GDCommentTableViewCell.xib */,
 			);
 			path = ChildView;
 			sourceTree = "<group>";
@@ -769,6 +785,8 @@
 				B59FEDC41E9CC97600A64D84 /* GiftBagCell.xib in Resources */,
 				B50FD1901EB314AB00CA5E85 /* GameDetailTableViewCell.xib in Resources */,
 				B59FEDBD1E9C8AF300A64D84 /* SearchCell.xib in Resources */,
+				B59A76EA1EBB21D200FE2B50 /* GDCommentTableViewCell.xib in Resources */,
+				B59A76EF1EBB2B9900FE2B50 /* GDLikesTableViewCell.xib in Resources */,
 				B5D35BA31E9F6F9E00902B04 /* ClassfiyTableViewCell.xib in Resources */,
 				B52CC14C1EB857AE00A1A792 /* changyan.bundle in Resources */,
 				B5C5D4AC1EA073AA008A46DE /* StrategyCell.xib in Resources */,
@@ -888,12 +906,14 @@
 				B5E2C8181E9E2E59002CEC61 /* MyAttentionView.m in Sources */,
 				B5E2C8121E9E2DED002CEC61 /* AppManagerView.m in Sources */,
 				B58A5C021EB181C700CC1D00 /* MineModel.m in Sources */,
+				B59A76EE1EBB2B9900FE2B50 /* GDLikesTableViewCell.m in Sources */,
 				B5E2C81E1E9E2E96002CEC61 /* AboutUsView.m in Sources */,
 				B5E2C8241E9F2A27002CEC61 /* HomeViewController.m in Sources */,
 				B5A266681E9F480300F0C38E /* HomeHeader.m in Sources */,
 				B5C70F271EA9EA920073FDA4 /* RecommentTableHeader.m in Sources */,
 				B5C5D4E21EA0C60F008A46DE /* CustomLayout.m in Sources */,
 				B59FEDC31E9CC97600A64D84 /* GiftBagCell.m in Sources */,
+				B59A76E91EBB21D200FE2B50 /* GDCommentTableViewCell.m in Sources */,
 				5E8DE55C1E9BD497007E719D /* MainTabBarController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
