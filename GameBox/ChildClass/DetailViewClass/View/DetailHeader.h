@@ -34,4 +34,19 @@
 /** 选择的下标 */
 @property (nonatomic, assign) NSInteger index;
 
+/** 游戏评分 */
+@property (nonatomic, assign) CGFloat source;
+
+/** 游戏标签 */
+@property (nonatomic, strong) NSMutableArray<UILabel *> *typeLabels;
+
+/** 游戏大小 */
+@property (nonatomic, strong) UILabel *sizeLabel;
+
 @end
+
+
+
+
+
+

@@ -152,7 +152,7 @@
     
     cell.dict = _showArray[indexPath.row];
     
-    [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.9344.net%@",_showArray[indexPath.row][@"logo"]]]];
+    [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
    
  
@@ -175,7 +175,12 @@
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     self.parentViewController.hidesBottomBarWhenPushed = YES;
+    
     [ControllerManager shareManager].detailView.gameID = self.showArray[indexPath.row][@"id"];
+    
+    SearchCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    [ControllerManager shareManager].detailView.gameLogo = cell.gameLogo.image;
     
     [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
     self.parentViewController.hidesBottomBarWhenPushed = NO;
@@ -194,7 +199,11 @@
 #pragma mark - cellDelegete
 /** cell的代理  */
 - (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
-    CLog(@"下载游戏:%@",dict);
+    NSString *str = dict[@"ios_url"];
+//    syLog(@"%@",dict);
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+    
+//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-services://?action=download-manifest&url=https%3A%2F%2Fdownload.fir.im%2Fapps%2F58c78f29ca87a86ab50000ee%2Finstall%3Fdownload_token%3Dfb0f242cdf75f7007568a491321dac4d%26release_id%3D58c78faeca87a86b4c00012e"]];
 }
 
 #pragma mark - rollingDeleagte

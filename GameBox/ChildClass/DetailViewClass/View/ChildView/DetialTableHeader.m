@@ -70,7 +70,7 @@
         _layout = [[CustomLayout alloc]init];
         _layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         
-        _layout.itemSize = CGSizeMake(self.bounds.size.height * 0.7 , self.bounds.size.height);
+        _layout.itemSize = CGSizeMake(self.bounds.size.height * 0.7 , self.bounds.size.height - 10);
     }
     return _layout;
 }

@@ -10,6 +10,12 @@
 
 @interface DetailViewController : UIViewController
 
-@property (nonatomic, assign) NSString *gameID;
+/** 游戏ID */
+@property (nonatomic, strong) NSString *gameID;
+
+/** 游戏logo */
+@property (nonatomic, strong) UIImage *gameLogo;
+
+
 
 @end

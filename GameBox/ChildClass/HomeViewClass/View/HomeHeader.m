@@ -18,6 +18,8 @@
 
 @property (nonatomic, strong) UIView *line;
 
+@property (nonatomic, strong) UIButton *lastBtn;
+
 @end
 
 @implementation HomeHeader
@@ -35,7 +37,10 @@
 - (void)setBtnNameArray:(NSArray *)btnNameArray {
     _btnNameArray = btnNameArray;
     
+    _buttons = [NSMutableArray arrayWithCapacity:btnNameArray.count];
+    
     [_btnNameArray enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    
         UIButton *button = [UIButton buttonWithType:(UIButtonTypeCustom)];
         button.frame = CGRectMake(idx * kSCREEN_WIDTH / _btnNameArray.count, 0, kSCREEN_WIDTH / self.btnNameArray.count, 44);
         
@@ -44,20 +49,47 @@
         button.tag = BTNTAG + idx;
         
         [button addTarget:self action:@selector(respondstoBtn:) forControlEvents:(UIControlEventTouchUpInside)];
+        if (idx == 0) {
+            [button setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
+            _lastBtn = button;
+        } else {
+            [button setTitleColor:[UIColor lightGrayColor] forState:(UIControlStateNormal)];
+        }
         
-        [button setTitleColor:[UIColor lightGrayColor] forState:(UIControlStateNormal)];
+        [_buttons addObject:button];
+        
         [self addSubview:button];
     }];
+    
     [self addSubview:self.line];
     [self addSubview:self.seleView];
 }
 
 - (void)setIndex:(NSInteger)index {
     _index = index;
+    if (_lastBtn) {
+        [_lastBtn setTitleColor:[UIColor lightGrayColor] forState:(UIControlStateNormal)];
+    }
+    
     [UIView animateWithDuration:0.3 animations:^{
-        self.seleView.frame = CGRectMake(index * kSCREEN_WIDTH / self.btnNameArray.count, 41, kSCREEN_WIDTH / self.btnNameArray.count, 3);
-        UIButton *button;
+        
+        NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:14]};
+        CGSize retSize = [_buttons[_index].titleLabel.text boundingRectWithSize:CGSizeMake(kSCREEN_WIDTH / _buttons.count, 30)
+                                           options:\
+                          NSStringDrawingTruncatesLastVisibleLine |
+                          NSStringDrawingUsesLineFragmentOrigin |
+                          NSStringDrawingUsesFontLeading
+                                        attributes:attribute
+                                           context:nil].size;
+
+        self.seleView.bounds = CGRectMake(0, 0, (retSize.width + 10), 3);
+        self.seleView.center = CGPointMake(_buttons[index].center.x, 42.5);
+        
+        
+        [_buttons[_index] setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
     }];
+    
+    _lastBtn = _buttons[_index];
 }
 
 - (UIView *)line {
@@ -72,8 +104,13 @@
 - (UIView *)seleView {
     if (!_seleView) {
         _seleView = [[UIView alloc] init];
-        _seleView.frame = CGRectMake(0, 41, kSCREEN_WIDTH / self.btnNameArray.count, 3);
+        NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:14]};
+        CGSize retSize = [_buttons[0].titleLabel.text boundingRectWithSize:CGSizeMake(kSCREEN_WIDTH / _buttons.count, 30) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
+        _seleView.bounds = CGRectMake(0, 0, (retSize.width + 10), 3);
+        _seleView.center = CGPointMake(_buttons[0].center.x, 42.5);
         _seleView.backgroundColor = [UIColor orangeColor];
+        _seleView.layer.cornerRadius = 1;
+        _seleView.layer.masksToBounds = YES;
     }
     return _seleView;
 }
