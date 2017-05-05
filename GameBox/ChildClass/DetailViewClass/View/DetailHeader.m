@@ -39,6 +39,7 @@
 }
 
 - (void)initUserInterface {
+    self.backgroundColor = [UIColor whiteColor];
 
     //选择控制器
     [self addSubview:self.selectView];
@@ -99,6 +100,7 @@
 - (HomeHeader *)selectView {
     if (!_selectView) {
         _selectView = [[HomeHeader alloc]initWithFrame:CGRectMake(0, 80, kSCREEN_WIDTH, 44)];
+        _selectView.lineColor = [UIColor whiteColor];
         _selectView.delegate = self;
     }
     return _selectView;

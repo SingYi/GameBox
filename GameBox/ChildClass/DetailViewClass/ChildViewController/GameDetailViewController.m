@@ -13,11 +13,13 @@
 
 #import "GameDetailTableViewCell.h"
 #import "GDLikesTableViewCell.h"
+#import "GDCommentTableViewCell.h"
 
 #import "ChangyanSDK.h"
 
 #define DetailTableCellIDE @"GameDetailTableViewCell"
 #define GDLIKESCELL @"GDLikesTableViewCell"
+#define GDCOMMENTCELLIDE @"GDCommentTableViewCell"
 
 @interface GameDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -42,6 +44,7 @@
 /** 返回的行高 */
 @property (nonatomic, strong) NSMutableArray *rowHeightArray;
 
+
 @end
 
 @implementation GameDetailViewController
@@ -59,7 +62,10 @@
     [super viewDidLoad];
     [self initUserInterFace];
     _sectionTitleArray = @[@"    游戏简介:",@"    游戏特征:",@"    游戏返利:",@"    猜你喜欢:",@"    用户评论:"];
+    
     _rowHeightArray = [@[@100.f,@100.f,@100.f] mutableCopy];
+    
+    _commentArray = @[@"",@"",@""];
 }
 
 
@@ -116,13 +122,6 @@
 //游戏特征
 - (void)setFeature:(NSString *)feature {
     NSMutableString *str = [feature mutableCopy];
-//    NSString *last = [str substringFromIndex:str.length - 1];
-//    while ([last isEqualToString:@"\n"]) {
-//        str = [[str substringToIndex:str.length - 1] mutableCopy];
-//        last = [str substringFromIndex:str.length - 1];
-//    }
-    
-   
     
     CGSize size = [self sizeForString:str Width:kSCREEN_WIDTH Height:MAXFLOAT];
     
@@ -163,6 +162,12 @@
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:(UITableViewRowAnimationNone)];
 }
 
+- (void)setCommentArray:(NSArray *)commentArray {
+    _commentArray = commentArray;
+    
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:3]] withRowAnimation:(UITableViewRowAnimationNone)];
+}
+
 /** 计算字符串需要的尺寸 */
 - (CGSize)sizeForString:(NSString *)string Width:(CGFloat)width Height:(CGFloat)height {
     NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:14]};
@@ -176,12 +181,17 @@
     return retSize;
 }
 
+
+
 #pragma mark - tableviewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return _sectionTitleArray.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (section == 4) {
+        return _commentArray.count;
+    }
     return 1;
 }
 
@@ -242,10 +252,11 @@
             
             break;
         }
-
-            
+            //用户评论
         default: {
-            cell.detail.text = @"";
+            GDCommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:GDCOMMENTCELLIDE];
+            
+            return cell;
         }
             break;
     }
@@ -304,7 +315,7 @@
         case 3:
             return 100;
         default:
-            return 400;
+            return 80;
     }
     
 }
@@ -343,6 +354,9 @@
         [_tableView registerNib:[UINib nibWithNibName:@"GameDetailTableViewCell" bundle:nil] forCellReuseIdentifier:DetailTableCellIDE];
         
         [_tableView registerNib:[UINib nibWithNibName:@"GDLikesTableViewCell" bundle:nil] forCellReuseIdentifier:GDLIKESCELL];
+        
+        [_tableView registerNib:[UINib nibWithNibName:@"GDCommentTableViewCell" bundle:nil] forCellReuseIdentifier:GDCOMMENTCELLIDE];
+        
         
         _tableView.delegate = self;
         _tableView.dataSource = self;

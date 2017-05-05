@@ -28,4 +28,7 @@
 /**移动主视图时下标的位置*/
 @property (nonatomic, assign) NSInteger index;
 
+/** 分割线颜色 */
+@property (nonatomic, strong) UIColor *lineColor;
+
 @end
