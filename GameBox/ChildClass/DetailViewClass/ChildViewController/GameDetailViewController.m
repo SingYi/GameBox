@@ -14,6 +14,8 @@
 #import "GameDetailTableViewCell.h"
 #import "GDLikesTableViewCell.h"
 
+#import "ChangyanSDK.h"
+
 #define DetailTableCellIDE @"GameDetailTableViewCell"
 #define GDLIKESCELL @"GDLikesTableViewCell"
 

@@ -17,9 +17,9 @@
 #import "GameGiftBagViewController.h"
 #import "GameOpenServerViewController.h"
 
+#import "ChangyanSDK.h"
 #import "UIImageView+WebCache.h"
 
-#import "ChangyanSDK.h"
 
 
 @interface DetailViewController ()<DetailHeaderDelegate>
@@ -132,6 +132,23 @@
             self.likes = content[@"data"][@"like"];
 
         }
+    }];
+    
+#warning 1
+    //获取评论
+//    [ChangyanSDK getTopicComments:[NSString stringWithFormat:@"game_%@",gameID] pageSize:@"5" pageNo:@"5" orderBy:nil style:nil depth:nil subSize:nil completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
+//        syLog(@"%@",responseStr);
+//    }];
+    
+    UIViewController *listViewController = [ChangyanSDK getListCommentViewController:@""
+                                                                             topicID:nil
+                                                                       topicSourceID:[NSString stringWithFormat:@"game_%@",gameID]
+                                                                          categoryID:nil
+                                                                          topicTitle:nil];
+    
+    UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:listViewController];
+    [self presentViewController:navigation animated:YES completion:^{
+        
     }];
     
     

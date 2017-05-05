@@ -35,13 +35,13 @@
         anonymousAccessToken:nil];
     
     
-    [ChangyanSDK getUserInfo:^(CYStatusCode statusCode, NSString *responseStr) {
-        
-        
-    }];
+//    [ChangyanSDK getUserInfo:^(CYStatusCode statusCode, NSString *responseStr) {
+//        
+//        
+//    }];
   
     
-    [ChangyanSDK setLoginViewController:[ControllerManager shareManager].loginViewController];
+//    [ChangyanSDK setLoginViewController:[ControllerManager shareManager].loginViewController];
     
 
     
