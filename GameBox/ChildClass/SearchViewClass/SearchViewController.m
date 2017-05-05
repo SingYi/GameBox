@@ -115,7 +115,6 @@
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    cell.selectIndex = indexPath.row;
     
 //    cell.textLabel.text = _showArray[indexPath.row];
     

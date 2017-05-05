@@ -17,18 +17,16 @@
 
 @interface SearchCell : UITableViewCell
 
-@property (nonatomic, assign) NSInteger selectIndex;
-
+/** 游戏信息 */
 @property (nonatomic, strong) NSDictionary *dict;
 
+/** 游戏logo */
 @property (weak, nonatomic) IBOutlet UIImageView *gameLogo;
 
+/** 游戏评分 */
+@property (nonatomic, assign) CGFloat source;
+
+/** 代理 */
 @property (nonatomic, weak) id<SearchCellDelelgate> delegate;
-
-@property (weak, nonatomic) IBOutlet UILabel *label1;
-
-@property (weak, nonatomic) IBOutlet UILabel *label2;
-
-@property (weak, nonatomic) IBOutlet UILabel *label3;
 
 @end

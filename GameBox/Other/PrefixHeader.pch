@@ -9,27 +9,41 @@
 #ifndef PrefixHeader_pch
 #define PrefixHeader_pch
 
-#define kSCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
-#define kSCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
+//用户模型
+#import "UserModel.h"
 
+
+/** 总接口地址 */
 #define URLMAP @"http://www.9344.net/api-index-map"
 
+/** 图片接口前置地址 */
 #define IMAGEURL @"http://www.9344.net%@"
 
-#define GETUSERID [[NSUserDefaults standardUserDefaults] objectForKey:@"USERID"]
+/** 获取用户ID */
+#define GETUSERID [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]
 
-#define SAVEUSERID(uid) [[NSUserDefaults standardUserDefaults] setObject:uid forKey:@"USERID"];
+/** 保存用户ID */
+#define SAVEUSERID(uid) [[NSUserDefaults standardUserDefaults] setObject:uid forKey:@"userID"];
 
+/** 获取系统单利 */
 #define OBJECT_FOR_USERDEFAULTS(key) [[NSUserDefaults standardUserDefaults] objectForKey:key] 
 
+/** 保存系统单利 */
 #define SAVEOBJECT_AT_USERDEFAULTS(object,key) [[NSUserDefaults standardUserDefaults] setObject:object forKey:key]
+
+/** 渠道ID */
+#define CHANNELID @"185"
+
 
 #define USERID [UserModel uid]
 
 #define RGBACOLOR(r,g,b,a) [UIColor colorWithRed:r / 255.0 green:g / 255.0 blue:b / 255.0 alpha:a]
 #define RGBCOLOR(r,g,b) RGBACOLOR(r,g,b,1)
+#define TABBARCOLOR RGBCOLOR(247,247,247)
 
 
+#define kSCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
+#define kSCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 
 #ifdef DEBUG
 #define CLog(format, ...) NSLog(format, ## __VA_ARGS__)
@@ -42,6 +56,7 @@
 #else
 #define syog(format, ...)
 #endif
+
 
 
 #endif /* PrefixHeader_pch */

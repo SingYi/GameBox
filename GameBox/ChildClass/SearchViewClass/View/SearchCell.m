@@ -10,14 +10,34 @@
 
 @interface SearchCell ()
 
+/** 游戏名称 */
 @property (weak, nonatomic) IBOutlet UILabel *gameName;
-
-
+/** 下载次数 */
 @property (weak, nonatomic) IBOutlet UILabel *gameNumber;
-
+/** 下载游戏 */
 @property (weak, nonatomic) IBOutlet UIButton *gameDownload;
-
+/** 游戏大小 */
 @property (weak, nonatomic) IBOutlet UILabel *gameSize;
+/** 标签1 */
+@property (weak, nonatomic) IBOutlet UILabel *label1;
+/** 标签2 */
+@property (weak, nonatomic) IBOutlet UILabel *label2;
+/** 标签3 */
+@property (weak, nonatomic) IBOutlet UILabel *label3;
+
+/** 星级数组 */
+@property (nonatomic, strong) NSArray<UIImageView *> *stars;
+
+@property (weak, nonatomic) IBOutlet UIImageView *star1;
+
+@property (weak, nonatomic) IBOutlet UIImageView *star2;
+
+@property (weak, nonatomic) IBOutlet UIImageView *star3;
+
+@property (weak, nonatomic) IBOutlet UIImageView *star4;
+
+@property (weak, nonatomic) IBOutlet UIImageView *star5;
+
 
 //约束布局
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *lefLayout;
@@ -29,6 +49,8 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    
+    _stars = @[self.star1,self.star2,self.star3,self.star4,self.star5];
     
     self.gameNumber.font = [UIFont systemFontOfSize:14];
     self.gameNumber.textColor = [UIColor lightGrayColor];
@@ -116,9 +138,30 @@
         labels[i].text = [NSString stringWithFormat:@" %@ ",types[i]];
     }
 
-
+    //游戏大小
     self.gameSize.text = [NSString stringWithFormat:@"%@M",_dict[@"size"]];
     
+    //评分
+#ifdef DEBUG 
+    self.source = (arc4random() % 50) / 10.f;
+#else 
+    self.source = _dict[@"score"];
+#endif
+    
+}
+
+- (void)setSource:(CGFloat)source {
+    _source = source;
+    for (NSInteger i = 0; i < 5; i++) {
+        if (_source <= 0) {
+            self.stars[i].image = [UIImage imageNamed:@"star_dark"];
+        } else if (_source > 0 && _source <= 0.5) {
+            self.stars[i].image = [UIImage imageNamed:@"star_half"];
+        } else if (_source > 0.5) {
+            self.stars[i].image = [UIImage imageNamed:@"star_bright"];
+        }
+        _source--;
+    }
 }
 
 

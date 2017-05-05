@@ -156,9 +156,9 @@
     
     if ([str isKindOfClass:[NSNull class]]) {
         
-        NSString *uid = [[NSUserDefaults standardUserDefaults] objectForKey:@"USERID"];
+        NSString *uid = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
         
-        if (!uid) {
+        if (uid.length == 0) {
             uid = @"0";
         }
         

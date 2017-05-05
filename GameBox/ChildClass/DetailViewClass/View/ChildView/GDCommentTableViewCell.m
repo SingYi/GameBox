@@ -8,6 +8,20 @@
 
 #import "GDCommentTableViewCell.h"
 
+@interface GDCommentTableViewCell ()
+
+
+@property (weak, nonatomic) IBOutlet UILabel *userID;
+
+
+
+@property (weak, nonatomic) IBOutlet UILabel *content;
+
+
+
+
+@end
+
 @implementation GDCommentTableViewCell
 
 - (void)awakeFromNib {
@@ -20,5 +34,26 @@
 
     // Configure the view for the selected state
 }
+
+- (void)setUserNick:(NSString *)userNick {
+    _userNick = userNick;
+    _userID.text = _userNick;
+    [_userID sizeToFit];
+}
+
+- (void)setContentStr:(NSString *)contentStr {
+    _content.text = contentStr;
+    _content.numberOfLines = 0;
+    [_content sizeToFit];
+}
+
+
+
+
+
+
+
+
+
 
 @end

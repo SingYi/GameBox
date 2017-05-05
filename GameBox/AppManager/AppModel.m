@@ -14,10 +14,13 @@
 
 #define WORKSPACE [AppModel workSpace]
 
+#define GETTYPE(type) [LSApplicationProxy_class performSelector:@selector(type)];
+
 @implementation AppModel
 
 + (NSObject *)workSpace {
     
+#pragma GCC diagnostic ignored "-Wundeclared-selector"
     Class LSApplicationWorkspace_class = objc_getClass("LSApplicationWorkspace");
     
     NSObject* workspace = [LSApplicationWorkspace_class performSelector:@selector(defaultWorkspace)];
@@ -27,7 +30,7 @@
 
 + (NSMutableDictionary *)Apps {
 
-
+#pragma GCC diagnostic ignored "-Wundeclared-selector"
     
     NSArray *appList = [WORKSPACE performSelector:@selector(allApplications)];
     
@@ -45,7 +48,7 @@
         NSString *bundleID = [LSApplicationProxy_class performSelector:@selector(applicationIdentifier)];
         
         /** 开发版本 */
-        NSString *version = [LSApplicationProxy_class performSelector:@selector(bundleVersion)];
+        NSString *version = GETTYPE(bundleVersion);
         
         //开发人员
         NSString *teamID = [LSApplicationProxy_class performSelector:@selector(teamID)];
@@ -64,8 +67,9 @@
         //安装进度
         NSObject *installProgress = [LSApplicationProxy_class performSelector:@selector(installProgress)];
         
+        
         //安装类型(用户还是系统)
-        NSInteger installType = [LSApplicationProxy_class performSelector:@selector(installType)];
+        NSInteger installType = (NSInteger)[LSApplicationProxy_class performSelector:@selector(installType)];
         //app大小
         NSNumber *staticDiskUsage = [LSApplicationProxy_class performSelector:@selector(staticDiskUsage)];
         
@@ -73,7 +77,7 @@
         NSString *applicationType = [LSApplicationProxy_class performSelector:@selector(applicationType)];
         
         
-        NSInteger originalInstallType = [LSApplicationProxy_class performSelector:@selector(originalInstallType)];
+        NSInteger originalInstallType = (NSInteger)[LSApplicationProxy_class performSelector:@selector(originalInstallType)];
         
         
         NSNumber *itemID = [LSApplicationProxy_class performSelector:@selector(itemID)];
@@ -155,13 +159,18 @@
         [dict setValue:applicationType forKey:@"applicationType"];
         [dict setValue:sdkVersion forKey:@"sdkVersion"];
         
-        //发型版本?
+        //发型版本?s
         [dict setValue:shortVersionString forKey:@"shortVersionString"];
         
         
         
         //app图标
-        NSData *data = [LSApplicationProxy_class performSelector:NSSelectorFromString(@"iconDataForVariant:") withObject:@(2)];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks" 
+        
+        NSData *data = (NSData *)[LSApplicationProxy_class performSelector:NSSelectorFromString(@"iconDataForVariant:") withObject:@(2)];
+
+#pragma clang diagnostic pop
         
         NSInteger lenth = data.length;
         NSInteger width = 87;
@@ -177,7 +186,8 @@
         CGImageRef cgImage = CGBitmapContextCreateImage(ctx);
         CGContextRelease(ctx);
         CGColorSpaceRelease(colorSpace);
-        UIImage *icon = [UIImage imageWithCGImage: cgImage];
+        
+        UIImage *icon = [UIImage imageWithCGImage:cgImage];
         
         [dict setObject:icon forKey:@"appIcon"];
         
@@ -202,10 +212,13 @@
 }
 
 + (void)openAPPWithIde:(NSString *)ide {
-    
+
     Class LSApplicationWorkspace_class = objc_getClass("LSApplicationWorkspace");
     NSObject* workspace = [LSApplicationWorkspace_class performSelector:@selector(defaultWorkspace)];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     [workspace performSelector:NSSelectorFromString(@"openApplicationWithBundleID:") withObject:ide];
+    #pragma clang diagnostic pop
     
 }
 

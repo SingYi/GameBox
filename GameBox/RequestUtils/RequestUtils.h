@@ -10,23 +10,23 @@
 
 @interface RequestUtils : NSObject
 
+/** get方法 */
 + (void)getRequestWithURL:(NSString *)url
                    params:(NSDictionary *)dicP
                completion:(void(^)(NSDictionary *content,BOOL success))completion;
 
 
+/** post方法 */
 + (void)postRequestWithURL:(NSString *)url
                     params:(NSDictionary *)dicP
                 completion:(void(^)(NSDictionary *content,BOOL success))completion;
 
-+ (void)postDataWithUrl:(NSString *)url
-                 params:(NSDictionary *)dicP
-             completion:(void(^)(NSData *resultData,BOOL success))completion;
 
 
-
+/** 设备ID */
 + (NSString *)DeviceID;
 
+/** 设备IP */
 + (NSString *)DeviceIP;
 
 

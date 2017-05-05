@@ -80,12 +80,17 @@
     [super viewWillAppear:animated];
     self.navigationItem.titleView = self.searchBar;
     
+//        [ControllerManager shareManager].rootViewController.navigationBar.hidden = NO;
+//        self.navigationController.navigationBar.hidden = YES;
+    
     
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.navigationItem.titleView = nil;
+//        [ControllerManager shareManager].rootViewController.navigationBar.hidden = YES;
+//        self.navigationController.navigationBar.hidden = NO;
 }
 
 - (void)viewDidLoad {
@@ -102,10 +107,7 @@
     _isAnimation = NO;
     _isLeft = NO;
     
-    //请求数据总借口
-    [RequestUtils postRequestWithURL:URLMAP params:nil completion:^(NSDictionary *content, BOOL success) {
 
-    }];
 
 }
 
@@ -135,6 +137,7 @@
 #warning 导航栏的两个按钮,还没有做处理
     self.navigationItem.leftBarButtonItem = self.downLoadBtn;
     self.navigationItem.rightBarButtonItem = self.messageBtn;
+
     
     
 }

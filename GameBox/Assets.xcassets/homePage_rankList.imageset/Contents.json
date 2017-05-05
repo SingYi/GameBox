@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "f_paihangbang.png",
+      "filename" : "a_huodong.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "f_paihangbang@2x.png",
+      "filename" : "a_huodong@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "f_paihangbang@3x.png",
+      "filename" : "a_huodong@3x.png",
       "scale" : "3x"
     }
   ],

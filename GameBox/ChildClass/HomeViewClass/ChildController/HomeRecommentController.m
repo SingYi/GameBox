@@ -9,16 +9,18 @@
 #import "HomeRecommentController.h"
 #import "RecommentTableHeader.h"
 #import "SearchCell.h"
-#import "GameModel.h"
 #import "ControllerManager.h"
 #import "RCCCollectionViewCell.h"
 
+//四个子视图
 #import "NewServerController.h"
 #import "ActivityController.h"
 #import "RGiftBagController.h"
 #import "StrategyController.h"
 
-#import "RequestUtils.h"
+#import "GameRequest.h"
+#import "GameModel.h"
+
 #import "MJRefresh.h"
 #import "UIImageView+WebCache.h"
 
@@ -67,11 +69,16 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.rollHeader startTimer];
+//    [ControllerManager shareManager].rootViewController.navigationBar.hidden = NO;
+//    self.navigationController.navigationBar.hidden = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.rollHeader stopTimer];
+    
+//    [ControllerManager shareManager].rootViewController.navigationBar.hidden = YES;
+//    self.navigationController.navigationBar.hidden = NO;
 }
 
 - (void)viewDidLoad {
@@ -100,18 +107,22 @@
 #pragma mkar - method
 /**刷新数据*/
 - (void)refreshData {
-    [GameModel postRecommendGameListWithChannelID:@"185" Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        self.rollHeader.rollingArray = content[@"data"][@"banner"];
-        _showArray = [content[@"data"][@"gamelist"] mutableCopy];
-        
-        _currentPage = 1;
-        _isAll = NO;
-        
-//        CLog(@"%@",content);
-        
+//    [ControllerManager starLoadingAnimation];
+    [GameRequest recommendGameWithPage:nil Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success && !((NSString *)content[@"status"]).boolValue) {
+            self.rollHeader.rollingArray = content[@"data"][@"banner"];
+            _showArray = [content[@"data"][@"gamelist"] mutableCopy];
+            
+            _currentPage = 1;
+            _isAll = NO;
+            
+            //        [ControllerManager stopLoadingAnimation];
+//            syLog(@"%@",content);
+            
+            [self.tableView reloadData];
+        }
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer endRefreshing];
-        [self.tableView reloadData];
     }];
 }
 
@@ -120,17 +131,20 @@
     if (_isAll) {
         [self.tableView.mj_footer endRefreshingWithNoMoreData];
     } else {
+        //页数加一
         _currentPage++;
-        [GameModel postRecommendGameListWithChannelID:@"185" Page:[NSString stringWithFormat:@"%ld",(long)_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
-
-            NSArray *array = content[@"data"][@"gamelist"];
-            if (array.count == 0) {
-                _isAll = YES;
-                [self.tableView.mj_footer endRefreshingWithNoMoreData];
-            } else {
-                [_showArray addObjectsFromArray:array];
-                [self.tableView.mj_footer endRefreshing];
-                [self.tableView reloadData];
+        
+        [GameRequest recommendGameWithPage:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            if (success) {
+                NSArray *array = content[@"data"][@"gamelist"];
+                if (array.count == 0) {
+                    _isAll = YES;
+                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+                } else {
+                    [_showArray addObjectsFromArray:array];
+                    [self.tableView.mj_footer endRefreshing];
+                    [self.tableView reloadData];
+                }
             }
         }];
     }
@@ -149,18 +163,12 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDENTIFIER];
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    cell.delegate = self;
     
     cell.dict = _showArray[indexPath.row];
     
     [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
-    cell.selectionStyle = UITableViewCellSelectionStyleGray;
-   
- 
-    
-    
-    cell.selectIndex = indexPath.row;
-    
-    cell.delegate = self;
     
     return cell;
 }
@@ -170,6 +178,7 @@
     return 80;
 }
 
+/** gameDetail */
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -187,22 +196,22 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return kSCREEN_WIDTH * 0.218;
+    return kSCREEN_WIDTH * 0.218 + 4;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    
-    return self.collectionView;
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_WIDTH * 0.218 + 10)];
+    view.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
+    [view addSubview:self.collectionView];
+    return view;
 }
 
 
-#pragma mark - cellDelegete
+#pragma mark - downloadGame
 /** cell的代理  */
 - (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
     NSString *str = dict[@"ios_url"];
-//    syLog(@"%@",dict);
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
-    
 //    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-services://?action=download-manifest&url=https%3A%2F%2Fdownload.fir.im%2Fapps%2F58c78f29ca87a86ab50000ee%2Finstall%3Fdownload_token%3Dfb0f242cdf75f7007568a491321dac4d%26release_id%3D58c78faeca87a86b4c00012e"]];
 }
 
@@ -213,8 +222,9 @@
     if (type.integerValue == 1) {
         [ControllerManager shareManager].detailView.gameID = info[@"gid"];
         [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
+    } else {
+        syLog(@"%@",info);
     }
-    
 }
 
 #pragma mark - collection deleegate And dataSource
@@ -223,7 +233,6 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    
     return _collectionArray.count;
 }
 
@@ -312,6 +321,7 @@
     return _headerView;
 }
 
+/** 中间4个按钮 */
 - (UICollectionView *)collectionView {
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
@@ -322,19 +332,20 @@
         layout.minimumInteritemSpacing = 0;
         
         
-        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, kSCREEN_WIDTH * 0.4 + 1, kSCREEN_WIDTH, kSCREEN_WIDTH * 0.218 - 2) collectionViewLayout:layout];
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 2, kSCREEN_WIDTH, kSCREEN_WIDTH * 0.218) collectionViewLayout:layout];
         
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         
         [_collectionView registerClass:[RCCCollectionViewCell class] forCellWithReuseIdentifier:@"RCSELECT"];
         
-        _collectionView.backgroundColor = RGBCOLOR(247, 247, 247);
+//        _collectionView.backgroundColor = RGBCOLOR(247, 247, 247);
+        _collectionView.backgroundColor = [UIColor whiteColor];
     }
     return _collectionView;
 }
 
-/**< 新服视图 */
+/** 新服视图 */
 - (NewServerController *)rNewServerController {
     if (!_rNewServerController) {
         _rNewServerController = [NewServerController new];
@@ -342,7 +353,7 @@
     return _rNewServerController;
 }
 
-/**< 活动视图 */
+/** 活动视图 */
 - (ActivityController *)rActivityController {
     if (!_rActivityController) {
         _rActivityController = [ActivityController new];

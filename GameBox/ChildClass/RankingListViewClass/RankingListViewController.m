@@ -213,10 +213,7 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [searchBar resignFirstResponder];
     
-    NSString *uid = GETUSERID;
-    if (!uid) {
-        uid = @"0";
-    }
+
     
 }
 

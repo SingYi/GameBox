@@ -27,24 +27,32 @@
 //tabbar
 @property (nonatomic, strong) MainTabBarController *tabbarController;
 
-/**< 我的礼包 */
+/** 我的礼包 */
 @property (nonatomic, strong) MyGiftBagViewController *myGiftBagView;
 
-/**游戏详情页面*/
+/** 游戏详情页面 */
 @property (nonatomic, strong) DetailViewController *detailView;
 
-/**网页视图*/
+/** 网页视图 */
 @property (nonatomic, strong) WebViewController *webController;
 
-/**< 登录页面 */
+/** 登录页面 */
 @property (nonatomic, strong) LoginViewController *loginViewController;
 
-/**< 搜索结果页面 */
+/** 搜索结果页面 */
 @property (nonatomic, strong) SearchResultViewController *searchResultController;
 
 /** 我的应用 */
 @property (nonatomic, strong) MyAppViewController *myAppViewController;
 
+/** 等待的时候的屏幕 */
+@property (nonatomic, strong) UIWindow *animationWindow;
+
+
+/** 开启加载等待动画 */
++ (void)starLoadingAnimation;
+/** 关闭加载等待动画 */
++ (void)stopLoadingAnimation;
 
 
 @end

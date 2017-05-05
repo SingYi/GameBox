@@ -95,7 +95,7 @@
                         completion(nil,false);
                     }
                 });
-                CLog(@"NSJSONSerialization error");
+                syLog(@"NSJSONSerialization error");
 
             } else {
                 if (obj && [obj isKindOfClass:[NSDictionary class]]) {
@@ -107,7 +107,7 @@
                 }
             }
         } else {
-            CLog(@"Request Failed...");
+            syLog(@"Request Failed...");
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completion) {
                     completion(nil,false);
@@ -116,45 +116,6 @@
         }
     }];
     [task resume];
-}
-
-+ (void)postDataWithUrl:(NSString *)url
-                 params:(NSDictionary *)dicP
-             completion:(void(^)(NSData *resultData,BOOL success))completion {
-    
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
-    if (dicP && dicP.count) {
-        NSArray *arrKey = [dicP allKeys];
-        NSMutableArray *pValues = [NSMutableArray array];
-        for (id key in arrKey) {
-            [pValues addObject:[NSString stringWithFormat:@"%@=%@",key,dicP[key]]];
-        }
-        NSString *strP = [pValues componentsJoinedByString:@"&"];
-        [request setHTTPBody:[strP dataUsingEncoding:NSUTF8StringEncoding]];
-    }
-    
-    [request setHTTPMethod:@"POST"];
-    NSURLSessionTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if (error == nil) {
-
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (completion) {
-                    completion(data,true);
-                }
-            });
-                           
-        } else {
-            CLog(@"Request Failed...");
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (completion) {
-                    completion(nil,false);
-                }
-            });
-        }
-    }];
-    [task resume];
-    
 }
 
 
@@ -165,7 +126,6 @@
     if (deviceID.length != 0) {
         return deviceID;
     } else {
-        
         NSString *idfv = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
         [[NSUserDefaults standardUserDefaults] setObject:idfv forKey:@"deviceID"];
         return idfv;
@@ -178,16 +138,16 @@
     struct ifaddrs *interfaces = NULL;
     struct ifaddrs *temp_addr = NULL;
     int success = 0;
-    // retrieve the current interfaces - returns 0 on success
+
     success = getifaddrs(&interfaces);
     if (success == 0) {
-        // Loop through linked list of interfaces
+    
         temp_addr = interfaces;
         while(temp_addr != NULL) {
             if(temp_addr->ifa_addr->sa_family == AF_INET) {
-                // Check if interface is en0 which is the wifi connection on the iPhone
+               
                 if([[NSString stringWithUTF8String:temp_addr->ifa_name] isEqualToString:@"en0"]) {
-                    // Get NSString from C String
+    
                     address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];
                 }
             }

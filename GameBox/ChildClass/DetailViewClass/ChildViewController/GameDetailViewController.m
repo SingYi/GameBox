@@ -9,11 +9,13 @@
 #import "GameDetailViewController.h"
 #import "DetailTableCell.h"
 #import "DetialTableHeader.h"
-#import "DetailTableFooter.h"
+#import "ControllerManager.h"
 
 #import "GameDetailTableViewCell.h"
 #import "GDLikesTableViewCell.h"
 #import "GDCommentTableViewCell.h"
+
+#import "GDCommentDetailController.h"
 
 #import "ChangyanSDK.h"
 
@@ -26,8 +28,8 @@
 /**头部视图*/
 @property (nonatomic, strong) DetialTableHeader *headerView;
 
-/**尾部视图*/
-@property (nonatomic, strong) DetailTableFooter *footerView;
+/**尾部视图:点击显示更多评论*/
+@property (nonatomic, strong) UIView *footerView;
 
 /**游戏内容和评论*/
 @property (nonatomic, strong) UITableView *tableView;
@@ -43,6 +45,9 @@
 
 /** 返回的行高 */
 @property (nonatomic, strong) NSMutableArray *rowHeightArray;
+
+/** 更多评论页码 */
+@property (nonatomic, strong) GDCommentDetailController *GDCommentController;
 
 
 @end
@@ -64,8 +69,8 @@
     _sectionTitleArray = @[@"    游戏简介:",@"    游戏特征:",@"    游戏返利:",@"    猜你喜欢:",@"    用户评论:"];
     
     _rowHeightArray = [@[@100.f,@100.f,@100.f] mutableCopy];
-    
-    _commentArray = @[@"",@"",@""];
+    _commentArray = @[];
+
 }
 
 
@@ -87,7 +92,6 @@
 
 - (void)setLikes:(NSArray *)likes {
     _likes = likes;
-    self.footerView.likesArray = likes;
 }
 
 - (void)setDict:(NSDictionary *)dict {
@@ -95,6 +99,14 @@
     [self.tableView reloadData];
 }
 
+#pragma mark - respond
+- (void)respondsToMoreCommentBtn {
+    self.parentViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:self.GDCommentController animated:YES];
+}
+
+
+#pragma mark - getter
 //游戏简介
 - (void)setAbstract:(NSString *)abstract {
     NSMutableString *str = [abstract mutableCopy];
@@ -165,7 +177,8 @@
 - (void)setCommentArray:(NSArray *)commentArray {
     _commentArray = commentArray;
     
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:3]] withRowAnimation:(UITableViewRowAnimationNone)];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:(UITableViewRowAnimationNone)];
+//    [self.tableView reloadData];
 }
 
 /** 计算字符串需要的尺寸 */
@@ -256,6 +269,10 @@
         default: {
             GDCommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:GDCOMMENTCELLIDE];
             
+            cell.userNick = _commentArray[indexPath.row][@"passport"][@"nickname"];
+            
+            cell.contentStr = _commentArray[indexPath.row][@"content"];
+            
             return cell;
         }
             break;
@@ -294,7 +311,10 @@
         }
         
         [tableView endUpdates];
-    } 
+    } else {
+        
+        
+    }
 }
 
 
@@ -326,15 +346,21 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
-    
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 1, kSCREEN_WIDTH, 28)];
-    
     label.backgroundColor = [UIColor whiteColor];
-    
-    label.text = self.sectionTitleArray[section];
-    
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 30)];
     view.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
+    
+    if (section < 3) {
+        
+        label.text = self.sectionTitleArray[section];
+    } else {
+        label.text = [NSString stringWithFormat:@"%@",self.sectionTitleArray[section]];
+    }
+    
+
+    
+    
     [view addSubview:label];
     
     
@@ -348,9 +374,9 @@
 #pragma mark - getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 230) style:(UITableViewStylePlain)];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 245) style:(UITableViewStylePlain)];
 
-        
+        syLog(@"%lf[======%lf",self.view.frame.size.height,CGRectGetHeight(self.view.frame));
         [_tableView registerNib:[UINib nibWithNibName:@"GameDetailTableViewCell" bundle:nil] forCellReuseIdentifier:DetailTableCellIDE];
         
         [_tableView registerNib:[UINib nibWithNibName:@"GDLikesTableViewCell" bundle:nil] forCellReuseIdentifier:GDLIKESCELL];
@@ -365,11 +391,13 @@
         _tableView.autoresizesSubviews = YES;
         
         _tableView.tableHeaderView = self.headerView;
-//        _tableView.tableFooterView = self.footerView;
+        _tableView.tableFooterView = self.footerView;
         
         
         _tableView.showsVerticalScrollIndicator = NO;
         _tableView.showsHorizontalScrollIndicator = NO;
+        
+//        _tableView.bounces = NO;
     }
     
     return _tableView;
@@ -383,13 +411,36 @@
     return _headerView;
 }
 
-- (DetailTableFooter *)footerView {
+- (UIView *)footerView {
     if (!_footerView) {
-        _footerView = [[DetailTableFooter alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 20 + (kSCREEN_WIDTH / 4))];
+        _footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH,46)];
+        
+        _footerView.backgroundColor = RGBCOLOR(247, 247, 247);
+        
+        //响应事件
+        UIButton *button = [UIButton buttonWithType:(UIButtonTypeCustom)];
+        button.frame = CGRectMake(0, 1, kSCREEN_WIDTH, 44);
+        
+        [button setTitle:@"点击查看更多评论>" forState:(UIControlStateNormal)];
+        [button setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
+        
+        [button addTarget:self action:@selector(respondsToMoreCommentBtn) forControlEvents:(UIControlEventTouchUpInside)];
+        button.backgroundColor = [UIColor whiteColor];
+        
+        [_footerView addSubview:button];
+        
+        
+        
     }
     return _footerView;
 }
 
+- (GDCommentDetailController *)GDCommentController {
+    if (!_GDCommentController) {
+        _GDCommentController = [[GDCommentDetailController alloc] init];
+    }
+    return _GDCommentController;
+}
 
 
 

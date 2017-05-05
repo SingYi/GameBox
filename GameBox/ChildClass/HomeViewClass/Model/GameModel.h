@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MJRefresh.h"
+
+#import <MJRefresh.h>
 #import <UIImageView+WebCache.h>
 
 /** 新游,热门,排行榜 */

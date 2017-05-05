@@ -8,7 +8,7 @@
 
 #import "GameModel.h"
 #import "RequestUtils.h"
-
+#import <UIKit/UIKit.h>
 
 #define RECOMMENDLISTURL @"http://www.9344.net/api-game-index"
 #define GAMELISTURL @"http://www.9344.net/api-game-gameType"
@@ -169,12 +169,7 @@
     [RequestUtils postRequestWithURL:CLASSINFOURL params:dict completion:completion];
 }
 
-+ (void)postImageWithUrl:(NSString * _Nonnull)url
-              Completion:(void (^ _Nullable)(NSData * _Nullable content, BOOL success))completion {
-    
-    [RequestUtils postDataWithUrl:[NSString stringWithFormat:@"%@%@",IMAGEURL,url] params:nil completion:completion];
-    
-}
+
 
 + (void)postStrategyWithGameID:(NSString *)gameID
                           Page:(NSString *)page

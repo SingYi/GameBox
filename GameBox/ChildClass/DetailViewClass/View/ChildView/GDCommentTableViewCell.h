@@ -10,4 +10,10 @@
 
 @interface GDCommentTableViewCell : UITableViewCell
 
+/** 用户昵称 */
+@property (nonatomic, strong) NSString *userNick;
+
+/** 内容 */
+@property (nonatomic, strong) NSString *contentStr;
+
 @end

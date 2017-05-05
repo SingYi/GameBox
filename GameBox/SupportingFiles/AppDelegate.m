@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ControllerManager.h"
+#import "RequestUtils.h"
 
 #import "ChangyanSDK.h"
 
@@ -25,34 +26,45 @@
     
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
-    ControllerManager *manager = [[ControllerManager alloc]init];
+    self.window.rootViewController = [ControllerManager shareManager].rootViewController;
     
-    self.window.rootViewController = manager.rootViewController;
+    [self.window makeKeyAndVisible];
     
-    [ChangyanSDK registerApp:@"cysXjYB6V"
-                      appKey:@"f6b34b898c39f5ff7f95828c78126d4f"
+    [ChangyanSDK registerApp:@"cysYKUClL"
+                      appKey:@"6c88968800e8b236e5c69b8634db704d"
                  redirectUrl:nil
         anonymousAccessToken:nil];
     
-//    [ChangyanSDK registerApp:@"cysYKUClL" appKey:@"C66A5BAD9ED000011E5A1F685821111F" redirectUrl:nil anonymousAccessToken:nil];
+    [ChangyanSDK setAllowSelfLogin:YES];
+    
+    [ChangyanSDK setAllowAnonymous:NO];
+    [ChangyanSDK setAllowRate:NO];
+    [ChangyanSDK setAllowUpload:YES];
+    [ChangyanSDK setAllowWeiboLogin:NO];
+    [ChangyanSDK setAllowQQLogin:NO];
+    [ChangyanSDK setAllowSohuLogin:NO];
     
     
-//    [ChangyanSDK getUserInfo:^(CYStatusCode statusCode, NSString *responseStr) {
-//        
-//        
+    
+    //请求数据总借口
+    [RequestUtils postRequestWithURL:URLMAP params:nil completion:^(NSDictionary *content, BOOL success) {
+        if (success && !((NSString *)content[@"status"]).boolValue) {
+            NSDictionary *dict = content[@"data"];
+            syLog(@"%@",dict);
+            NSArray *keys = [dict allKeys];
+            [keys enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                SAVEOBJECT_AT_USERDEFAULTS(dict[obj], obj);
+            }];
+            SAVEOBJECT_AT_USERDEFAULTS(keys, @"MAP");
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }];
+    
+//    NSArray *arry = OBJECT_FOR_USERDEFAULTS(@"MAP");
+//    [arry enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//        syLog(@"%@",obj);
 //    }];
-  
     
-//    [ChangyanSDK setLoginViewController:[ControllerManager shareManager].loginViewController];
-    
-
-    
-    NSString *idfv = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-    
-    [[NSUserDefaults standardUserDefaults] setObject:idfv forKey:@"deviceID"];
-    
-    
-    [self.window makeKeyAndVisible];
     
     return YES;
 }

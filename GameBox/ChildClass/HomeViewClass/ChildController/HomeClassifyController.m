@@ -11,6 +11,7 @@
 #import "GameModel.h"
 
 #import <SDWebImageDownloader.h>
+#import <UIImageView+WebCache.h>
 
 #define CellIDE @"ClassfiyTableViewCell"
 #define BTNTAG 1700

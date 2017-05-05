@@ -22,7 +22,7 @@
 
 
 
-@interface DetailViewController ()<DetailHeaderDelegate>
+@interface DetailViewController ()<DetailHeaderDelegate,DetailFooterDelegate>
 
 /**头部视图*/
 @property (nonatomic, strong) DetailHeader *detailHeader;
@@ -64,6 +64,8 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    //页面即将消失时取消底部视图代理
+    self.detailFooter.delegate = nil;
 }
 
 - (void)viewDidLoad {
@@ -121,68 +123,63 @@
 #pragma mark - setter
 - (void)setGameID:(NSString *)gameID {
     
-    _gameID = gameID;
-    
-    //请求游戏详情
-    [GameModel postGameInfoWithGameID:gameID UserID:@"0" ChannelID:@"185" Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
+    if ([_gameID isEqualToString:gameID]) {
+        //设置收藏按钮的代理
+        self.detailFooter.delegate = self;
+    } else {
         
-        if (success && !((NSString *)content[@"status"]).boolValue) {
+        _gameID = gameID;
+        //请求游戏详情
+        [GameModel postGameInfoWithGameID:gameID UserID:@"0" ChannelID:@"185" Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
             
-            self.gameinfo = content[@"data"][@"gameinfo"];
-            
-            self.likes = content[@"data"][@"like"];
+            if (success && !((NSString *)content[@"status"]).boolValue) {
+                
+                self.gameinfo = content[@"data"][@"gameinfo"];
+                
+                self.likes = content[@"data"][@"like"];
+                
+                //设置收藏按钮的代理
+                self.detailFooter.delegate = self;
+            }
+        }];
+        
+        self.gameGiftBag.gameID = gameID;
+        self.gameOpenServer.gameID = gameID;
+        self.gameStrategy.gameID = gameID;
+    }
+    
+    //    syLog(@"%@",gameID);
+    
+#warning get comment list
+    [ChangyanSDK loadTopic:@"" topicTitle:nil topicSourceID:[NSString stringWithFormat:@"game_%@",gameID] pageSize:@"3" hotSize:nil orderBy:nil style:nil depth:nil subSize:nil completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
+        
+        NSData *jsonData = [responseStr dataUsingEncoding:NSUTF8StringEncoding];
+        
+        NSError *err;
+        
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
+//        syLog(@"%@",dic[@"comments"]);
+        NSArray *array = dic[@"comments"];
+        self.gameDetail.commentArray = dic[@"comments"];
+        [array enumerateObjectsUsingBlock:^(NSDictionary * obj, NSUInteger idx, BOOL * _Nonnull stop) {
 
-        }
+        }];
+                             
     }];
     
-#warning 1
-    //获取评论
-//    [ChangyanSDK getTopicComments:[NSString stringWithFormat:@"game_%@",gameID] pageSize:@"5" pageNo:@"5" orderBy:nil style:nil depth:nil subSize:nil completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
-//        syLog(@"%@",responseStr);
-//    }];
-    
-    UIViewController *listViewController = [ChangyanSDK getListCommentViewController:@""
-                                                                             topicID:nil
-                                                                       topicSourceID:[NSString stringWithFormat:@"game_%@",gameID]
-                                                                          categoryID:nil
-                                                                          topicTitle:nil];
-    
-    UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:listViewController];
-    [self presentViewController:navigation animated:YES completion:^{
+    [ChangyanSDK getCommentCount:@"" topicSourceID:[NSString stringWithFormat:@"game_%@",gameID]  topicUrl:@"" completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
+        
+        NSData *jsonData = [responseStr dataUsingEncoding:NSUTF8StringEncoding];
+        NSError *err;
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
+        
+        //评论数
+        syLog(@"%@",dic[@"result"][[NSString stringWithFormat:@"game_%@",gameID]][@"comments"]);
         
     }];
     
     
-    [ChangyanSDK getTopicComments:[NSString stringWithFormat:@"game_%@",gameID] pageSize:@"3" pageNo:@"1" orderBy:nil style:nil depth:nil subSize:nil completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
-        syLog(@"%d",statusCode);
-        syLog(@"%@",responseStr);
-    }];
-    
-    
-    //请求评论
-    [ChangyanSDK getCommentCount:[NSString stringWithFormat:@"game_%@",gameID] topicSourceID:nil topicUrl:nil completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
-        syLog(@"%d",statusCode);
-        syLog(@"%@",responseStr);
-    
-//        switch (statusCode) {
-//                CYSuccess           = 0,    /* 成功 */
-//                CYParamsError       = 1,    /* 参数错误 */
-//                CYLoginError        = 2,    /* 登录错误 */
-//                CYOtherError        = 3,    /* 其他错误 */
-//            case CYSuccess:
-//                syLog(<#format, ...#>)
-//                break;
-//
-//            default:
-//                break;
-//        }
-    
-    }];
-    
-    
-    self.gameGiftBag.gameID = gameID;
-    self.gameOpenServer.gameID = gameID;
-    self.gameStrategy.gameID = gameID;
+
 }
 
 #pragma markg - gameInfo
@@ -190,6 +187,7 @@
 - (void)setGameinfo:(NSDictionary *)gameinfo {
     _gameinfo = gameinfo;
     
+
     syLog(@"%@",gameinfo);
 
     //设置游戏名称
@@ -199,7 +197,7 @@
     //设置标签
     NSArray *types = [((NSString *)_gameinfo[@"types"]) componentsSeparatedByString:@" "];
     NSInteger j = 0;
-    for (; j < types.count; j++) {
+    for (; j < (types.count < 3 ? types.count : 3); j++) {
         self.detailHeader.typeLabels[j].text = [NSString stringWithFormat:@" %@ ",types[j]];
         if (j == 0) {
             self.detailHeader.typeLabels[j].frame = CGRectMake(CGRectGetMaxX(self.detailHeader.gameNameLabel.frame) + 4, 15, 15, 15);
@@ -361,8 +359,27 @@
                 break;
         }
     }
-    
 
+}
+
+#pragma mark - detailFooterDelegate
+- (void)DetailFooter:(DetailFooter *)detailFooter clickCollecBtn:(UIButton *)sender {
+    if (self.gameinfo && _gameinfo[@"collect"]) {
+        BOOL isCollect = ((NSString *)_gameinfo[@"collect"]).boolValue;
+        if (isCollect) {
+            
+            syLog(@"取消收藏");
+        } else {
+            
+            syLog(@"添加收藏");
+        }
+    }
+}
+
+- (void)DetailFooter:(DetailFooter *)detailFooter clickShareBtn:(UIButton *)sender {
+    if (self.gameinfo) {
+        syLog(@"分享");
+    }
 }
 
 
@@ -371,10 +388,10 @@
     if (!_detailHeader) {
         _detailHeader = [[DetailHeader alloc]initWithFrame:CGRectMake(0, 64, kSCREEN_WIDTH, 124)];
 
-        _detailHeader.layer.shadowColor = [UIColor lightGrayColor].CGColor;
+        _detailHeader.layer.shadowColor = [UIColor colorWithWhite:0.7 alpha:1].CGColor;
         _detailHeader.layer.shadowOpacity = 1.f;
-        _detailHeader.layer.shadowRadius = 2.f;
-        _detailHeader.layer.shadowOffset = CGSizeMake(2, 2);
+        _detailHeader.layer.shadowRadius = 5.f;
+        _detailHeader.layer.shadowOffset = CGSizeMake(0, 5);
         
 
         _detailHeader.detailHeaderDelegate = self;
@@ -386,6 +403,7 @@
 - (DetailFooter *)detailFooter {
     if (!_detailFooter) {
         _detailFooter = [[DetailFooter alloc]initWithFrame:CGRectMake(0, kSCREEN_HEIGHT - 50, kSCREEN_WIDTH, 50)];
+        _detailFooter.delegate = self;
     }
     return _detailFooter;
 }
@@ -395,12 +413,13 @@
 - (GameDetailViewController *)gameDetail {
     if (!_gameDetail) {
         _gameDetail = [[GameDetailViewController alloc] init];
-        _gameDetail.view.frame = CGRectMake(0, CGRectGetMaxY(self.detailHeader.frame) + 5, kSCREEN_WIDTH, kSCREEN_HEIGHT - CGRectGetMaxY(self.detailHeader.frame) -  255);
+        _gameDetail.view.frame = CGRectMake(0, CGRectGetMaxY(self.detailHeader.frame) + 7, kSCREEN_WIDTH, kSCREEN_HEIGHT - CGRectGetMaxY(self.detailHeader.frame) - 57);
         
         _gameDetail.view.layer.shadowColor = [UIColor lightGrayColor].CGColor;
         _gameDetail.view.layer.shadowOpacity = 1.f;
         _gameDetail.view.layer.shadowRadius = 2.f;
         _gameDetail.view.layer.shadowOffset = CGSizeMake(2, 2);
+        _gameDetail.view.layer.masksToBounds = YES;
 
     }
     return _gameDetail;
@@ -409,7 +428,14 @@
 - (GameStrategyViewController *)gameStrategy {
     if (!_gameStrategy) {
         _gameStrategy = [[GameStrategyViewController alloc] init];
-        _gameStrategy.view.frame = CGRectMake(0, CGRectGetMaxY(self.detailHeader.frame) + 5, kSCREEN_WIDTH, kSCREEN_HEIGHT - CGRectGetMaxY(self.detailHeader.frame) -  255);
+        _gameStrategy.view.frame = CGRectMake(0, CGRectGetMaxY(self.detailHeader.frame) + 7, kSCREEN_WIDTH, kSCREEN_HEIGHT - CGRectGetMaxY(self.detailHeader.frame) - 57);
+        
+        _gameStrategy.view.layer.shadowColor = [UIColor lightGrayColor].CGColor;
+        _gameStrategy.view.layer.shadowOpacity = 1.f;
+        _gameStrategy.view.layer.shadowRadius = 2.f;
+        _gameStrategy.view.layer.shadowOffset = CGSizeMake(2, 2);
+        _gameStrategy.view.layer.masksToBounds = YES;
+
 
     }
     return _gameStrategy;
@@ -418,7 +444,14 @@
 - (GameGiftBagViewController *)gameGiftBag {
     if (!_gameGiftBag) {
         _gameGiftBag = [[GameGiftBagViewController alloc] init];
-        _gameGiftBag.view.frame = CGRectMake(0, CGRectGetMaxY(self.detailHeader.frame) + 5, kSCREEN_WIDTH, kSCREEN_HEIGHT - CGRectGetMaxY(self.detailHeader.frame) -  255);
+        _gameGiftBag.view.frame = CGRectMake(0, CGRectGetMaxY(self.detailHeader.frame) + 7, kSCREEN_WIDTH, kSCREEN_HEIGHT - CGRectGetMaxY(self.detailHeader.frame) -  57);
+        
+        _gameGiftBag.view.layer.shadowColor = [UIColor lightGrayColor].CGColor;
+        _gameGiftBag.view.layer.shadowOpacity = 1.f;
+        _gameGiftBag.view.layer.shadowRadius = 2.f;
+        _gameGiftBag.view.layer.shadowOffset = CGSizeMake(2, 2);
+        _gameGiftBag.view.layer.masksToBounds = YES;
+
 
     }
     return _gameGiftBag;
@@ -427,7 +460,14 @@
 - (GameOpenServerViewController *)gameOpenServer {
     if (!_gameOpenServer) {
         _gameOpenServer = [[GameOpenServerViewController alloc] init];
-        _gameOpenServer.view.frame = CGRectMake(0, CGRectGetMaxY(self.detailHeader.frame) + 5, kSCREEN_WIDTH, kSCREEN_HEIGHT - CGRectGetMaxY(self.detailHeader.frame) -  255);
+        _gameOpenServer.view.frame = CGRectMake(0, CGRectGetMaxY(self.detailHeader.frame) + 7, kSCREEN_WIDTH, kSCREEN_HEIGHT - CGRectGetMaxY(self.detailHeader.frame) -  57);
+        
+        _gameOpenServer.view.layer.shadowColor = [UIColor lightGrayColor].CGColor;
+        _gameOpenServer.view.layer.shadowOpacity = 1.f;
+        _gameOpenServer.view.layer.shadowRadius = 2.f;
+        _gameOpenServer.view.layer.shadowOffset = CGSizeMake(2, 2);
+        _gameOpenServer.view.layer.masksToBounds = YES;
+
 
     }
     return _gameOpenServer;

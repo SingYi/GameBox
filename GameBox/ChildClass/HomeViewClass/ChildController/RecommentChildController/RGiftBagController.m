@@ -249,7 +249,7 @@
         
         NSString *uid = [[NSUserDefaults standardUserDefaults] objectForKey:@"USERID"];
         
-        if (!uid) {
+        if (uid.length == 0) {
             uid = @"0";
         }
         
