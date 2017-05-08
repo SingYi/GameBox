@@ -177,6 +177,21 @@
 }
 
 #pragma mark - tableviewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (_showArray.count != 0) {
+        
+        NSString *keyword = _showArray[indexPath.row];
+        
+        self.parentViewController.hidesBottomBarWhenPushed = YES;
+        [ControllerManager shareManager].searchResultController.keyword = keyword;
+        [self.navigationController pushViewController:[ControllerManager shareManager].searchResultController animated:YES];
+        self.parentViewController.hidesBottomBarWhenPushed = NO;
+    }
+    
+    
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 44)];
     view.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];

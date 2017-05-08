@@ -54,9 +54,11 @@
 - (void)setRollingArray:(NSArray *)rollingArray {
     
     
-    _rollingArray = [rollingArray mutableCopy];
-    [_rollingArray insertObject:rollingArray[_rollingArray.count - 1] atIndex:0];
-    [_rollingArray addObject:rollingArray[0]];
+    if (rollingArray.count != 0) {
+        _rollingArray = [rollingArray mutableCopy];
+        [_rollingArray insertObject:rollingArray[_rollingArray.count - 1] atIndex:0];
+        [_rollingArray addObject:rollingArray[0]];
+    }
 
     
     [self.collectionView reloadData];

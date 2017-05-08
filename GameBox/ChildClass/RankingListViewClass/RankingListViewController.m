@@ -64,7 +64,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.navigationItem.titleView = nil;
-    [self clickCancelBtn];
+//    [self clickCancelBtn];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -170,7 +170,7 @@
     self.searchBar.text = @"";
     
     [[ControllerManager shareManager].searchView.view removeFromSuperview];
-    [[ControllerManager shareManager].searchView removeFromParentViewController];
+//    [[ControllerManager shareManager].searchView removeFromParentViewController];
     
     self.navigationItem.rightBarButtonItem = self.messageBtn;
     self.navigationItem.leftBarButtonItem = self.downLoadBtn;
@@ -184,6 +184,7 @@
     self.navigationItem.rightBarButtonItem = self.cancelBtn;
     self.navigationItem.leftBarButtonItem = nil;
     
+    [[ControllerManager shareManager].searchView removeFromParentViewController];
     [self.view addSubview:[ControllerManager shareManager].searchView.view];
     [self addChildViewController:[ControllerManager shareManager].searchView];
     
