@@ -10,13 +10,14 @@
 #import "SearchCell.h"
 #import "GameModel.h"
 #import "ControllerManager.h"
+#import "SearchModel.h"
 
 #import <UIImageView+WebCache.h>
 #import <MJRefresh.h>
 
 #define CELLIDENTIFIER @"SearchCell"
 
-@interface RankingListViewController ()<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,UISearchResultsUpdating,UISearchControllerDelegate>
+@interface RankingListViewController ()<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,SearchCellDelelgate>
 
 
 /**列表文件*/
@@ -44,6 +45,9 @@
 @property (nonatomic, assign) BOOL isAll;
 
 
+@property (nonatomic, strong) UISearchController *searchController;
+
+
 
 @end
 
@@ -60,6 +64,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.navigationItem.titleView = nil;
+    [self clickCancelBtn];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -146,6 +151,11 @@
     }
 }
 
+#pragma mark - cellDeleagte
+- (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
+    syLog(@"下载%@",dict[@"gamename"]);
+}
+
 - (void)clickDownloadBtn {
     [self.navigationController pushViewController:[ControllerManager shareManager].myAppViewController animated:YES];
 }
@@ -157,21 +167,28 @@
 - (void)clickCancelBtn {
     [self.searchBar resignFirstResponder];
     
+    self.searchBar.text = @"";
+    
+    [[ControllerManager shareManager].searchView.view removeFromSuperview];
+    [[ControllerManager shareManager].searchView removeFromParentViewController];
+    
     self.navigationItem.rightBarButtonItem = self.messageBtn;
     self.navigationItem.leftBarButtonItem = self.downLoadBtn;
 }
 
-#pragma mark - search updateing
-- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
-    
-}
 
 #pragma mark - searchDeleagete
 //即将开始搜索
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-    [self.tableView reloadData];
+
     self.navigationItem.rightBarButtonItem = self.cancelBtn;
     self.navigationItem.leftBarButtonItem = nil;
+    
+    [self.view addSubview:[ControllerManager shareManager].searchView.view];
+    [self addChildViewController:[ControllerManager shareManager].searchView];
+    
+//    [self.view addSubview:[ControllerManager shareManager].searchResultController.view];
+    
     return YES;
 }
 
@@ -182,7 +199,8 @@
 
 //即将结束搜索
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
-    //    NSLog(@"searchBarShouldEndEditing");
+    
+    
     return YES;
 }
 
@@ -207,12 +225,15 @@
     //点击cancel按钮
     [searchBar resignFirstResponder];
     searchBar.showsCancelButton = NO;
-    
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    [searchBar resignFirstResponder];
     
+    if (![searchBar.text isEqualToString:@""]) {
+        [SearchModel addSearchHistoryWithKeyword:searchBar.text];
+        [ControllerManager shareManager].searchResultController.keyword = searchBar.text;
+        [self.navigationController pushViewController:[ControllerManager shareManager].searchResultController animated:YES];
+    }
 
     
 }
@@ -229,6 +250,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDENTIFIER forIndexPath:indexPath];
+    cell.delegate = self;
     
     cell.dict = _showArray[indexPath.row];
     
@@ -257,6 +279,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
     [ControllerManager shareManager].detailView.gameID = _showArray[indexPath.row][@"id"];
     
@@ -324,6 +348,8 @@
             searchField.layer.masksToBounds = YES;
         }
         
+        _searchBar.tintColor = [UIColor blackColor];
+        
         _searchBar.placeholder = @"搜索游戏";
         
         _searchBar.delegate = self;
@@ -352,8 +378,6 @@
     }
     return _cancelBtn;
 }
-
-
 
 
 

@@ -17,6 +17,7 @@
 #import "HomeClassifyController.h"
 
 #import "RequestUtils.h"
+#import "SearchModel.h"
 
 
 #define RecommendCellIDE @"RecommendCell"
@@ -91,6 +92,8 @@
     self.navigationItem.titleView = nil;
 //        [ControllerManager shareManager].rootViewController.navigationBar.hidden = YES;
 //        self.navigationController.navigationBar.hidden = NO;
+    
+    [self clickCancelBtn];
 }
 
 - (void)viewDidLoad {
@@ -134,16 +137,13 @@
     [self.view addGestureRecognizer:rightSwipe];
     [self.view addGestureRecognizer:leftSwipe];
     
-#warning 导航栏的两个按钮,还没有做处理
     self.navigationItem.leftBarButtonItem = self.downLoadBtn;
     self.navigationItem.rightBarButtonItem = self.messageBtn;
-
-    
     
 }
 
 #pragma mark- responds
-/**< 手势的响应事件 */
+/** 手势的响应事件 */
 - (void)respondsToSwipe:(UISwipeGestureRecognizer *)sender {
     
     if (sender.direction == UISwipeGestureRecognizerDirectionLeft && _currentIndex >= 0 && _currentIndex < 3) {
@@ -169,39 +169,74 @@
 }
 
 - (void)clickCancelBtn {
+    [self.searchBar resignFirstResponder];
     
+    self.searchBar.text = @"";
+    
+    [[ControllerManager shareManager].searchView.view removeFromSuperview];
+    [[ControllerManager shareManager].searchView removeFromParentViewController];
+    
+    self.navigationItem.rightBarButtonItem = self.messageBtn;
+    self.navigationItem.leftBarButtonItem = self.downLoadBtn;
 }
 
-#warning 还未处理,搜索的代理事件,
-- (void)willPresentSearchController:(UISearchController *)searchController {
+#pragma mark - searchBarDelegate
+//即将开始搜索
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
+    
+    self.navigationItem.rightBarButtonItem = self.cancelBtn;
     self.navigationItem.leftBarButtonItem = nil;
-    self.navigationItem.rightBarButtonItem = nil;
-    CLog(@"willPresentSearchController");
-}
-
-- (void)didPresentSearchController:(UISearchController *)searchController {
-    CLog(@"didPresentSearchController");
-}
-
-- (void)willDismissSearchController:(UISearchController *)searchController {
-    CLog(@"willDismissSearchController");
-}
-
-- (void)didDismissSearchController:(UISearchController *)searchController {
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"应用" style:0 target:self action:nil];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"应用" style:0 target:self action:nil];
-    CLog(@"didDismissSearchController");
     
+    [self.view addSubview:[ControllerManager shareManager].searchView.view];
+    [self addChildViewController:[ControllerManager shareManager].searchView];
+    
+    //    [self.view addSubview:[ControllerManager shareManager].searchResultController.view];
+    
+    return YES;
 }
 
+//开始搜索
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-//    // 创建出搜索使用的表示图控制器
-//
-//    [self presentViewController:self.searchController animated:YES completion:^{
-//        // 当模态推出这个searchController的时候,需要把之前的searchBar隐藏,如果希望搜索的时候看不到热门搜索什么的,可以把这个页面给隐藏
-//
-//        
-//    }];
+    //    NSLog(@"searchBarTextDidBeginEditing");
+}
+
+//即将结束搜索
+- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
+    
+    
+    return YES;
+}
+
+//结束搜索
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+    //    NSLog(@"searchBarTextDidEndEditing");
+}
+
+//文本已经改变
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    //    NSLog(@"textDidChange");
+}
+
+//文编即将改变
+- (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    //    NSLog(@"shouldChangeTextInRange");
+    return YES;
+}
+
+//点击cancel按钮的响应事件
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    //点击cancel按钮
+    [searchBar resignFirstResponder];
+    searchBar.showsCancelButton = NO;
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    
+    if (![searchBar.text isEqualToString:@""]) {
+        [SearchModel addSearchHistoryWithKeyword:searchBar.text];
+        [ControllerManager shareManager].searchResultController.keyword = searchBar.text;
+        [self.navigationController pushViewController:[ControllerManager shareManager].searchResultController animated:YES];
+    }
 }
 
 

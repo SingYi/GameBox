@@ -4,6 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,18 +18,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="375" height="102"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7gI-Cp-Vam">
-                        <rect key="frame" x="112" y="8" width="60" height="60"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Po-d3-1dc">
-                        <rect key="frame" x="211" y="8" width="60" height="60"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ac4-m7-hNb">
-                        <rect key="frame" x="307" y="8" width="60" height="60"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="edi-f8-M0r">
                         <rect key="frame" x="17" y="68" width="42" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -57,23 +46,42 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pJj-tJ-uFi">
-                        <rect key="frame" x="13" y="8" width="60" height="60"/>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HYP-NZ-Uk0">
+                        <rect key="frame" x="8" y="8" width="60" height="60"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </imageView>
+                        <state key="normal" backgroundImage="image_downloading"/>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IFi-ED-lWF">
+                        <rect key="frame" x="112" y="8" width="60" height="60"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <state key="normal" backgroundImage="image_downloading"/>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G7L-pR-XxO">
+                        <rect key="frame" x="211" y="8" width="60" height="60"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <state key="normal" backgroundImage="image_downloading"/>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vpg-kK-pB1">
+                        <rect key="frame" x="307" y="8" width="60" height="60"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <state key="normal" backgroundImage="image_downloading"/>
+                    </button>
                 </subviews>
             </tableViewCellContentView>
             <connections>
                 <outlet property="game1Label" destination="edi-f8-M0r" id="3aI-49-abK"/>
-                <outlet property="game1Logo" destination="pJj-tJ-uFi" id="cQR-vU-XxY"/>
+                <outlet property="game1Logo" destination="HYP-NZ-Uk0" id="Tyu-lp-9Cv"/>
                 <outlet property="game2Label" destination="diF-Ni-lH3" id="6Wj-n6-Isb"/>
-                <outlet property="game2Logo" destination="7gI-Cp-Vam" id="plw-pN-Y2B"/>
+                <outlet property="game2Logo" destination="IFi-ED-lWF" id="aIs-uA-T7h"/>
                 <outlet property="game3Label" destination="9rL-Lq-nIg" id="e3f-Rd-5Go"/>
-                <outlet property="game3Logo" destination="3Po-d3-1dc" id="pdg-TP-h1A"/>
+                <outlet property="game3Logo" destination="G7L-pR-XxO" id="xQ7-zM-h6w"/>
                 <outlet property="game4Label" destination="dKE-OC-IVd" id="cnq-AX-PrG"/>
-                <outlet property="game4Logo" destination="Ac4-m7-hNb" id="SOT-Mc-QhL"/>
+                <outlet property="game4Logo" destination="vpg-kK-pB1" id="Bf2-XX-7NI"/>
             </connections>
             <point key="canvasLocation" x="61" y="-20"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="image_downloading" width="45" height="45"/>
+    </resources>
 </document>

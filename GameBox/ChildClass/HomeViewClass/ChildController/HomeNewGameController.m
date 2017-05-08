@@ -8,7 +8,9 @@
 
 #import "HomeNewGameController.h"
 #import "SearchCell.h"
-#import "GameModel.h"
+
+//#import "GameModel.h"
+#import "GameRequest.h"
 #import "ControllerManager.h"
 
 #import "MJRefresh.h"
@@ -57,17 +59,31 @@
 
 #pragma markr - method
 - (void)refreshData {
-    [GameModel postNewGameListWithChannelID:@"185" Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        if (success) {
-            _dataArray = [NSMutableArray arrayWithArray:content[@"data"]];
+    [GameRequest newGameWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success && !((NSString *)content[@"status"]).boolValue) {
+            _dataArray = [content[@"data"] mutableCopy];
             [self clearUpData:_dataArray];
-            _isAll = NO;
             _currentPage = 1;
+            _isAll = NO;
+        
             [self.tableView.mj_footer endRefreshing];
+            [self.tableView reloadData];
         }
         [self.tableView.mj_header endRefreshing];
-        [self.tableView reloadData];
+
     }];
+    
+//    [GameModel postNewGameListWithChannelID:@"185" Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
+//        if (success) {
+//            _dataArray = [NSMutableArray arrayWithArray:content[@"data"]];
+//            [self clearUpData:_dataArray];
+//            _isAll = NO;
+//            _currentPage = 1;
+//            [self.tableView.mj_footer endRefreshing];
+//        }
+//        [self.tableView.mj_header endRefreshing];
+//        [self.tableView reloadData];
+//    }];
 }
 
 - (void)loadMoreData {
@@ -75,8 +91,9 @@
         [self.tableView.mj_footer endRefreshingWithNoMoreData];
     } else {
         _currentPage++;
-        [GameModel postNewGameListWithChannelID:@"185" Page:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
-            if (success) {
+        
+        [GameRequest newGameWithPage:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            if (success && !((NSString *)content[@"status"]).boolValue) {
                 NSArray *array = content[@"data"];
                 if (array.count == 0) {
                     _isAll = YES;
@@ -89,6 +106,21 @@
                 }
             }
         }];
+        
+//        [GameModel postNewGameListWithChannelID:@"185" Page:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+//            if (success) {
+//                NSArray *array = content[@"data"];
+//                if (array.count == 0) {
+//                    _isAll = YES;
+//                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+//                } else {
+//                    [_dataArray addObjectsFromArray:array];
+//                    [self clearUpData:_dataArray];
+//                    [self.tableView reloadData];
+//                    [self.tableView.mj_footer endRefreshing];
+//                }
+//            }
+//        }];
     }
 }
 
@@ -187,7 +219,7 @@
 #pragma mark - getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 145) style:(UITableViewStylePlain)];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 157) style:(UITableViewStylePlain)];
         
         
         [_tableView registerNib:[UINib nibWithNibName:@"SearchCell" bundle:nil] forCellReuseIdentifier:CELLIDENTIFIER];

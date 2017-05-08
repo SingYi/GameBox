@@ -15,6 +15,7 @@
 #import "LoginViewController.h"
 #import "SearchResultViewController.h"
 #import "MyAppViewController.h"
+#import "SearchViewController.h"
 
 @interface ControllerManager : NSObject
 
@@ -39,6 +40,8 @@
 /** 登录页面 */
 @property (nonatomic, strong) LoginViewController *loginViewController;
 
+/** 搜索视图 */
+@property (nonatomic, strong) SearchViewController *searchView;
 /** 搜索结果页面 */
 @property (nonatomic, strong) SearchResultViewController *searchResultController;
 

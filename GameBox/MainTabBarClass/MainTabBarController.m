@@ -50,6 +50,8 @@
         
     }];
     self.viewControllers = viewControllers;
+    
+    
 }
 
 //初始化用户界面

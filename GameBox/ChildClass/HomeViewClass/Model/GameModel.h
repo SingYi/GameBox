@@ -26,9 +26,9 @@ typedef enum : NSInteger {
 } ServiceType;
 
 typedef enum : NSInteger {
-    collection = 1,
-    cancel,
-} CollectionType;
+    collection1 = 1,
+    cancel1,
+} CollectionType1;
 
 
 @interface GameModel : NSObject
@@ -66,7 +66,7 @@ typedef enum : NSInteger {
                     Comoletion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
 
 /** 收藏接口 */
-+ (void)postCollectionGameWithType:(CollectionType)collectionType
++ (void)postCollectionGameWithType:(CollectionType1)collectionType
                             GameID:(NSString * _Nonnull)gameID
                             UserID:(NSString * _Nonnull)uid
                         Comoletion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;

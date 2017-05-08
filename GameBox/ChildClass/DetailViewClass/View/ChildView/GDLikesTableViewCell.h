@@ -8,9 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@class GDLikesTableViewCell;
+
+@protocol GDLikesTableViewCellDelegate <NSObject>
+
+- (void)GDLikesTableViewCell:(GDLikesTableViewCell *)cell clickGame:(NSDictionary *)dict;
+
+@end
+
 @interface GDLikesTableViewCell : UITableViewCell
 
 /** 游戏信息 */
 @property (nonatomic, strong) NSArray *array;
+
+@property (nonatomic, weak) id<GDLikesTableViewCellDelegate> delegate;
 
 @end

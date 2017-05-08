@@ -124,6 +124,13 @@ static ControllerManager *manager = nil;
     return _loginViewController;
 }
 
+- (SearchViewController *)searchView {
+    if (!_searchView) {
+        _searchView = [[SearchViewController alloc] init];
+    }
+    return _searchView;
+}
+
 - (SearchResultViewController *)searchResultController {
     if (!_searchResultController) {
         _searchResultController = [[SearchResultViewController alloc] init];

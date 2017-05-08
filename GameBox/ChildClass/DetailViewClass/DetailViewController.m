@@ -264,8 +264,8 @@
     
     NSData *data2 = UIImagePNGRepresentation(gameLogo);
     
-    if ([data1 isEqual:data2]) {
-        [self.detailHeader.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_gameinfo[@"lgog"]]] placeholderImage:image];
+    if ([data1 isEqual:data2] || gameLogo == nil) {
+        [self.detailHeader.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_gameinfo[@"logo"]]] placeholderImage:image];
     
     } else {
         

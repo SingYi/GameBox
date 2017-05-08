@@ -19,7 +19,7 @@
 #import "StrategyController.h"
 
 #import "GameRequest.h"
-#import "GameModel.h"
+//#import "GameModel.h"
 
 #import "MJRefresh.h"
 #import "UIImageView+WebCache.h"
@@ -119,6 +119,8 @@
             //        [ControllerManager stopLoadingAnimation];
 //            syLog(@"%@",content);
             
+//            syLog(@"%@",content);
+            
             [self.tableView reloadData];
         }
         [self.tableView.mj_header endRefreshing];
@@ -135,7 +137,7 @@
         _currentPage++;
         
         [GameRequest recommendGameWithPage:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
-            if (success) {
+            if (success && !((NSString *)content[@"status"]).boolValue) {
                 NSArray *array = content[@"data"][@"gamelist"];
                 if (array.count == 0) {
                     _isAll = YES;
@@ -211,8 +213,12 @@
 /** cell的代理  */
 - (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
     NSString *str = dict[@"ios_url"];
+    
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+    
+    syLog(@"%@",dict);
 //    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-services://?action=download-manifest&url=https%3A%2F%2Fdownload.fir.im%2Fapps%2F58c78f29ca87a86ab50000ee%2Finstall%3Fdownload_token%3Dfb0f242cdf75f7007568a491321dac4d%26release_id%3D58c78faeca87a86b4c00012e"]];
+    
 }
 
 #pragma mark - rollingDeleagte

@@ -130,7 +130,7 @@
     [RequestUtils postRequestWithURL:GAMEINFOURL params:dict completion:completion];
 }
 
-+ (void)postCollectionGameWithType:(CollectionType)collectionType
++ (void)postCollectionGameWithType:(CollectionType1)collectionType
                             GameID:(NSString *)gameID
                             UserID:(NSString *)uid
                         Comoletion:(void (^)(NSDictionary * _Nullable, BOOL))completion {

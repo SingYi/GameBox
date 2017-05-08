@@ -8,10 +8,14 @@
 
 #import "HomeClassifyController.h"
 #import "ClassfiyTableViewCell.h"
-#import "GameModel.h"
+
+//#import "GameModel.h"
+#import "GameRequest.h"
 
 #import <SDWebImageDownloader.h>
 #import <UIImageView+WebCache.h>
+
+#import <MJRefresh.h>
 
 #define CellIDE @"ClassfiyTableViewCell"
 #define BTNTAG 1700
@@ -21,11 +25,19 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, strong) NSArray<NSDictionary *> *showArry;
 
-@property (nonatomic, strong) NSArray *classifyArray;
+@property (nonatomic, strong) NSMutableArray<NSDictionary *> *showArry;
 
+/** 分类数组 */
+@property (nonatomic, strong) NSMutableArray *classifyArray;
+
+/** 头部视图 */
 @property (nonatomic, strong) UIView *headerView;
+
+/**< 当前页数 */
+@property (nonatomic, assign) NSInteger currentPage;
+
+@property (nonatomic, assign) BOOL isAll;
 
 @end
 
@@ -34,73 +46,112 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self initDataSource];
     [self initUserInterface];
+    [self initDataSource];
 }
 
 - (void)initDataSource {
-    [GameModel postGameClassifyWithChannel:@"185" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        self.classifyArray = content[@"data"][@"class"];
-        self.showArry = content[@"data"][@"classData"];
-//        CLog(@"%@",content);
-    }];
-    
-
-    
+    [self.tableView.mj_header beginRefreshing];
 }
 
 - (void)initUserInterface {
     [self.view addSubview:self.tableView];
 }
 
-
-#pragma makr - setter
-- (void)setShowArry:(NSArray<NSDictionary *> *)showArry {
-    _showArry = showArry;
-    [self.tableView reloadData];
+- (void)refreshData {
+    [GameRequest gameClassifyWithPage:@"1" Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success) {
+            self.classifyArray = [content[@"data"][@"class"] mutableCopy];
+            self.showArry = [content[@"data"][@"classData"] mutableCopy];
+            _currentPage = 1;
+            _isAll = NO;
+            [self.tableView reloadData];
+        }
+        [self.tableView.mj_footer endRefreshing];
+        [self.tableView.mj_header endRefreshing];
+//        syLog(@"%@",content);
+    }];
 }
 
-- (void)setClassifyArray:(NSArray *)classifyArray {
-    _classifyArray = classifyArray;
-    NSMutableArray *titleArray = [NSMutableArray arrayWithCapacity:_classifyArray.count];
-    
-    [_classifyArray enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *string = obj[@"name"];
-        [titleArray addObject:string];
-    }];
-    
-    CGFloat height = titleArray.count / 4.f;
-    NSInteger height1 = height;
-    
-    if (height > height1) {
-        height1++;
-    }
-    
-    self.headerView.bounds = CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_WIDTH / 4 * height1);
-    
-    self.headerView.backgroundColor = [UIColor whiteColor];
-    
-    [_classifyArray enumerateObjectsUsingBlock:^(NSDictionary * obj, NSUInteger idx, BOOL * _Nonnull stop) {
+- (void)loadMoreData {
+    if (_isAll) {
+        [self.tableView.mj_footer endRefreshingWithNoMoreData];
+    } else {
+        //页数加一
+        _currentPage++;
         
-        NSString *title = obj[@"name"];
-        UIButton *button = [UIButton buttonWithType:(UIButtonTypeCustom)];
-        
-        button.frame = CGRectMake(kSCREEN_WIDTH / 4 * (idx % 4), kSCREEN_WIDTH / 4 * (idx / 4), kSCREEN_WIDTH / 4, kSCREEN_WIDTH / 4);
-        [button setTitle:title forState:(UIControlStateNormal)];
-        
-        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,obj[@"logo"]]] options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+        [GameRequest gameClassifyWithPage:[NSString stringWithFormat:@"%ld",_currentPage] Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
             
-            [button setImage:image forState:(UIControlStateNormal)];
-//            CLog(@"图片加载");
+            if (success && !((NSString *)content[@"status"]).boolValue) {
+                NSArray *array = content[@"data"][@"classData"];
+                if (array.count == 0) {
+                    _isAll = YES;
+                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+                } else {
+                    [_showArry addObjectsFromArray:array];
+                    [self.tableView.mj_footer endRefreshing];
+                    [self.tableView reloadData];
+                }
+            } else {
+                [self.tableView.mj_footer endRefreshing];
+            }
+        }];
+    }
+}
+
+
+#pragma makr - setter
+//- (void)setShowArry:(NSMutableArray<NSDictionary *> *)showArry {
+//    _showArry = showArry;
+//    [self.tableView reloadData];
+//}
+
+- (void)setClassifyArray:(NSMutableArray *)classifyArray {
+    
+    if (classifyArray) {
+        _classifyArray = classifyArray;
+        NSMutableArray *titleArray = [NSMutableArray arrayWithCapacity:_classifyArray.count];
+        
+        [_classifyArray enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString *string = obj[@"name"];
+            [titleArray addObject:string];
         }];
         
-        button.tag = idx + BTNTAG;
-        [button setTitleColor:[UIColor lightGrayColor] forState:(UIControlStateNormal)];
+        CGFloat height = titleArray.count / 4.f;
+        NSInteger height1 = height;
         
-        [button addTarget:self action:@selector(respondsToBtn:) forControlEvents:(UIControlEventTouchUpInside)];
+        if (height > height1) {
+            height1++;
+        }
         
-        [self.headerView addSubview:button];
-    }];
+        self.headerView.bounds = CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_WIDTH / 4 * height1);
+        
+        self.headerView.backgroundColor = [UIColor whiteColor];
+        
+        [_classifyArray enumerateObjectsUsingBlock:^(NSDictionary * obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            NSString *title = obj[@"name"];
+            UIButton *button = [UIButton buttonWithType:(UIButtonTypeCustom)];
+            
+            button.frame = CGRectMake(kSCREEN_WIDTH / 4 * (idx % 4), kSCREEN_WIDTH / 4 * (idx / 4), kSCREEN_WIDTH / 4, kSCREEN_WIDTH / 4);
+            [button setTitle:title forState:(UIControlStateNormal)];
+            
+            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,obj[@"logo"]]] options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+                
+                [button setImage:image forState:(UIControlStateNormal)];
+                
+            }];
+            
+            button.tag = idx + BTNTAG;
+            [button setTitleColor:[UIColor lightGrayColor] forState:(UIControlStateNormal)];
+            
+            [button addTarget:self action:@selector(respondsToBtn:) forControlEvents:(UIControlEventTouchUpInside)];
+            
+            [self.headerView addSubview:button];
+        }];
+    } else {
+        self.headerView = nil;
+    }
     
 }
 
@@ -120,7 +171,9 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     ClassfiyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIDE];
+    
     NSDictionary *dict = self.showArry[indexPath.section];
     NSArray *gameArray = dict[@"list"];
     NSArray<UIImageView *> *ImageArray = @[cell.imageView1,cell.imageView2,cell.imageView3,cell.imageView4];
@@ -153,12 +206,12 @@
     return label;
 }
 
+#pragma makr - getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_HEIGHT, kSCREEN_HEIGHT - 145) style:(UITableViewStylePlain)];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 158) style:(UITableViewStylePlain)];
         
         
-        [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"ClassifyCell1"];
         [_tableView registerNib:[UINib nibWithNibName:@"ClassfiyTableViewCell" bundle:nil] forCellReuseIdentifier:CellIDE];
         
         _tableView.dataSource = self;
@@ -166,20 +219,39 @@
         
         _tableView.backgroundColor = [UIColor whiteColor];
         
-        
-        
         _tableView.showsVerticalScrollIndicator = NO;
         _tableView.showsHorizontalScrollIndicator = NO;
         
-        _tableView.tableHeaderView = self.headerView;
         
+        //下拉刷新
+        MJRefreshNormalHeader *customRef = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
+        
+        [customRef setTitle:@"数据已加载" forState:MJRefreshStateIdle];
+        [customRef setTitle:@"刷新数据" forState:MJRefreshStatePulling];
+        [customRef setTitle:@"正在刷新" forState:MJRefreshStateRefreshing];
+        [customRef setTitle:@"即将刷新" forState:MJRefreshStateWillRefresh];
+        [customRef setTitle:@"所有数据加载完毕，没有更多的数据了" forState:MJRefreshStateNoMoreData];
+        
+        
+        //自动更改透明度
+        _tableView.mj_header.automaticallyChangeAlpha = YES;
+        
+        _tableView.mj_header = customRef;
+        
+        //上拉刷新
+        _tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+        
+        _tableView.tableHeaderView = self.headerView;
+        _tableView.tableFooterView = [UIView new];
     }
     return _tableView;
 }
 
+
 - (UIView *)headerView {
     if (!_headerView) {
         _headerView = [[UIView alloc]init];
+        _headerView.frame = CGRectMake(0, 0, kSCREEN_WIDTH, 0);
     }
     return _headerView;
 }

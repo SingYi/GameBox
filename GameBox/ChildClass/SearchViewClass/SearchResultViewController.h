@@ -10,4 +10,8 @@
 
 @interface SearchResultViewController : UIViewController
 
+/** 搜索关键词 */
+@property (nonatomic, strong) NSString *keyword;
+
+
 @end

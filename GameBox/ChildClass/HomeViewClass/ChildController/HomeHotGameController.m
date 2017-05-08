@@ -8,7 +8,9 @@
 
 #import "HomeHotGameController.h"
 #import "SearchCell.h"
-#import "GameModel.h"
+
+//#import "GameModel.h"
+#import "GameRequest.h"
 
 #import "ControllerManager.h"
 
@@ -18,7 +20,11 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, strong) NSArray *showArray;
+@property (nonatomic, strong) NSMutableArray *showArray;
+
+@property (nonatomic, assign) NSInteger currentPage;
+
+@property (nonatomic, assign) BOOL isAll;
 
 @end
 
@@ -42,12 +48,41 @@
 
 #pragma mark - method
 - (void)refreshData {
-    [GameModel postGameListWithType:HotGame ChannelID:@"185" Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        _showArray = content[@"data"];
+    [GameRequest hotGameWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success && !((NSString *)content[@"status"]).boolValue) {
+            _showArray = [content[@"data"] mutableCopy];
+            
+            _currentPage = 1;
+            _isAll = NO;
+
+            [self.tableView.mj_footer endRefreshing];
+            [self.tableView reloadData];
+        }
         [self.tableView.mj_header endRefreshing];
-        [self.tableView reloadData];
         
     }];
+}
+
+- (void)loadMoreData {
+    if (_isAll) {
+        [self.tableView.mj_footer endRefreshingWithNoMoreData];
+    } else {
+        _currentPage++;
+        
+        [GameRequest newGameWithPage:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            if (success && !((NSString *)content[@"status"]).boolValue) {
+                NSArray *array = content[@"data"];
+                if (array.count == 0) {
+                    _isAll = YES;
+                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+                } else {
+                    [_showArray addObjectsFromArray:array];
+                    [self.tableView reloadData];
+                    [self.tableView.mj_footer endRefreshing];
+                }
+            }
+        }];
+    }
 }
 
 
@@ -94,7 +129,7 @@
 #pragma mark - getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 145) style:(UITableViewStylePlain)];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 157) style:(UITableViewStylePlain)];
         
         
         [_tableView registerNib:[UINib nibWithNibName:@"SearchCell" bundle:nil] forCellReuseIdentifier:CELLIDENTIFIER];
@@ -116,15 +151,15 @@
         
         //自动更改透明度
         _tableView.mj_header.automaticallyChangeAlpha = YES;
-        
-        [customRef.lastUpdatedTimeLabel setText:@"0"];
-        
         _tableView.mj_header = customRef;
         
-        
+        //上拉刷新
+        _tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
         
         _tableView.showsVerticalScrollIndicator = NO;
         _tableView.showsHorizontalScrollIndicator = NO;
+        
+        _tableView.tableFooterView = [UIView new];
         
     }
     return _tableView;
