@@ -79,8 +79,8 @@ typedef enum : NSInteger {
                         Completion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
 
 /** 游戏的图标 */
-+ (void)postImageWithUrl:(NSString * _Nonnull)url
-              Completion:(void (^ _Nullable)(NSData * _Nullable content, BOOL success))completion;
+//+ (void)postImageWithUrl:(NSString * _Nonnull)url
+//              Completion:(void (^ _Nullable)(NSData * _Nullable content, BOOL success))completion;
 
 /** 游戏相关攻略 */
 + (void)postStrategyWithGameID:(NSString * _Nonnull)gameID

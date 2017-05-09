@@ -81,6 +81,11 @@
     [super viewWillAppear:animated];
     self.navigationItem.titleView = self.searchBar;
     
+    if ( [ControllerManager shareManager].searchView.currentParentController != 1) {
+        self.navigationItem.rightBarButtonItem = self.messageBtn;
+        self.navigationItem.leftBarButtonItem = self.downLoadBtn;
+    }
+    
 //        [ControllerManager shareManager].rootViewController.navigationBar.hidden = NO;
 //        self.navigationController.navigationBar.hidden = YES;
     
@@ -174,7 +179,6 @@
     self.searchBar.text = @"";
     
     [[ControllerManager shareManager].searchView.view removeFromSuperview];
-//    [[ControllerManager shareManager].searchView removeFromParentViewController];
     
     self.navigationItem.rightBarButtonItem = self.messageBtn;
     self.navigationItem.leftBarButtonItem = self.downLoadBtn;
@@ -187,11 +191,13 @@
     self.navigationItem.rightBarButtonItem = self.cancelBtn;
     self.navigationItem.leftBarButtonItem = nil;
     
+    [ControllerManager shareManager].searchView.currentParentController = 1;
+    
     [[ControllerManager shareManager].searchView removeFromParentViewController];
     [self.view addSubview:[ControllerManager shareManager].searchView.view];
     [self addChildViewController:[ControllerManager shareManager].searchView];
     
-    //    [self.view addSubview:[ControllerManager shareManager].searchResultController.view];
+    
     
     return YES;
 }

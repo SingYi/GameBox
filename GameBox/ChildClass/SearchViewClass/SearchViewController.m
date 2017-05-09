@@ -169,6 +169,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:(UITableViewCellStyleValue1) reuseIdentifier:@"rrrrr"];
             }
             
+            cell.imageView.image = [UIImage imageNamed:@"search_history"];
             cell.textLabel.text = _showArray[indexPath.row];
             cell.textLabel.textColor = [UIColor lightGrayColor];
             return cell;

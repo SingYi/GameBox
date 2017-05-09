@@ -50,8 +50,6 @@
         
     }];
     self.viewControllers = viewControllers;
-    
-    
 }
 
 //初始化用户界面
@@ -60,10 +58,20 @@
     
 }
 
+- (void)setSelectedViewController:(__kindof UIViewController *)selectedViewController {
+    
+    [super setSelectedViewController:selectedViewController];
+    
+}
+
+
 
 
 
 @end
+
+
+
 
 
 

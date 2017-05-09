@@ -59,6 +59,11 @@
                      ConfirmPassword:(NSString * _Nonnull)confirmPassword
                           Completion:(void(^_Nonnull)( NSDictionary  * _Nullable content,BOOL success))completion;
 
+/** 修改昵称接口 */
++ (void)postModifyNickNameWithUserID:(NSString * _Nonnull)uid
+                            NickName:(NSString * _Nonnull)nickName
+                           Copletion:(void(^_Nonnull)( NSDictionary  * _Nullable content,BOOL success))completion;
+
 /** 显示提示信息 */
 + (void)showAlertWithMessage:(NSString *_Nullable)message dismiss:(void(^_Nullable)(void))dismiss;
 

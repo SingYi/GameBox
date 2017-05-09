@@ -10,4 +10,7 @@
 
 @interface SearchViewController : UIViewController
 
+//加载在controller的下标
+@property (nonatomic, assign) NSInteger currentParentController;
+
 @end

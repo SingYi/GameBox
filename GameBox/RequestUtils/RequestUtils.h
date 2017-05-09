@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#define REQUESTSUCCESS !((NSString *)content[@"status"]).boolValue
+#define REQUESTMSG content[@"msg"]
+
 @interface RequestUtils : NSObject
 
 /** get方法 */

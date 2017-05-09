@@ -49,6 +49,7 @@
 + (void)postLoginWithAccount:(NSString *)account
                     PassWord:(NSString *)passWord
                   Completion:(void (^)(NSDictionary * _Nullable, BOOL))completion {
+    
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:account forKey:@"username"];
     [dict setObject:passWord forKey:@"password"];
@@ -128,6 +129,10 @@
     [dict setObject:confirmPassword forKey:@"repassword"];
     
     [RequestUtils postRequestWithURL:MODIFYPASSWORDURL params:dict completion:completion];
+    
+}
+
++ (void)postModifyNickNameWithUserID:(NSString *)uid NickName:(NSString *)nickName Copletion:(void (^)(NSDictionary * _Nullable, BOOL))completion {
     
 }
 

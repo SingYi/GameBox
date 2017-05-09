@@ -9,7 +9,10 @@
 #import "LoginViewController.h"
 #import "RegisterViewController.h"
 #import "ForgetPassWordView.h"
-#import "MineModel.h"
+//#import "MineModel.h"
+#import "UserModel.h"
+
+#import <SDWebImageDownloader.h>
 
 @interface LoginViewController ()<UITextFieldDelegate>
 
@@ -77,45 +80,47 @@
 //    self.hidesBottomBarWhenPushed = NO;
 }
 
+/** 登录 */
 - (void)respondsToLogin {
     //释放第一响应者
+    [self.userName resignFirstResponder];
     [self.passWord resignFirstResponder];
     
-    [MineModel postLoginWithAccount:self.userName.text PassWord:self.passWord.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
+    if (self.userName.text.length < 3) {
         
-        NSNumber *status = content[@"status"];
+        [UserModel showAlertWithMessage:@"用户名太短" dismiss:nil];
         
-        if (success && status.integerValue == 0) {
-            
-            SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:YES], @"isLogin");
-            
-            SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"id"], @"userID");
-            SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"nicename"], @"naceName");
-            SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"user_longin"], @"userLogin");
-            SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"user_email"], @"email");
-            if ([(content[@"data"][@"avatar"]) isKindOfClass:[NSNull class]]) {
+        return;
+    }
+    
+    if (self.passWord.text.length < 6) {
+        [UserModel showAlertWithMessage:@"密码长度有误" dismiss:nil];
+    }
+    
+    [UserModel userLoginWithUserName:self.userName.text PassWord:self.passWord.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success) {
+            if (REQUESTSUCCESS) {
+                //登录成功
+                SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"avatar"], @"avatar");
+                SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"id"],     @"userID");
+                SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"tel"],    @"phoneNumber");
+                SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"nicename"], @"nickname");
                 
+                
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                [self.navigationController popToRootViewControllerAnimated:YES];
+                
+                [UserModel logIn];
+                [UserModel showAlertWithMessage:@"登录成功" dismiss:nil];
+                syLog(@"%@",content);
             } else {
                 
-                SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"avatar"], @"avatar");
+                [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
             }
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            
-            [MineModel showAlertWithMessage:@"登录成功" dismiss:^{
-
-                [self.navigationController popViewControllerAnimated:YES];
-            }];
-            
-        } else if (success && status.integerValue == 1) {
-            
-            [MineModel showAlertWithMessage:content[@"msg"] dismiss:nil];
         } else {
+            [UserModel showAlertWithMessage:@"网络不知道飞哪去了" dismiss:nil];
         }
-
-        CLog(@"interesting%@",content);
     }];
-    
-    
     
 }
 
@@ -132,6 +137,26 @@
     return YES;
 }
 
+//限制用户名和密码长度
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if (textField == self.userName) {
+        if (range.length == 1 && string.length == 0) {
+            return YES;
+        } else if (self.userName.text.length >= 15) {
+            self.userName.text = [textField.text substringToIndex:15];
+            return NO;
+        }
+    } else if (textField == self.passWord) {
+        if (range.length == 1 && string.length == 0) {
+            return YES;
+        } else if (self.passWord.text.length >= 16) {
+            self.passWord.text = [textField.text substringToIndex:16];
+            return NO;
+        }
+    }
+    return YES;
+}
 
 
 #pragma mark - getter
@@ -140,12 +165,21 @@
         _userName = [[UITextField alloc]init];
         _userName.bounds = CGRectMake(0, 0, kSCREEN_WIDTH * 0.8, 44);
         _userName.center = CGPointMake(kSCREEN_WIDTH / 2, 120);
-        UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"wode_an"]];
-        imageView.bounds = CGRectMake(0, 0, 35, 35);
-        _userName.leftView = imageView;
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+        view.backgroundColor = [UIColor clearColor];
+        
+        UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"login_account"]];
+        imageView.bounds = CGRectMake(0, 0, 20, 20);
+        imageView.center = CGPointMake(20, 15);
+        
+        [view addSubview:imageView];
+        
+        _userName.leftView = view;
+        
         _userName.leftViewMode = UITextFieldViewModeAlways;
         _userName.borderStyle = UITextBorderStyleRoundedRect;
         _userName.placeholder = @"请输入手机号或用户名";
+        _userName.keyboardType = UIKeyboardTypeASCIICapable;
         _userName.delegate = self;
         _userName.returnKeyType = UIReturnKeyNext;
     }
@@ -157,9 +191,17 @@
         _passWord = [[UITextField alloc]init];
         _passWord.bounds = CGRectMake(0, 0, kSCREEN_WIDTH * 0.8, 44);
         _passWord.center = CGPointMake(kSCREEN_WIDTH / 2, 185);
-        UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"wode_an"]];
-        imageView.bounds = CGRectMake(0, 0, 35, 35);
-        _passWord.leftView = imageView;
+        
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+        view.backgroundColor = [UIColor clearColor];
+        UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"login_password"]];
+        imageView.bounds = CGRectMake(0, 0, 20, 20);
+        imageView.center = CGPointMake(20, 15);
+        
+        [view addSubview:imageView];
+        
+        _passWord.leftView = view;
+        
         _passWord.leftViewMode = UITextFieldViewModeAlways;
         _passWord.borderStyle = UITextBorderStyleRoundedRect;
         _passWord.placeholder = @"请输入密码";
@@ -238,19 +280,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)showAlertWithMessage:(NSString *)message dissmiss:(void(^)(void))dismiss {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-    
-    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertController animated:YES completion:nil];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [alertController dismissViewControllerAnimated:YES completion:^{
-            if (dismiss) {
-                dismiss();
-            }
-        }];
-    });
-}
+
 
 
 

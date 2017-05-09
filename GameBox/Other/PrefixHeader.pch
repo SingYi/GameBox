@@ -31,8 +31,12 @@
 /** 保存系统单利 */
 #define SAVEOBJECT_AT_USERDEFAULTS(object,key) [[NSUserDefaults standardUserDefaults] setObject:object forKey:key]
 
+#define WeakSelf __weak typeof(self) weakSelf = self
+
 /** 渠道ID */
 #define CHANNELID @"185"
+
+
 
 
 #define USERID [UserModel uid]

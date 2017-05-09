@@ -7,6 +7,7 @@
 //
 
 #import "SettingView.h"
+#import "UserModel.h"
 
 #define CELLIDE @"SettingCell"
 
@@ -16,9 +17,21 @@
 
 @property (nonatomic, strong) NSArray<NSArray *> *showArray;
 
+/** 退出登录 */
+@property (nonatomic, strong) UIButton *logoutBtn;
+
 @end
 
 @implementation SettingView
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    if ([UserModel CurrentUser]) {
+        self.tableView.tableFooterView = self.logoutBtn;
+    } else {
+        self.tableView.tableFooterView = [UIView new];
+    }
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -32,6 +45,12 @@
     self.navigationItem.title = @"设置";
     
     [self.view addSubview:self.tableView];
+}
+
+#pragma mark - responds
+- (void)respondsToLogoutBtn {
+    [UserModel logOut];
+    self.tableView.tableFooterView = [UIView new];
 }
 
 #pragma mark - tableViewDataSource
@@ -113,20 +132,29 @@
     return _tableView;
 }
 
+- (UIButton *)logoutBtn {
+    if (!_logoutBtn) {
+        _logoutBtn = [UIButton buttonWithType:(UIButtonTypeCustom)];
+        _logoutBtn.frame = CGRectMake(0, 0, kSCREEN_WIDTH, 44);
+        _logoutBtn.backgroundColor = RGBCOLOR(247, 247, 247);
+        [_logoutBtn setTitle:@"退出登录" forState:(UIControlStateNormal)];
+        [_logoutBtn setTitleColor:[UIColor darkGrayColor] forState:(UIControlStateNormal)];
+        [_logoutBtn addTarget:self action:@selector(respondsToLogoutBtn) forControlEvents:(UIControlEventTouchUpInside)];
+    }
+    return _logoutBtn;
+}
+
 - (NSArray *)showArray {
     if (!_showArray) {
         _showArray = @[@[@"仅使用WiFi下载",
-                         @"下载完后自动安装游戏",
-                         @"安装完成后删除安装包",
-                         @"清空下载目录",
                          @"清空缓存"],
-                       @[@"开启消息通知",
-                         @"声音",
-                         @"震动"],
+                       @[@"开启消息通知"],
                        @[@"检测更新"]];
     }
     return _showArray;
 }
+
+
 
 
 - (void)didReceiveMemoryWarning {

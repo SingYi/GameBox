@@ -10,7 +10,9 @@
 #import "LoginViewController.h"
 #import "ControllerManager.h"
 #import "MineCell.h"
-#import "MineModel.h"
+
+
+//#import "MineModel.h"
 
 #import "UserModel.h"
 
@@ -24,8 +26,10 @@
 #import "AboutUsView.h"
 
 #import <MobileCoreServices/MobileCoreServices.h>
+#import <UIImageView+WebCache.h>
 
 #define CELLIDENTIFIER @"MineCell"
+
 
 
 @interface MineViewController ()<UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
@@ -56,6 +60,7 @@
 @property (nonatomic, strong) ResetPassWordViewController *resetPassWordView;
 
 
+
 @end
 
 @implementation MineViewController
@@ -64,32 +69,6 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.hidden = YES;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    
-    NSString *uid = [UserModel CurrentUser].uid;
-    
-    NSNumber *isLogin = OBJECT_FOR_USERDEFAULTS(@"isLogin");
-    
-    CLog(@"MineViewController.uid == %@",[UserModel CurrentUser].uid);
-    CLog(@"MineViewController.isLogin == %d",isLogin.boolValue);
-    
-    if (uid && isLogin.boolValue) {
-        CLog(@"已登录");
-        
-        self.avatar.image = [UIImage imageWithData:[UserModel CurrentUser].avatar];
-        
-        [self.loginBtn removeFromSuperview];
-        [self.headerview addSubview:self.avatar];
-        [self.headerview addSubview:self.nickNameBtn];
-        
-    } else {
-        CLog(@"未登录");
-        
-        self.avatar.image = nil;
-        
-        [self.headerview addSubview:self.loginBtn];
-        [self.avatar removeFromSuperview];
-        [self.nickNameBtn removeFromSuperview];
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -101,6 +80,59 @@
     [super viewDidLoad];
     [self initDataSource];
     [self initUserInterface];
+    
+    if ([UserModel CurrentUser]) {
+        
+        [self.avatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,[UserModel CurrentUser].avatar]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
+    
+        [self.loginBtn removeFromSuperview];
+        [self.headerview addSubview:self.avatar];
+        [self.headerview addSubview:self.nickNameBtn];
+    
+    } else {
+        
+        self.avatar.image = nil;
+        
+        [self.headerview addSubview:self.loginBtn];
+        [self.avatar removeFromSuperview];
+        [self.nickNameBtn removeFromSuperview];
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(isLogin:) name:@"isLogin" object:nil];
+}
+
+- (void)isLogin:(NSNotification *)sender {
+    NSNumber *isLogin = sender.userInfo[@"isLogin"];
+    
+    if (isLogin.boolValue) {
+        
+        if (((NSNumber *)OBJECT_FOR_USERDEFAULTS(@"setUserAvatar")).boolValue || OBJECT_FOR_USERDEFAULTS(@"setUserAvatar") == nil) {
+            [self.avatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,[UserModel CurrentUser].avatar]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
+        }
+        
+        /*
+         [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,content[@"data"][@"avatar"]]] options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+         if (finished) {
+         [UserModel saveImg:image];
+         SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:YES], @"haveAvatar");
+         [[NSUserDefaults standardUserDefaults] synchronize];
+         }
+         }];
+         */
+        
+        
+        [self.loginBtn removeFromSuperview];
+        [self.headerview addSubview:self.avatar];
+        [self.headerview addSubview:self.nickNameBtn];
+    } else {
+        self.avatar.image = nil;
+        
+        [self.headerview addSubview:self.loginBtn];
+        [self.avatar removeFromSuperview];
+        [self.nickNameBtn removeFromSuperview];
+    }
+    
+    syLog(@"－－－－－接收到通知------");
 }
 
 - (void)initDataSource {
@@ -121,15 +153,15 @@
 }
 
 #pragma mark - responds
+/** 登录 */
 - (void)respondsToLoginBtn:(UIButton *)sender {
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:self.loginView animated:YES];
     self.hidesBottomBarWhenPushed = NO;
 }
 
+/** 修改头像 */
 - (void)TapaAvatar {
-    
-    CLog(@"1");
     
     UIImagePickerController *pickerView = [[UIImagePickerController alloc] init];
     pickerView.delegate = self;
@@ -154,6 +186,7 @@
         [alertController addAction:photoLibraryAct];
         [alertController addAction:cameraAct];
         [alertController addAction:cancelAct];
+        
         [self presentViewController:alertController animated:YES completion:nil];
     }
 }
@@ -165,17 +198,16 @@
     if ([type isEqualToString:(NSString*)kUTTypeImage]) {
         
         UIImage  *photo = info[UIImagePickerControllerEditedImage];
-        NSData *data = UIImagePNGRepresentation(photo);
-        
-        SAVEOBJECT_AT_USERDEFAULTS(data, @"avatar");
-        
-        [[NSUserDefaults standardUserDefaults] synchronize];
         
         self.avatar.image = photo;
         
+        SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:NO], @"setUserAvatar");
         
-
-
+        [UserModel userUploadPortraitWithUserID:[UserModel uid] Image:photo Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        
+        }];
+        
+        
         
      
     } else {
@@ -309,7 +341,7 @@
     if (!_loginBtn) {
         _loginBtn = [[UIButton alloc]init];
         _loginBtn.bounds = CGRectMake(0, 0, kSCREEN_WIDTH / 3, kSCREEN_WIDTH / 3);
-        _loginBtn.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_WIDTH / 4);
+        _loginBtn.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_WIDTH / 3);
         
         [_loginBtn setImage:[UIImage imageNamed:@"mine_loginBtn_no"] forState:(UIControlStateNormal)];
         
@@ -324,7 +356,7 @@
         _avatar.bounds = CGRectMake(0, 0, kSCREEN_WIDTH / 3, kSCREEN_WIDTH / 3);
         _avatar.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_WIDTH / 3);
         
-        _avatar.backgroundColor = [UIColor blueColor];
+        _avatar.backgroundColor = [UIColor grayColor];
         _avatar.layer.cornerRadius = kSCREEN_WIDTH / 6;
         _avatar.layer.masksToBounds = YES;
         

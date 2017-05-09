@@ -44,8 +44,8 @@
 }
 
 - (void)refreshData {
-//    CLog(@"%@",[UserModel CurrentUser].uid);
-    [GiftBagModel postGiftListWihtUserID:[UserModel CurrentUser].uid ChannelID:@"185" Order:nil OrderType:nil Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
+
+    [GiftBagModel postGiftListWihtUserID:[UserModel uid] ChannelID:@"185" Order:nil OrderType:nil Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         self.showArray = content[@"data"][@"list"];
 //        CLog(@"%@",content);
         [self.tableView.mj_header endRefreshing];

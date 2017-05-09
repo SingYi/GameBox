@@ -152,10 +152,13 @@
 //游戏返利
 - (void)setRebate:(NSString *)rebate {
     NSMutableString *str = [rebate mutableCopy];
-    NSString *last = [str substringFromIndex:str.length - 1];
-    while ([last isEqualToString:@"\n"]) {
-        str = [[str substringToIndex:str.length - 1] mutableCopy];
-        last = [str substringFromIndex:str.length - 1];
+    if (str.length != 0) {
+        
+        NSString *last = [str substringFromIndex:str.length - 1];
+        while ([last isEqualToString:@"\n"]) {
+            str = [[str substringToIndex:str.length - 1] mutableCopy];
+            last = [str substringFromIndex:str.length - 1];
+        }
     }
     
     

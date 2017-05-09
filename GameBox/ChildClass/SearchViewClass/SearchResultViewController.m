@@ -7,6 +7,7 @@
 //
 
 #import "SearchResultViewController.h"
+#import "ControllerManager.h"
 
 #import "SearchCell.h"
 
@@ -33,15 +34,16 @@
 }
 
 - (void)initUserInterface {
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.navigationItem.title = @"搜索结果";
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
 }
 
 #pragma mark - settter
 - (void)setKeyword:(NSString *)keyword {
-    _showArray = nil;
-    if (keyword) {
-        
+    if (keyword && ![keyword isEqualToString:_keyword]) {
+        _showArray = nil;
         _keyword = keyword;
         [GameRequest searchGameWithKeyword:_keyword Completion:^(NSDictionary * _Nullable content, BOOL success) {
             if (success) {
@@ -74,6 +76,23 @@
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 80;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
+    
+    [ControllerManager shareManager].detailView.gameID = _showArray[indexPath.row][@"id"];
+    
+    SearchCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    [ControllerManager shareManager].detailView.gameLogo = cell.gameLogo.image;
+    
+    [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
+}
+
 #pragma mark - cellDelegate
 - (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
     
@@ -82,13 +101,19 @@
 #pragma mark - getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, kSCREEN_WIDTH, kSCREEN_HEIGHT - 64 - 49) style:(UITableViewStylePlain)];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, kSCREEN_WIDTH, kSCREEN_HEIGHT - 64) style:(UITableViewStylePlain)];
         
         _tableView.delegate = self;
         _tableView.dataSource = self;
         
         
         [_tableView registerNib:[UINib nibWithNibName:@"SearchCell" bundle:nil] forCellReuseIdentifier:CELLIDE];
+        
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        
+        _tableView.tableFooterView = [UIView new];
+        
+        _tableView.backgroundColor = [UIColor whiteColor];
         
         
     }

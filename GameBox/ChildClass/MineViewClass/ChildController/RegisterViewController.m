@@ -7,7 +7,7 @@
 //
 
 #import "RegisterViewController.h"
-#import "MineModel.h"
+#import "UserModel.h"
 
 @interface RegisterViewController ()<UITextFieldDelegate>
 
@@ -31,6 +31,11 @@
 
 /**< 发送验证码按钮 */
 @property (nonatomic, strong) UIButton *sendMessageBtn;
+/** 计时器 */
+@property (nonatomic, strong) NSTimer *timer;
+
+//当前的时间;
+@property (nonatomic, assign) NSInteger currnetTime;
 
 @end
 
@@ -83,22 +88,169 @@
 #pragma mark - responds
 /** 注册 */
 - (void)respondsToRegisterBtn {
-    [MineModel postRegisterWithAccount:self.userName.text PassWord:self.passWord.text PhoneNumber:self.phoneNumber.text PhoneCode:self.securityCode.text email:nil Completion:^(NSDictionary * _Nullable content, BOOL success) {
-
-
+    
+    //用户名太短,返回
+    if (self.userName.text.length < 3) {
+        [UserModel showAlertWithMessage:@"用户名长度太短" dismiss:nil];
+        return;
+    }
+    //密码太短
+    if (self.passWord.text.length < 6) {
+        [UserModel showAlertWithMessage:@"密码长度太短" dismiss:nil];
+    }
+    
+    NSString *MOBILE = @"^1(3[0-9]|4[57]|5[0-35-9]|8[0-9]|7[06-8])\\d{8}$";
+    
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
+    //手机号有误
+    if (![regextestmobile evaluateWithObject:self.phoneNumber.text]) {
+        [UserModel showAlertWithMessage:@"手机号码有误" dismiss:nil];
+        return;
+    }
+    //验证码长度不正确
+    if (self.securityCode.text.length != 4) {
+        [UserModel showAlertWithMessage:@"验证码长度有误" dismiss:nil];
+    }
+    //email格式不对
+    if (self.email.text.length > 0) {
+        NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+        NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+        if (![emailTest evaluateWithObject:self.email.text]) {
+            [UserModel showAlertWithMessage:@"邮箱地址有误" dismiss:nil];
+        }
+    }
+    
+    [UserModel userRegisterWithUserName:self.userName.text PassWord:self.passWord.text PhoneNumber:self.phoneNumber.text MsgCode:self.securityCode.text Email:self.email.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        
+        if (success) {
+            if (REQUESTSUCCESS) {
+                //注册成功
+                USERLOGIN;
+                SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"avatar"], @"avatar");
+                SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"id"],     @"userID");
+                SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"tel"],    @"phoneNumber");
+                SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:YES], @"setUserAvatar");
+                
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+                [self.navigationController popToRootViewControllerAnimated:YES];
+                
+            } else {
+                
+            }
+            [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
+            syLog(@"%@",content);
+        }
+        
+    
     }];
 }
 
 /** 响应发送验证码按钮 */
 - (void)respondsToSendMessageBtn {
-    if (self.phoneNumber.text) {
-        [MineModel postPhoneCodeWithPhoneNumber:self.phoneNumber.text isVerify:nil Completion:^(NSDictionary * _Nullable content, BOOL success) {
-            NSLog(@"%@",content[@"msg"]);
-        }];
+    
+    NSString *MOBILE = @"^1(3[0-9]|4[57]|5[0-35-9]|8[0-9]|7[06-8])\\d{8}$";
+    
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
+    
+    if (![regextestmobile evaluateWithObject:self.phoneNumber.text]) {
+        [UserModel showAlertWithMessage:@"手机号码有误" dismiss:nil];
+        return;
     }
+    
+    WeakSelf;
+    
+    [UserModel userSendMessageWithPhoneNumber:self.phoneNumber.text IsVerify:nil Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        
+        if (success) {
+            _currnetTime = 59;
+            weakSelf.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(refreshTime) userInfo:nil repeats:YES];
+            [UserModel showAlertWithMessage:content[@"msg"] dismiss:nil];
+        } else {
+            [UserModel showAlertWithMessage:@"网络不知道飞哪去了~" dismiss:nil];
+        }
+    }];
     
 }
 
+- (void)refreshTime {
+    [self.sendMessageBtn setTitle:[NSString stringWithFormat:@"%lds",_currnetTime] forState:(UIControlStateNormal)];
+    [self.sendMessageBtn setUserInteractionEnabled:NO];
+    if (_currnetTime <= 0) {
+        [self stopTimer];
+        [self.sendMessageBtn setUserInteractionEnabled:YES];
+        [self.sendMessageBtn setTitle:@"发送验证码" forState:(UIControlStateNormal)];
+    }
+    _currnetTime--;
+}
+
+- (void)stopTimer {
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
+#pragma mark - textfieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self.email) {
+        [self respondsToRegisterBtn];
+    } else if (textField == self.userName) {
+        [self.userName resignFirstResponder];
+        [self.passWord becomeFirstResponder];
+    } else if (textField == self.passWord) {
+        [self.passWord resignFirstResponder];
+        [self.phoneNumber becomeFirstResponder];
+    } else if (textField == self.phoneNumber) {
+        [self.phoneNumber resignFirstResponder];
+        [self.securityCode becomeFirstResponder];
+    } else if (textField == self.securityCode) {
+        [self.securityCode resignFirstResponder];
+        [self.email becomeFirstResponder];
+    }
+    
+    return YES;
+}
+
+//限制用户名和密码长度
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if (textField == self.userName) {
+        if (range.length == 1 && string.length == 0) {
+            return YES;
+        } else if (self.userName.text.length >= 15) {
+            self.userName.text = [textField.text substringToIndex:15];
+            return NO;
+        }
+    } else if (textField == self.passWord) {
+        if (range.length == 1 && string.length == 0) {
+            return YES;
+        } else if (self.passWord.text.length >= 16) {
+            self.passWord.text = [textField.text substringToIndex:16];
+            return NO;
+        }
+    } else if (textField == self.phoneNumber) {
+        if (range.length == 1 && string.length == 0) {
+            return YES;
+        } else if (self.phoneNumber.text.length >= 11) {
+            self.phoneNumber.text = [textField.text substringToIndex:11];
+            return NO;
+        }
+    } else if (textField == self.securityCode) {
+        if (range.length == 1 && string.length == 0) {
+            return YES;
+        } else if (self.securityCode.text.length >= 4) {
+            self.securityCode.text = [textField.text substringToIndex:4];
+            return NO;
+        }
+    } else if (textField == self.email) {
+        if (range.length == 1 && string.length == 0) {
+            return YES;
+        } else if (self.email.text.length >= 30) {
+            self.email.text = [textField.text substringToIndex:30];
+            return NO;
+        }
+    }
+    return YES;
+}
 
 #pragma mark - getter
 - (UITextField *)creatTextFieldWithLeftView:(UIImageView *)lefitView WithRightView:(UIImageView *)rigthView WithPlaceholder:(NSString *)placeholder WithBounds:(CGRect)Bounds WithsecureTextEntry:(BOOL)secureTextEntry  {
@@ -119,6 +271,8 @@
     if (!_userName) {
         _userName = [self creatTextFieldWithLeftView:nil WithRightView:nil WithPlaceholder:@"请输入手机号或用户名" WithBounds:CGRectMake(0, 0, kSCREEN_WIDTH * 0.8, 44) WithsecureTextEntry:NO];
         _userName.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT * 0.2);
+        _userName.returnKeyType = UIReturnKeyNext;
+        _userName.keyboardType = UIKeyboardTypeASCIICapable;
     }
     return _userName;
 }
@@ -127,6 +281,7 @@
     if (!_passWord) {
         _passWord = [self creatTextFieldWithLeftView:nil WithRightView:nil WithPlaceholder:@"请输入密码" WithBounds:CGRectMake(0, 0, kSCREEN_WIDTH * 0.8, 44) WithsecureTextEntry:YES];
         _passWord.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT * 0.3);
+        _passWord.returnKeyType = UIReturnKeyNext;
     }
     return _passWord;
 }
@@ -135,6 +290,8 @@
     if (!_phoneNumber) {
         _phoneNumber = [self creatTextFieldWithLeftView:nil WithRightView:nil WithPlaceholder:@"请输入手机号" WithBounds:CGRectMake(0, 0, kSCREEN_WIDTH * 0.8, 44) WithsecureTextEntry:NO];
         _phoneNumber.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT * 0.4);
+        _phoneNumber.returnKeyType = UIReturnKeyNext;
+        _phoneNumber.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     }
     return _phoneNumber;
 }
@@ -147,6 +304,8 @@
         _securityCode.rightViewMode = UITextFieldViewModeAlways;
         
         _securityCode.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT * 0.5);
+        _securityCode.returnKeyType = UIReturnKeyNext;
+        _securityCode.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     }
     return _securityCode;
 }
@@ -155,6 +314,8 @@
     if(!_email) {
         _email = [self creatTextFieldWithLeftView:nil WithRightView:nil WithPlaceholder:@"请输入邮箱" WithBounds:CGRectMake(0, 0, kSCREEN_WIDTH * 0.8, 44) WithsecureTextEntry:NO];
         _email.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT * 0.6);
+        _email.returnKeyType = UIReturnKeyDone;
+        _email.keyboardType = UIKeyboardTypeEmailAddress;
     }
     return _email;
 }
@@ -183,6 +344,8 @@
         [_sendMessageBtn setTitle:@"发送验证码" forState:(UIControlStateNormal)];
         [_sendMessageBtn addTarget:self action:@selector(respondsToSendMessageBtn) forControlEvents:(UIControlEventTouchUpInside)];
         _sendMessageBtn.bounds = CGRectMake(0, 0, kSCREEN_WIDTH * 0.3, 44);
+        _sendMessageBtn.layer.cornerRadius = 2;
+        _sendMessageBtn.layer.masksToBounds = YES;
     }
     
     return _sendMessageBtn;
