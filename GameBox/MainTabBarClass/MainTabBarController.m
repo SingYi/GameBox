@@ -7,6 +7,7 @@
 //
 
 #import "MainTabBarController.h"
+#import "ControllerManager.h"
 
 @interface MainTabBarController ()
 
@@ -31,9 +32,10 @@
     NSMutableArray *viewControllers = [NSMutableArray arrayWithCapacity:4];
     
     [viewControllerNames enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        //通过类名得到对应的类
+        UIViewController *viewController = nil;
+
         Class classname = NSClassFromString(obj);
-        UIViewController *viewController = [[classname alloc] init];
+        viewController = [[classname alloc] init];
         
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
         

@@ -800,7 +800,7 @@
 				TargetAttributes = {
 					5E8DE51B1E9BD0A6007E719D = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 92V5W9S9K9;
+						DevelopmentTeam = JR27SLBFXN;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1028,7 +1028,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1069,7 +1069,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -1081,9 +1081,9 @@
 			baseConfigurationReference = 26B70E1884DC12DBF33C89F9 /* Pods-GameBox.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Yi Shi (Y7ZD75NS7B)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 92V5W9S9K9;
+				DEVELOPMENT_TEAM = JR27SLBFXN;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/GameBox/Other/PrefixHeader.pch";
 				INFOPLIST_FILE = GameBox/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
@@ -1095,7 +1095,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = Singyi.GameBox;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos10.3;
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
@@ -1104,8 +1104,8 @@
 			baseConfigurationReference = 2B0B2C3935C994EA4AB1EC14 /* Pods-GameBox.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 92V5W9S9K9;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Yi Shi (Y7ZD75NS7B)";
+				DEVELOPMENT_TEAM = JR27SLBFXN;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/GameBox/Other/PrefixHeader.pch";
 				INFOPLIST_FILE = GameBox/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
@@ -1117,7 +1117,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = Singyi.GameBox;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos10.3;
+				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
@@ -1131,7 +1131,7 @@
 				5E8DE5321E9BD0A6007E719D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		5E8DE5331E9BD0A6007E719D /* Build configuration list for PBXNativeTarget "GameBox" */ = {
 			isa = XCConfigurationList;
@@ -1140,7 +1140,7 @@
 				5E8DE5351E9BD0A6007E719D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

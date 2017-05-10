@@ -379,7 +379,7 @@
     if (!_tableView) {
         _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 245) style:(UITableViewStylePlain)];
 
-        syLog(@"%lf[======%lf",self.view.frame.size.height,CGRectGetHeight(self.view.frame));
+//        syLog(@"%lf[======%lf",self.view.frame.size.height,CGRectGetHeight(self.view.frame));
         [_tableView registerNib:[UINib nibWithNibName:@"GameDetailTableViewCell" bundle:nil] forCellReuseIdentifier:DetailTableCellIDE];
         
         [_tableView registerNib:[UINib nibWithNibName:@"GDLikesTableViewCell" bundle:nil] forCellReuseIdentifier:GDLIKESCELL];

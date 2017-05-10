@@ -105,14 +105,13 @@
                 SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"id"],     @"userID");
                 SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"tel"],    @"phoneNumber");
                 SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"nicename"], @"nickname");
-                
-                
                 [[NSUserDefaults standardUserDefaults] synchronize];
+                
                 [self.navigationController popToRootViewControllerAnimated:YES];
                 
                 [UserModel logIn];
                 [UserModel showAlertWithMessage:@"登录成功" dismiss:nil];
-                syLog(@"%@",content);
+//                syLog(@"%@",content);
             } else {
                 
                 [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];

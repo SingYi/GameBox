@@ -94,6 +94,7 @@
     
     cell.textLabel.text = [NSString stringWithFormat:@"%@ 版本(%@)  bundleID:%@",dict[@"localizedName"],dict[@"bundleVersion"],_showArray[indexPath.row]];
     
+    syLog(@"name === %@  bundleID ======= %@",dict[@"localizedName"],_showArray[indexPath.row]);
 //    NSNumber *zise = dict[@"staticDiskUsage"];
     
 //    cell.detailTextLabel.text = [NSString stringWithFormat:@"大小 :%.2lfM 开发人员ID:%@",zise.integerValue / 1024 / 1024.f,dict[@"teamID"]];

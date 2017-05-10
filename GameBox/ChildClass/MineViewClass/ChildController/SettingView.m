@@ -31,6 +31,7 @@
     } else {
         self.tableView.tableFooterView = [UIView new];
     }
+//    self.tableView.tableFooterView = self.logoutBtn;
 }
 
 - (void)viewDidLoad {
@@ -48,9 +49,12 @@
 }
 
 #pragma mark - responds
+/** 退出登录 */
 - (void)respondsToLogoutBtn {
     [UserModel logOut];
     self.tableView.tableFooterView = [UIView new];
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    [UserModel showAlertWithMessage:@"退出登录" dismiss:nil];
 }
 
 #pragma mark - tableViewDataSource

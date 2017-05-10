@@ -59,7 +59,7 @@
     [super viewWillAppear:animated];
     self.navigationItem.titleView = self.searchBar;
     
-    if ( [ControllerManager shareManager].searchView.currentParentController != 2) {
+    if ( [ControllerManager shareManager].searchViewController.currentParentController != 2) {
         self.navigationItem.rightBarButtonItem = self.messageBtn;
         self.navigationItem.leftBarButtonItem = self.downLoadBtn;
     }
@@ -86,6 +86,7 @@
     [super viewDidLoad];
     [self initDataSourece];
     [self initUserinterface];
+
 }
 
 /**初始化数据*/
@@ -127,6 +128,9 @@
             _currentPage = 1;
             _isAll = NO;
             [self.tableView reloadData];
+            [_showArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                syLog(@"%@",obj[@"gamename"]);
+            }];
         } else {
             [GameModel showAlertWithMessage:@"网络不知道飞到哪里去了" dismiss:nil];
             [self.tableView.mj_header endRefreshing];
@@ -140,13 +144,17 @@
         [self.tableView.mj_footer endRefreshingWithNoMoreData];
     } else {
         _currentPage++;
-        [GameModel postNewGameListWithChannelID:@"185" Page:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        [GameModel postGameListWithType:RankingGame ChannelID:@"185" Page:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+//            CLog(@"%ld  %@",_currentPage,content[@"gamename"]);
             if (success) {
                 NSArray *array = content[@"data"];
                 if (array.count == 0) {
                     _isAll = YES;
                     [self.tableView.mj_footer endRefreshingWithNoMoreData];
                 } else {
+                    [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                        syLog(@"%@",obj[@"gamename"]);
+                    }];
                     [_showArray addObjectsFromArray:array];
                     [self.tableView reloadData];
                     [self.tableView.mj_footer endRefreshing];
@@ -158,15 +166,29 @@
 
 #pragma mark - cellDeleagte
 - (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
-    syLog(@"下载%@",dict[@"gamename"]);
-}
-
-- (void)clickDownloadBtn {
-    [self.navigationController pushViewController:[ControllerManager shareManager].myAppViewController animated:YES];
-}
-
-- (void)clickMessageBtn {
+    NSString *str = dict[@"ios_url"];
     
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+    
+    syLog(@"%@",dict);
+}
+
+/** 我的应用 */
+- (void)clickDownloadBtn {
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:[ControllerManager shareManager].myAppViewController animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
+}
+
+/** 我的消息 */
+- (void)clickMessageBtn {
+    self.hidesBottomBarWhenPushed = YES;
+    if ([UserModel CurrentUser]) {
+        [self.navigationController pushViewController:[ControllerManager shareManager].myNewsViewController animated:YES];
+    } else {
+        [self.navigationController pushViewController:[ControllerManager shareManager].loginViewController animated:YES];
+    }
+    self.hidesBottomBarWhenPushed = NO;
 }
 
 - (void)clickCancelBtn {
@@ -174,7 +196,7 @@
     
     self.searchBar.text = @"";
     
-    [[ControllerManager shareManager].searchView.view removeFromSuperview];
+    [[ControllerManager shareManager].searchViewController.view removeFromSuperview];
 //    [[ControllerManager shareManager].searchView removeFromParentViewController];
     
     self.navigationItem.rightBarButtonItem = self.messageBtn;
@@ -189,11 +211,11 @@
     self.navigationItem.rightBarButtonItem = self.cancelBtn;
     self.navigationItem.leftBarButtonItem = nil;
     
-    [ControllerManager shareManager].searchView.currentParentController = 2;
+    [ControllerManager shareManager].searchViewController.currentParentController = 2;
     
-    [[ControllerManager shareManager].searchView removeFromParentViewController];
-    [self.view addSubview:[ControllerManager shareManager].searchView.view];
-    [self addChildViewController:[ControllerManager shareManager].searchView];
+    [[ControllerManager shareManager].searchViewController removeFromParentViewController];
+    [self.view addSubview:[ControllerManager shareManager].searchViewController.view];
+    [self addChildViewController:[ControllerManager shareManager].searchViewController];
     
     
 //    [self.view addSubview:[ControllerManager shareManager].searchResultController.view];

@@ -129,7 +129,7 @@
 
 //结束搜索
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-    [self clickCancelSearchBtn];
+    
 }
 
 //文本已经改变
@@ -156,18 +156,17 @@
         [self clickCancelSearchBtn];
         searchBar.returnKeyType = UIReturnKeyContinue;
     }
-    
-    
-    [searchBar resignFirstResponder];
+
     
     NSString *uid = GETUSERID;
     if (!uid) {
         uid = @"0";
     }
     
-    [GiftBagModel postGiftBagListWithUid:uid ChannelID:@"185" Search:searchBar.text Order:nil OrderType:nil Page:@"1" Andcompletion:^(NSDictionary * _Nullable content, BOOL success) {
+    [GiftBagModel postGiftBagListWithUid:[UserModel uid] ChannelID:@"185" Search:searchBar.text Order:nil OrderType:nil Page:@"1" Andcompletion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success) {
             _resultArray = content[@"data"][@"list"];
+            
             if (_resultArray.count != 0) {
                 _showArray = [_resultArray mutableCopy];
                 [self.tableView reloadData];
@@ -179,7 +178,7 @@
         }
 
     }];
-;
+//    [searchBar resignFirstResponder];
 }
 
 #pragma mark - method
@@ -205,7 +204,7 @@
         
         [GiftBagModel postGiftBagListWithPage:[NSString stringWithFormat:@"%ld",(long)_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
             
-//            CLog(@"%ld  %@",_currentPage,content);
+            CLog(@"%ld  %@",_currentPage,content);
             
             NSArray *array = content[@"data"][@"list"];
             if (array.count == 0) {
@@ -220,13 +219,13 @@
     }
 }
 
+/** 点击我的礼包 */
 - (void)clickMineGiftBag {
-    NSString *uid = OBJECT_FOR_USERDEFAULTS(@"userID");
-    
-    if (uid) {
+  
+    self.hidesBottomBarWhenPushed = YES;
+    if ([UserModel CurrentUser]) {
         [self.navigationController pushViewController:[ControllerManager shareManager].myGiftBagView animated:YES];
     } else {
-        self.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:[ControllerManager shareManager].loginViewController animated:YES];
     }
 }

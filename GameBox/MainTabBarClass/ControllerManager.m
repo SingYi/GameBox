@@ -32,6 +32,7 @@ static ControllerManager *manager = nil;
 }
 
 #pragma mark - method
+/** 加载动画 */
 + (void)starLoadingAnimation {
     
     UIImageView *imageView = [[UIImageView alloc] init];
@@ -58,7 +59,7 @@ static ControllerManager *manager = nil;
 
     
 }
-
+/** 停止加载动画 */
 + (void)stopLoadingAnimation {
     [ControllerManager shareManager].animationWindow = nil;
 }
@@ -71,19 +72,11 @@ static ControllerManager *manager = nil;
     if (!_rootViewController) {
         _rootViewController = [[UINavigationController alloc]initWithRootViewController:self.tabbarController];
         _rootViewController.navigationBarHidden = YES;
-        
-//        _rootViewController.navigationBar.backgroundColor = [UIColor blackColor];
-//        
-//        _rootViewController.navigationBar.barStyle = UIBarStyleBlack;
-//        
-//        _rootViewController.navigationBar.tintColor = [UIColor whiteColor];
-        
-        
     }
     return _rootViewController;
 }
 
-/**< tabbar控制器 */
+/** tabbar控制器 */
 - (MainTabBarController *)tabbarController {
     if (!_tabbarController) {
         _tabbarController = [[MainTabBarController alloc]init];
@@ -91,8 +84,18 @@ static ControllerManager *manager = nil;
     return _tabbarController;
 }
 
+//- (MineViewController *)minViewController {
+//    if (!_minViewController) {
+//        _minViewController = self.tabbarController.viewControllers[3];
+////        _minViewController = [[MineViewController alloc] init];
+//        syLog(@"mine1");
+//    }
+//    syLog(@"mine2");
+//    return _minViewController;
+//}
 
-/**< 我的礼包视图 */
+
+/** 我的礼包视图 */
 - (MyGiftBagViewController *)myGiftBagView {
     if (!_myGiftBagView) {
         _myGiftBagView = [MyGiftBagViewController new];
@@ -100,7 +103,7 @@ static ControllerManager *manager = nil;
     return _myGiftBagView;
 }
 
-/**游戏详情页面*/
+/** 游戏详情页面 */
 - (DetailViewController *)detailView {
     if (!_detailView) {
         _detailView = [DetailViewController new];
@@ -108,7 +111,7 @@ static ControllerManager *manager = nil;
     return _detailView;
 }
 
-/**网页*/
+/** 网页 */
 - (WebViewController *)webController {
     if (!_webController) {
         _webController = [[WebViewController alloc] init];
@@ -117,6 +120,7 @@ static ControllerManager *manager = nil;
     return _webController;
 }
 
+/** 登录控制器 */
 - (LoginViewController *)loginViewController {
     if (!_loginViewController) {
         _loginViewController = [[LoginViewController alloc] init];
@@ -124,13 +128,15 @@ static ControllerManager *manager = nil;
     return _loginViewController;
 }
 
-- (SearchViewController *)searchView {
-    if (!_searchView) {
-        _searchView = [[SearchViewController alloc] init];
+/** 搜索视图 */
+- (SearchViewController *)searchViewController {
+    if (!_searchViewController) {
+        _searchViewController = [[SearchViewController alloc] init];
     }
-    return _searchView;
+    return _searchViewController;
 }
 
+/** 搜搜结果视图 */
 - (SearchResultViewController *)searchResultController {
     if (!_searchResultController) {
         _searchResultController = [[SearchResultViewController alloc] init];
@@ -138,6 +144,7 @@ static ControllerManager *manager = nil;
     return _searchResultController;
 }
 
+/** 我的应用 */
 - (MyAppViewController *)myAppViewController {
     if (!_myAppViewController) {
         _myAppViewController = [[MyAppViewController alloc] init];
@@ -145,11 +152,20 @@ static ControllerManager *manager = nil;
     return _myAppViewController;
 }
 
+/** 我的消息 */
+- (MyNewsView *)myNewsViewController {
+    if (!_myNewsViewController) {
+        _myNewsViewController = [[MyNewsView alloc] init];
+    }
+    return _myNewsViewController;
+}
+
+
+/** 动画的window */
 - (UIWindow *)animationWindow {
     if (!_animationWindow) {
         _animationWindow = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT)];
         _animationWindow.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
-        
     }
     return _animationWindow;
 }

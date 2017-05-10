@@ -7,9 +7,9 @@
 //
 
 #import "ResetPassWordViewController.h"
-#import "MineModel.h"
+#import "UserModel.h"
 
-@interface ResetPassWordViewController ()
+@interface ResetPassWordViewController ()<UITextFieldDelegate>
 
 //原始密码
 @property (nonatomic, strong) UITextField *oriPassWord;
@@ -29,6 +29,18 @@
 
 @implementation ResetPassWordViewController
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.oriPassWord.text = @"";
+    self.reSetWord.text = @"";
+    self.affirmWord.text = @"";
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.oriPassWord becomeFirstResponder];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"修改密码";
@@ -39,14 +51,84 @@
     [self.view addSubview:self.sureBtn];
 }
 
+- (void)allTextFiledresignFirstResponder {
+    [self.oriPassWord resignFirstResponder];
+    [self.reSetWord resignFirstResponder];
+    [self.affirmWord resignFirstResponder];
+}
+
 #pragma mark - responds
+/** 修改密码按钮 */
 - (void)respondsToSureBtn {
-    [MineModel postModifyPassWordWithUserID:@"" OldPassword:self.oriPassWord.text NewPassword:self.reSetWord.text ConfirmPassword:self.affirmWord.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
-       
-        NSLog(@"%@",content);
-        NSLog(@"%@",content[@"msg"]);
-        
+    [self allTextFiledresignFirstResponder];
+    
+    if (self.oriPassWord.text.length < 6) {
+        [UserModel showAlertWithMessage:@"原始密码长度不少于6位" dismiss:nil];
+        [self.oriPassWord becomeFirstResponder];
+        return;
+    }
+    
+    if (self.reSetWord.text.length < 6) {
+        [UserModel showAlertWithMessage:@"新密码长度不少于6位" dismiss:nil];
+        [self.reSetWord becomeFirstResponder];
+        return;
+    }
+    
+    if (self.affirmWord.text.length < 6) {
+        [UserModel showAlertWithMessage:@"确认密码长度不少于6位" dismiss:nil];
+        [self.affirmWord becomeFirstResponder];
+        return;
+    }
+    
+    if (![self.reSetWord.text isEqualToString:self.affirmWord.text]) {
+        [UserModel showAlertWithMessage:@"两次输入密码不相等" dismiss:nil];
+        return;
+    }
+    
+    [ControllerManager starLoadingAnimation];
+    [UserModel userModifyPasswordWithUserID:[UserModel uid] OldPassword:self.oriPassWord.text NewPassword:self.reSetWord.text RePasswordk:self.affirmWord.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success) {
+            if (REQUESTSUCCESS) {
+                [ControllerManager stopLoadingAnimation];
+                [self.navigationController popToRootViewControllerAnimated:YES];
+                [UserModel showAlertWithMessage:@"密码修改成功" dismiss:nil];
+            } else {
+                [ControllerManager stopLoadingAnimation];
+                [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
+            }
+        } else {
+            [ControllerManager stopLoadingAnimation];
+            [UserModel showAlertWithMessage:@"网络不知道哪里去了" dismiss:nil];
+        }
     }];
+}
+
+#pragma mark - textfieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self.affirmWord) {
+        [self respondsToSureBtn];
+    } else if (textField == self.oriPassWord) {
+        [self.oriPassWord resignFirstResponder];
+        [self.reSetWord becomeFirstResponder];
+    } else if (textField == self.reSetWord) {
+        [self.reSetWord resignFirstResponder];
+        [self.affirmWord becomeFirstResponder];
+    }
+    
+    return YES;
+}
+
+//限制用户名和密码长度
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if (range.length == 1 && string.length == 0) {
+        return YES;
+    } else if (textField.text.length >= 16) {
+        textField.text = [textField.text substringToIndex:16];
+        return NO;
+    }
+    
+    return YES;
 }
 
 
@@ -59,6 +141,8 @@
         _oriPassWord.center = CGPointMake(kSCREEN_WIDTH / 2, 120);
         _oriPassWord.borderStyle = UITextBorderStyleRoundedRect;
         _oriPassWord.placeholder = @"请输入原始密码:";
+        _oriPassWord.returnKeyType = UIReturnKeyNext;
+        _oriPassWord.delegate = self;
     }
     return _oriPassWord;
 }
@@ -71,6 +155,8 @@
         _reSetWord.center = CGPointMake(kSCREEN_WIDTH / 2, 185);
         _reSetWord.borderStyle = UITextBorderStyleRoundedRect;
         _reSetWord.placeholder = @"请输入新密码:";
+        _reSetWord.returnKeyType = UIReturnKeyNext;
+        _reSetWord.delegate = self;
     }
     return _reSetWord;
 }
@@ -83,6 +169,8 @@
         _affirmWord.center = CGPointMake(kSCREEN_WIDTH / 2, 250);
         _affirmWord.borderStyle = UITextBorderStyleRoundedRect;
         _affirmWord.placeholder = @"请确认密码:";
+        _affirmWord.returnKeyType = UIReturnKeyDone;
+        _affirmWord.delegate = self;
     }
     return _affirmWord;
 }

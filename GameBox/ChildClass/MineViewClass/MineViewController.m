@@ -29,36 +29,42 @@
 #import <UIImageView+WebCache.h>
 
 #define CELLIDENTIFIER @"MineCell"
+#define LOGINNOTIFICATION @"logingnotification"
 
 
 
-@interface MineViewController ()<UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface MineViewController ()<UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITextFieldDelegate>
 
 @property (nonatomic, strong) UIImageView *headerview;
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 
-//**显示数组*/
+/** 显示数组 */
 @property (nonatomic, strong) NSArray *showArray;
 
-/**图片数组*/
+/** 图片数组 */
 @property (nonatomic, strong) NSArray *imageArray;
 
-/**登录按钮*/
+/** 登录按钮 */
 @property (nonatomic, strong) UIButton *loginBtn;
 
 /** 用户昵称 */
 @property (nonatomic, strong) UIButton *nickNameBtn;
+@property (nonatomic, strong) UIWindow *animationWindow;
+@property (nonatomic, strong) UIButton *resetNickNameBtn;
+@property (nonatomic, strong) UITextField *nickNameText;
 
 /** 用户头像 */
 @property (nonatomic, strong) UIImageView *avatar;
 
-/**登录页面*/
-@property (nonatomic, strong) LoginViewController *loginView;
-
-/**修改密码*/
-@property (nonatomic, strong) ResetPassWordViewController *resetPassWordView;
-
+/** 修改密码 */
+@property (nonatomic, strong) ResetPassWordViewController *resetPassWordViewController;
+/** 我的关注 */
+@property (nonatomic, strong) MyAttentionView *myAttentionViewController;
+/** 设置 */
+@property (nonatomic, strong) SettingView *settingViewController;
+/** 关于我们 */
+@property (nonatomic, strong) AboutUsView *aboutUsViewController;
 
 
 @end
@@ -81,58 +87,13 @@
     [self initDataSource];
     [self initUserInterface];
     
-    if ([UserModel CurrentUser]) {
-        
-        [self.avatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,[UserModel CurrentUser].avatar]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
-    
-        [self.loginBtn removeFromSuperview];
-        [self.headerview addSubview:self.avatar];
-        [self.headerview addSubview:self.nickNameBtn];
-    
-    } else {
-        
-        self.avatar.image = nil;
-        
-        [self.headerview addSubview:self.loginBtn];
-        [self.avatar removeFromSuperview];
-        [self.nickNameBtn removeFromSuperview];
-    }
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(isLogin:) name:@"isLogin" object:nil];
+    //注册通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(isLogin:) name:LOGINNOTIFICATION object:nil];
 }
 
 - (void)isLogin:(NSNotification *)sender {
-    NSNumber *isLogin = sender.userInfo[@"isLogin"];
-    
-    if (isLogin.boolValue) {
-        
-        if (((NSNumber *)OBJECT_FOR_USERDEFAULTS(@"setUserAvatar")).boolValue || OBJECT_FOR_USERDEFAULTS(@"setUserAvatar") == nil) {
-            [self.avatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,[UserModel CurrentUser].avatar]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
-        }
-        
-        /*
-         [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,content[@"data"][@"avatar"]]] options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
-         if (finished) {
-         [UserModel saveImg:image];
-         SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:YES], @"haveAvatar");
-         [[NSUserDefaults standardUserDefaults] synchronize];
-         }
-         }];
-         */
-        
-        
-        [self.loginBtn removeFromSuperview];
-        [self.headerview addSubview:self.avatar];
-        [self.headerview addSubview:self.nickNameBtn];
-    } else {
-        self.avatar.image = nil;
-        
-        [self.headerview addSubview:self.loginBtn];
-        [self.avatar removeFromSuperview];
-        [self.nickNameBtn removeFromSuperview];
-    }
-    
-    syLog(@"－－－－－接收到通知------");
+    [self loginInterface];
+//    syLog(@"-------接收到通知------");
 }
 
 - (void)initDataSource {
@@ -150,14 +111,91 @@
     
     [self.view addSubview:self.headerview];
     [self.view addSubview:self.collectionView];
+    [self loginInterface];
+
+}
+
+- (void)loginInterface {
+    if ([UserModel CurrentUser]) {
+        
+        [self.avatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,[UserModel CurrentUser].avatar]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
+        
+        
+        if ([UserModel CurrentUser].nickName == nil || [UserModel CurrentUser].nickName.length == 0) {
+            [self.nickNameBtn setTitle:@"设置昵称" forState:(UIControlStateNormal)];
+        } else {
+            [self.nickNameBtn setTitle:[UserModel CurrentUser].nickName forState:(UIControlStateNormal)];
+        }
+        
+        [self.loginBtn removeFromSuperview];
+        [self.headerview addSubview:self.avatar];
+        [self.headerview addSubview:self.nickNameBtn];
+    } else {
+        self.avatar.image = nil;
+        [self.headerview addSubview:self.loginBtn];
+        [self.avatar removeFromSuperview];
+        [self.nickNameBtn removeFromSuperview];
+    }
 }
 
 #pragma mark - responds
 /** 登录 */
 - (void)respondsToLoginBtn:(UIButton *)sender {
     self.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:self.loginView animated:YES];
+    [self.navigationController pushViewController:[ControllerManager shareManager].loginViewController animated:YES];
     self.hidesBottomBarWhenPushed = NO;
+}
+
+/** 修改昵称 */
+- (void)respondsToNickNameBtn {
+    syLog(@"设置昵称");
+
+    [self.animationWindow addSubview:self.nickNameText];
+    [self.animationWindow addSubview:self.resetNickNameBtn];
+    [self.animationWindow makeKeyAndVisible];
+    
+}
+
+- (void)clickResetNickNameBtn {
+    self.animationWindow = nil;
+    if (self.nickNameText.text.length == 0) {
+        [UserModel showAlertWithMessage:@"请输入昵称" dismiss:nil];
+        return;
+    }
+    
+    [ControllerManager starLoadingAnimation];
+    [UserModel userModifyNicknameWithUserID:[UserModel uid] NickName:self.nickNameText.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success) {
+            if (REQUESTSUCCESS) {
+                [self.nickNameBtn setTitle:self.nickNameText.text forState:(UIControlStateNormal)];
+                SAVEOBJECT_AT_USERDEFAULTS(self.nickNameText.text, @"nickname");
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
+        } else {
+            [UserModel showAlertWithMessage:@"网络不知道飞哪去了" dismiss:nil];
+        }
+        [ControllerManager stopLoadingAnimation];
+    }];
+}
+
+#pragma mark - textfieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    [self clickResetNickNameBtn];
+    return YES;
+}
+
+//限制用户名和密码长度
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if (range.length == 1 && string.length == 0) {
+        return YES;
+    } else if (textField.text.length >= 12) {
+        textField.text = [textField.text substringToIndex:12];
+        return NO;
+    }
+    return YES;
 }
 
 /** 修改头像 */
@@ -203,6 +241,7 @@
         
         SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:NO], @"setUserAvatar");
         
+        /** 上传图片 */
         [UserModel userUploadPortraitWithUserID:[UserModel uid] Image:photo Completion:^(NSDictionary * _Nullable content, BOOL success) {
         
         }];
@@ -255,46 +294,72 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
     self.hidesBottomBarWhenPushed = YES;
+    
     switch (indexPath.row) {
+        //应用
         case 0:
         {
-//            [self.navigationController pushViewController:[AppManagerView new] animated:YES];
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-services://?action=download-manifest&url=https%3A%2F%2Fdownload.fir.im%2Fapps%2F58c78f29ca87a86ab50000ee%2Finstall%3Fdownload_token%3Dfb0f242cdf75f7007568a491321dac4d%26release_id%3D58c78faeca87a86b4c00012e"]];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-services://?action=download-manifest&url=https%3A%2F%2Fdownload.fir.im%2Fapps%2F58a5b4c0548b7a169b00006a%2Finstall%3Fdownload_token%3D280a9c300900931027c741d4090280b1%26release_id%3D58b62c59959d69056d0001ae"]];
+//            [self.navigationController pushViewController:[ControllerManager shareManager].myAppViewController animated:YES];
+
         }
             break;
+        //我的礼包
         case 1:
         {
+            if ([UserModel CurrentUser] == nil) {
+                [self.navigationController pushViewController:[ControllerManager shareManager].loginViewController animated:YES];
+                break;
+            }
             [self.navigationController pushViewController:[ControllerManager shareManager].myGiftBagView animated:YES];
         }
             break;
+        //我的消息
         case 2:
         {
-            [self.navigationController pushViewController:[MyNewsView new] animated:YES];
+            if ([UserModel CurrentUser] == nil) {
+                [self.navigationController pushViewController:[ControllerManager shareManager].loginViewController animated:YES];
+                break;
+            }
+            [self.navigationController pushViewController:[ControllerManager shareManager].myNewsViewController animated:YES];
         }
             
             break;
+        //修改密码
         case 3:
         {
-            [self.navigationController pushViewController:self.resetPassWordView animated:YES];
+            if ([UserModel CurrentUser] == nil) {
+                [self.navigationController pushViewController:[ControllerManager shareManager].loginViewController animated:YES];
+                break;
+            }
+            [self.navigationController pushViewController:self.resetPassWordViewController animated:YES];
         }
             break;
+        //我的关注
         case 4:
         {
-            [self.navigationController pushViewController:[MyAttentionView new] animated:YES];
+            if ([UserModel CurrentUser] == nil) {
+                [self.navigationController pushViewController:[ControllerManager shareManager].loginViewController animated:YES];
+                break;
+            }
+            [self.navigationController pushViewController:self.myAttentionViewController animated:YES];
         }
             break;
+        //设置
         case 5:
         {
-            [self.navigationController pushViewController:[SettingView new] animated:YES];
+            [self.navigationController pushViewController:self.settingViewController animated:YES];
         }
             break;
+        //关于我们
         case 6:
         {
+            if (![CHANNELID isEqualToString:@"185"]) {
+                break;
+            }
             [self.navigationController pushViewController:[AboutUsView new] animated:YES];
         }
             break;
-            
-            
             
         default:
             break;
@@ -332,11 +397,11 @@
         
         [_collectionView registerClass:[MineCell class] forCellWithReuseIdentifier:CELLIDENTIFIER];
         
-        
     }
     return _collectionView;
 }
 
+/** 登录按钮 */
 - (UIButton *)loginBtn {
     if (!_loginBtn) {
         _loginBtn = [[UIButton alloc]init];
@@ -350,6 +415,7 @@
     return _loginBtn;
 }
 
+/** 头像 */
 - (UIImageView *)avatar {
     if (!_avatar) {
         _avatar = [[UIImageView alloc] init];
@@ -371,6 +437,7 @@
     return _avatar;
 }
 
+/** 昵称 */
 - (UIButton *)nickNameBtn {
     if (!_nickNameBtn) {
         _nickNameBtn = [UIButton buttonWithType:(UIButtonTypeCustom)];
@@ -378,25 +445,75 @@
         _nickNameBtn.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_WIDTH * 0.55);
         [_nickNameBtn setTitle:@"NickName" forState:(UIControlStateNormal)];
         _nickNameBtn.titleLabel.font = [UIFont systemFontOfSize:18];
+        [_nickNameBtn addTarget:self action:@selector(respondsToNickNameBtn) forControlEvents:(UIControlEventTouchUpInside)];
     }
     return _nickNameBtn;
 }
 
-- (LoginViewController *)loginView {
-    if (!_loginView) {
-        _loginView = [[LoginViewController alloc] init];
-        
+- (UIWindow *)animationWindow {
+    if (!_animationWindow) {
+        _animationWindow = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT)];
+        _animationWindow.backgroundColor = [UIColor colorWithWhite:0.3 alpha:0.7];
     }
-    return _loginView;
+    return _animationWindow;
+}
+
+- (UITextField *)nickNameText {
+    if (!_nickNameText) {
+        _nickNameText = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH * 0.8, 44)];
+        _nickNameText.placeholder = @"输入昵称";
+        _nickNameText.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT / 3.3);
+        _nickNameText.borderStyle = UITextBorderStyleRoundedRect;
+        _nickNameText.delegate = self;
+    }
+    return _nickNameText;
+}
+
+- (UIButton *)resetNickNameBtn {
+    if (!_resetNickNameBtn) {
+        _resetNickNameBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH * 0.8, 44)];
+        [_resetNickNameBtn setTitle:@"修改昵称" forState:(UIControlStateNormal)];
+        _resetNickNameBtn.backgroundColor = [UIColor orangeColor];
+        _resetNickNameBtn.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT / 3.3 + 60);
+        [_resetNickNameBtn addTarget:self action:@selector(clickResetNickNameBtn) forControlEvents:(UIControlEventTouchUpInside)];
+    }
+    return _resetNickNameBtn;
 }
 
 
 //修改密码
-- (ResetPassWordViewController *)resetPassWordView {
-    if (!_resetPassWordView) {
-        _resetPassWordView = [ResetPassWordViewController new];
+- (ResetPassWordViewController *)resetPassWordViewController {
+    if (!_resetPassWordViewController) {
+        _resetPassWordViewController = [ResetPassWordViewController new];
     }
-    return _resetPassWordView;
+    return _resetPassWordViewController;
+}
+//我的关注
+- (MyAttentionView *)myAttentionViewController {
+    if (!_myAttentionViewController) {
+        _myAttentionViewController = [[MyAttentionView alloc] init];
+    }
+    return _myAttentionViewController;
+}
+//设置
+- (SettingView *)settingViewController {
+    if (!_settingViewController) {
+        _settingViewController = [[SettingView alloc] init];
+    }
+    return _settingViewController;
+}
+//关于我们
+- (AboutUsView *)aboutUsViewController {
+    if (!_aboutUsViewController) {
+        _aboutUsViewController = [[AboutUsView alloc] init];
+    }
+    return _aboutUsViewController;
+}
+
+
+/** 移除通知 */
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:LOGINNOTIFICATION object:nil];
 }
 
 - (void)didReceiveMemoryWarning {

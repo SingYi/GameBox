@@ -20,6 +20,7 @@
 #define USER_MODIFYNN @"http://www.9344.net/api-user-modify_nicename"
 #define USER_UPLOAD @"http://www.9344.net/api-user-upload_portrait"
 
+#define LOGINNOTIFICATION @"logingnotification"
 
 
 static UserModel *currentUser = nil;
@@ -47,25 +48,25 @@ static UserModel *currentUser = nil;
 
     } else {
         return nil;
-        //登录返回用户数据
+    
     }
 }
 
 + (void)logIn {
-    NSDictionary *dict = @{@"isLogin":@YES};
+    USERLOGIN;
     
     //创建通知
-    
-    NSNotification *notification =[NSNotification notificationWithName:@"isLogin" object:nil userInfo:dict];
+    NSNotification *notification =[NSNotification notificationWithName:LOGINNOTIFICATION object:nil userInfo:nil];
     
     //通过通知中心发送通知
     [[NSNotificationCenter defaultCenter] postNotification:notification];
-    
-    USERLOGIN;
+
 }
 
 /** 退出登录 */
 + (void)logOut {
+    
+    
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"avatar"];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"userID"];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"phoneNumber"];
@@ -73,6 +74,12 @@ static UserModel *currentUser = nil;
     SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:YES], @"setUserAvatar");
     [[NSUserDefaults standardUserDefaults] synchronize];
     USERLOGOUT;
+    
+    //创建通知
+    NSNotification *notification =[NSNotification notificationWithName:LOGINNOTIFICATION object:nil userInfo:nil];
+    //通过通知中心发送通知
+    [[NSNotificationCenter defaultCenter] postNotification:notification];
+    
 }
 
 + (NSString *)uid {
@@ -302,14 +309,12 @@ static UserModel *currentUser = nil;
                                 mimeType:@"image/png"];
         
     } progress:^(NSProgress *_Nonnull uploadProgress) {
-        //打印下上传进度
-        syLog(@"%@",uploadProgress);
+
     } success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-        syLog(@"上传成功");
-        //上传成功
+        SAVEOBJECT_AT_USERDEFAULTS(responseObject[@"data"], @"avatar");
+        [[NSUserDefaults standardUserDefaults] synchronize];
     } failure:^(NSURLSessionDataTask *_Nullable task, NSError * _Nonnull error) {
-        //上传失败
-        syLog(@"error === %@",error.localizedDescription);
+
     }];
     
     [task resume];
@@ -336,6 +341,7 @@ static UserModel *currentUser = nil;
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
     
     [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertController animated:YES completion:nil];
+    
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [alertController dismissViewControllerAnimated:YES completion:^{

@@ -49,7 +49,7 @@
             if (success) {
                 _showArray = content[@"data"];
                 [self.tableView reloadData];
-                syLog(@"%@",content);
+//                syLog(@"%@",content);
             }
         }];
     }

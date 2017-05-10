@@ -121,25 +121,27 @@
     }
     
     [UserModel userRegisterWithUserName:self.userName.text PassWord:self.passWord.text PhoneNumber:self.phoneNumber.text MsgCode:self.securityCode.text Email:self.email.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        
+    
         if (success) {
             if (REQUESTSUCCESS) {
-                //注册成功
-                USERLOGIN;
+                //登录成功
                 SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"avatar"], @"avatar");
                 SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"id"],     @"userID");
                 SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"tel"],    @"phoneNumber");
-                SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:YES], @"setUserAvatar");
-                
+                SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"nicename"], @"nickname");
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 
                 [self.navigationController popToRootViewControllerAnimated:YES];
                 
+                [UserModel logIn];
+                [UserModel showAlertWithMessage:@"注册成功" dismiss:nil];
+//                syLog(@"%@",content);
             } else {
                 
+                [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
             }
-            [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
-            syLog(@"%@",content);
+        } else {
+            [UserModel showAlertWithMessage:@"网络不知道飞哪去了" dismiss:nil];
         }
         
     

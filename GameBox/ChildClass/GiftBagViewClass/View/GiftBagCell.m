@@ -67,7 +67,12 @@
 
     NSString *total = _dict[@"pack_counts"];
     NSString *current = _dict[@"pack_used_counts"];
-    CGFloat tc = current.floatValue / total.floatValue;
+    CGFloat tc = 0;
+    if (total.floatValue == 0) {
+        tc = 0;
+    } else {
+        tc = current.floatValue / total.floatValue;
+    }
     
     
     NSString *tcStr = [NSString stringWithFormat:@"%.02f%%",(100.f - tc * 100.f)];

@@ -50,7 +50,7 @@
     [RequestUtils postRequestWithURL:URLMAP params:nil completion:^(NSDictionary *content, BOOL success) {
         if (success && !((NSString *)content[@"status"]).boolValue) {
             NSDictionary *dict = content[@"data"];
-            syLog(@"%@",dict);
+//            syLog(@"%@",dict);
             NSArray *keys = [dict allKeys];
             [keys enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 SAVEOBJECT_AT_USERDEFAULTS(dict[obj], obj);

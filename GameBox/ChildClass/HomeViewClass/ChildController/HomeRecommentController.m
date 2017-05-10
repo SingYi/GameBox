@@ -229,7 +229,7 @@
         [ControllerManager shareManager].detailView.gameID = info[@"gid"];
         [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
     } else {
-        syLog(@"%@",info);
+//        syLog(@"%@",info);
     }
 }
 

@@ -145,7 +145,7 @@
 #ifdef DEBUG 
     self.source = (arc4random() % 50) / 10.f;
 #else 
-    self.source = _dict[@"score"];
+//    self.source = _dict[@"score"];
 #endif
     
 }

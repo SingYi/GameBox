@@ -174,7 +174,7 @@
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
         
         //评论数
-        syLog(@"%@",dic[@"result"][[NSString stringWithFormat:@"game_%@",gameID]][@"comments"]);
+//        syLog(@"%@",dic[@"result"][[NSString stringWithFormat:@"game_%@",gameID]][@"comments"]);
         
     }];
     
@@ -188,7 +188,7 @@
     _gameinfo = gameinfo;
     
 
-    syLog(@"%@",gameinfo);
+//    syLog(@"%@",gameinfo);
 
     //设置游戏名称
     self.detailHeader.gameNameLabel.text = _gameinfo[@"gamename"];
@@ -368,17 +368,17 @@
         BOOL isCollect = ((NSString *)_gameinfo[@"collect"]).boolValue;
         if (isCollect) {
             
-            syLog(@"取消收藏");
+//            syLog(@"取消收藏");
         } else {
             
-            syLog(@"添加收藏");
+//            syLog(@"添加收藏");
         }
     }
 }
 
 - (void)DetailFooter:(DetailFooter *)detailFooter clickShareBtn:(UIButton *)sender {
     if (self.gameinfo) {
-        syLog(@"分享");
+//        syLog(@"分享");
     }
 }
 

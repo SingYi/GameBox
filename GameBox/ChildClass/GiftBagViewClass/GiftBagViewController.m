@@ -68,6 +68,7 @@
     [super viewDidLoad];
     [self initDataSource];
     [self initUserInterface];
+
 }
 
 /**初始化数据*/
@@ -98,14 +99,22 @@
 }
 
 #pragma mark - respond
+/** 我的应用 */
 - (void)clickDownloadBtn {
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:[ControllerManager shareManager].myAppViewController animated:YES];
     self.hidesBottomBarWhenPushed = NO;
 }
 
+/** 我的消息 */
 - (void)clickMessageBtn {
-    
+    self.hidesBottomBarWhenPushed = YES;
+    if ([UserModel CurrentUser]) {
+        [self.navigationController pushViewController:[ControllerManager shareManager].myNewsViewController animated:YES];
+    } else {
+        [self.navigationController pushViewController:[ControllerManager shareManager].loginViewController animated:YES];
+    }
+    self.hidesBottomBarWhenPushed = NO;
 }
 
 - (void)clickCancelBtn {

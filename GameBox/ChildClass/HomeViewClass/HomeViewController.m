@@ -81,7 +81,7 @@
     [super viewWillAppear:animated];
     self.navigationItem.titleView = self.searchBar;
     
-    if ( [ControllerManager shareManager].searchView.currentParentController != 1) {
+    if ( [ControllerManager shareManager].searchViewController.currentParentController != 1) {
         self.navigationItem.rightBarButtonItem = self.messageBtn;
         self.navigationItem.leftBarButtonItem = self.downLoadBtn;
     }
@@ -163,14 +163,22 @@
     }
 }
 
+/** 我的应用 */
 - (void)clickDownloadBtn {
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:[ControllerManager shareManager].myAppViewController animated:YES];
     self.hidesBottomBarWhenPushed = NO;
 }
 
+/** 我的消息 */
 - (void)clickMessageBtn {
-    
+    self.hidesBottomBarWhenPushed = YES;
+    if ([UserModel CurrentUser]) {
+        [self.navigationController pushViewController:[ControllerManager shareManager].myNewsViewController animated:YES];
+    } else {
+         [self.navigationController pushViewController:[ControllerManager shareManager].loginViewController animated:YES];
+    }
+    self.hidesBottomBarWhenPushed = NO;
 }
 
 - (void)clickCancelBtn {
@@ -178,7 +186,7 @@
     
     self.searchBar.text = @"";
     
-    [[ControllerManager shareManager].searchView.view removeFromSuperview];
+    [[ControllerManager shareManager].searchViewController.view removeFromSuperview];
     
     self.navigationItem.rightBarButtonItem = self.messageBtn;
     self.navigationItem.leftBarButtonItem = self.downLoadBtn;
@@ -191,11 +199,11 @@
     self.navigationItem.rightBarButtonItem = self.cancelBtn;
     self.navigationItem.leftBarButtonItem = nil;
     
-    [ControllerManager shareManager].searchView.currentParentController = 1;
+    [ControllerManager shareManager].searchViewController.currentParentController = 1;
     
-    [[ControllerManager shareManager].searchView removeFromParentViewController];
-    [self.view addSubview:[ControllerManager shareManager].searchView.view];
-    [self addChildViewController:[ControllerManager shareManager].searchView];
+    [[ControllerManager shareManager].searchViewController removeFromParentViewController];
+    [self.view addSubview:[ControllerManager shareManager].searchViewController.view];
+    [self addChildViewController:[ControllerManager shareManager].searchViewController];
     
     
     
