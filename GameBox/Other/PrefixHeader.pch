@@ -14,7 +14,7 @@
 
 
 /** 总接口地址 */
-#define URLMAP @"http://www.9344.net/api-index-map"
+#define URLMAP @"http://www.185sy.com/api-index-map"
 
 /** 图片接口前置地址 */
 #define IMAGEURL @"http://www.9344.net%@"

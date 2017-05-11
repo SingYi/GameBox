@@ -227,6 +227,7 @@
     NSString *type = info[@"type"];
     if (type.integerValue == 1) {
         [ControllerManager shareManager].detailView.gameID = info[@"gid"];
+        [ControllerManager shareManager].detailView.gameLogo = nil;
         [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
     } else {
 //        syLog(@"%@",info);

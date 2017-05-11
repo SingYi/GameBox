@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ControllerManager.h"
+#import "LaunchScreen.h"
 #import "RequestUtils.h"
 
 #import "ChangyanSDK.h"
@@ -35,14 +36,26 @@
                  redirectUrl:nil
         anonymousAccessToken:nil];
     
-    [ChangyanSDK setAllowSelfLogin:YES];
+//    [ChangyanSDK setAllowSelfLogin:YES];
+//    
+//    [ChangyanSDK setAllowAnonymous:NO];
+//    [ChangyanSDK setAllowRate:NO];
+//    [ChangyanSDK setAllowUpload:YES];
+//    [ChangyanSDK setAllowWeiboLogin:NO];
+//    [ChangyanSDK setAllowQQLogin:NO];
+//    [ChangyanSDK setAllowSohuLogin:NO];
     
-    [ChangyanSDK setAllowAnonymous:NO];
-    [ChangyanSDK setAllowRate:NO];
-    [ChangyanSDK setAllowUpload:YES];
-    [ChangyanSDK setAllowWeiboLogin:NO];
-    [ChangyanSDK setAllowQQLogin:NO];
-    [ChangyanSDK setAllowSohuLogin:NO];
+    NSString *isFirst = [[NSUserDefaults standardUserDefaults] stringForKey:@"isFirst"];
+    
+    
+    if (!isFirst) {
+        
+        
+        [self.window addSubview:[LaunchScreen new]];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"isFirst"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     
     
     
@@ -50,7 +63,6 @@
     [RequestUtils postRequestWithURL:URLMAP params:nil completion:^(NSDictionary *content, BOOL success) {
         if (success && !((NSString *)content[@"status"]).boolValue) {
             NSDictionary *dict = content[@"data"];
-//            syLog(@"%@",dict);
             NSArray *keys = [dict allKeys];
             [keys enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 SAVEOBJECT_AT_USERDEFAULTS(dict[obj], obj);
@@ -59,11 +71,6 @@
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
     }];
-    
-//    NSArray *arry = OBJECT_FOR_USERDEFAULTS(@"MAP");
-//    [arry enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//        syLog(@"%@",obj);
-//    }];
     
     
     return YES;

@@ -10,6 +10,7 @@
 #import "HomeHeader.h"
 #import "NewServerCell.h"
 #import "GameModel.h"
+//#import "GameRequest.h"
 
 
 #define CELLIDE @"NewServerCell"

@@ -91,6 +91,13 @@
     return 200;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [ControllerManager shareManager].webController.webURL = _showArray[indexPath.row][@"info_url"];
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:[ControllerManager shareManager].webController animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
+}
+
 #pragma mark - getter
 - (UITableView *)tableView {
     if (!_tableView) {

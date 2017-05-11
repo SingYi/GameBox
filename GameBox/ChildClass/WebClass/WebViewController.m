@@ -7,11 +7,12 @@
 //
 
 #import "WebViewController.h"
+#import <WebKit/WebKit.h>
 
-@interface WebViewController ()<UIWebViewDelegate>
+@interface WebViewController ()<WKUIDelegate,WKNavigationDelegate>
 
 /**web视图*/
-@property (nonatomic, strong) UIWebView * webView;;
+@property (nonatomic, strong) WKWebView * webView;
 
 @end
 
@@ -19,57 +20,46 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://m.185sy.net/news/155.html"]]];
     [self.view addSubview:self.webView];
+    self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
 - (void)setWebURL:(NSString *)webURL {
     _webURL = webURL;
-//    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:webURL]]];
+    syLog(@"%@",webURL);
+    
+//    NSString *urlStr = [NSString stringWithFormat:@"https://m.baidu.com/"];
+    
+    NSURL *url = [NSURL URLWithString:webURL];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    [self.webView loadRequest:request];
 }
 
 #pragma makr - getter
-- (UIWebView *)webView {
+- (WKWebView *)webView {
     if (!_webView) {
-        _webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
-        _webView.scalesPageToFit = YES;
-        _webView.delegate = self;
+        _webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT)];
+        _webView.UIDelegate = self;
+        _webView.navigationDelegate = self;
     }
     return _webView;
 }
 
-- (void)webViewDidStartLoad:(UIWebView *)webView{
-    // starting the load, show the activity indicator in the status bar
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+- (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
+    syLog(@"star");
 }
-- (void)webViewDidFinishLoad:(UIWebView *)webView{
-    // finished loading, hide the activity indicator in the status bar
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
+    syLog(@"finsh");
 }
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
-    // load error, hide the activity indicator in the status bar
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    // report the error inside the webview
-    NSString* errorString = [NSString stringWithFormat: @"<html><center><font size=+5 color='red'>An error occurred:<br>%@</font></center></html>", error.localizedDescription];
-    [self.webView loadHTMLString:errorString baseURL:nil];
+
+- (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
+    
+    syLog(@"error === %@",error.localizedDescription);
 }
 
 
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -11,6 +11,7 @@
 
 @interface MyAppViewController ()<UITableViewDelegate,UITableViewDataSource>
 
+/** 游戏列表 */
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) NSArray *showArray;
@@ -115,8 +116,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     //打开app
-//    [AppModel openAPPWithIde:_showArray[indexPath.row]];
-    [AppModel installAPPWithIDE:_showArray[indexPath.row]];
+    [AppModel openAPPWithIde:_showArray[indexPath.row]];
+//    [AppModel installAPPWithIDE:_showArray[indexPath.row]];
 }
 
 #pragma mark - getter

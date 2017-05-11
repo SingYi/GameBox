@@ -72,18 +72,6 @@
         [self.tableView.mj_header endRefreshing];
 
     }];
-    
-//    [GameModel postNewGameListWithChannelID:@"185" Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-//        if (success) {
-//            _dataArray = [NSMutableArray arrayWithArray:content[@"data"]];
-//            [self clearUpData:_dataArray];
-//            _isAll = NO;
-//            _currentPage = 1;
-//            [self.tableView.mj_footer endRefreshing];
-//        }
-//        [self.tableView.mj_header endRefreshing];
-//        [self.tableView reloadData];
-//    }];
 }
 
 - (void)loadMoreData {
@@ -106,21 +94,6 @@
                 }
             }
         }];
-        
-//        [GameModel postNewGameListWithChannelID:@"185" Page:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
-//            if (success) {
-//                NSArray *array = content[@"data"];
-//                if (array.count == 0) {
-//                    _isAll = YES;
-//                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
-//                } else {
-//                    [_dataArray addObjectsFromArray:array];
-//                    [self clearUpData:_dataArray];
-//                    [self.tableView reloadData];
-//                    [self.tableView.mj_footer endRefreshing];
-//                }
-//            }
-//        }];
     }
 }
 
@@ -207,6 +180,8 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     self.parentViewController.hidesBottomBarWhenPushed = YES;
     [ControllerManager shareManager].detailView.gameID = self.dataDictionary[self.timeArray[indexPath.section]][indexPath.row][@"id"];
+    SearchCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [ControllerManager shareManager].detailView.gameLogo = cell.gameLogo.image;
     [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
     self.parentViewController.hidesBottomBarWhenPushed = NO;
 }

@@ -57,6 +57,10 @@
 		B58A5C061EB1C0B400CC1D00 /* UserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C051EB1C0B400CC1D00 /* UserModel.m */; };
 		B58A5C0A1EB1DF1D00CC1D00 /* MyAppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C091EB1DF1D00CC1D00 /* MyAppViewController.m */; };
 		B58A5C0D1EB1DFBC00CC1D00 /* AppModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C0C1EB1DFBC00CC1D00 /* AppModel.m */; };
+		B59816D81EC3F7B20017599F /* MNCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = B59816D71EC3F7B20017599F /* MNCommentController.m */; };
+		B59816DB1EC3F7CB0017599F /* MNNtificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B59816DA1EC3F7CB0017599F /* MNNtificationController.m */; };
+		B59816DF1EC412DC0017599F /* HCDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = B59816DE1EC412DC0017599F /* HCDetailController.m */; };
+		B59816E41EC45F250017599F /* LaunchScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = B59816E31EC45F250017599F /* LaunchScreen.m */; };
 		B59A76E91EBB21D200FE2B50 /* GDCommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59A76E71EBB21D200FE2B50 /* GDCommentTableViewCell.m */; };
 		B59A76EA1EBB21D200FE2B50 /* GDCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B59A76E81EBB21D200FE2B50 /* GDCommentTableViewCell.xib */; };
 		B59A76EE1EBB2B9900FE2B50 /* GDLikesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59A76EC1EBB2B9900FE2B50 /* GDLikesTableViewCell.m */; };
@@ -105,8 +109,8 @@
 		5E8DE51C1E9BD0A6007E719D /* GameBox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameBox.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E8DE53A1E9BD255007E719D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5E8DE53C1E9BD255007E719D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		5E8DE54D1E9BD35A007E719D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		5E8DE54E1E9BD35A007E719D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		5E8DE54D1E9BD35A007E719D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = SupportingFiles/AppDelegate.h; sourceTree = "<group>"; };
+		5E8DE54E1E9BD35A007E719D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = SupportingFiles/AppDelegate.m; sourceTree = "<group>"; };
 		5E8DE5501E9BD35A007E719D /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5E8DE5571E9BD3D2007E719D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5E8DE55A1E9BD497007E719D /* MainTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTabBarController.h; sourceTree = "<group>"; };
@@ -194,6 +198,14 @@
 		B58A5C091EB1DF1D00CC1D00 /* MyAppViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAppViewController.m; sourceTree = "<group>"; };
 		B58A5C0B1EB1DFBC00CC1D00 /* AppModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppModel.h; sourceTree = "<group>"; };
 		B58A5C0C1EB1DFBC00CC1D00 /* AppModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppModel.m; sourceTree = "<group>"; };
+		B59816D61EC3F7B20017599F /* MNCommentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNCommentController.h; sourceTree = "<group>"; };
+		B59816D71EC3F7B20017599F /* MNCommentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNCommentController.m; sourceTree = "<group>"; };
+		B59816D91EC3F7CB0017599F /* MNNtificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNNtificationController.h; sourceTree = "<group>"; };
+		B59816DA1EC3F7CB0017599F /* MNNtificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNNtificationController.m; sourceTree = "<group>"; };
+		B59816DD1EC412DC0017599F /* HCDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCDetailController.h; sourceTree = "<group>"; };
+		B59816DE1EC412DC0017599F /* HCDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCDetailController.m; sourceTree = "<group>"; };
+		B59816E21EC45F250017599F /* LaunchScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchScreen.h; sourceTree = "<group>"; };
+		B59816E31EC45F250017599F /* LaunchScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchScreen.m; sourceTree = "<group>"; };
 		B59A76E61EBB21D200FE2B50 /* GDCommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDCommentTableViewCell.h; sourceTree = "<group>"; };
 		B59A76E71EBB21D200FE2B50 /* GDCommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDCommentTableViewCell.m; sourceTree = "<group>"; };
 		B59A76E81EBB21D200FE2B50 /* GDCommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GDCommentTableViewCell.xib; sourceTree = "<group>"; };
@@ -311,6 +323,10 @@
 		5E8DE5371E9BD255007E719D /* GameBox */ = {
 			isa = PBXGroup;
 			children = (
+				5E8DE54D1E9BD35A007E719D /* AppDelegate.h */,
+				5E8DE54E1E9BD35A007E719D /* AppDelegate.m */,
+				B59816E21EC45F250017599F /* LaunchScreen.h */,
+				B59816E31EC45F250017599F /* LaunchScreen.m */,
 				5E8DE5441E9BD255007E719D /* ControllerManager */,
 				B58A5C031EB1C09B00CC1D00 /* UserModel */,
 				B58A5C071EB1DEF600CC1D00 /* AppManager */,
@@ -404,8 +420,6 @@
 			isa = PBXGroup;
 			children = (
 				5E8DE5501E9BD35A007E719D /* main.m */,
-				5E8DE54D1E9BD35A007E719D /* AppDelegate.h */,
-				5E8DE54E1E9BD35A007E719D /* AppDelegate.m */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -539,6 +553,26 @@
 				B58A5C0C1EB1DFBC00CC1D00 /* AppModel.m */,
 			);
 			path = AppManager;
+			sourceTree = "<group>";
+		};
+		B59816D51EC3F78A0017599F /* NewsChildController */ = {
+			isa = PBXGroup;
+			children = (
+				B59816D61EC3F7B20017599F /* MNCommentController.h */,
+				B59816D71EC3F7B20017599F /* MNCommentController.m */,
+				B59816D91EC3F7CB0017599F /* MNNtificationController.h */,
+				B59816DA1EC3F7CB0017599F /* MNNtificationController.m */,
+			);
+			path = NewsChildController;
+			sourceTree = "<group>";
+		};
+		B59816DC1EC4127D0017599F /* ClassifyChildController */ = {
+			isa = PBXGroup;
+			children = (
+				B59816DD1EC412DC0017599F /* HCDetailController.h */,
+				B59816DE1EC412DC0017599F /* HCDetailController.m */,
+			);
+			path = ClassifyChildController;
 			sourceTree = "<group>";
 		};
 		B59FEDA81E9C6DAB00A64D84 /* Other */ = {
@@ -683,6 +717,7 @@
 				B55416261EA88E900043A36D /* HomeHotGameController.m */,
 				B55416281EA88E9F0043A36D /* HomeClassifyController.h */,
 				B55416291EA88E9F0043A36D /* HomeClassifyController.m */,
+				B59816DC1EC4127D0017599F /* ClassifyChildController */,
 			);
 			path = ChildController;
 			sourceTree = "<group>";
@@ -704,6 +739,7 @@
 				B5E2C8111E9E2DED002CEC61 /* AppManagerView.m */,
 				B5E2C8131E9E2E0C002CEC61 /* MyNewsView.h */,
 				B5E2C8141E9E2E0C002CEC61 /* MyNewsView.m */,
+				B59816D51EC3F78A0017599F /* NewsChildController */,
 				B5E2C80D1E9E27E7002CEC61 /* ResetPassWordViewController.h */,
 				B5E2C80E1E9E27E7002CEC61 /* ResetPassWordViewController.m */,
 				B5E2C8161E9E2E59002CEC61 /* MyAttentionView.h */,
@@ -921,11 +957,14 @@
 				B55416331EA89A7B0043A36D /* NewServerController.m in Sources */,
 				B5E2C8061E9E0AB2002CEC61 /* ForgetPassWordView.m in Sources */,
 				B55416151EA8535F0043A36D /* GameDetailViewController.m in Sources */,
+				B59816D81EC3F7B20017599F /* MNCommentController.m in Sources */,
 				B5D35BA21E9F6F9E00902B04 /* ClassfiyTableViewCell.m in Sources */,
 				5E8DE56C1E9BDA66007E719D /* RequestUtils.m in Sources */,
 				B5E2C81B1E9E2E6F002CEC61 /* SettingView.m in Sources */,
 				B5C5D4DC1EA0C484008A46DE /* DetialTableHeader.m in Sources */,
 				B5E2C8091E9E0AB2002CEC61 /* RegisterViewController.m in Sources */,
+				B59816E41EC45F250017599F /* LaunchScreen.m in Sources */,
+				B59816DF1EC412DC0017599F /* HCDetailController.m in Sources */,
 				B5420F741EA6005A0068AEE1 /* GiftBagModel.m in Sources */,
 				B5691C481EC1B8E70094BE0F /* AFSecurityPolicy.m in Sources */,
 				B5F10BDE1EAF272C0061B43E /* RGiftBagController.m in Sources */,
@@ -933,6 +972,7 @@
 				B5E2C8071E9E0AB2002CEC61 /* LoginViewController.m in Sources */,
 				B5FAB14B1EB97B0E002B29BD /* RCCCollectionViewCell.m in Sources */,
 				B52B2FDC1EBC73B3002A572D /* GameRequest.m in Sources */,
+				B59816DB1EC3F7CB0017599F /* MNNtificationController.m in Sources */,
 				B55416271EA88E900043A36D /* HomeHotGameController.m in Sources */,
 				B5C5D4BB1EA09AC8008A46DE /* DetailViewController.m in Sources */,
 				B5C5D4BE1EA09E44008A46DE /* DetailHeader.m in Sources */,

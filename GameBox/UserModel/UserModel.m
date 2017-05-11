@@ -11,14 +11,14 @@
 #import "AFHTTPSessionManager.h"
 
 /** url */
-#define USER_LOGIN @"http://www.9344.net/api-user-login"
-#define USER_REGISTER @"http://www.9344.net/api-user-register"
-#define USER_SENDMSG @"http://www.9344.net/api-user-send_message"
-#define USER_CHECKMSG @"http://www.9344.net/api-user-check_smscode"
-#define USER_FINDPWD @"http://www.9344.net/api-user-forget_password"
-#define USER_MODIFYPWD @"http://www.9344.net/api-user-modify_password"
-#define USER_MODIFYNN @"http://www.9344.net/api-user-modify_nicename"
-#define USER_UPLOAD @"http://www.9344.net/api-user-upload_portrait"
+#define USER_LOGIN @"http://www.185sy.com/api-user-login"
+#define USER_REGISTER @"http://www.185sy.com/api-user-register"
+#define USER_SENDMSG @"http://www.185sy.com/api-user-send_message"
+#define USER_CHECKMSG @"http://www.185sy.com/api-user-check_smscode"
+#define USER_FINDPWD @"http://www.185sy.com/api-user-forget_password"
+#define USER_MODIFYPWD @"http://www.185sy.com/api-user-modify_password"
+#define USER_MODIFYNN @"http://www.185sy.com/api-user-modify_nicename"
+#define USER_UPLOAD @"http://www.185sy.com/api-user-upload_portrait"
 
 #define LOGINNOTIFICATION @"logingnotification"
 

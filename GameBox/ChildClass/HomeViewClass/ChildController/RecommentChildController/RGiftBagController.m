@@ -178,7 +178,7 @@
         }
 
     }];
-//    [searchBar resignFirstResponder];
+    [searchBar resignFirstResponder];
 }
 
 #pragma mark - method

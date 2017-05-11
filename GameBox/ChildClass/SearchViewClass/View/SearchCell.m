@@ -142,11 +142,13 @@
     self.gameSize.text = [NSString stringWithFormat:@"%@M",_dict[@"size"]];
     
     //评分
-#ifdef DEBUG 
-    self.source = (arc4random() % 50) / 10.f;
-#else 
-//    self.source = _dict[@"score"];
-#endif
+
+    CGFloat sorce = ((NSString *)_dict[@"score"]).floatValue;
+    if (sorce <= 5.f && sorce >= 0) {
+        self.source = ((NSString *)_dict[@"score"]).floatValue;
+    } else {
+        self.source = 5.f;
+    }
     
 }
 

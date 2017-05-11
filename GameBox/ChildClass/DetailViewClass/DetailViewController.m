@@ -169,9 +169,9 @@
     
     [ChangyanSDK getCommentCount:@"" topicSourceID:[NSString stringWithFormat:@"game_%@",gameID]  topicUrl:@"" completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
         
-        NSData *jsonData = [responseStr dataUsingEncoding:NSUTF8StringEncoding];
-        NSError *err;
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
+//        NSData *jsonData = [responseStr dataUsingEncoding:NSUTF8StringEncoding];
+//        NSError *err;
+//        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
         
         //评论数
 //        syLog(@"%@",dic[@"result"][[NSString stringWithFormat:@"game_%@",gameID]][@"comments"]);

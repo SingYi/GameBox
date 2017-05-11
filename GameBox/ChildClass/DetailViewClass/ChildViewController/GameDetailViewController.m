@@ -23,7 +23,7 @@
 #define GDLIKESCELL @"GDLikesTableViewCell"
 #define GDCOMMENTCELLIDE @"GDCommentTableViewCell"
 
-@interface GameDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface GameDetailViewController ()<UITableViewDelegate,UITableViewDataSource,GDLikesTableViewCellDelegate>
 
 /**头部视图*/
 @property (nonatomic, strong) DetialTableHeader *headerView;
@@ -264,6 +264,8 @@
             GDLikesTableViewCell *celllieks = [tableView dequeueReusableCellWithIdentifier:GDLIKESCELL];
             celllieks.array = self.likes;
             
+            celllieks.delegate = self;
+            
             return celllieks;
             
             break;
@@ -370,7 +372,12 @@
     return view;
 }
 
-
+#pragma mark - gdlikesCellDelegate
+- (void)GDLikesTableViewCell:(GDLikesTableViewCell *)cell clickGame:(NSDictionary *)dict {
+    [ControllerManager shareManager].detailView.gameID = dict[@"id"];
+    
+    [ControllerManager shareManager].detailView.gameLogo = dict[@"gameLogo"];
+}
 
 
 

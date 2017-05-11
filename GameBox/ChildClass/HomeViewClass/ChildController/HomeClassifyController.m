@@ -7,24 +7,30 @@
 //
 
 #import "HomeClassifyController.h"
-#import "ClassfiyTableViewCell.h"
+#import "GDLikesTableViewCell.h"
+#import "HCDetailController.h"
 
 //#import "GameModel.h"
 #import "GameRequest.h"
 
 #import <SDWebImageDownloader.h>
 #import <UIImageView+WebCache.h>
+#import <UIButton+WebCache.h>
 
 #import <MJRefresh.h>
 
-#define CellIDE @"ClassfiyTableViewCell"
+#define CellIDE @"GDLikesTableViewCell"
+
 #define BTNTAG 1700
+#define SECTIONTAG 2700
 
 
-@interface HomeClassifyController ()<UITableViewDelegate,UITableViewDataSource>
+@interface HomeClassifyController ()<UITableViewDelegate,UITableViewDataSource,GDLikesTableViewCellDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
+/** 分类详情 */
+@property (nonatomic, strong) HCDetailController *detailController;
 
 @property (nonatomic, strong) NSMutableArray<NSDictionary *> *showArry;
 
@@ -34,7 +40,7 @@
 /** 头部视图 */
 @property (nonatomic, strong) UIView *headerView;
 
-/**< 当前页数 */
+/** 当前页数 */
 @property (nonatomic, assign) NSInteger currentPage;
 
 @property (nonatomic, assign) BOOL isAll;
@@ -60,52 +66,66 @@
 
 - (void)refreshData {
     [GameRequest gameClassifyWithPage:@"1" Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
-        if (success) {
+        if (success && REQUESTSUCCESS) {
             self.classifyArray = [content[@"data"][@"class"] mutableCopy];
-            self.showArry = [content[@"data"][@"classData"] mutableCopy];
-            _currentPage = 1;
-            _isAll = NO;
+            NSArray *array = content[@"data"][@"classData"];
+            self.showArry = [NSMutableArray array];
+            [array enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                NSArray *list = obj[@"list"];
+                if (list.count == 0 || list == nil) {
+                    
+                } else {
+                    [self.showArry addObject:obj];
+                }
+            }];
+
+//            _currentPage = 1;
+//            _isAll = NO;
             [self.tableView reloadData];
+        } else {
+            self.showArry = nil;
         }
-        [self.tableView.mj_footer endRefreshing];
+        
+//        [self.tableView.mj_footer endRefreshing];
         [self.tableView.mj_header endRefreshing];
-//        syLog(@"%@",content);
     }];
 }
 
 - (void)loadMoreData {
-    if (_isAll) {
-        [self.tableView.mj_footer endRefreshingWithNoMoreData];
-    } else {
-        //页数加一
-        _currentPage++;
-        
-        [GameRequest gameClassifyWithPage:[NSString stringWithFormat:@"%ld",_currentPage] Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
-            
-            if (success && !((NSString *)content[@"status"]).boolValue) {
-                NSArray *array = content[@"data"][@"classData"];
-                if (array.count == 0) {
-                    _isAll = YES;
-                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
-                } else {
-                    [_showArry addObjectsFromArray:array];
-                    [self.tableView.mj_footer endRefreshing];
-                    [self.tableView reloadData];
-                }
-            } else {
-                [self.tableView.mj_footer endRefreshing];
-            }
-        }];
-    }
+    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+//    if (_isAll) {
+//    } else {
+//        //页数加一
+//        _currentPage++;
+//        
+//        [GameRequest gameClassifyWithPage:[NSString stringWithFormat:@"%ld",_currentPage] Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
+//            syLog(@"%ld",_currentPage);
+//            if (success && REQUESTSUCCESS) {
+//                NSArray *array = content[@"data"][@"classData"];
+//                if (array.count == 0) {
+//                    _isAll = YES;
+//                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+//                } else {
+//                    [array enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                        NSArray *list = obj[@"list"];
+//                        if (list.count == 0 || list == nil) {
+//                            
+//                        } else {
+//                            [self.showArry addObject:obj];
+//                        }
+//                    }];
+//                    [self.tableView.mj_footer endRefreshing];
+//                    [self.tableView reloadData];
+//                }
+//            } else {
+//                [self.tableView.mj_footer endRefreshing];
+//            }
+//        }];
+//    }
 }
 
 
 #pragma makr - setter
-//- (void)setShowArry:(NSMutableArray<NSDictionary *> *)showArry {
-//    _showArry = showArry;
-//    [self.tableView reloadData];
-//}
-
 - (void)setClassifyArray:(NSMutableArray *)classifyArray {
     
     if (classifyArray) {
@@ -126,28 +146,40 @@
         
         self.headerView.bounds = CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_WIDTH / 4 * height1);
         
-        self.headerView.backgroundColor = [UIColor whiteColor];
+        self.headerView.backgroundColor = RGBCOLOR(247, 247, 247);
         
         [_classifyArray enumerateObjectsUsingBlock:^(NSDictionary * obj, NSUInteger idx, BOOL * _Nonnull stop) {
             
             NSString *title = obj[@"name"];
+            
+//            背景视图
+            UIView *view = [[UIView alloc] initWithFrame:CGRectMake(kSCREEN_WIDTH / 4 * (idx % 4), kSCREEN_WIDTH / 4 * (idx / 4), kSCREEN_WIDTH / 4, kSCREEN_WIDTH / 4 )];
+            view.backgroundColor = RGBCOLOR(247, 247, 247);
+//            view.layer.borderColor = [UIColor lightGrayColor].CGColor;
+//            view.layer.borderWidth = 0.5;
+            
             UIButton *button = [UIButton buttonWithType:(UIButtonTypeCustom)];
             
-            button.frame = CGRectMake(kSCREEN_WIDTH / 4 * (idx % 4), kSCREEN_WIDTH / 4 * (idx / 4), kSCREEN_WIDTH / 4, kSCREEN_WIDTH / 4);
-            [button setTitle:title forState:(UIControlStateNormal)];
+            button.bounds = CGRectMake(0, 0, kSCREEN_WIDTH / 8, kSCREEN_WIDTH / 8);
+            button.center = CGPointMake(kSCREEN_WIDTH / 8, kSCREEN_WIDTH / 9);
             
-            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,obj[@"logo"]]] options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
-                
-                [button setImage:image forState:(UIControlStateNormal)];
-                
-            }];
+            [button sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,obj[@"logo"]]] forState:(UIControlStateNormal)];
             
             button.tag = idx + BTNTAG;
-            [button setTitleColor:[UIColor lightGrayColor] forState:(UIControlStateNormal)];
             
             [button addTarget:self action:@selector(respondsToBtn:) forControlEvents:(UIControlEventTouchUpInside)];
             
-            [self.headerView addSubview:button];
+            UILabel *label = [[UILabel alloc] init];
+            label.bounds = CGRectMake(0, 0, kSCREEN_WIDTH / 8, kSCREEN_WIDTH / 20);
+            label.center = CGPointMake(kSCREEN_WIDTH / 8, kSCREEN_WIDTH / 24 * 5);
+
+            label.text = title;
+            label.textAlignment = NSTextAlignmentCenter;
+            label.font = [UIFont systemFontOfSize:13];
+            
+            [view addSubview:button];
+            [view addSubview:label];
+            [self.headerView addSubview:view];
         }];
     } else {
         self.headerView = nil;
@@ -155,10 +187,25 @@
     
 }
 
+/** 按钮响应事件 */
 - (void)respondsToBtn:(UIButton *)sender {
     
+    self.detailController.dict = self.classifyArray[sender.tag - BTNTAG];
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:self.detailController animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
     
+}
+
+/** section按钮点击事件 */
+- (void)respondstoSectionBtn:(UIButton *)button {
+    NSString *classifyId = self.showArry[button.tag - SECTIONTAG][@"list"][0][@"tid"];
+    NSDictionary *dict = @{@"id":classifyId,@"name":self.showArry[button.tag - SECTIONTAG][@"className"]};
     
+    self.detailController.dict = dict;
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:self.detailController animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 }
 
 #pragma mark - tableViewDataSource
@@ -172,38 +219,61 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    ClassfiyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIDE];
+    GDLikesTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIDE];
     
-    NSDictionary *dict = self.showArry[indexPath.section];
-    NSArray *gameArray = dict[@"list"];
-    NSArray<UIImageView *> *ImageArray = @[cell.imageView1,cell.imageView2,cell.imageView3,cell.imageView4];
-    for (NSInteger i = 0; i < gameArray.count; i++) {
-        NSDictionary *gamedict = gameArray[i];
-        [ImageArray[i] sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,gamedict[@"logo"]]]];
-    }
+    cell.delegate = self;
+    cell.array = self.showArry[indexPath.section][@"list"];
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
 }
 
 #pragma mark - tableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 20;
+    return 30;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 80;
+    return 100;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 20)];
+    UIView * view = [[UIView alloc ]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 30)];
+    view.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
     
-    label.backgroundColor = [UIColor lightGrayColor];
-    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 2, kSCREEN_WIDTH, 26)];
+    label.backgroundColor = RGBCOLOR(247, 247, 247);
     NSString *string = self.showArry[section][@"className"];
+    
+    UIButton *button = [UIButton buttonWithType:(UIButtonTypeCustom)];
+    button.frame  = CGRectMake(kSCREEN_WIDTH - 75, 5, 60, 20);
+    [button setTitle:@"更多>" forState:(UIControlStateNormal)];
+    [button setTitleColor:[UIColor orangeColor] forState:(UIControlStateNormal)];
+    button.titleLabel.font = [UIFont systemFontOfSize:13];
+    button.tag = SECTIONTAG + section;
+    [button addTarget:self action:@selector(respondstoSectionBtn:) forControlEvents:(UIControlEventTouchUpInside)];
     
     label.text = [NSString stringWithFormat:@"     %@",string];
     
-    return label;
+    [view addSubview:label];
+    [view addSubview:button];
+    return view;
+}
+
+
+#pragma mark - cellDelegate
+- (void)GDLikesTableViewCell:(GDLikesTableViewCell *)cell clickGame:(NSDictionary *)dict {
+    
+    self.parentViewController.hidesBottomBarWhenPushed = YES;
+    
+    [ControllerManager shareManager].detailView.gameID = dict[@"id"];
+    
+    [ControllerManager shareManager].detailView.gameLogo = dict[@"gameLogo"];
+    
+    [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
+    
+    self.parentViewController.hidesBottomBarWhenPushed = NO;
 }
 
 #pragma makr - getter
@@ -212,7 +282,7 @@
         _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 158) style:(UITableViewStylePlain)];
         
         
-        [_tableView registerNib:[UINib nibWithNibName:@"ClassfiyTableViewCell" bundle:nil] forCellReuseIdentifier:CellIDE];
+        [_tableView registerNib:[UINib nibWithNibName:@"GDLikesTableViewCell" bundle:nil] forCellReuseIdentifier:CellIDE];
         
         _tableView.dataSource = self;
         _tableView.delegate = self;
@@ -238,7 +308,7 @@
         
         _tableView.mj_header = customRef;
         
-        //上拉刷新
+//        //上拉刷新
         _tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
         
         _tableView.tableHeaderView = self.headerView;
@@ -252,10 +322,17 @@
     if (!_headerView) {
         _headerView = [[UIView alloc]init];
         _headerView.frame = CGRectMake(0, 0, kSCREEN_WIDTH, 0);
+
     }
     return _headerView;
 }
 
+- (HCDetailController *)detailController {
+    if (!_detailController) {
+        _detailController = [[HCDetailController alloc] init];
+    }
+    return _detailController;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -340,12 +340,12 @@
 
 
 #pragma mark - headerDelegate
-/**< 标签按钮的响应 */
+/** 标签按钮的响应 */
 - (void)didSelectBtnAtIndexPath:(NSInteger)idx {
     [self didselectViewAtIndexPath:idx];
 }
 
-/**< 是否在动画中(如果在动画中则不能切换视图) */
+/** 是否在动画中(如果在动画中则不能切换视图) */
 - (void)setIsAnimation:(BOOL)isAnimation {
     _isAnimation = isAnimation;
     self.selectView.isAnimation = isAnimation;
