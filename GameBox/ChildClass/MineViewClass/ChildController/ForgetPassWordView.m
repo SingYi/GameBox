@@ -58,10 +58,11 @@
 #pragma mark - responds
 /** 下一步 */
 - (void)respondsToNext {
-    
+#warning ===================================
     [MineModel postCheckPhoneCodeWithPhoneNumber:self.phoneNumber.text PhoneCode:self.securityCode.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success) {
-            
+            syLog(@"%@",content);
+            syLog(@"%@",REQUESTMSG);
         }
 
         self.newPassWordView.userId = content[@"data"][@"id"];
