@@ -170,7 +170,7 @@
     
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
     
-    syLog(@"%@",dict);
+//    syLog(@"%@",dict);
 }
 
 /** 我的应用 */

@@ -8,6 +8,9 @@
 
 #import "MyAppViewController.h"
 #import "AppModel.h"
+#import "MyGamesCell.h"
+
+#define CELLIDE @"MyGamesCell"
 
 @interface MyAppViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -30,45 +33,21 @@
 }
 
 - (void)initDataSource {
-    NSMutableDictionary *dict = [AppModel Apps];
-    NSArray *array = [dict allKeys];
-    _data = [NSMutableDictionary dictionary];
-    [array enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([dict[obj][@"applicationType"] isEqualToString:@"System"]) {
-            
-        } else {
-            [_data setObject:dict[obj] forKey:obj];
-        
-        }
-        
-    }];
-    _showArray = [_data allKeys];
     
-//    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(task) userInfo:nil repeats:YES];
-}
-
-- (void)task {
-    CLog(@"刷新");
-    NSMutableDictionary *dict = [AppModel Apps];
-    NSArray *array = [dict allKeys];
-    _data = [NSMutableDictionary dictionary];
-    [array enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([dict[obj][@"applicationType"] isEqualToString:@"System"]) {
-            
+    [AppModel getLocalGamesWithBlock:^(NSArray * _Nullable games, BOOL success) {
+//        syLog(@"%@",games);
+        if (success) {
+            _showArray = games;
         } else {
-            [_data setObject:dict[obj] forKey:obj];
+            _showArray = nil;
         }
-        
+        [self.tableView reloadData];
     }];
-    _showArray = [_data allKeys];
-    
-    [self.tableView reloadData];
 }
-
 
 - (void)initUserInterface {
     self.view.backgroundColor = [UIColor whiteColor];
-    
+    self.navigationItem.title = @"我的游戏";
     [self.view addSubview:self.tableView];
 }
 
@@ -82,42 +61,38 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"test"];
+    MyGamesCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDE];
     
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:(UITableViewCellStyleSubtitle) reuseIdentifier:@"test"];
-    }
+
+    NSDictionary *dict = _showArray[indexPath.row];
     
-    NSDictionary *dict = _data[_showArray[indexPath.row]];
-    
-    
-    cell.imageView.image = dict[@"appIcon"];
-    
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ 版本(%@)  bundleID:%@",dict[@"localizedName"],dict[@"bundleVersion"],_showArray[indexPath.row]];
-    
-    syLog(@"name === %@  bundleID ======= %@",dict[@"localizedName"],_showArray[indexPath.row]);
-//    NSNumber *zise = dict[@"staticDiskUsage"];
-    
-//    cell.detailTextLabel.text = [NSString stringWithFormat:@"大小 :%.2lfM 开发人员ID:%@",zise.integerValue / 1024 / 1024.f,dict[@"teamID"]];
-    
+    cell.gameLogoImage = dict[@"appIcon"];
+    cell.gameVersionText = dict[@"shortVersionString"];
+    cell.gameNameText = dict[@"localizedName"];
+    NSNumber *size = dict[@"size"];
+    cell.gameSizeText = [NSString stringWithFormat:@"%.2fM",size.floatValue / 1024 / 1024];
+//    NSLog(@"%@",dict);
     
     NSProgress *progress = dict[@"installProgress"];
     
     
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",progress.localizedDescription];
     
-    
-//    CLog(@"%@",dict);
-    
-    
-    
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     //打开app
-    [AppModel openAPPWithIde:_showArray[indexPath.row]];
-//    [AppModel installAPPWithIDE:_showArray[indexPath.row]];
+    [AppModel openAPPWithIde:_showArray[indexPath.row][@"bundleID"]];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 80;
+}
+
+#pragma mark - cell delegeta
+- (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
+    
 }
 
 #pragma mark - getter
@@ -127,6 +102,10 @@
         
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        
+        [_tableView registerNib:[UINib nibWithNibName:@"MyGamesCell" bundle:nil] forCellReuseIdentifier:CELLIDE];
+        
+        _tableView.tableFooterView = [UIView new];
     }
     
     return _tableView;

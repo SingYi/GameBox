@@ -148,7 +148,7 @@
 
 /** 修改昵称 */
 - (void)respondsToNickNameBtn {
-    syLog(@"设置昵称");
+//    syLog(@"设置昵称");
 
     [self.animationWindow addSubview:self.nickNameText];
     [self.animationWindow addSubview:self.resetNickNameBtn];

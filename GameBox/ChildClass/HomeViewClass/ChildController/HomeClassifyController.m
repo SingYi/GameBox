@@ -81,6 +81,7 @@
 
 //            _currentPage = 1;
 //            _isAll = NO;
+
             [self.tableView reloadData];
         } else {
             self.showArry = nil;
@@ -163,7 +164,9 @@
             button.bounds = CGRectMake(0, 0, kSCREEN_WIDTH / 8, kSCREEN_WIDTH / 8);
             button.center = CGPointMake(kSCREEN_WIDTH / 8, kSCREEN_WIDTH / 9);
             
-            [button sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,obj[@"logo"]]] forState:(UIControlStateNormal)];
+//            [button sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,obj[@"logo"]]] forState:(UIControlStateNormal)];
+
+            [button sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,obj[@"logo"]]] forState:(UIControlStateNormal) placeholderImage:[UIImage imageNamed:@"image_downloading"]];
             
             button.tag = idx + BTNTAG;
             

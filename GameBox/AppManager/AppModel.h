@@ -11,15 +11,18 @@
 @interface AppModel : NSObject
 
 /** 获取用户所有安装的app */
-+ (NSMutableDictionary *)Apps;
++ (NSMutableDictionary *_Nullable)Apps;
 
 /** 根据app的bundleID打开app */
-+ (void)openAPPWithIde:(NSString *)ide;
++ (void)openAPPWithIde:(NSString *_Nullable)ide;
 
+/** 获取本地游戏 */
++ (void)getLocalGamesWithBlock:(void(^_Nullable)(NSArray * _Nullable games, BOOL success))block;
 
-+ (NSObject *)workSpace;
+//+ (NSDictionary *_Nullable)getAppinfoWithIde:(NSString *_Nullable)ide;
 
 /** test */
-+ (void)installAPPWithIDE:(NSString *)ide;
+//+ (void)installAPPWithIDE:(NSString *)ide;
+
 
 @end

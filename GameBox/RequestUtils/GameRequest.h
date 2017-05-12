@@ -34,8 +34,8 @@ typedef enum : NSInteger {
 
 /** 游戏名,游戏包名 */
 typedef enum : NSUInteger {
-    AllName,
-    AllBackage,
+    AllName = 1,
+    AllBackage = 2,
 } AllType;
 
 

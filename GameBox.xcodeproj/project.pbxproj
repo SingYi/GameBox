@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		520A861529C2F5487FAF4F82 /* libPods-GameBox.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0830EB8A36A7F8F58E00C379 /* libPods-GameBox.a */; };
-		5E8DE5461E9BD255007E719D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E8DE53A1E9BD255007E719D /* Assets.xcassets */; };
 		5E8DE5471E9BD255007E719D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E8DE53B1E9BD255007E719D /* LaunchScreen.storyboard */; };
 		5E8DE5551E9BD3AB007E719D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE5501E9BD35A007E719D /* main.m */; };
 		5E8DE5561E9BD3AB007E719D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE54E1E9BD35A007E719D /* AppDelegate.m */; };
@@ -18,6 +17,8 @@
 		5E8DE5651E9BD7BC007E719D /* GiftBagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE5641E9BD7BC007E719D /* GiftBagViewController.m */; };
 		5E8DE5681E9BD7D2007E719D /* MineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE5671E9BD7D2007E719D /* MineViewController.m */; };
 		5E8DE56C1E9BDA66007E719D /* RequestUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE56B1E9BDA66007E719D /* RequestUtils.m */; };
+		B506F2691EC54F1D005C1B2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B506F2681EC54F1D005C1B2A /* Assets.xcassets */; };
+		B506F26D1EC551B5005C1B2A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B506F26C1EC551B5005C1B2A /* Images.xcassets */; };
 		B50FD18F1EB314AB00CA5E85 /* GameDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B50FD18D1EB314AB00CA5E85 /* GameDetailTableViewCell.m */; };
 		B50FD1901EB314AB00CA5E85 /* GameDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B50FD18E1EB314AB00CA5E85 /* GameDetailTableViewCell.xib */; };
 		B52A06D01EA70CF9007179F9 /* ActivityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B52A06CF1EA70CF9007179F9 /* ActivityModel.m */; };
@@ -44,6 +45,8 @@
 		B560ECB31EC0444C00F5C559 /* SearchCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B560ECB11EC0444C00F5C559 /* SearchCollectionCell.m */; };
 		B560ECB41EC0444C00F5C559 /* SearchCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B560ECB21EC0444C00F5C559 /* SearchCollectionCell.xib */; };
 		B560ECB71EC0480400F5C559 /* SearchModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B560ECB61EC0480400F5C559 /* SearchModel.m */; };
+		B563A3BC1EC5958E007D4142 /* MyGamesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B563A3BA1EC5958E007D4142 /* MyGamesCell.m */; };
+		B563A3BD1EC5958E007D4142 /* MyGamesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B563A3BB1EC5958E007D4142 /* MyGamesCell.xib */; };
 		B5691C3C1EC1B8310094BE0F /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5691C3B1EC1B8310094BE0F /* AFHTTPSessionManager.m */; };
 		B5691C3F1EC1B86B0094BE0F /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5691C3E1EC1B86B0094BE0F /* AFURLSessionManager.m */; };
 		B5691C421EC1B8CC0094BE0F /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B5691C411EC1B8CC0094BE0F /* AFURLResponseSerialization.m */; };
@@ -107,7 +110,6 @@
 		26B70E1884DC12DBF33C89F9 /* Pods-GameBox.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GameBox.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GameBox/Pods-GameBox.debug.xcconfig"; sourceTree = "<group>"; };
 		2B0B2C3935C994EA4AB1EC14 /* Pods-GameBox.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GameBox.release.xcconfig"; path = "Pods/Target Support Files/Pods-GameBox/Pods-GameBox.release.xcconfig"; sourceTree = "<group>"; };
 		5E8DE51C1E9BD0A6007E719D /* GameBox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameBox.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5E8DE53A1E9BD255007E719D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5E8DE53C1E9BD255007E719D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5E8DE54D1E9BD35A007E719D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = SupportingFiles/AppDelegate.h; sourceTree = "<group>"; };
 		5E8DE54E1E9BD35A007E719D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = SupportingFiles/AppDelegate.m; sourceTree = "<group>"; };
@@ -125,6 +127,8 @@
 		5E8DE5671E9BD7D2007E719D /* MineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineViewController.m; sourceTree = "<group>"; };
 		5E8DE56A1E9BDA66007E719D /* RequestUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestUtils.h; sourceTree = "<group>"; };
 		5E8DE56B1E9BDA66007E719D /* RequestUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestUtils.m; sourceTree = "<group>"; };
+		B506F2681EC54F1D005C1B2A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B506F26C1EC551B5005C1B2A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		B50FD18C1EB314AB00CA5E85 /* GameDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameDetailTableViewCell.h; sourceTree = "<group>"; };
 		B50FD18D1EB314AB00CA5E85 /* GameDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameDetailTableViewCell.m; sourceTree = "<group>"; };
 		B50FD18E1EB314AB00CA5E85 /* GameDetailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GameDetailTableViewCell.xib; sourceTree = "<group>"; };
@@ -173,6 +177,9 @@
 		B560ECB21EC0444C00F5C559 /* SearchCollectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchCollectionCell.xib; sourceTree = "<group>"; };
 		B560ECB51EC0480400F5C559 /* SearchModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchModel.h; sourceTree = "<group>"; };
 		B560ECB61EC0480400F5C559 /* SearchModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchModel.m; sourceTree = "<group>"; };
+		B563A3B91EC5958E007D4142 /* MyGamesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyGamesCell.h; sourceTree = "<group>"; };
+		B563A3BA1EC5958E007D4142 /* MyGamesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyGamesCell.m; sourceTree = "<group>"; };
+		B563A3BB1EC5958E007D4142 /* MyGamesCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyGamesCell.xib; sourceTree = "<group>"; };
 		B5691C3A1EC1B8310094BE0F /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
 		B5691C3B1EC1B8310094BE0F /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPSessionManager.m; sourceTree = "<group>"; };
 		B5691C3D1EC1B86B0094BE0F /* AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLSessionManager.h; sourceTree = "<group>"; };
@@ -336,9 +343,10 @@
 				B52CC14D1EB857BB00A1A792 /* ChangyanSDK */,
 				B5691C391EC1B8230094BE0F /* AFNetWorking */,
 				5E8DE54C1E9BD35A007E719D /* SupportingFiles */,
-				5E8DE53A1E9BD255007E719D /* Assets.xcassets */,
 				5E8DE53B1E9BD255007E719D /* LaunchScreen.storyboard */,
+				B506F2681EC54F1D005C1B2A /* Assets.xcassets */,
 				5E8DE5571E9BD3D2007E719D /* Info.plist */,
+				B506F26C1EC551B5005C1B2A /* Images.xcassets */,
 			);
 			path = GameBox;
 			sourceTree = "<group>";
@@ -551,6 +559,9 @@
 				B58A5C091EB1DF1D00CC1D00 /* MyAppViewController.m */,
 				B58A5C0B1EB1DFBC00CC1D00 /* AppModel.h */,
 				B58A5C0C1EB1DFBC00CC1D00 /* AppModel.m */,
+				B563A3B91EC5958E007D4142 /* MyGamesCell.h */,
+				B563A3BA1EC5958E007D4142 /* MyGamesCell.m */,
+				B563A3BB1EC5958E007D4142 /* MyGamesCell.xib */,
 			);
 			path = AppManager;
 			sourceTree = "<group>";
@@ -865,10 +876,12 @@
 			files = (
 				B5C5D4B51EA078BF008A46DE /* ActivityCell.xib in Resources */,
 				B5824FB91EA05B6800966640 /* NewServerTableViewCell.xib in Resources */,
-				5E8DE5461E9BD255007E719D /* Assets.xcassets in Resources */,
 				B59FEDC41E9CC97600A64D84 /* GiftBagCell.xib in Resources */,
+				B563A3BD1EC5958E007D4142 /* MyGamesCell.xib in Resources */,
 				B50FD1901EB314AB00CA5E85 /* GameDetailTableViewCell.xib in Resources */,
+				B506F2691EC54F1D005C1B2A /* Assets.xcassets in Resources */,
 				B59FEDBD1E9C8AF300A64D84 /* SearchCell.xib in Resources */,
+				B506F26D1EC551B5005C1B2A /* Images.xcassets in Resources */,
 				B59A76EA1EBB21D200FE2B50 /* GDCommentTableViewCell.xib in Resources */,
 				B59A76EF1EBB2B9900FE2B50 /* GDLikesTableViewCell.xib in Resources */,
 				B5D35BA31E9F6F9E00902B04 /* ClassfiyTableViewCell.xib in Resources */,
@@ -975,6 +988,7 @@
 				B59816DB1EC3F7CB0017599F /* MNNtificationController.m in Sources */,
 				B55416271EA88E900043A36D /* HomeHotGameController.m in Sources */,
 				B5C5D4BB1EA09AC8008A46DE /* DetailViewController.m in Sources */,
+				B563A3BC1EC5958E007D4142 /* MyGamesCell.m in Sources */,
 				B5C5D4BE1EA09E44008A46DE /* DetailHeader.m in Sources */,
 				B5C5D4D51EA0B6B3008A46DE /* DetailTableCell.m in Sources */,
 				B58A5C061EB1C0B400CC1D00 /* UserModel.m in Sources */,
@@ -1121,7 +1135,7 @@
 			baseConfigurationReference = 26B70E1884DC12DBF33C89F9 /* Pods-GameBox.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Yi Shi (Y7ZD75NS7B)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = JR27SLBFXN;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/GameBox/Other/PrefixHeader.pch";
@@ -1144,7 +1158,7 @@
 			baseConfigurationReference = 2B0B2C3935C994EA4AB1EC14 /* Pods-GameBox.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Yi Shi (Y7ZD75NS7B)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = JR27SLBFXN;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/GameBox/Other/PrefixHeader.pch";
 				INFOPLIST_FILE = GameBox/Info.plist;

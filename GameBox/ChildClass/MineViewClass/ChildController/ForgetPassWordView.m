@@ -61,8 +61,8 @@
 #warning ===================================
     [MineModel postCheckPhoneCodeWithPhoneNumber:self.phoneNumber.text PhoneCode:self.securityCode.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success) {
-            syLog(@"%@",content);
-            syLog(@"%@",REQUESTMSG);
+//            syLog(@"%@",content);
+//            syLog(@"%@",REQUESTMSG);
         }
 
         self.newPassWordView.userId = content[@"data"][@"id"];

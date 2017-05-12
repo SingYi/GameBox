@@ -26,7 +26,7 @@
 
 - (void)setWebURL:(NSString *)webURL {
     _webURL = webURL;
-    syLog(@"%@",webURL);
+//    syLog(@"%@",webURL);
     
 //    NSString *urlStr = [NSString stringWithFormat:@"https://m.baidu.com/"];
     
@@ -47,16 +47,16 @@
 }
 
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
-    syLog(@"star");
+//    syLog(@"star");
 }
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
-    syLog(@"finsh");
+//    syLog(@"finsh");
 }
 
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
     
-    syLog(@"error === %@",error.localizedDescription);
+//    syLog(@"error === %@",error.localizedDescription);
 }
 
 
