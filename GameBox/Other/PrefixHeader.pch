@@ -17,7 +17,7 @@
 #define URLMAP @"http://www.185sy.com/api-index-map"
 
 /** 图片接口前置地址 */
-#define IMAGEURL @"http://www.9344.net%@"
+#define IMAGEURL @"http://www.185sy.com%@"
 
 /** 获取用户ID */
 #define GETUSERID [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]

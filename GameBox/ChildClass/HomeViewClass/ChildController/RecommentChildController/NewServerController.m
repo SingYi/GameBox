@@ -9,22 +9,28 @@
 #import "NewServerController.h"
 #import "HomeHeader.h"
 #import "NewServerCell.h"
-#import "GameModel.h"
-//#import "GameRequest.h"
+#import "GameRequest.h"
 
+#import "NSTodayServerController.h"
+#import "NSCommingServerController.h"
+#import "NSAlredayServerController.h"
 
 #define CELLIDE @"NewServerCell"
 
-@interface NewServerController ()<HomeHeaderDelegate,UICollectionViewDelegate,UICollectionViewDataSource,NewServerCellDelegate>
+@interface NewServerController ()<HomeHeaderDelegate,UICollectionViewDelegate,UICollectionViewDataSource>
 
 /**选择按钮*/
 @property (nonatomic, strong) HomeHeader *headerView;
 
 /**开服视图*/
 @property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong) NSTodayServerController *todayServerController;
+@property (nonatomic, strong) NSCommingServerController *commingServerController;
+@property (nonatomic, strong) NSAlredayServerController *alredayServerController;
+
 
 /**显示数据*/
-@property (nonatomic, strong) NSArray *showArray;
+@property (nonatomic, strong) NSArray<UIViewController *> *showArray;
 
 /**数据数组*/
 @property (nonatomic, strong) NSMutableDictionary * dataDict;
@@ -42,11 +48,7 @@
 
 //**初始化数据*/
 - (void)initDataSource {
-    _showArray = @[@"",@"",@""];
-    _dataDict = [NSMutableDictionary dictionaryWithCapacity:3];
-    for (NSInteger i = 1; i <= 3; i++) {
-        [self postCellDataWithIndex:i];
-    }
+    self.showArray = @[self.todayServerController,self.commingServerController,self.alredayServerController];
 }
 
 /**初始化用户界面*/
@@ -57,35 +59,6 @@
     [self.view addSubview:self.collectionView];
 
 }
-
-#pragma mark - method
-/**请求数据*/
-- (void)postCellDataWithIndex:(NSInteger)idx {
-    [GameModel postServerListWithType:(ServiceType)(idx) ChannelID:@"185" Page:@"1" Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
-        if (success) {
-            [_dataDict setObject:content[@"data"] forKey:[NSString stringWithFormat:@"%ld",idx - 1]];
-        
-            
-            [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:idx - 1 inSection:0]]];
-        }
-    }];
-}
-
-#pragma mark - cellDelegate
-- (void)newServerCellRefreshDataWithIndex:(NSInteger)index {
-    [self postCellDataWithIndex:index + 1];
-    CLog(@"刷新数据");
-    
-    NewServerCell *cell = (NewServerCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0]];
-    
-    [cell endAnimation];
-    
-}
-
-- (void)didselectRowAtIndexpath:(NSIndexPath *)index {
-    
-}
-
 
 #pragma mark - headerDelegate
 - (void)didSelectBtnAtIndexPath:(NSInteger)idx {
@@ -104,11 +77,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     NewServerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CELLIDE forIndexPath:indexPath];
     
-    cell.DataArray = _dataDict[[NSString stringWithFormat:@"%ld",indexPath.item]];
-    
-    cell.idx = indexPath.item;
-    
-    cell.serverCellDelegate = self;
+    [cell.contentView addSubview:self.showArray[indexPath.row].view];
     
     
     return cell;
@@ -117,7 +86,7 @@
 #pragma mark - getter
 - (HomeHeader *)headerView {
     if (!_headerView) {
-        _headerView = [[HomeHeader alloc] initWithFrame:CGRectMake(0, 64, kSCREEN_WIDTH, 32) WithBtnArray:@[@"今日开服",@"即将开服",@"已经开服"]];
+        _headerView = [[HomeHeader alloc] initWithFrame:CGRectMake(0, 64, kSCREEN_WIDTH, 44) WithBtnArray:@[@"今日开服",@"即将开服",@"已经开服"]];
         
         _headerView.delegate = self;
     }
@@ -130,7 +99,7 @@
         
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
         
-        layout.itemSize = CGSizeMake(kSCREEN_WIDTH, (kSCREEN_HEIGHT - 96));
+        layout.itemSize = CGSizeMake(kSCREEN_WIDTH, (kSCREEN_HEIGHT - 108));
         
         layout.minimumInteritemSpacing = 0;
         
@@ -139,7 +108,7 @@
         //横向
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         
-        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 96, kSCREEN_WIDTH, kSCREEN_HEIGHT - 96) collectionViewLayout:layout];
+        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 108, kSCREEN_WIDTH, kSCREEN_HEIGHT - 108) collectionViewLayout:layout];
         _collectionView.backgroundColor = [UIColor whiteColor];
         
         _collectionView.delegate = self;
@@ -152,10 +121,34 @@
         
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.bounces = NO;
-        _collectionView.scrollEnabled = NO;
+        _collectionView.scrollEnabled = YES;
         
     }
     return _collectionView;
+}
+
+- (NSTodayServerController *)todayServerController {
+    if (!_todayServerController) {
+        _todayServerController = [[NSTodayServerController alloc] init];
+        _todayServerController.view.frame = CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 108);
+    }
+    return _todayServerController;
+}
+
+- (NSCommingServerController *)commingServerController {
+    if (!_commingServerController) {
+        _commingServerController = [[NSCommingServerController alloc] init];
+        _commingServerController.view.frame = CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 108);
+    }
+    return _commingServerController;
+}
+
+-(NSAlredayServerController *)alredayServerController {
+    if (!_alredayServerController) {
+        _alredayServerController = [[NSAlredayServerController alloc] init];
+        _alredayServerController.view.frame = CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 108);
+    }
+    return _alredayServerController;
 }
 
 - (void)didReceiveMemoryWarning {

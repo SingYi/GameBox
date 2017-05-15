@@ -30,6 +30,9 @@
 		B52CC1501EB8581100A1A792 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B52CC14F1EB8581100A1A792 /* Security.framework */; };
 		B5420F741EA6005A0068AEE1 /* GiftBagModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B5420F731EA6005A0068AEE1 /* GiftBagModel.m */; };
 		B54378CD1EADD35200B25D47 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54378CC1EADD35200B25D47 /* WebViewController.m */; };
+		B54FCA321EC94EAD00BACAF7 /* NSCommingServerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54FCA311EC94EAD00BACAF7 /* NSCommingServerController.m */; };
+		B54FCA351EC94EC100BACAF7 /* NSAlredayServerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54FCA341EC94EC100BACAF7 /* NSAlredayServerController.m */; };
+		B54FCA361EC959B800BACAF7 /* NSTodayServerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54FCA2E1EC94E9300BACAF7 /* NSTodayServerController.m */; };
 		B55416151EA8535F0043A36D /* GameDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416141EA8535F0043A36D /* GameDetailViewController.m */; };
 		B55416181EA853AD0043A36D /* GameStrategyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416171EA853AD0043A36D /* GameStrategyViewController.m */; };
 		B554161B1EA853C90043A36D /* GameGiftBagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B554161A1EA853C90043A36D /* GameGiftBagViewController.m */; };
@@ -148,6 +151,12 @@
 		B5420F731EA6005A0068AEE1 /* GiftBagModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GiftBagModel.m; sourceTree = "<group>"; };
 		B54378CB1EADD35200B25D47 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		B54378CC1EADD35200B25D47 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
+		B54FCA2D1EC94E9300BACAF7 /* NSTodayServerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTodayServerController.h; sourceTree = "<group>"; };
+		B54FCA2E1EC94E9300BACAF7 /* NSTodayServerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTodayServerController.m; sourceTree = "<group>"; };
+		B54FCA301EC94EAD00BACAF7 /* NSCommingServerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSCommingServerController.h; sourceTree = "<group>"; };
+		B54FCA311EC94EAD00BACAF7 /* NSCommingServerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSCommingServerController.m; sourceTree = "<group>"; };
+		B54FCA331EC94EC100BACAF7 /* NSAlredayServerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSAlredayServerController.h; sourceTree = "<group>"; };
+		B54FCA341EC94EC100BACAF7 /* NSAlredayServerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSAlredayServerController.m; sourceTree = "<group>"; };
 		B55416131EA8535F0043A36D /* GameDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameDetailViewController.h; sourceTree = "<group>"; };
 		B55416141EA8535F0043A36D /* GameDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameDetailViewController.m; sourceTree = "<group>"; };
 		B55416161EA853AD0043A36D /* GameStrategyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameStrategyViewController.h; sourceTree = "<group>"; };
@@ -482,6 +491,19 @@
 			path = WebClass;
 			sourceTree = "<group>";
 		};
+		B54FCA2C1EC94E5200BACAF7 /* NewServerChildeController */ = {
+			isa = PBXGroup;
+			children = (
+				B54FCA2D1EC94E9300BACAF7 /* NSTodayServerController.h */,
+				B54FCA2E1EC94E9300BACAF7 /* NSTodayServerController.m */,
+				B54FCA301EC94EAD00BACAF7 /* NSCommingServerController.h */,
+				B54FCA311EC94EAD00BACAF7 /* NSCommingServerController.m */,
+				B54FCA331EC94EC100BACAF7 /* NSAlredayServerController.h */,
+				B54FCA341EC94EC100BACAF7 /* NSAlredayServerController.m */,
+			);
+			path = NewServerChildeController;
+			sourceTree = "<group>";
+		};
 		B55416121EA853080043A36D /* ChildViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -504,6 +526,7 @@
 			children = (
 				B554162E1EA89A7B0043A36D /* NewServerController.h */,
 				B554162F1EA89A7B0043A36D /* NewServerController.m */,
+				B54FCA2C1EC94E5200BACAF7 /* NewServerChildeController */,
 				B554162C1EA89A7B0043A36D /* ActivityController.h */,
 				B554162D1EA89A7B0043A36D /* ActivityController.m */,
 				B5F10BDC1EAF272C0061B43E /* RGiftBagController.h */,
@@ -968,6 +991,7 @@
 				B5E2C80F1E9E27E7002CEC61 /* ResetPassWordViewController.m in Sources */,
 				B5E2C8081E9E0AB2002CEC61 /* NewPassWordView.m in Sources */,
 				B55416331EA89A7B0043A36D /* NewServerController.m in Sources */,
+				B54FCA351EC94EC100BACAF7 /* NSAlredayServerController.m in Sources */,
 				B5E2C8061E9E0AB2002CEC61 /* ForgetPassWordView.m in Sources */,
 				B55416151EA8535F0043A36D /* GameDetailViewController.m in Sources */,
 				B59816D81EC3F7B20017599F /* MNCommentController.m in Sources */,
@@ -1010,7 +1034,9 @@
 				B5824FB41EA0594400966640 /* NewServerCell.m in Sources */,
 				B5691C421EC1B8CC0094BE0F /* AFURLResponseSerialization.m in Sources */,
 				B5C5D4B41EA078BF008A46DE /* ActivityCell.m in Sources */,
+				B54FCA321EC94EAD00BACAF7 /* NSCommingServerController.m in Sources */,
 				B55416181EA853AD0043A36D /* GameStrategyViewController.m in Sources */,
+				B54FCA361EC959B800BACAF7 /* NSTodayServerController.m in Sources */,
 				B5E2C8181E9E2E59002CEC61 /* MyAttentionView.m in Sources */,
 				B5691C451EC1B8DB0094BE0F /* AFURLRequestSerialization.m in Sources */,
 				B5E2C8121E9E2DED002CEC61 /* AppManagerView.m in Sources */,

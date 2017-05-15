@@ -33,6 +33,11 @@
 
 @implementation GameRequest
 
++ (void)downLoadAppWithURL:(NSString *)url {
+    if (url && url.length != 0) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+    }
+}
 
 /** 推荐游戏 
  *  URLKey:GAME_INDEX
@@ -83,7 +88,7 @@
     if (!urlStr) {
         urlStr = GAME_TYPE;
     }
-    
+
     [RequestUtils postRequestWithURL:urlStr params:dict completion:completion];
 }
 

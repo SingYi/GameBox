@@ -146,7 +146,7 @@
     
     imageView.backgroundColor = [UIColor orangeColor];
     
-    [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,self.rollingArray[indexPath.row][@"slide_pic"]]] placeholderImage:nil];
+    [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,self.rollingArray[indexPath.row][@"slide_pic"]]] placeholderImage:[UIImage imageNamed:@"homePage_bannerDownloading"]];
     
     [cell addSubview:imageView];
 

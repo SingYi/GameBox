@@ -9,7 +9,6 @@
 #import "LoginViewController.h"
 #import "RegisterViewController.h"
 #import "ForgetPassWordView.h"
-//#import "MineModel.h"
 #import "UserModel.h"
 
 #import <SDWebImageDownloader.h>

@@ -12,7 +12,7 @@
 
 #define CELLIDE @"MyGamesCell"
 
-@interface MyAppViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface MyAppViewController ()<UITableViewDelegate,UITableViewDataSource,MygamesCellDelegate>
 
 /** 游戏列表 */
 @property (nonatomic, strong) UITableView *tableView;
@@ -35,7 +35,6 @@
 - (void)initDataSource {
     
     [AppModel getLocalGamesWithBlock:^(NSArray * _Nullable games, BOOL success) {
-//        syLog(@"%@",games);
         if (success) {
             _showArray = games;
         } else {
@@ -62,7 +61,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MyGamesCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDE];
-    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     NSDictionary *dict = _showArray[indexPath.row];
     
@@ -71,7 +70,10 @@
     cell.gameNameText = dict[@"localizedName"];
     NSNumber *size = dict[@"size"];
     cell.gameSizeText = [NSString stringWithFormat:@"%.2fM",size.floatValue / 1024 / 1024];
-//    NSLog(@"%@",dict);
+    
+    cell.index = indexPath.row;
+
+    cell.delegate = self;
     
     NSProgress *progress = dict[@"installProgress"];
     
@@ -83,17 +85,19 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     //打开app
-    [AppModel openAPPWithIde:_showArray[indexPath.row][@"bundleID"]];
+//    [AppModel openAPPWithIde:_showArray[indexPath.row][@"bundleID"]];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 80;
 }
 
-#pragma mark - cell delegeta
-- (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
-    
+#pragma mark - cell delegate
+- (void)myGameCellClickOpenBtnWithIndex:(NSInteger)idx {
+    //打开app
+    [AppModel openAPPWithIde:_showArray[idx][@"bundleID"]];
 }
+
 
 #pragma mark - getter
 - (UITableView *)tableView {

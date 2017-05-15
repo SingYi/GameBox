@@ -9,7 +9,6 @@
 #import "HomeNewGameController.h"
 #import "SearchCell.h"
 
-//#import "GameModel.h"
 #import "GameRequest.h"
 #import "ControllerManager.h"
 
@@ -188,7 +187,8 @@
 
 #pragma mark - cellDeleagate 
 - (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
-    CLog(@"下载游戏:%@",dict);
+    
+    [GameRequest downLoadAppWithURL:dict[@"ios_url"]];
 }
 
 #pragma mark - getter

@@ -8,7 +8,7 @@
 
 #import "RankingListViewController.h"
 #import "SearchCell.h"
-#import "GameModel.h"
+#import "GameRequest.h"
 #import "ControllerManager.h"
 #import "SearchModel.h"
 
@@ -119,23 +119,17 @@
 #pragma mark - responsd
 /**刷新数据*/
 - (void)refreshData {
-    [GameModel postGameListWithType:RankingGame ChannelID:@"185" Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        if (success) {
-
+    [GameRequest rankGameWithhPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success && REQUESTSUCCESS) {
             _showArray = [content[@"data"] mutableCopy];
-            [self.tableView.mj_header endRefreshing];
-            [self.tableView.mj_footer endRefreshing];
             _currentPage = 1;
             _isAll = NO;
             [self.tableView reloadData];
-            [_showArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//                syLog(@"%@",obj[@"gamename"]);
-            }];
         } else {
-            [GameModel showAlertWithMessage:@"网络不知道飞到哪里去了" dismiss:nil];
-            [self.tableView.mj_header endRefreshing];
-            [self.tableView.mj_footer endRefreshing];
+//            [GameRequest showAlertWithMessage:@"网络不知道飞到哪里去了" dismiss:nil];
         }
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
     }];
 }
 
@@ -144,21 +138,22 @@
         [self.tableView.mj_footer endRefreshingWithNoMoreData];
     } else {
         _currentPage++;
-        [GameModel postGameListWithType:RankingGame ChannelID:@"185" Page:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
-//            CLog(@"%ld  %@",_currentPage,content[@"gamename"]);
-            if (success) {
+        [GameRequest rankGameWithhPage:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            if (success && REQUESTSUCCESS) {
                 NSArray *array = content[@"data"];
                 if (array.count == 0) {
                     _isAll = YES;
                     [self.tableView.mj_footer endRefreshingWithNoMoreData];
                 } else {
                     [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//                        syLog(@"%@",obj[@"gamename"]);
                     }];
                     [_showArray addObjectsFromArray:array];
                     [self.tableView reloadData];
                     [self.tableView.mj_footer endRefreshing];
                 }
+
+            } else {
+                [self.tableView.mj_footer endRefreshing];
             }
         }];
     }
@@ -166,11 +161,7 @@
 
 #pragma mark - cellDeleagte
 - (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
-    NSString *str = dict[@"ios_url"];
-    
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
-    
-//    syLog(@"%@",dict);
+    [GameRequest downLoadAppWithURL:dict[@"ios_url"]];
 }
 
 /** 我的应用 */

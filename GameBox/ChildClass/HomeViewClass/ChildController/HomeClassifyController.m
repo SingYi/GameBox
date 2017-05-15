@@ -10,7 +10,6 @@
 #import "GDLikesTableViewCell.h"
 #import "HCDetailController.h"
 
-//#import "GameModel.h"
 #import "GameRequest.h"
 
 #import <SDWebImageDownloader.h>
@@ -51,7 +50,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     [self initUserInterface];
     [self initDataSource];
 }
@@ -92,38 +90,6 @@
     }];
 }
 
-- (void)loadMoreData {
-    [self.tableView.mj_footer endRefreshingWithNoMoreData];
-//    if (_isAll) {
-//    } else {
-//        //页数加一
-//        _currentPage++;
-//        
-//        [GameRequest gameClassifyWithPage:[NSString stringWithFormat:@"%ld",_currentPage] Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
-//            syLog(@"%ld",_currentPage);
-//            if (success && REQUESTSUCCESS) {
-//                NSArray *array = content[@"data"][@"classData"];
-//                if (array.count == 0) {
-//                    _isAll = YES;
-//                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
-//                } else {
-//                    [array enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//                        NSArray *list = obj[@"list"];
-//                        if (list.count == 0 || list == nil) {
-//                            
-//                        } else {
-//                            [self.showArry addObject:obj];
-//                        }
-//                    }];
-//                    [self.tableView.mj_footer endRefreshing];
-//                    [self.tableView reloadData];
-//                }
-//            } else {
-//                [self.tableView.mj_footer endRefreshing];
-//            }
-//        }];
-//    }
-}
 
 
 #pragma makr - setter
@@ -194,9 +160,9 @@
 - (void)respondsToBtn:(UIButton *)sender {
     
     self.detailController.dict = self.classifyArray[sender.tag - BTNTAG];
-    self.hidesBottomBarWhenPushed = YES;
+    self.parentViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:self.detailController animated:YES];
-    self.hidesBottomBarWhenPushed = NO;
+    self.parentViewController.hidesBottomBarWhenPushed = NO;
     
 }
 

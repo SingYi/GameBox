@@ -1,77 +1,76 @@
 //
-//  HomeHotGameController.m
+//  NSTodayServerController.m
 //  GameBox
 //
-//  Created by 石燚 on 2017/4/20.
+//  Created by 石燚 on 2017/5/15.
 //  Copyright © 2017年 SingYi. All rights reserved.
 //
 
-#import "HomeHotGameController.h"
-#import "SearchCell.h"
+#import "NSTodayServerController.h"
+#import "NewServerTableViewCell.h"
 
 #import "GameRequest.h"
+#import <MJRefresh.h>
 
-#import "ControllerManager.h"
+#define CELLIDE @"NewServerTableViewCell"
 
-#define CELLIDENTIFIER @"SearchCell"
-
-@interface HomeHotGameController ()<UITableViewDataSource,UITableViewDelegate,SearchCellDelelgate>
+@interface NSTodayServerController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) NSMutableArray *showArray;
 
+/** 当前页数 */
 @property (nonatomic, assign) NSInteger currentPage;
 
 @property (nonatomic, assign) BOOL isAll;
 
 @end
 
-@implementation HomeHotGameController
+@implementation NSTodayServerController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     [self initDataSource];
     [self initUserInterface];
 }
-
 
 - (void)initDataSource {
     [self.tableView.mj_header beginRefreshing];
 }
 
 - (void)initUserInterface {
+    self.view.backgroundColor = [UIColor orangeColor];
     [self.view addSubview:self.tableView];
 }
 
 #pragma mark - method
 - (void)refreshData {
-    [GameRequest hotGameWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        if (success && !((NSString *)content[@"status"]).boolValue) {
+    [GameRequest todayServerOpenWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        syLog(@"%@",content);
+        if (success && REQUESTSUCCESS) {
             _showArray = [content[@"data"] mutableCopy];
-            
             _currentPage = 1;
             _isAll = NO;
-
-            [self.tableView.mj_footer endRefreshing];
             [self.tableView reloadData];
+            [self.tableView.mj_footer endRefreshing];
+        } else {
+            _currentPage = 0;
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
         }
         [self.tableView.mj_header endRefreshing];
-        
     }];
 }
 
 - (void)loadMoreData {
-    if (_isAll) {
+    if (_isAll || _currentPage == 0) {
         [self.tableView.mj_footer endRefreshingWithNoMoreData];
     } else {
         _currentPage++;
-        
-        [GameRequest newGameWithPage:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
-            if (success && !((NSString *)content[@"status"]).boolValue) {
+        [GameRequest todayServerOpenWithPage:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            if (success && REQUESTSUCCESS) {
                 NSArray *array = content[@"data"];
-                if (array.count == 0) {
+                if (array.count == 0 || array == nil) {
                     _isAll = YES;
                     [self.tableView.mj_footer endRefreshingWithNoMoreData];
                 } else {
@@ -79,14 +78,15 @@
                     [self.tableView reloadData];
                     [self.tableView.mj_footer endRefreshing];
                 }
+            } else {
+                _isAll = YES;
+                [self.tableView.mj_footer endRefreshingWithNoMoreData];
             }
         }];
     }
 }
 
-
-
-#pragma mark - tableViewDataSource
+#pragma mark - tableViewDelegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
@@ -96,49 +96,28 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDENTIFIER];
+    NewServerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDE];
     
-    [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] placeholderImage:nil];
+    [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,self.showArray[indexPath.row][@"logo"]]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
     
-    cell.dict = (NSDictionary *)_showArray[indexPath.row];
-    
-    cell.delegate = self;
+    cell.dict = self.showArray[indexPath.row];
     
     return cell;
 }
 
-#pragma mark - tableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 80;
 }
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    [ControllerManager shareManager].detailView.gameID = _showArray[indexPath.row][@"id"];
-    SearchCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [ControllerManager shareManager].detailView.gameLogo = cell.gameLogo.image;
-    self.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
-    self.hidesBottomBarWhenPushed = NO;
-}
-
-#pragma mark - cellDelegate
-- (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
-    [GameRequest downLoadAppWithURL:dict[@"ios_url"]];
-}
-
-#pragma mark - getter
+#pragma makr - getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 157) style:(UITableViewStylePlain)];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT - 108)];
         
         
-        [_tableView registerNib:[UINib nibWithNibName:@"SearchCell" bundle:nil] forCellReuseIdentifier:CELLIDENTIFIER];
+        [_tableView registerNib:[UINib nibWithNibName:@"NewServerTableViewCell" bundle:nil] forCellReuseIdentifier:CELLIDE];
         
-        _tableView.dataSource = self;
         _tableView.delegate = self;
-        
-        _tableView.backgroundColor = [UIColor whiteColor];
+        _tableView.dataSource = self;
         
         //下拉刷新
         MJRefreshNormalHeader *customRef = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
@@ -149,30 +128,18 @@
         [customRef setTitle:@"即将刷新" forState:MJRefreshStateWillRefresh];
         [customRef setTitle:@"所有数据加载完毕，没有更多的数据了" forState:MJRefreshStateNoMoreData];
         
-        
         //自动更改透明度
         _tableView.mj_header.automaticallyChangeAlpha = YES;
+        
         _tableView.mj_header = customRef;
         
         //上拉刷新
         _tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
         
-        _tableView.showsVerticalScrollIndicator = NO;
-        _tableView.showsHorizontalScrollIndicator = NO;
-        
         _tableView.tableFooterView = [UIView new];
-        
     }
     return _tableView;
 }
-
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 
 
 @end

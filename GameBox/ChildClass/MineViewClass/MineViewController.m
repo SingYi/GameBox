@@ -12,8 +12,6 @@
 #import "MineCell.h"
 
 
-//#import "MineModel.h"
-
 #import "UserModel.h"
 
 //我的页面的7个子视图

@@ -41,6 +41,9 @@ typedef enum : NSUInteger {
 
 @interface GameRequest : RequestUtils
 
+/** 下载游戏 */
++ (void)downLoadAppWithURL:(NSString *_Nullable)url;
+
 /** 推荐游戏接口 */
 + (void)recommendGameWithPage:(NSString * _Nullable)page
                    Completion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;

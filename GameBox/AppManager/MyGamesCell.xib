@@ -36,22 +36,22 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="大小" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EPv-4H-21q">
-                        <rect key="frame" x="88" y="43.5" width="35" height="20"/>
+                        <rect key="frame" x="88" y="43.5" width="29" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="OVB-vL-aI2"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="highlightedColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="版本号" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r1l-mf-JUP">
-                        <rect key="frame" x="88" y="63" width="52" height="20"/>
+                        <rect key="frame" x="88" y="63" width="49" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="R6C-em-pNt"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="highlightedColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ELZ-oe-4L2">
                         <rect key="frame" x="478" y="38" width="60" height="30"/>
@@ -59,7 +59,9 @@
                             <constraint firstAttribute="width" constant="60" id="7td-m3-g66"/>
                             <constraint firstAttribute="height" constant="30" id="Hom-Hz-Pqi"/>
                         </constraints>
-                        <state key="normal" title="打开"/>
+                        <state key="normal" title="打开" backgroundImage="downLoadButton">
+                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
                     </button>
                 </subviews>
                 <constraints>
@@ -85,4 +87,7 @@
             <point key="canvasLocation" x="-99" y="-12"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="downLoadButton" width="61" height="27"/>
+    </resources>
 </document>

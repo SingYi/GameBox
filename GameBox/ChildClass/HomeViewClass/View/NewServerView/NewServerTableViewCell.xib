@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -67,8 +68,9 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="gameLogo" destination="qtX-WT-syK" id="fGD-ym-1cY"/>
-                <outlet property="gameName" destination="NeE-x0-PK0" id="uht-ON-maa"/>
-                <outlet property="startTime" destination="ISI-vx-Xwt" id="erU-7Q-ixz"/>
+                <outlet property="gameNameLabel" destination="NeE-x0-PK0" id="dq3-2l-OTk"/>
+                <outlet property="remindButton" destination="r2v-Nb-SqK" id="LM1-Lm-Fna"/>
+                <outlet property="startTimeLabel" destination="ISI-vx-Xwt" id="fty-Ir-3dF"/>
             </connections>
             <point key="canvasLocation" x="-50.5" y="38"/>
         </tableViewCell>

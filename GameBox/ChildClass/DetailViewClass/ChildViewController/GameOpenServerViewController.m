@@ -63,15 +63,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NewServerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DTServicerCELL];
+
     
-    cell.gameName.text = [NSString stringWithFormat:@"%@ 区",_showArray[indexPath.row][@"server_id"]];
-    
-    NSString *timeStr = _showArray[indexPath.row][@"start_time"];
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:timeStr.integerValue];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"MM-dd hh:mm";
-    
-    cell.startTime.text = [formatter stringFromDate:date];
+    cell.dict = _showArray[indexPath.row];
     
     cell.gameLogo.image = self.logoImage;
     

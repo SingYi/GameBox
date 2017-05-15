@@ -87,8 +87,10 @@
     
     NSURLSessionTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error == nil) {
+            
             NSError * fail = nil;
             id obj = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&fail];
+//            syLog(@"%@",obj);
             if (fail) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (completion) {
@@ -107,7 +109,7 @@
                 }
             }
         } else {
-//            syLog(@"Request Failed...");
+            syLog(@"Request Failed...");
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completion) {
                     completion(nil,false);

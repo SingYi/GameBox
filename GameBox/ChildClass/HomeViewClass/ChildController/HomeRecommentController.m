@@ -19,7 +19,6 @@
 #import "StrategyController.h"
 
 #import "GameRequest.h"
-//#import "GameModel.h"
 
 #import "MJRefresh.h"
 #import "UIImageView+WebCache.h"
@@ -109,6 +108,7 @@
 - (void)refreshData {
 //    [ControllerManager starLoadingAnimation];
     [GameRequest recommendGameWithPage:nil Completion:^(NSDictionary * _Nullable content, BOOL success) {
+//        syLog(@"%@",content);
         if (success && !((NSString *)content[@"status"]).boolValue) {
             self.rollHeader.rollingArray = content[@"data"][@"banner"];
             _showArray = [content[@"data"][@"gamelist"] mutableCopy];
@@ -117,11 +117,10 @@
             _isAll = NO;
             
             //        [ControllerManager stopLoadingAnimation];
-//            syLog(@"%@",content);
-            
-//            syLog(@"%@",content);
             
             [self.tableView reloadData];
+        } else {
+            _currentPage = 0;
         }
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer endRefreshing];
@@ -130,7 +129,7 @@
 
 /** 加载更多数据 */
 - (void)loadMoreData {
-    if (_isAll) {
+    if (_isAll || _currentPage == 0) {
         [self.tableView.mj_footer endRefreshingWithNoMoreData];
     } else {
         //页数加一
@@ -147,6 +146,9 @@
                     [self.tableView.mj_footer endRefreshing];
                     [self.tableView reloadData];
                 }
+            } else {
+                _isAll = YES;
+                [self.tableView.mj_footer endRefreshingWithNoMoreData];
             }
         }];
     }
@@ -212,11 +214,10 @@
 #pragma mark - downloadGame
 /** cell的代理  */
 - (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
-    NSString *str = dict[@"ios_url"];
+    NSString *url = dict[@"ios_url"];
     
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
-    
-//    syLog(@"%@",dict);
+    [GameRequest downLoadAppWithURL:url];
+
 //    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-services://?action=download-manifest&url=https%3A%2F%2Fdownload.fir.im%2Fapps%2F58c78f29ca87a86ab50000ee%2Finstall%3Fdownload_token%3Dfb0f242cdf75f7007568a491321dac4d%26release_id%3D58c78faeca87a86b4c00012e"]];
     
 }

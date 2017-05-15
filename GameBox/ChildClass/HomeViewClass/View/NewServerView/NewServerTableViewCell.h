@@ -10,10 +10,10 @@
 
 @interface NewServerTableViewCell : UITableViewCell
 
+/** 游戏logo */
 @property (weak, nonatomic) IBOutlet UIImageView *gameLogo;
 
-@property (weak, nonatomic) IBOutlet UILabel *gameName;
-
-@property (weak, nonatomic) IBOutlet UILabel *startTime;
+/** 游戏数据 */
+@property (nonatomic, strong) NSDictionary *dict;
 
 @end

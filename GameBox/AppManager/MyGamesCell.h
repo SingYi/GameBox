@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class MyGamesCell;
+
+@protocol MygamesCellDelegate <NSObject>
+
+- (void)myGameCellClickOpenBtnWithIndex:(NSInteger)idx;
+
+@end
+
 @interface MyGamesCell : UITableViewCell
 
 @property (nonatomic, strong) UIImage *gameLogoImage;
@@ -17,6 +25,10 @@
 @property (nonatomic, strong) NSString *gameSizeText;
 
 @property (nonatomic, strong) NSString *gameVersionText;
+
+@property (nonatomic, assign) NSInteger  index;
+
+@property (nonatomic, weak) id<MygamesCellDelegate> delegate;
 
 
 @end

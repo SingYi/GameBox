@@ -28,6 +28,14 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    
+    [_openBtn addTarget:self action:@selector(respondsToOpenBtn) forControlEvents:(UIControlEventTouchUpInside)];
+}
+
+- (void)respondsToOpenBtn {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(myGameCellClickOpenBtnWithIndex:)]) {
+        [self.delegate myGameCellClickOpenBtnWithIndex:_index];
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
