@@ -10,12 +10,8 @@
 
 @interface ActivityCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *activityName;
-
-@property (weak, nonatomic) IBOutlet UILabel *activitySummary;
-
-@property (weak, nonatomic) IBOutlet UILabel *activityTime;
-
 @property (weak, nonatomic) IBOutlet UIImageView *activityLogo;
+
+@property (nonatomic, strong) NSDictionary *dict;
 
 @end

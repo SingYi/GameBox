@@ -8,7 +8,7 @@
 
 #import "GameOpenServerViewController.h"
 #import "NewServerTableViewCell.h"
-#import "GameModel.h"
+#import "GameRequest.h"
 
 #define DTServicerCELL @"NewServerTableViewCell"
 
@@ -40,16 +40,26 @@
 
 #pragma mark - method
 - (void)getOpenServerData {
-    [GameModel postServerListWithGameID:_gameID Copoletion:^(NSDictionary * _Nullable content, BOOL scccess) {
-
-        _showArray = content[@"data"];
-        [self.tableView reloadData];
+    
+    [GameRequest gameServerOpenWithGameID:_gameID Comoletion:^(NSDictionary * _Nullable content, BOOL scccess) {
+//        syLog(@"%@",content);
+        if (scccess && REQUESTSUCCESS) {
+            _showArray = content[@"data"];
+            [self.tableView reloadData];
+        } else {
+            _showArray = nil;
+        }
+        
     }];
 }
 
 - (void)setGameID:(NSString *)gameID {
     _gameID = gameID;
     [self getOpenServerData];
+}
+
+- (void)setGamename:(NSString *)gamename {
+    _gamename = gamename;
 }
 
 #pragma mark - tableviewDataSource
@@ -63,9 +73,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NewServerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DTServicerCELL];
-
     
-    cell.dict = _showArray[indexPath.row];
+    NSMutableDictionary *dict = [_showArray[indexPath.row] mutableCopy];
+    [dict setObject:_gamename forKey:@"gamename"];
+    
+    cell.dict = dict;
     
     cell.gameLogo.image = self.logoImage;
     

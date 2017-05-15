@@ -18,6 +18,9 @@
 /** 点击分享按钮 */
 - (void)DetailFooter:(DetailFooter *)detailFooter clickShareBtn:(UIButton *)sender;
 
+/** 点击现在按钮 */
+- (void)DetailFooter:(DetailFooter *)detailFooter clickDownLoadBtn:(UIButton *)sender;
+
 @end
 
 @interface DetailFooter : UIView

@@ -159,9 +159,21 @@ typedef enum : NSUInteger {
                     UserID:(NSString *_Nonnull)uid
                 Completion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
 
+//=====================================================================//
+/** 游戏活动 */
++ (void)activityWithPage:(NSString *_Nonnull)page
+              Completion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
+
+/** 游戏攻略 */
++ (void)setrategyWithPage:(NSString *_Nonnull)page
+               Completion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
+/** 搜索攻略 */
++ (void)searchStrategyWithKeyword:(NSString *_Nonnull)keyword
+                             Page:(NSString *_Nonnull)page
+                       Completion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
+
 /** 显示提示信息 */
 + (void)showAlertWithMessage:(NSString *_Nullable)message dismiss:(void(^_Nullable)(void))dismiss;
-
 
 @end
 

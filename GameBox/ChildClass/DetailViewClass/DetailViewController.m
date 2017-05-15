@@ -10,7 +10,8 @@
 #import "DetailHeader.h"
 #import "DetailFooter.h"
 
-#import "GameModel.h"
+#import "GameRequest.h"
+#import "UserModel.h"
 
 #import "GameDetailViewController.h"
 #import "GameStrategyViewController.h"
@@ -122,33 +123,27 @@
 
 #pragma mark - setter
 - (void)setGameID:(NSString *)gameID {
-    
-    if ([_gameID isEqualToString:gameID]) {
-        //设置收藏按钮的代理
-        self.detailFooter.delegate = self;
-    } else {
-        
-        _gameID = gameID;
+    self.detailFooter.delegate = nil;
+    _gameID = gameID;
         //请求游戏详情
-        [GameModel postGameInfoWithGameID:gameID UserID:@"0" ChannelID:@"185" Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
+
+    [GameRequest gameInfoWithGameID:_gameID Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success && REQUESTSUCCESS) {
+            self.gameinfo = content[@"data"][@"gameinfo"];
             
-            if (success && !((NSString *)content[@"status"]).boolValue) {
+            self.likes = content[@"data"][@"like"];
                 
-                self.gameinfo = content[@"data"][@"gameinfo"];
+            //设置收藏按钮的代理
+            self.detailFooter.delegate = self;
+        } else {
                 
-                self.likes = content[@"data"][@"like"];
-                
-                //设置收藏按钮的代理
-                self.detailFooter.delegate = self;
-            }
-        }];
-        
-        self.gameGiftBag.gameID = gameID;
-        self.gameOpenServer.gameID = gameID;
-        self.gameStrategy.gameID = gameID;
-    }
+        }
+    }];
     
-    //    syLog(@"%@",gameID);
+    self.gameGiftBag.gameID = gameID;
+    self.gameOpenServer.gameID = gameID;
+    self.gameStrategy.gameID = gameID;
+
     
 #warning get comment list
     [ChangyanSDK loadTopic:@"" topicTitle:nil topicSourceID:[NSString stringWithFormat:@"game_%@",gameID] pageSize:@"3" hotSize:nil orderBy:nil style:nil depth:nil subSize:nil completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
@@ -186,14 +181,11 @@
 /** 设置游戏信息 */
 - (void)setGameinfo:(NSDictionary *)gameinfo {
     _gameinfo = gameinfo;
-    
-
-//    syLog(@"%@",gameinfo);
 
     //设置游戏名称
     self.detailHeader.gameNameLabel.text = _gameinfo[@"gamename"];
     [self.detailHeader.gameNameLabel sizeToFit];
-    
+    self.gameOpenServer.gamename = _gameinfo[@"gamename"];
     //设置标签
     NSArray *types = [((NSString *)_gameinfo[@"types"]) componentsSeparatedByString:@" "];
     NSInteger j = 0;
@@ -213,8 +205,8 @@
     
     
     //设置游戏评分
-    self.detailHeader.source = 3.5;
-    
+    self.detailHeader.source = ((NSString *)_gameinfo[@"score"]).floatValue;
+
     //设置游戏下载次数
     NSInteger downLoad = ((NSString *)_gameinfo[@"download"]).integerValue;
     if (downLoad > 10000) {
@@ -364,14 +356,35 @@
 
 #pragma mark - detailFooterDelegate
 - (void)DetailFooter:(DetailFooter *)detailFooter clickCollecBtn:(UIButton *)sender {
+    if ([UserModel CurrentUser]) {
+        
+    } else {
+        [GameRequest showAlertWithMessage:@"未登录" dismiss:nil];
+        return;
+    }
+    
     if (self.gameinfo && _gameinfo[@"collect"]) {
-        BOOL isCollect = ((NSString *)_gameinfo[@"collect"]).boolValue;
+        BOOL isCollect = self.detailFooter.isCollection;
         if (isCollect) {
-            
-//            syLog(@"取消收藏");
+            [GameRequest gameCollectWithType:cancel GameID:_gameID Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
+                //取消收藏
+                if (success && REQUESTSUCCESS) {
+                    self.detailFooter.isCollection = NO;
+                } else {
+                    
+                }
+//                syLog(@"取消收藏");
+            }];
         } else {
-            
-//            syLog(@"添加收藏");
+            [GameRequest gameCollectWithType:collection GameID:_gameID Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
+                //收藏
+                if (success && REQUESTSUCCESS) {
+                    self.detailFooter.isCollection = YES;
+                } else {
+                
+                }
+//                syLog(@"收藏");
+            }];
         }
     }
 }
@@ -380,6 +393,20 @@
     if (self.gameinfo) {
 //        syLog(@"分享");
     }
+    
+    if ([UserModel CurrentUser]) {
+        
+    } else {
+//        self.hidesBottomBarWhenPushed = YES;
+//        [self.navigationController pushViewController:[ControllerManager shareManager].loginViewController animated:YES];
+        return;
+    }
+    
+    
+}
+
+- (void)DetailFooter:(DetailFooter *)detailFooter clickDownLoadBtn:(UIButton *)sender {
+    [GameRequest downLoadAppWithURL:_gameinfo[@"ios_url"]];
 }
 
 

@@ -345,12 +345,12 @@
         _tableView.mj_header.automaticallyChangeAlpha = YES;
         _tableView.mj_header = customRef;
         
+        //上拉刷新
         _tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
         
         _tableView.tableHeaderView = self.rollingHeader;
         _tableView.tableFooterView = [UIView new];
         
-        //上拉刷新
         
     
 
@@ -365,37 +365,16 @@
     return _rollingHeader;
 }
 
-/**< 搜索控制器 */
-- (UISearchController *)searchController {
-    if (!_searchController) {
-        _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-        
-        _searchController.searchResultsUpdater = self;
-        _searchController.delegate = self;
-        
-        _searchController.dimsBackgroundDuringPresentation = false;
-        [_searchController.searchBar sizeToFit];
-        _searchController.searchBar.backgroundColor = [UIColor clearColor];
-        _searchController.searchBar.placeholder= @"搜索礼包";
-        _searchController.searchBar.barStyle = UISearchBarStyleDefault;
-        
-        //隐藏导航栏
-//        _searchController.hidesNavigationBarDuringPresentation = NO;
-    }
-    return _searchController;
-}
 
 - (UISearchBar *)searchBar {
     if (!_searchBar) {
         _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 20)];
-//        [_searchBar sizeToFit];
-        
+
         UITextField *searchField = [_searchBar valueForKey:@"searchField"];
         if (searchField) {
             [searchField setBackgroundColor:[UIColor whiteColor]];
             searchField.layer.cornerRadius = 14.0f;
-//            searchField.layer.borderColor = [UIColor colorWithRed:247/255.0 green:75/255.0 blue:31/255.0 alpha:1].CGColor;
-//            searchField.layer.borderWidth = 1;
+
             searchField.layer.masksToBounds = YES;
         }
         _searchBar.placeholder = @"搜索礼包";

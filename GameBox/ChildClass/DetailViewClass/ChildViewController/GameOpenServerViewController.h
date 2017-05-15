@@ -14,4 +14,6 @@
 
 @property (nonatomic, strong) UIImage *logoImage;
 
+@property (nonatomic, strong) NSString *gamename;
+
 @end

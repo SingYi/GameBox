@@ -90,7 +90,7 @@
     
     CGRect rect = cell.packProgress.bounds;
     
-    cell.progressView.frame = CGRectMake(0, 0, rect.size.width * tc, rect.size.height);
+//    cell.progressView.frame = CGRectMake(0, 0, rect.size.width * tc, rect.size.height);
     
     return cell;
 }

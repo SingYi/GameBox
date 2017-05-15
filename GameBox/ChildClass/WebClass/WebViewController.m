@@ -39,7 +39,7 @@
 #pragma makr - getter
 - (WKWebView *)webView {
     if (!_webView) {
-        _webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT)];
+        _webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 10, kSCREEN_WIDTH, kSCREEN_HEIGHT)];
         _webView.UIDelegate = self;
         _webView.navigationDelegate = self;
     }
@@ -48,15 +48,18 @@
 
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
 //    syLog(@"star");
+    [ControllerManager starLoadingAnimation];
 }
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
 //    syLog(@"finsh");
+    [ControllerManager stopLoadingAnimation];
 }
 
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
     
-//    syLog(@"error === %@",error.localizedDescription);
+    [ControllerManager stopLoadingAnimation];
+    syLog(@"error === %@",error.localizedDescription);
 }
 
 

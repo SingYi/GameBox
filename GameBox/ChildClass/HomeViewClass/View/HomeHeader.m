@@ -97,6 +97,12 @@
     self.line.backgroundColor = lineColor;
 }
 
+- (void)reomveLabelWithX:(CGFloat)x {
+    
+    self.seleView.center = CGPointMake(_buttons[0].center.x + x, 42.5);
+}
+
+#pragma mark - getter
 - (UIView *)line {
     if (!_line) {
         _line = [[UIView alloc] initWithFrame:CGRectMake(0, 41, kSCREEN_WIDTH, 3)];

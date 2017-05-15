@@ -21,7 +21,6 @@
 		B506F26D1EC551B5005C1B2A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B506F26C1EC551B5005C1B2A /* Images.xcassets */; };
 		B50FD18F1EB314AB00CA5E85 /* GameDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B50FD18D1EB314AB00CA5E85 /* GameDetailTableViewCell.m */; };
 		B50FD1901EB314AB00CA5E85 /* GameDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B50FD18E1EB314AB00CA5E85 /* GameDetailTableViewCell.xib */; };
-		B52A06D01EA70CF9007179F9 /* ActivityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B52A06CF1EA70CF9007179F9 /* ActivityModel.m */; };
 		B52A06D31EA711B5007179F9 /* GameModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B52A06D21EA711B5007179F9 /* GameModel.m */; };
 		B52B2FD91EBC5A30002A572D /* GDCommentDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = B52B2FD81EBC5A30002A572D /* GDCommentDetailController.m */; };
 		B52B2FDC1EBC73B3002A572D /* GameRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B52B2FDB1EBC73B3002A572D /* GameRequest.m */; };
@@ -90,8 +89,6 @@
 		B5C5D4DC1EA0C484008A46DE /* DetialTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4DB1EA0C484008A46DE /* DetialTableHeader.m */; };
 		B5C5D4E21EA0C60F008A46DE /* CustomLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4E11EA0C60F008A46DE /* CustomLayout.m */; };
 		B5C70F271EA9EA920073FDA4 /* RecommentTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C70F261EA9EA920073FDA4 /* RecommentTableHeader.m */; };
-		B5D35BA21E9F6F9E00902B04 /* ClassfiyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5D35BA01E9F6F9E00902B04 /* ClassfiyTableViewCell.m */; };
-		B5D35BA31E9F6F9E00902B04 /* ClassfiyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5D35BA11E9F6F9E00902B04 /* ClassfiyTableViewCell.xib */; };
 		B5E2C8061E9E0AB2002CEC61 /* ForgetPassWordView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C7FF1E9E0AB2002CEC61 /* ForgetPassWordView.m */; };
 		B5E2C8071E9E0AB2002CEC61 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8011E9E0AB2002CEC61 /* LoginViewController.m */; };
 		B5E2C8081E9E0AB2002CEC61 /* NewPassWordView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8031E9E0AB2002CEC61 /* NewPassWordView.m */; };
@@ -135,8 +132,6 @@
 		B50FD18C1EB314AB00CA5E85 /* GameDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameDetailTableViewCell.h; sourceTree = "<group>"; };
 		B50FD18D1EB314AB00CA5E85 /* GameDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameDetailTableViewCell.m; sourceTree = "<group>"; };
 		B50FD18E1EB314AB00CA5E85 /* GameDetailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GameDetailTableViewCell.xib; sourceTree = "<group>"; };
-		B52A06CE1EA70CF9007179F9 /* ActivityModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityModel.h; sourceTree = "<group>"; };
-		B52A06CF1EA70CF9007179F9 /* ActivityModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityModel.m; sourceTree = "<group>"; };
 		B52A06D11EA711B5007179F9 /* GameModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameModel.h; sourceTree = "<group>"; };
 		B52A06D21EA711B5007179F9 /* GameModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameModel.m; sourceTree = "<group>"; };
 		B52B2FD71EBC5A30002A572D /* GDCommentDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDCommentDetailController.h; sourceTree = "<group>"; };
@@ -262,9 +257,6 @@
 		B5C5D4E11EA0C60F008A46DE /* CustomLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomLayout.m; sourceTree = "<group>"; };
 		B5C70F251EA9EA920073FDA4 /* RecommentTableHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecommentTableHeader.h; sourceTree = "<group>"; };
 		B5C70F261EA9EA920073FDA4 /* RecommentTableHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecommentTableHeader.m; sourceTree = "<group>"; };
-		B5D35B9F1E9F6F9E00902B04 /* ClassfiyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassfiyTableViewCell.h; sourceTree = "<group>"; };
-		B5D35BA01E9F6F9E00902B04 /* ClassfiyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassfiyTableViewCell.m; sourceTree = "<group>"; };
-		B5D35BA11E9F6F9E00902B04 /* ClassfiyTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ClassfiyTableViewCell.xib; sourceTree = "<group>"; };
 		B5E2C7FE1E9E0AB2002CEC61 /* ForgetPassWordView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForgetPassWordView.h; sourceTree = "<group>"; };
 		B5E2C7FF1E9E0AB2002CEC61 /* ForgetPassWordView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForgetPassWordView.m; sourceTree = "<group>"; };
 		B5E2C8001E9E0AB2002CEC61 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
@@ -807,9 +799,6 @@
 				B5C5D4A71EA07380008A46DE /* StrategyView */,
 				B5A266661E9F480300F0C38E /* HomeHeader.h */,
 				B5A266671E9F480300F0C38E /* HomeHeader.m */,
-				B5D35B9F1E9F6F9E00902B04 /* ClassfiyTableViewCell.h */,
-				B5D35BA01E9F6F9E00902B04 /* ClassfiyTableViewCell.m */,
-				B5D35BA11E9F6F9E00902B04 /* ClassfiyTableViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -819,8 +808,6 @@
 			children = (
 				B52A06D11EA711B5007179F9 /* GameModel.h */,
 				B52A06D21EA711B5007179F9 /* GameModel.m */,
-				B52A06CE1EA70CF9007179F9 /* ActivityModel.h */,
-				B52A06CF1EA70CF9007179F9 /* ActivityModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -907,7 +894,6 @@
 				B506F26D1EC551B5005C1B2A /* Images.xcassets in Resources */,
 				B59A76EA1EBB21D200FE2B50 /* GDCommentTableViewCell.xib in Resources */,
 				B59A76EF1EBB2B9900FE2B50 /* GDLikesTableViewCell.xib in Resources */,
-				B5D35BA31E9F6F9E00902B04 /* ClassfiyTableViewCell.xib in Resources */,
 				B52CC14C1EB857AE00A1A792 /* changyan.bundle in Resources */,
 				B560ECB41EC0444C00F5C559 /* SearchCollectionCell.xib in Resources */,
 				B5C5D4AC1EA073AA008A46DE /* StrategyCell.xib in Resources */,
@@ -975,7 +961,6 @@
 				B55416341EA89A7B0043A36D /* StrategyController.m in Sources */,
 				B55416321EA89A7B0043A36D /* ActivityController.m in Sources */,
 				B554162A1EA88E9F0043A36D /* HomeClassifyController.m in Sources */,
-				B52A06D01EA70CF9007179F9 /* ActivityModel.m in Sources */,
 				B52A06D31EA711B5007179F9 /* GameModel.m in Sources */,
 				B58A5C0A1EB1DF1D00CC1D00 /* MyAppViewController.m in Sources */,
 				B55416241EA88E7B0043A36D /* HomeNewGameController.m in Sources */,
@@ -995,7 +980,6 @@
 				B5E2C8061E9E0AB2002CEC61 /* ForgetPassWordView.m in Sources */,
 				B55416151EA8535F0043A36D /* GameDetailViewController.m in Sources */,
 				B59816D81EC3F7B20017599F /* MNCommentController.m in Sources */,
-				B5D35BA21E9F6F9E00902B04 /* ClassfiyTableViewCell.m in Sources */,
 				5E8DE56C1E9BDA66007E719D /* RequestUtils.m in Sources */,
 				B5E2C81B1E9E2E6F002CEC61 /* SettingView.m in Sources */,
 				B5C5D4DC1EA0C484008A46DE /* DetialTableHeader.m in Sources */,

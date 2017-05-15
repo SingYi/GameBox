@@ -48,7 +48,6 @@
     NSDictionary *dict = [[NSDictionary alloc] init];
 //    Class LSApplicationProxy_class = object_getClass(@"LSApplicationProxy");
 //    id test = [LSApplicationProxy_class performSelector:NSSelectorFromString(@"applicationProxyForIdentifier:") withObject:ide];
-//    syLog(@"%@",test);
     return dict;
 }
 
@@ -192,8 +191,7 @@
     
     //获取应用列表
     NSArray *appList = [WORKSPACE performSelector:@selector(allApplications)];
-//    syLog(@"%ld",appList.count);
-    
+
     //应用的类
     Class LSApplicationProxy_class = object_getClass(@"LSApplicationProxy");
     

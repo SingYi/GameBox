@@ -109,7 +109,7 @@
                 }
             }
         } else {
-            syLog(@"Request Failed...");
+//            syLog(@"Request Failed...");
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completion) {
                     completion(nil,false);

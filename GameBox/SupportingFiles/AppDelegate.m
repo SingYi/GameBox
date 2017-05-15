@@ -67,6 +67,7 @@
             [keys enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 SAVEOBJECT_AT_USERDEFAULTS(dict[obj], obj);
             }];
+            syLog(@"%@",content);
             SAVEOBJECT_AT_USERDEFAULTS(keys, @"MAP");
             [[NSUserDefaults standardUserDefaults] synchronize];
         }

@@ -31,4 +31,8 @@
 /** 分割线颜色 */
 @property (nonatomic, strong) UIColor *lineColor;
 
+/** 移动标签 */
+- (void)reomveLabelWithX:(CGFloat)x;
+
+
 @end

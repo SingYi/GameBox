@@ -20,4 +20,6 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *gameLogo;
 
+@property (nonatomic, strong) NSDictionary *dict;
+
 @end

@@ -51,6 +51,12 @@
     }
 }
 
+- (void)clickDownLoadButton:(UIButton *)sender {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(DetailFooter:clickDownLoadBtn:)]) {
+        [self.delegate DetailFooter:self clickDownLoadBtn:sender];
+    }
+}
+
 #pragma mark - setter
 - (void)setIsCollection:(BOOL)isCollection {
     _isCollection = isCollection;
@@ -79,29 +85,8 @@
     if (!_downLoadBtn) {
         _downLoadBtn = [UIButton buttonWithType:(UIButtonTypeCustom)];
         _downLoadBtn.frame = CGRectMake(60, 3, kSCREEN_WIDTH - 120, 44);
-
-////        初始化CAGradientlayer对象，使它的大小为UIView的大小
-//        CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-//        gradientLayer.frame = _downLoadBtn.bounds;
-//        
-//        //将CAGradientlayer对象添加在我们要设置背景色的视图的layer层
-//        [_downLoadBtn.layer addSublayer:gradientLayer];
-//        
-//        //设置渐变区域的起始和终止位置（范围为0-1）
-//        gradientLayer.startPoint = CGPointMake(0, 0);
-//        gradientLayer.endPoint = CGPointMake(1, 0);
-//        
-//        //设置颜色数组
-//        gradientLayer.colors = @[(__bridge id)[UIColor colorWithRed:226/255.0 green:174/255.0 blue:62/255.0 alpha:1].CGColor, (__bridge id)[UIColor colorWithRed:226/255.0 green:144/255.0 blue:39/255.0 alpha:1].CGColor];
-//        
-//        _downLoadBtn.layer.cornerRadius = 4;
-//        _downLoadBtn.layer.masksToBounds = YES;
-//        
-//        //设置颜色分割点（范围：0-1）
-//        gradientLayer.locations = @[@(0.5f), @(1.0f)];
-        
+        [_downLoadBtn setBackgroundImage:[UIImage imageNamed:@"gameDetail_downLoad"] forState:(UIControlStateNormal)];
         [_downLoadBtn setTitle:@"下载" forState:(UIControlStateNormal)];
-        [_downLoadBtn setBackgroundColor:[UIColor orangeColor]];
     }
     return _downLoadBtn;
 }

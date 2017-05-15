@@ -29,7 +29,7 @@
 #define GAME_GRADE @"http://www.185sy.com/api-game-gameGrade"
 #define GAMESTRAURL @"http://www.185sy.com/api-article-get_list_by_game"
 //18
-
+#define INDEX_ARTICLE @"http://www.185sy.com/api-article-get_list"
 
 @implementation GameRequest
 
@@ -397,6 +397,73 @@
     NSString *urlStr = OBJECT_FOR_USERDEFAULTS(@"GAME_GRADE");
     if (!urlStr) {
         urlStr = GAME_GRADE;
+    }
+    [GameRequest postRequestWithURL:urlStr params:dict completion:completion];
+    
+}
+
+/** 活动 */
++ (void)activityWithPage:(NSString *)page Completion:(void (^)(NSDictionary * _Nullable, BOOL))completion {
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObject:@"2" forKey:@"system"];
+    [dict setObject:@"1" forKey:@"type"];
+    [dict setObject:CHANNELID forKey:@"channel_id"];
+
+    if (page) {
+        [dict setObject:page forKey:@"page"];
+    } else {
+        [dict setObject:@"1" forKey:@"page"];
+    }
+    
+    NSString *urlStr = OBJECT_FOR_USERDEFAULTS(@"INDEX_ARTICLE");
+    if (!urlStr) {
+        urlStr = INDEX_ARTICLE;
+    }
+    [GameRequest postRequestWithURL:urlStr params:dict completion:completion];
+}
+
+/** 攻略 */
++ (void)setrategyWithPage:(NSString *)page Completion:(void (^)(NSDictionary * _Nullable, BOOL))completion {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObject:@"2" forKey:@"system"];
+    [dict setObject:@"2" forKey:@"type"];
+    [dict setObject:CHANNELID forKey:@"channel_id"];
+    
+    if (page) {
+        [dict setObject:page forKey:@"page"];
+    } else {
+        [dict setObject:@"1" forKey:@"page"];
+    }
+    
+    NSString *urlStr = OBJECT_FOR_USERDEFAULTS(@"INDEX_ARTICLE");
+    if (!urlStr) {
+        urlStr = INDEX_ARTICLE;
+    }
+    [GameRequest postRequestWithURL:urlStr params:dict completion:completion];
+}
+
+/** 搜索攻略 */
++ (void)searchStrategyWithKeyword:(NSString *)keyword
+                             Page:(NSString * _Nonnull)page
+                       Completion:(void (^)(NSDictionary * _Nullable, BOOL))completion {
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObject:@"2" forKey:@"system"];
+    [dict setObject:@"2" forKey:@"type"];
+    [dict setObject:CHANNELID forKey:@"channel_id"];
+    
+    if (page) {
+        [dict setObject:page forKey:@"page"];
+    } else {
+        [dict setObject:@"1" forKey:@"page"];
+    }
+    
+    [dict setObject:keyword forKey:@"search"];
+    
+    NSString *urlStr = OBJECT_FOR_USERDEFAULTS(@"INDEX_ARTICLE");
+    if (!urlStr) {
+        urlStr = INDEX_ARTICLE;
     }
     [GameRequest postRequestWithURL:urlStr params:dict completion:completion];
     

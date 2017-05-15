@@ -17,7 +17,7 @@
 
 #define CELLIDE @"NewServerCell"
 
-@interface NewServerController ()<HomeHeaderDelegate,UICollectionViewDelegate,UICollectionViewDataSource>
+@interface NewServerController ()<HomeHeaderDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UIScrollViewDelegate>
 
 /**选择按钮*/
 @property (nonatomic, strong) HomeHeader *headerView;
@@ -49,6 +49,9 @@
 //**初始化数据*/
 - (void)initDataSource {
     self.showArray = @[self.todayServerController,self.commingServerController,self.alredayServerController];
+    [self addChildViewController:self.todayServerController];
+    [self addChildViewController:self.commingServerController];
+    [self addChildViewController:self.alredayServerController];
 }
 
 /**初始化用户界面*/
@@ -81,6 +84,19 @@
     
     
     return cell;
+}
+
+#pragma mark - srcrllerDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat x = scrollView.contentOffset.x;
+    CGSize rect = scrollView.contentSize;
+    CGFloat x1 = x / rect.width;
+    x = x1 * kSCREEN_WIDTH;
+    
+    [self.headerView reomveLabelWithX:x];
+    
+    
+//    syLog(@"%lf",scrollView.contentOffset.x);
 }
 
 #pragma mark - getter

@@ -440,6 +440,7 @@
         }
         
 //        _searchBar.backgroundColor = [UIColor blackColor];
+        _searchBar.tintColor = [UIColor blueColor];
         _searchBar.placeholder = @"搜索游戏";
         
         _searchBar.delegate = self;

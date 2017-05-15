@@ -150,6 +150,18 @@
         self.source = 5.f;
     }
     
+    
+    NSString *islocal = dict[@"isLocal"];
+    if ([islocal isEqualToString:@"1"]) {
+        [self.gameDownload setTitle:@"打开" forState:(UIControlStateNormal)];
+        [self.gameDownload setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
+        [self.gameDownload setBackgroundImage:[UIImage imageNamed:@"downLoadButton"] forState:(UIControlStateNormal)];
+    } else {
+        [self.gameDownload setTitle:@"下载" forState:(UIControlStateNormal)];
+        [self.gameDownload setTitleColor:[UIColor orangeColor] forState:(UIControlStateNormal)];
+        [self.gameDownload setBackgroundImage:[UIImage imageNamed:@"button_circle"] forState:(UIControlStateNormal)];
+    }
+//    syLog(@"%@",_dict);
 }
 
 - (void)setSource:(CGFloat)source {

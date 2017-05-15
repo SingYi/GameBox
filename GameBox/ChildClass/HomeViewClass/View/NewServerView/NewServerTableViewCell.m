@@ -27,8 +27,8 @@
     [super awakeFromNib];
     // Initialization code
     
-    self.gameNameLabel.font = [UIFont systemFontOfSize:14];
-    self.startTimeLabel.font = [UIFont systemFontOfSize:14];
+    self.gameNameLabel.font = [UIFont systemFontOfSize:13];
+    self.startTimeLabel.font = [UIFont systemFontOfSize:13];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -44,7 +44,7 @@
     }
     
     //设置游戏名
-    self.gameNameLabel.text = [NSString stringWithFormat:@"%@ - %@",_dict[@"gamename"],_dict[@"server_id"]];
+    self.gameNameLabel.text = [NSString stringWithFormat:@"%@ - %@服",_dict[@"gamename"],_dict[@"server_id"]];
     
     //设置开服时间
     NSString *timeStr = _dict[@"start_time"];
@@ -53,6 +53,17 @@
     formatter.dateFormat = @"YYYY-MM-dd hh:mm";
     timeStr = [formatter stringFromDate:starDate];
     self.startTimeLabel.text = [NSString stringWithFormat:@"开服时间: %@",timeStr];
+    
+    //设置按钮
+    if ([[NSDate date] timeIntervalSinceDate:starDate] < 0.0f) {
+        [self.remindButton setBackgroundImage:[UIImage imageNamed:@"button_circle"] forState:(UIControlStateNormal)];
+        [self.remindButton setTitle:@"提醒" forState:(UIControlStateNormal)];
+        [self.remindButton setTitleColor:[UIColor orangeColor] forState:(UIControlStateNormal)];
+    } else {
+        [self.remindButton setBackgroundImage:[UIImage imageNamed:@"downLoadButton"] forState:(UIControlStateNormal)];
+        [self.remindButton setTitle:@"已开服" forState:(UIControlStateNormal)];
+        [self.remindButton setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
+    }
 }
 
 

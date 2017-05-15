@@ -370,7 +370,7 @@
             searchField.layer.masksToBounds = YES;
         }
         
-        _searchBar.tintColor = [UIColor blackColor];
+        _searchBar.tintColor = [UIColor blueColor];
         
         _searchBar.placeholder = @"搜索游戏";
         

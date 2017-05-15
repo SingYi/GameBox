@@ -8,7 +8,7 @@
 
 #import "ActivityController.h"
 #import "ActivityCell.h"
-#import "ActivityModel.h"
+#import "GameRequest.h"
 
 #import "ControllerManager.h"
 
@@ -68,27 +68,30 @@
 #pragma mark - refresh
 /** 刷新数据 */
 - (void)refreshData {
-    [ActivityModel postWithType:ActivityList Page:@"1" ChannelId:@"185" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        if (success ) {
+    [GameRequest activityWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success && REQUESTSUCCESS) {
             _currentPage = 1;
             _isAll = NO;
             _showArray = [content[@"data"][@"list"] mutableCopy];
-            [self.tableView.mj_header endRefreshing];
+//            syLog(@"%@",content[@"data"][@"list"]);
             [self.tableView reloadData];
+            [self.tableView.mj_footer endRefreshing];
+        } else {
+            _currentPage = 0;
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
         }
+        [self.tableView.mj_header endRefreshing];
     }];
 }
 
 /** 加载数据 */
 - (void)loadMoreData {
-    
-    if (_isAll) {
+    if (_isAll || _currentPage == 0) {
         [self.tableView.mj_footer endRefreshingWithNoMoreData];
     } else {
         _currentPage++;
-        [ActivityModel postWithType:ActivityList Page:[NSString stringWithFormat:@"%ld",_currentPage] ChannelId:@"185" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-            if (success ) {
-            
+        [GameRequest activityWithPage:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            if (success && REQUESTSUCCESS) {
                 NSArray *array = content[@"data"][@"list"];
                 if (array.count == 0) {
                     _isAll = YES;
@@ -98,10 +101,11 @@
                     [self.tableView.mj_footer endRefreshing];
                     [self.tableView reloadData];
                 }
+            } else {
+                [self.tableView.mj_footer endRefreshingWithNoMoreData];
             }
         }];
     }
-    
 }
 
 
@@ -118,19 +122,17 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ActivityCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDE forIndexPath:indexPath];
-
-    cell.activityName.text = _showArray[indexPath.row][@"title"];
-    cell.activityTime.text = _showArray[indexPath.row][@"release_time"];
-    cell.activitySummary.text = _showArray[indexPath.row][@"abstract"];
     
-    [cell.activityLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] placeholderImage:nil];
+    cell.dict = _showArray[indexPath.row];
+    
+    [cell.activityLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
     
     return cell;
 }
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 100;
+    return 80;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

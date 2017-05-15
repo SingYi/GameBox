@@ -19,6 +19,7 @@
 #import "StrategyController.h"
 
 #import "GameRequest.h"
+#import "AppModel.h"
 
 #import "MJRefresh.h"
 #import "UIImageView+WebCache.h"
@@ -32,6 +33,8 @@
 @property (nonatomic, strong) UITableView *tableView;
 /**推荐游戏数据*/
 @property (nonatomic, strong) NSMutableArray *showArray;
+/** 本地游戏 */
+@property (nonatomic, strong) NSArray *localArray;
 /**轮播图*/
 @property (nonatomic, strong) RecommentTableHeader *rollHeader;
 /**头部视图*/
@@ -115,15 +118,37 @@
             
             _currentPage = 1;
             _isAll = NO;
+            [AppModel getLocalGamesWithBlock:^(NSArray * _Nullable games, BOOL success) {
+                if (success) {
+                    _localArray = games;
+                    
+//                    syLog(@"%@ === %@ ",_showArray,games);
+                    
+                    for (NSInteger i = 0; i < _showArray.count; i++) {
+                        for (NSInteger j = 0; j < _localArray.count; j++) {
+                            if ([_showArray[i][@"ios_pack"] isEqualToString:_localArray[j][@"bundleID"]]) {
+                                NSMutableDictionary *dict = [_showArray[i] mutableCopy];
+                                [dict setObject:@"1" forKey:@"isLocal"];
+                                [_showArray replaceObjectAtIndex:i withObject:dict];
+                            }
+                        }
+                    }
+   
+                    [self.tableView reloadData];
+                    
+                } else {
+                    _localArray = nil;
+                }
+                
+                [self.tableView.mj_header endRefreshing];
+                [self.tableView.mj_footer endRefreshing];
+            }];
             
-            //        [ControllerManager stopLoadingAnimation];
+  
             
-            [self.tableView reloadData];
         } else {
             _currentPage = 0;
         }
-        [self.tableView.mj_header endRefreshing];
-        [self.tableView.mj_footer endRefreshing];
     }];
 }
 
@@ -214,9 +239,15 @@
 #pragma mark - downloadGame
 /** cell的代理  */
 - (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
-    NSString *url = dict[@"ios_url"];
-    
-    [GameRequest downLoadAppWithURL:url];
+    NSString *isLocal = dict[@"isLocal"];
+    if ([isLocal isEqualToString:@"1"]) {
+        [AppModel openAPPWithIde:dict[@"ios_pack"]];
+        
+    } else {
+        NSString *url = dict[@"ios_url"];
+        
+        [GameRequest downLoadAppWithURL:url];
+    }
 
 //    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-services://?action=download-manifest&url=https%3A%2F%2Fdownload.fir.im%2Fapps%2F58c78f29ca87a86ab50000ee%2Finstall%3Fdownload_token%3Dfb0f242cdf75f7007568a491321dac4d%26release_id%3D58c78faeca87a86b4c00012e"]];
     

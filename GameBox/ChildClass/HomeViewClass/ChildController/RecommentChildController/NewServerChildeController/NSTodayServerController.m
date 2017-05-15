@@ -47,7 +47,7 @@
 #pragma mark - method
 - (void)refreshData {
     [GameRequest todayServerOpenWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        syLog(@"%@",content);
+//        syLog(@"%@",content);
         if (success && REQUESTSUCCESS) {
             _showArray = [content[@"data"] mutableCopy];
             _currentPage = 1;
@@ -108,6 +108,25 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 80;
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    self.parentViewController.hidesBottomBarWhenPushed = YES;
+    
+    [ControllerManager shareManager].detailView.gameID = self.showArray[indexPath.row][@"id"];
+    
+    NewServerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    [ControllerManager shareManager].detailView.gameLogo = cell.gameLogo.image;
+    
+    [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
+//    self.parentViewController.hidesBottomBarWhenPushed = NO;
+
+    
+}
+
+
 #pragma makr - getter
 - (UITableView *)tableView {
     if (!_tableView) {
