@@ -21,13 +21,11 @@
 		B506F26D1EC551B5005C1B2A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B506F26C1EC551B5005C1B2A /* Images.xcassets */; };
 		B50FD18F1EB314AB00CA5E85 /* GameDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B50FD18D1EB314AB00CA5E85 /* GameDetailTableViewCell.m */; };
 		B50FD1901EB314AB00CA5E85 /* GameDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B50FD18E1EB314AB00CA5E85 /* GameDetailTableViewCell.xib */; };
-		B52A06D31EA711B5007179F9 /* GameModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B52A06D21EA711B5007179F9 /* GameModel.m */; };
 		B52B2FD91EBC5A30002A572D /* GDCommentDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = B52B2FD81EBC5A30002A572D /* GDCommentDetailController.m */; };
 		B52B2FDC1EBC73B3002A572D /* GameRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B52B2FDB1EBC73B3002A572D /* GameRequest.m */; };
 		B52CC14A1EB857AA00A1A792 /* libChangyanSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B52CC1491EB857AA00A1A792 /* libChangyanSDK.a */; };
 		B52CC14C1EB857AE00A1A792 /* changyan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B52CC14B1EB857AE00A1A792 /* changyan.bundle */; };
 		B52CC1501EB8581100A1A792 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B52CC14F1EB8581100A1A792 /* Security.framework */; };
-		B5420F741EA6005A0068AEE1 /* GiftBagModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B5420F731EA6005A0068AEE1 /* GiftBagModel.m */; };
 		B54378CD1EADD35200B25D47 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54378CC1EADD35200B25D47 /* WebViewController.m */; };
 		B54FCA321EC94EAD00BACAF7 /* NSCommingServerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54FCA311EC94EAD00BACAF7 /* NSCommingServerController.m */; };
 		B54FCA351EC94EC100BACAF7 /* NSAlredayServerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54FCA341EC94EC100BACAF7 /* NSAlredayServerController.m */; };
@@ -58,7 +56,9 @@
 		B5824FB41EA0594400966640 /* NewServerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5824FB31EA0594400966640 /* NewServerCell.m */; };
 		B5824FB81EA05B6800966640 /* NewServerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5824FB61EA05B6800966640 /* NewServerTableViewCell.m */; };
 		B5824FB91EA05B6800966640 /* NewServerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5824FB71EA05B6800966640 /* NewServerTableViewCell.xib */; };
-		B58A5C021EB181C700CC1D00 /* MineModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C011EB181C700CC1D00 /* MineModel.m */; };
+		B5858D5B1ECA9737003A2414 /* SearchGiftController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5858D5A1ECA9737003A2414 /* SearchGiftController.m */; };
+		B5858D5E1ECA9B23003A2414 /* SearchGiftResultController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5858D5D1ECA9B23003A2414 /* SearchGiftResultController.m */; };
+		B5858D651ECADB76003A2414 /* GiftRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B5858D641ECADB76003A2414 /* GiftRequest.m */; };
 		B58A5C061EB1C0B400CC1D00 /* UserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C051EB1C0B400CC1D00 /* UserModel.m */; };
 		B58A5C0A1EB1DF1D00CC1D00 /* MyAppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C091EB1DF1D00CC1D00 /* MyAppViewController.m */; };
 		B58A5C0D1EB1DFBC00CC1D00 /* AppModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C0C1EB1DFBC00CC1D00 /* AppModel.m */; };
@@ -95,7 +95,6 @@
 		B5E2C8091E9E0AB2002CEC61 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8051E9E0AB2002CEC61 /* RegisterViewController.m */; };
 		B5E2C80C1E9E1A37002CEC61 /* MyGiftBagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C80B1E9E1A37002CEC61 /* MyGiftBagViewController.m */; };
 		B5E2C80F1E9E27E7002CEC61 /* ResetPassWordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C80E1E9E27E7002CEC61 /* ResetPassWordViewController.m */; };
-		B5E2C8121E9E2DED002CEC61 /* AppManagerView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8111E9E2DED002CEC61 /* AppManagerView.m */; };
 		B5E2C8151E9E2E0C002CEC61 /* MyNewsView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8141E9E2E0C002CEC61 /* MyNewsView.m */; };
 		B5E2C8181E9E2E59002CEC61 /* MyAttentionView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8171E9E2E59002CEC61 /* MyAttentionView.m */; };
 		B5E2C81B1E9E2E6F002CEC61 /* SettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C81A1E9E2E6F002CEC61 /* SettingView.m */; };
@@ -132,8 +131,6 @@
 		B50FD18C1EB314AB00CA5E85 /* GameDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameDetailTableViewCell.h; sourceTree = "<group>"; };
 		B50FD18D1EB314AB00CA5E85 /* GameDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameDetailTableViewCell.m; sourceTree = "<group>"; };
 		B50FD18E1EB314AB00CA5E85 /* GameDetailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GameDetailTableViewCell.xib; sourceTree = "<group>"; };
-		B52A06D11EA711B5007179F9 /* GameModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameModel.h; sourceTree = "<group>"; };
-		B52A06D21EA711B5007179F9 /* GameModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameModel.m; sourceTree = "<group>"; };
 		B52B2FD71EBC5A30002A572D /* GDCommentDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDCommentDetailController.h; sourceTree = "<group>"; };
 		B52B2FD81EBC5A30002A572D /* GDCommentDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDCommentDetailController.m; sourceTree = "<group>"; };
 		B52B2FDA1EBC73B3002A572D /* GameRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameRequest.h; sourceTree = "<group>"; };
@@ -142,8 +139,6 @@
 		B52CC14B1EB857AE00A1A792 /* changyan.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = changyan.bundle; sourceTree = "<group>"; };
 		B52CC14E1EB857BB00A1A792 /* ChangyanSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangyanSDK.h; sourceTree = "<group>"; };
 		B52CC14F1EB8581100A1A792 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		B5420F721EA6005A0068AEE1 /* GiftBagModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GiftBagModel.h; sourceTree = "<group>"; };
-		B5420F731EA6005A0068AEE1 /* GiftBagModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GiftBagModel.m; sourceTree = "<group>"; };
 		B54378CB1EADD35200B25D47 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		B54378CC1EADD35200B25D47 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		B54FCA2D1EC94E9300BACAF7 /* NSTodayServerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTodayServerController.h; sourceTree = "<group>"; };
@@ -201,8 +196,12 @@
 		B5824FB51EA05B6800966640 /* NewServerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewServerTableViewCell.h; sourceTree = "<group>"; };
 		B5824FB61EA05B6800966640 /* NewServerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewServerTableViewCell.m; sourceTree = "<group>"; };
 		B5824FB71EA05B6800966640 /* NewServerTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewServerTableViewCell.xib; sourceTree = "<group>"; };
-		B58A5C001EB181C700CC1D00 /* MineModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineModel.h; sourceTree = "<group>"; };
-		B58A5C011EB181C700CC1D00 /* MineModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineModel.m; sourceTree = "<group>"; };
+		B5858D591ECA9737003A2414 /* SearchGiftController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchGiftController.h; sourceTree = "<group>"; };
+		B5858D5A1ECA9737003A2414 /* SearchGiftController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchGiftController.m; sourceTree = "<group>"; };
+		B5858D5C1ECA9B23003A2414 /* SearchGiftResultController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchGiftResultController.h; sourceTree = "<group>"; };
+		B5858D5D1ECA9B23003A2414 /* SearchGiftResultController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchGiftResultController.m; sourceTree = "<group>"; };
+		B5858D631ECADB76003A2414 /* GiftRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GiftRequest.h; sourceTree = "<group>"; };
+		B5858D641ECADB76003A2414 /* GiftRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GiftRequest.m; sourceTree = "<group>"; };
 		B58A5C041EB1C0B400CC1D00 /* UserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserModel.h; sourceTree = "<group>"; };
 		B58A5C051EB1C0B400CC1D00 /* UserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserModel.m; sourceTree = "<group>"; };
 		B58A5C081EB1DF1D00CC1D00 /* MyAppViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAppViewController.h; sourceTree = "<group>"; };
@@ -269,8 +268,6 @@
 		B5E2C80B1E9E1A37002CEC61 /* MyGiftBagViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyGiftBagViewController.m; sourceTree = "<group>"; };
 		B5E2C80D1E9E27E7002CEC61 /* ResetPassWordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResetPassWordViewController.h; sourceTree = "<group>"; };
 		B5E2C80E1E9E27E7002CEC61 /* ResetPassWordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResetPassWordViewController.m; sourceTree = "<group>"; };
-		B5E2C8101E9E2DED002CEC61 /* AppManagerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppManagerView.h; sourceTree = "<group>"; };
-		B5E2C8111E9E2DED002CEC61 /* AppManagerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppManagerView.m; sourceTree = "<group>"; };
 		B5E2C8131E9E2E0C002CEC61 /* MyNewsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyNewsView.h; sourceTree = "<group>"; };
 		B5E2C8141E9E2E0C002CEC61 /* MyNewsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyNewsView.m; sourceTree = "<group>"; };
 		B5E2C8161E9E2E59002CEC61 /* MyAttentionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAttentionView.h; sourceTree = "<group>"; };
@@ -403,8 +400,12 @@
 			children = (
 				5E8DE55D1E9BD786007E719D /* SearchViewController.h */,
 				5E8DE55E1E9BD786007E719D /* SearchViewController.m */,
+				B5858D591ECA9737003A2414 /* SearchGiftController.h */,
+				B5858D5A1ECA9737003A2414 /* SearchGiftController.m */,
 				B57DB6DA1EB08E9B00A0D8A0 /* SearchResultViewController.h */,
 				B57DB6DB1EB08E9B00A0D8A0 /* SearchResultViewController.m */,
+				B5858D5C1ECA9B23003A2414 /* SearchGiftResultController.h */,
+				B5858D5D1ECA9B23003A2414 /* SearchGiftResultController.m */,
 				B560ECAD1EC01CB000F5C559 /* SearchView.h */,
 				B560ECAE1EC01CB000F5C559 /* SearchView.m */,
 				5E8DE56D1E9BDBD4007E719D /* Model */,
@@ -440,6 +441,8 @@
 				5E8DE56B1E9BDA66007E719D /* RequestUtils.m */,
 				B52B2FDA1EBC73B3002A572D /* GameRequest.h */,
 				B52B2FDB1EBC73B3002A572D /* GameRequest.m */,
+				B5858D631ECADB76003A2414 /* GiftRequest.h */,
+				B5858D641ECADB76003A2414 /* GiftRequest.m */,
 			);
 			path = RequestUtils;
 			sourceTree = "<group>";
@@ -622,8 +625,6 @@
 		B59FEDBF1E9CC95E00A64D84 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				B5420F721EA6005A0068AEE1 /* GiftBagModel.h */,
-				B5420F731EA6005A0068AEE1 /* GiftBagModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -640,8 +641,6 @@
 		B59FEDCB1E9CD8F700A64D84 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				B58A5C001EB181C700CC1D00 /* MineModel.h */,
-				B58A5C011EB181C700CC1D00 /* MineModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -761,8 +760,6 @@
 				B5E2C8051E9E0AB2002CEC61 /* RegisterViewController.m */,
 				B5E2C80A1E9E1A37002CEC61 /* MyGiftBagViewController.h */,
 				B5E2C80B1E9E1A37002CEC61 /* MyGiftBagViewController.m */,
-				B5E2C8101E9E2DED002CEC61 /* AppManagerView.h */,
-				B5E2C8111E9E2DED002CEC61 /* AppManagerView.m */,
 				B5E2C8131E9E2E0C002CEC61 /* MyNewsView.h */,
 				B5E2C8141E9E2E0C002CEC61 /* MyNewsView.m */,
 				B59816D51EC3F78A0017599F /* NewsChildController */,
@@ -806,8 +803,6 @@
 		B5E2C8211E9F29AA002CEC61 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				B52A06D11EA711B5007179F9 /* GameModel.h */,
-				B52A06D21EA711B5007179F9 /* GameModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -961,7 +956,6 @@
 				B55416341EA89A7B0043A36D /* StrategyController.m in Sources */,
 				B55416321EA89A7B0043A36D /* ActivityController.m in Sources */,
 				B554162A1EA88E9F0043A36D /* HomeClassifyController.m in Sources */,
-				B52A06D31EA711B5007179F9 /* GameModel.m in Sources */,
 				B58A5C0A1EB1DF1D00CC1D00 /* MyAppViewController.m in Sources */,
 				B55416241EA88E7B0043A36D /* HomeNewGameController.m in Sources */,
 				B5C5D4AB1EA073AA008A46DE /* StrategyCell.m in Sources */,
@@ -970,6 +964,7 @@
 				B5E2C80C1E9E1A37002CEC61 /* MyGiftBagViewController.m in Sources */,
 				B52B2FD91EBC5A30002A572D /* GDCommentDetailController.m in Sources */,
 				5E8DE5681E9BD7D2007E719D /* MineViewController.m in Sources */,
+				B5858D5B1ECA9737003A2414 /* SearchGiftController.m in Sources */,
 				5E8DE5621E9BD7A4007E719D /* RankingListViewController.m in Sources */,
 				B5691C3C1EC1B8310094BE0F /* AFHTTPSessionManager.m in Sources */,
 				B560ECB31EC0444C00F5C559 /* SearchCollectionCell.m in Sources */,
@@ -986,7 +981,6 @@
 				B5E2C8091E9E0AB2002CEC61 /* RegisterViewController.m in Sources */,
 				B59816E41EC45F250017599F /* LaunchScreen.m in Sources */,
 				B59816DF1EC412DC0017599F /* HCDetailController.m in Sources */,
-				B5420F741EA6005A0068AEE1 /* GiftBagModel.m in Sources */,
 				B5691C481EC1B8E70094BE0F /* AFSecurityPolicy.m in Sources */,
 				B5F10BDE1EAF272C0061B43E /* RGiftBagController.m in Sources */,
 				B554161E1EA853F40043A36D /* GameOpenServerViewController.m in Sources */,
@@ -1014,7 +1008,9 @@
 				B57DB6DC1EB08E9B00A0D8A0 /* SearchResultViewController.m in Sources */,
 				B5C5D4C11EA0AC64008A46DE /* DetailFooter.m in Sources */,
 				B5E2C8151E9E2E0C002CEC61 /* MyNewsView.m in Sources */,
+				B5858D5E1ECA9B23003A2414 /* SearchGiftResultController.m in Sources */,
 				B5824FB81EA05B6800966640 /* NewServerTableViewCell.m in Sources */,
+				B5858D651ECADB76003A2414 /* GiftRequest.m in Sources */,
 				B5824FB41EA0594400966640 /* NewServerCell.m in Sources */,
 				B5691C421EC1B8CC0094BE0F /* AFURLResponseSerialization.m in Sources */,
 				B5C5D4B41EA078BF008A46DE /* ActivityCell.m in Sources */,
@@ -1023,8 +1019,6 @@
 				B54FCA361EC959B800BACAF7 /* NSTodayServerController.m in Sources */,
 				B5E2C8181E9E2E59002CEC61 /* MyAttentionView.m in Sources */,
 				B5691C451EC1B8DB0094BE0F /* AFURLRequestSerialization.m in Sources */,
-				B5E2C8121E9E2DED002CEC61 /* AppManagerView.m in Sources */,
-				B58A5C021EB181C700CC1D00 /* MineModel.m in Sources */,
 				B59A76EE1EBB2B9900FE2B50 /* GDLikesTableViewCell.m in Sources */,
 				B5E2C81E1E9E2E96002CEC61 /* AboutUsView.m in Sources */,
 				B5E2C8241E9F2A27002CEC61 /* HomeViewController.m in Sources */,

@@ -19,6 +19,12 @@
 /** 获取本地游戏 */
 + (void)getLocalGamesWithBlock:(void(^_Nullable)(NSArray * _Nullable games, BOOL success))block;
 
+/** 将获取的本地游戏存入plist文件 */
++ (void)saveLocalGamesWithArray:(NSArray * _Nullable)games;
+
+/** 读取本地plist文件中的游戏 */
++ (NSArray *_Nullable)getLocalGamesWithPlist;
+
 //+ (NSDictionary *_Nullable)getAppinfoWithIde:(NSString *_Nullable)ide;
 
 /** test */

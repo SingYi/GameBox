@@ -65,17 +65,20 @@
     //礼包数量
     self.packCounts.text = _dict[@"pack_counts"];
 
+    //设置百分比
     NSString *total = _dict[@"pack_counts"];
     NSString *current = _dict[@"pack_used_counts"];
     CGFloat tc = 0;
+    NSString *tcStr = nil;
     if (total.floatValue == 0) {
         tc = 0;
+        tcStr = [NSString stringWithFormat:@"%.02f%%",(0.00)];
     } else {
         tc = current.floatValue / total.floatValue;
+        tcStr = [NSString stringWithFormat:@"%.02f%%",(100.f - tc * 100.f)];
     }
     
     
-    NSString *tcStr = [NSString stringWithFormat:@"%.02f%%",(100.f - tc * 100.f)];
     
     self.titlelabel.text = tcStr;
     
@@ -84,7 +87,7 @@
     self.progressView.frame = CGRectMake(0, 0, rect.size.width * tc, rect.size.height);
     
     NSString *str = _dict[@"card"];
-//    CLog(@"%@",_dict);
+
     if ([str isKindOfClass:[NSNull class]]) {
         [self.getBtn setBackgroundImage:[UIImage imageNamed:@"button_circle"] forState:(UIControlStateNormal)];
         [self.getBtn setTitle:@"领取" forState:(UIControlStateNormal)];

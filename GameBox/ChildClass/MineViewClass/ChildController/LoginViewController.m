@@ -110,7 +110,6 @@
                 
                 [UserModel logIn];
                 [UserModel showAlertWithMessage:@"登录成功" dismiss:nil];
-//                syLog(@"%@",content);
             } else {
                 
                 [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];

@@ -132,7 +132,16 @@
             self.gameinfo = content[@"data"][@"gameinfo"];
             
             self.likes = content[@"data"][@"like"];
-                
+            NSArray *array = [AppModel getLocalGamesWithPlist];
+            for (NSInteger i = 0; i < array.count; i++) {
+                if ([array[i][@"bundleID"] isEqualToString:self.gameinfo[@"ios_pack"]]) {
+                    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:self.gameinfo];
+                    [dict setObject:@"1" forKey:@"isLocal"];
+                    self.gameinfo = [dict copy];
+                    break;
+                }
+            }
+            
             //设置收藏按钮的代理
             self.detailFooter.delegate = self;
         } else {
@@ -373,7 +382,7 @@
                 } else {
                     
                 }
-//                syLog(@"取消收藏");
+
             }];
         } else {
             [GameRequest gameCollectWithType:collection GameID:_gameID Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
@@ -383,7 +392,7 @@
                 } else {
                 
                 }
-//                syLog(@"收藏");
+
             }];
         }
     }
@@ -391,14 +400,13 @@
 
 - (void)DetailFooter:(DetailFooter *)detailFooter clickShareBtn:(UIButton *)sender {
     if (self.gameinfo) {
-//        syLog(@"分享");
+
     }
     
     if ([UserModel CurrentUser]) {
         
     } else {
-//        self.hidesBottomBarWhenPushed = YES;
-//        [self.navigationController pushViewController:[ControllerManager shareManager].loginViewController animated:YES];
+
         return;
     }
     
@@ -406,7 +414,17 @@
 }
 
 - (void)DetailFooter:(DetailFooter *)detailFooter clickDownLoadBtn:(UIButton *)sender {
-    [GameRequest downLoadAppWithURL:_gameinfo[@"ios_url"]];
+    
+    NSString *isLocal = self.gameinfo[@"isLocal"];
+    if ([isLocal isEqualToString:@"1"]) {
+        [AppModel openAPPWithIde:self.gameinfo[@"ios_pack"]];
+        
+    } else {
+        NSString *url = self.gameinfo[@"ios_url"];
+        
+        [GameRequest downLoadAppWithURL:url];
+    }
+    syLog(@"下载");
 }
 
 

@@ -9,8 +9,6 @@
 #import "GameStrategyViewController.h"
 #import "StrategyCell.h"
 
-#import "GameModel.h"
-
 #import <MJRefresh.h>
 
 #define CELLIDE @"StrategyCell"
@@ -49,18 +47,20 @@
 
 #pragma mark - setter
 - (void)reloadData {
-    
-    [GameModel postStrategyWithGameID:_gameID Page:@"1" ChannelID:nil Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        
-        if ([content[@"data"][@"list"] isKindOfClass:[NSNull class]]) {
-            _showArray = nil;
-        } else {
-            _showArray = content[@"data"][@"list"];
-        }
-        
-
-        [self.tableView reloadData];
-    }];
+//    
+//    [g]
+//    
+//    [GameModel postStrategyWithGameID:_gameID Page:@"1" ChannelID:nil Completion:^(NSDictionary * _Nullable content, BOOL success) {
+//        
+//        if ([content[@"data"][@"list"] isKindOfClass:[NSNull class]]) {
+//            _showArray = nil;
+//        } else {
+//            _showArray = content[@"data"][@"list"];
+//        }
+//        
+//
+//        [self.tableView reloadData];
+//    }];
 }
 
 

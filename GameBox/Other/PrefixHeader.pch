@@ -36,7 +36,7 @@
 /** 渠道ID */
 #define CHANNELID @"185"
 
-
+#define NOTIFICATIONSETTING @"Notification"
 
 
 #define USERID [UserModel uid]

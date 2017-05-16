@@ -48,18 +48,18 @@
 
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
 //    syLog(@"star");
-    [ControllerManager starLoadingAnimation];
+//    [ControllerManager starLoadingAnimation];
 }
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
 //    syLog(@"finsh");
-    [ControllerManager stopLoadingAnimation];
+//    [ControllerManager stopLoadingAnimation];
 }
 
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
     
     [ControllerManager stopLoadingAnimation];
-    syLog(@"error === %@",error.localizedDescription);
+//    syLog(@"error === %@",error.localizedDescription);
 }
 
 

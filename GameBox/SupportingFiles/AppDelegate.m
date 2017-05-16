@@ -10,11 +10,11 @@
 #import "ControllerManager.h"
 #import "LaunchScreen.h"
 #import "RequestUtils.h"
-
+#import "AppModel.h"
 #import "ChangyanSDK.h"
+#import <UserNotifications/UserNotifications.h>
 
-
-@interface AppDelegate ()
+@interface AppDelegate ()<UNUserNotificationCenterDelegate>
 
 
 
@@ -73,8 +73,39 @@
         }
     }];
     
+    //存入本地游戏列表
+    [AppModel getLocalGamesWithBlock:^(NSArray * _Nullable games, BOOL success) {
+        if (success) {
+            [AppModel saveLocalGamesWithArray:games];
+        }
+    }];
+    
+    
+    [self resignNotifacation];
     
     return YES;
+}
+
+/** 注册通知 */
+- (void)resignNotifacation {
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    //监听回调事件
+    center.delegate = self;
+    
+    //iOS 10 使用以下方法注册，才能得到授权，注册通知以后，会自动注册 deviceToken，如果获取不到 deviceToken，Xcode8下要注意开启 Capability->Push Notification。
+    [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert + UNAuthorizationOptionSound)completionHandler:^(BOOL granted, NSError * _Nullable error) {
+        if (granted == YES) {
+            SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:granted], NOTIFICATIONSETTING);
+        } else {
+            SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:NO], NOTIFICATIONSETTING);
+        }
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }];
+    
+    //获取当前的通知设置，UNNotificationSettings 是只读对象，不能直接修改，只能通过以下方法获取
+    [center getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
+        
+    }];
 }
 
 

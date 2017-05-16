@@ -8,20 +8,20 @@
 
 #import "GameGiftBagViewController.h"
 #import "GiftBagCell.h"
-#import "GiftBagModel.h"
+#import "GiftRequest.h"
 
 #import <UIImageView+WebCache.h>
 #import <MJRefresh.h>
 
 #define CELLIDE @"GiftBagCell"
 
-@interface GameGiftBagViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface GameGiftBagViewController ()<UITableViewDelegate,UITableViewDataSource,GiftBagCellDelegate>
 
 /**礼包列表视图*/
 @property (nonatomic, strong) UITableView *tableView;
 
 /**显示数据的数组*/
-@property (nonatomic, strong) NSArray *showArray;
+@property (nonatomic, strong) NSMutableArray *showArray;
 
 @end
 
@@ -43,13 +43,18 @@
 }
 
 #pragma mark - mmethod
-- (void)reloadData {
-    [GiftBagModel postGiftBagWithGameID:_gameID Order:nil OrderType:nil page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        if (success) {
-            _showArray = content[@"data"][@"list"];
-
+- (void)refreshData {
+    
+    [GiftRequest giftWithGameID:_gameID WithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success && REQUESTSUCCESS) {
+            _showArray = [content[@"data"][@"list"] mutableCopy];
             [self.tableView reloadData];
+            
+        } else {
+            
         }
+        
+        [self.tableView.mj_header endRefreshing];
     }];
 }
 
@@ -57,9 +62,37 @@
 #pragma makr - setter
 - (void)setGameID:(NSString *)gameID {
     _gameID = gameID;
-    [self reloadData];
+    [self.tableView.mj_header beginRefreshing];
 }
 
+/** 点击cell的领取按钮的响应事件 */
+- (void)getGiftBagCellAtIndex:(NSInteger)idx {
+    NSString *str = _showArray[idx][@"card"];
+    
+    if ([str isKindOfClass:[NSNull class]]) {
+        //领取礼包
+        [GiftRequest getGiftWithGiftID:_showArray[idx][@"id"] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            if (success && REQUESTSUCCESS) {
+                NSMutableDictionary *dict = [_showArray[idx] mutableCopy];
+                [dict setObject:content[@"data"] forKey:@"card"];
+                [_showArray replaceObjectAtIndex:idx withObject:dict];
+                
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:(UITableViewRowAnimationNone)];
+                
+                [GiftRequest showAlertWithMessage:@"已领取礼包兑换码" dismiss:nil];
+            } else {
+                [GiftRequest showAlertWithMessage:@"礼包发送完了" dismiss:nil];
+            }
+        }];
+        
+    } else {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        
+        pasteboard.string = str;
+        
+        [GiftRequest showAlertWithMessage:@"已复制礼包兑换码" dismiss:nil];
+    }
+}
 
 
 #pragma mark - tableViewDataSource
@@ -73,24 +106,17 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     GiftBagCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDE forIndexPath:indexPath];
+
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    [cell.packLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"pack_logo"]]] placeholderImage:nil];
+    cell.delegate = self;
     
-    cell.packCounts.text = _showArray[indexPath.row][@"pack_counts"];
+    cell.currentIdx = indexPath.row;
     
-    cell.name.text = _showArray[indexPath.row][@"pack_name"];
+    //礼包logo
+    [cell.packLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"pack_logo"]]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
     
-    NSString *total = _showArray[indexPath.row][@"pack_counts"];
-    NSString *current = _showArray[indexPath.row][@"pack_used_counts"];
-    CGFloat tc = current.floatValue / total.floatValue;
-    
-    NSString *tcStr = [NSString stringWithFormat:@"%.0lf%%",(100 - tc * 100)];
-    
-    cell.titlelabel.text = tcStr;
-    
-    CGRect rect = cell.packProgress.bounds;
-    
-//    cell.progressView.frame = CGRectMake(0, 0, rect.size.width * tc, rect.size.height);
+    cell.dict = _showArray[indexPath.row];
     
     return cell;
 }
@@ -109,6 +135,23 @@
         _tableView.dataSource = self;
         
         [_tableView registerNib:[UINib nibWithNibName:@"GiftBagCell" bundle:nil] forCellReuseIdentifier:CELLIDE];
+        
+        //下拉刷新
+        MJRefreshNormalHeader *customRef = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
+        
+        [customRef setTitle:@"数据已加载" forState:MJRefreshStateIdle];
+        [customRef setTitle:@"刷新数据" forState:MJRefreshStatePulling];
+        [customRef setTitle:@"正在刷新" forState:MJRefreshStateRefreshing];
+        [customRef setTitle:@"即将刷新" forState:MJRefreshStateWillRefresh];
+        [customRef setTitle:@"所有数据加载完毕，没有更多的数据了" forState:MJRefreshStateNoMoreData];
+        
+        
+        //自动更改透明度
+        _tableView.mj_header.automaticallyChangeAlpha = YES;
+        
+        _tableView.mj_header = customRef;
+        
+        _tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
         
         _tableView.tableFooterView = [UIView new];
 

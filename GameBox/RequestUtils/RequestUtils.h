@@ -24,6 +24,8 @@
                     params:(NSDictionary *)dicP
                 completion:(void(^)(NSDictionary *content,BOOL success))completion;
 
+/** 显示提示信息 */
++ (void)showAlertWithMessage:(NSString *)message dismiss:(void(^)(void))dismiss;
 
 
 /** 设备ID */

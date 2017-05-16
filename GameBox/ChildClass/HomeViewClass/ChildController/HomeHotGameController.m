@@ -50,7 +50,7 @@
     [GameRequest hotGameWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success && !((NSString *)content[@"status"]).boolValue) {
             _showArray = [content[@"data"] mutableCopy];
-            
+            [self checkLocalGamesWith:_showArray];
             _currentPage = 1;
             _isAll = NO;
 
@@ -76,12 +76,37 @@
                     [self.tableView.mj_footer endRefreshingWithNoMoreData];
                 } else {
                     [_showArray addObjectsFromArray:array];
+                    [self checkLocalGamesWith:_showArray];
                     [self.tableView reloadData];
                     [self.tableView.mj_footer endRefreshing];
                 }
             }
         }];
     }
+}
+
+- (void)checkLocalGamesWith:(NSMutableArray *)array {
+    [AppModel getLocalGamesWithBlock:^(NSArray * _Nullable games, BOOL success) {
+        NSArray *localArray = nil;
+        if (success) {
+            localArray = games;
+            for (NSInteger i = 0; i < array.count; i++) {
+                for (NSInteger j = 0; j < localArray.count; j++) {
+                    if ([array[i][@"ios_pack"] isEqualToString:localArray[j][@"bundleID"]]) {
+                        NSMutableDictionary *dict = [array[i] mutableCopy];
+                        [dict setObject:@"1" forKey:@"isLocal"];
+                        [array replaceObjectAtIndex:i withObject:dict];
+                    }
+                }
+            }
+            
+        } else {
+            localArray = nil;
+        }
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+        [self.tableView reloadData];
+    }];
 }
 
 
@@ -124,7 +149,15 @@
 
 #pragma mark - cellDelegate
 - (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
-    [GameRequest downLoadAppWithURL:dict[@"ios_url"]];
+    NSString *isLocal = dict[@"isLocal"];
+    if ([isLocal isEqualToString:@"1"]) {
+        [AppModel openAPPWithIde:dict[@"ios_pack"]];
+        
+    } else {
+        NSString *url = dict[@"ios_url"];
+        
+        [GameRequest downLoadAppWithURL:url];
+    }
 }
 
 #pragma mark - getter

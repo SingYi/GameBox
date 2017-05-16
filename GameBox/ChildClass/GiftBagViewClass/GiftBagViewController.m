@@ -9,9 +9,11 @@
 #import "GiftBagViewController.h"
 #import "ControllerManager.h"
 #import "GiftBagCell.h"
-#import "GiftBagModel.h"
+#import "GiftRequest.h"
 #import "RequestUtils.h"
-
+#import "SearchGiftController.h"
+#import "SearchModel.h"
+#import "SearchGiftResultController.h"
 #import <UIImageView+WebCache.h>
 #import <MJRefresh.h>
 
@@ -43,6 +45,9 @@
 
 /** 当前页数 */
 @property (nonatomic, assign) NSInteger currentPage;
+
+/** 礼包搜索页面 */
+@property (nonatomic, strong) SearchGiftController *searchGiftCongroller;
 
 @property (nonatomic, assign) BOOL isAll;
 
@@ -118,17 +123,92 @@
 }
 
 - (void)clickCancelBtn {
+    [self.searchBar resignFirstResponder];
     
+    self.searchBar.text = @"";
+    
+    [self.searchGiftCongroller.view removeFromSuperview];
+    
+    self.navigationItem.rightBarButtonItem = self.messageBtn;
+    self.navigationItem.leftBarButtonItem = self.downLoadBtn;
+}
+
+#pragma mark - searchDeleagete
+//即将开始搜索
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
+    
+    self.navigationItem.rightBarButtonItem = self.cancelBtn;
+    self.navigationItem.leftBarButtonItem = nil;
+    
+    [self.view addSubview:self.searchGiftCongroller.view];
+    [self addChildViewController:self.searchGiftCongroller];
+    
+    
+    return YES;
+}
+
+//开始搜索
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    //    NSLog(@"searchBarTextDidBeginEditing");
+}
+
+//即将结束搜索
+- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
+    
+    
+    return YES;
+}
+
+//结束搜索
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+    //    NSLog(@"searchBarTextDidEndEditing");
+}
+
+//文本已经改变
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    //    NSLog(@"textDidChange");
+}
+
+//文编即将改变
+- (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    //    NSLog(@"shouldChangeTextInRange");
+    return YES;
+}
+
+//点击cancel按钮的响应事件
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    //点击cancel按钮
+    [searchBar resignFirstResponder];
+    searchBar.showsCancelButton = NO;
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    
+    if (![searchBar.text isEqualToString:@""]) {
+        [SearchModel addGiftSearchHistoryWithKeyword:searchBar.text];
+
+        
+        SearchGiftResultController *search = [SearchGiftResultController new];
+        search.keyword = searchBar.text;
+        
+        [self.navigationController pushViewController:search animated:YES];
+    }
 }
 
 
 /**刷新数据*/
 - (void)refreshData {
-    [GiftBagModel postGiftBagListWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-
-        _showArray = [content[@"data"][@"list"] mutableCopy];
-        _isAll = NO;
-        _currentPage = 1;
+    [GiftRequest giftListWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (REQUESTSUCCESS && success) {
+            
+            _showArray = [content[@"data"][@"list"] mutableCopy];
+            _isAll = NO;
+            _currentPage = 1;
+            
+        } else {
+            _showArray = nil;
+            _currentPage = 0;
+        }
         
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer endRefreshing];
@@ -142,47 +222,49 @@
     } else {
         _currentPage++;
 
-        [GiftBagModel postGiftBagListWithPage:[NSString stringWithFormat:@"%ld",(long)_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
-            
-            
-            NSArray *array = content[@"data"][@"list"];
-            if (array.count == 0) {
-                _isAll = YES;
-                [self.tableView.mj_footer endRefreshingWithNoMoreData];
+        [GiftRequest giftListWithPage:[NSString stringWithFormat:@"%ld",(long)_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            if (REQUESTSUCCESS && success) {
+                
+                NSArray *array = content[@"data"][@"list"];
+                if (array.count == 0) {
+                    _isAll = YES;
+                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+                } else {
+                    [_showArray addObjectsFromArray:array];
+                    [self.tableView.mj_footer endRefreshing];
+                    [self.tableView reloadData];
+                }
+                
             } else {
-                [_showArray addObjectsFromArray:array];
-                [self.tableView.mj_footer endRefreshing];
-                [self.tableView reloadData];
+                _showArray = nil;
+                _currentPage = 0;
+                [self.tableView.mj_footer endRefreshingWithNoMoreData];
             }
+            
         }];
     }
 }
 
 
-/**< 点击cell的领取按钮的响应事件 */
+/** 点击cell的领取按钮的响应事件 */
 - (void)getGiftBagCellAtIndex:(NSInteger)idx {
     NSString *str = _showArray[idx][@"card"];
     
     if ([str isKindOfClass:[NSNull class]]) {
-        
-        NSString *uid = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
-        
-        if (uid.length == 0) {
-            uid = @"0";
-        }
-        
         //领取礼包
-        [GiftBagModel postGiftBagWithBagID:_showArray[idx][@"id"] Uid:@"0" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-            if (success) {
+        [GiftRequest getGiftWithGiftID:_showArray[idx][@"id"] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            if (success && REQUESTSUCCESS) {
                 NSMutableDictionary *dict = [_showArray[idx] mutableCopy];
                 [dict setObject:content[@"data"] forKey:@"card"];
                 [_showArray replaceObjectAtIndex:idx withObject:dict];
                 
                 [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:(UITableViewRowAnimationNone)];
                 
-                [GiftBagModel showAlertWithMessage:@"已领取礼包兑换码" dismiss:^{
+                [GiftRequest showAlertWithMessage:@"已领取礼包兑换码" dismiss:^{
                     
                 }];
+            } else {
+                [GiftRequest showAlertWithMessage:@"礼包发送完了" dismiss:nil];
             }
         }];
         
@@ -191,7 +273,7 @@
         
         pasteboard.string = str;
         
-        [GiftBagModel showAlertWithMessage:@"已复制礼包兑换码" dismiss:^{
+        [GiftRequest showAlertWithMessage:@"已复制礼包兑换码" dismiss:^{
             
         }];
     }
@@ -247,15 +329,6 @@
 }
 
 
-#pragma mark - searchBarDelegate
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    [searchBar resignFirstResponder];
-    
-
-    
-    
-}
-
 #pragma mark - getter
 - (UITableView *)tableView {
     if (!_tableView) {
@@ -296,7 +369,6 @@
 - (UISearchBar *)searchBar {
     if (!_searchBar) {
         _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 20)];
-        //        [_searchBar sizeToFit];
         
         UITextField *searchField = [_searchBar valueForKey:@"searchField"];
         if (searchField) {
@@ -305,9 +377,9 @@
             searchField.layer.masksToBounds = YES;
         }
         
-        //        _searchBar.backgroundColor = [UIColor blackColor];
-        _searchBar.placeholder = @"搜索游戏";
         
+        _searchBar.placeholder = @"搜索礼包";
+        _searchBar.tintColor = [UIColor blueColor];
         _searchBar.delegate = self;
     }
     return _searchBar;
@@ -332,6 +404,13 @@
         _cancelBtn = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:(UIBarButtonItemStyleDone) target:self action:@selector(clickCancelBtn)];
     }
     return _cancelBtn;
+}
+
+- (SearchGiftController *)searchGiftCongroller {
+    if (!_searchGiftCongroller) {
+        _searchGiftCongroller = [[SearchGiftController alloc] init];
+    }
+    return _searchGiftCongroller;
 }
 
 

@@ -87,6 +87,7 @@
         _downLoadBtn.frame = CGRectMake(60, 3, kSCREEN_WIDTH - 120, 44);
         [_downLoadBtn setBackgroundImage:[UIImage imageNamed:@"gameDetail_downLoad"] forState:(UIControlStateNormal)];
         [_downLoadBtn setTitle:@"下载" forState:(UIControlStateNormal)];
+        [_downLoadBtn addTarget:self action:@selector(clickDownLoadButton:) forControlEvents:(UIControlEventTouchUpInside)];
     }
     return _downLoadBtn;
 }

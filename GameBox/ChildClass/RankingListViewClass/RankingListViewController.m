@@ -122,6 +122,7 @@
     [GameRequest rankGameWithhPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success && REQUESTSUCCESS) {
             _showArray = [content[@"data"] mutableCopy];
+            [self checkLocalGamesWith:_showArray];
             _currentPage = 1;
             _isAll = NO;
             [self.tableView reloadData];
@@ -140,7 +141,7 @@
         _currentPage++;
         [GameRequest rankGameWithhPage:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
             if (success && REQUESTSUCCESS) {
-                NSArray *array = content[@"data"];
+                NSMutableArray *array = [content[@"data"] mutableCopy];
                 if (array.count == 0) {
                     _isAll = YES;
                     [self.tableView.mj_footer endRefreshingWithNoMoreData];
@@ -148,8 +149,9 @@
                     [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     }];
                     [_showArray addObjectsFromArray:array];
-                    [self.tableView reloadData];
-                    [self.tableView.mj_footer endRefreshing];
+                    [self checkLocalGamesWith:_showArray];
+//                    [self.tableView reloadData];
+//                    [self.tableView.mj_footer endRefreshing];
                 }
 
             } else {
@@ -159,9 +161,41 @@
     }
 }
 
+
+- (void)checkLocalGamesWith:(NSMutableArray *)array {
+    [AppModel getLocalGamesWithBlock:^(NSArray * _Nullable games, BOOL success) {
+        NSArray *localArray = nil;
+        if (success) {
+            localArray = games;
+            for (NSInteger i = 0; i < array.count; i++) {
+                for (NSInteger j = 0; j < localArray.count; j++) {
+                    if ([array[i][@"ios_pack"] isEqualToString:localArray[j][@"bundleID"]]) {
+                        NSMutableDictionary *dict = [array[i] mutableCopy];
+                        [dict setObject:@"1" forKey:@"isLocal"];
+                        [array replaceObjectAtIndex:i withObject:dict];
+                    }
+                }
+            }
+            
+        } else {
+            localArray = nil;
+        }
+        
+        [self.tableView.mj_footer endRefreshing];
+        [self.tableView reloadData];
+    }];
+}
+
 #pragma mark - cellDeleagte
 - (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
-    [GameRequest downLoadAppWithURL:dict[@"ios_url"]];
+    NSString *isLocal = dict[@"isLocal"];
+    if ([isLocal isEqualToString:@"1"]) {
+        [AppModel openAPPWithIde:dict[@"ios_pack"]];
+    } else {
+        NSString *url = dict[@"ios_url"];
+        
+        [GameRequest downLoadAppWithURL:url];
+    }
 }
 
 /** 我的应用 */
@@ -188,7 +222,6 @@
     self.searchBar.text = @"";
     
     [[ControllerManager shareManager].searchViewController.view removeFromSuperview];
-//    [[ControllerManager shareManager].searchView removeFromParentViewController];
     
     self.navigationItem.rightBarButtonItem = self.messageBtn;
     self.navigationItem.leftBarButtonItem = self.downLoadBtn;

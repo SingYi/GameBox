@@ -129,6 +129,7 @@ static UserModel *currentUser = nil;
         urlStr = USER_LOGIN;
     }
     
+    
     [UserModel postRequestWithURL:urlStr params:dict completion:completion];
 }
 

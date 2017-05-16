@@ -61,14 +61,15 @@
     [GameRequest newGameWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success && !((NSString *)content[@"status"]).boolValue) {
             _dataArray = [content[@"data"] mutableCopy];
+            [self checkLocalGamesWith:_dataArray];
             [self clearUpData:_dataArray];
             _currentPage = 1;
             _isAll = NO;
         
-            [self.tableView.mj_footer endRefreshing];
             [self.tableView reloadData];
         }
         [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
 
     }];
 }
@@ -87,6 +88,7 @@
                     [self.tableView.mj_footer endRefreshingWithNoMoreData];
                 } else {
                     [_dataArray addObjectsFromArray:array];
+                    [self checkLocalGamesWith:_dataArray];
                     [self clearUpData:_dataArray];
                     [self.tableView reloadData];
                     [self.tableView.mj_footer endRefreshing];
@@ -96,7 +98,31 @@
     }
 }
 
-- (NSMutableArray *)clearUpData:(NSArray *)array {
+- (void)checkLocalGamesWith:(NSMutableArray *)array {
+    [AppModel getLocalGamesWithBlock:^(NSArray * _Nullable games, BOOL success) {
+        NSArray *localArray = nil;
+        if (success) {
+            localArray = games;
+            for (NSInteger i = 0; i < array.count; i++) {
+                for (NSInteger j = 0; j < localArray.count; j++) {
+                    if ([array[i][@"ios_pack"] isEqualToString:localArray[j][@"bundleID"]]) {
+                        NSMutableDictionary *dict = [array[i] mutableCopy];
+                        [dict setObject:@"1" forKey:@"isLocal"];
+                        [array replaceObjectAtIndex:i withObject:dict];
+                    }
+                }
+            }
+            
+        } else {
+            localArray = nil;
+        }
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+        [self.tableView reloadData];
+    }];
+}
+
+- (NSMutableArray *)clearUpData:(NSMutableArray *)array {
     
     NSMutableSet *set = [NSMutableSet set];
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -127,6 +153,12 @@
     
 
     self.dataDictionary = [dict mutableCopy];
+    
+    [self.timeArray enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSMutableArray *array = self.dataDictionary[obj];
+        [self checkLocalGamesWith:array];
+        [self.dataDictionary setObject:array forKey:obj];
+    }];
     
     return [array mutableCopy];
 }
@@ -187,8 +219,15 @@
 
 #pragma mark - cellDeleagate 
 - (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
-    
-    [GameRequest downLoadAppWithURL:dict[@"ios_url"]];
+    NSString *isLocal = dict[@"isLocal"];
+    if ([isLocal isEqualToString:@"1"]) {
+        [AppModel openAPPWithIde:dict[@"ios_pack"]];
+        
+    } else {
+        NSString *url = dict[@"ios_url"];
+        
+        [GameRequest downLoadAppWithURL:url];
+    }
 }
 
 #pragma mark - getter

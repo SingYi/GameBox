@@ -191,13 +191,17 @@
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     
     [dict setObject:type forKey:@"type"];
+    [dict setObject:@"2" forKey:@"system"];
     [dict setObject:gameID forKey:@"gid"];
     [dict setObject:[UserModel uid] forKey:@"uid"];
+    
+
     
     NSString *urlStr = OBJECT_FOR_USERDEFAULTS(@"GAME_COLLECT");
     if (!urlStr) {
         urlStr = GAME_COLLECT;
     }
+    
     [GameRequest postRequestWithURL:urlStr params:dict completion:completion];
 }
 
@@ -320,6 +324,7 @@
     
 }
 
+/** 我的收藏 */
 + (void)myCollectionGameWithPage:(NSString *)page Completion:(void (^)(NSDictionary * _Nullable, BOOL))completion {
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -332,6 +337,8 @@
     if (!urlStr) {
         urlStr = GAME_MY_COLLECT;
     }
+    
+
     
     [GameRequest postRequestWithURL:urlStr params:dict completion:completion];
     
@@ -469,19 +476,6 @@
     
 }
 
-+ (void)showAlertWithMessage:(NSString *)message dismiss:(void(^)(void))dismiss {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-    
-    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertController animated:YES completion:nil];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [alertController dismissViewControllerAnimated:YES completion:^{
-            if (dismiss) {
-                dismiss();
-            }
-        }];
-    });
-}
 
 @end
 

@@ -383,6 +383,32 @@
 }
 
 
++ (void)saveLocalGamesWithArray:(NSArray *)games {
+    //这里使用位于沙盒的plist（程序会自动新建的那一个）
+    NSArray *pathArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [pathArray objectAtIndex:0];
+    //获取文件的完整路径
+    NSString *filePatch = [path stringByAppendingPathComponent:@"LocalGames.plist"];
+
+    [games writeToFile:filePatch atomically:YES];
+    
+    
+    //这里使用的是位于工程自身的plist（手动新建的那一个）
+//    NSString *plistPath = [[NSBundle mainBundle]pathForResource:@"PropertyListTest" ofType:@"plist"];
+//    NSMutableDictionary *dataDic = [[NSMutableDictionary alloc]initWithContentsOfFile:plistPath];
+//
+ 
+}
+
++ (NSArray *)getLocalGamesWithPlist {
+    //这里使用位于沙盒的plist（程序会自动新建的那一个）
+    NSArray *pathArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [pathArray objectAtIndex:0];
+    //获取文件的完整路径
+    NSString *filePatch = [path stringByAppendingPathComponent:@"LocalGames.plist"];
+    NSArray *array = [NSArray arrayWithContentsOfFile:filePatch];
+    return array;
+}
 
 
 @end

@@ -9,7 +9,7 @@
 #import "MyGiftBagViewController.h"
 #import "GiftBagCell.h"
 
-#import "GiftBagModel.h"
+#import "GiftRequest.h"
 #import "UserModel.h"
 
 #import <MJRefresh.h>
@@ -21,7 +21,7 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, strong) NSArray *showArray;
+@property (nonatomic, strong) NSMutableArray *showArray;
 
 @end
 
@@ -44,12 +44,15 @@
 }
 
 - (void)refreshData {
-
-    [GiftBagModel postGiftListWihtUserID:[UserModel uid] ChannelID:@"185" Order:nil OrderType:nil Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-//        self.showArray = content[@"data"][@"list"];
-//        CLog(@"%@",content);
+    
+    [GiftRequest userGiftListWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success && REQUESTSUCCESS) {
+            _showArray = [content[@"data"][@"list"] mutableCopy];
+            [self.tableView reloadData];
+        } else {
+            
+        }
         [self.tableView.mj_header endRefreshing];
-        [self.tableView reloadData];
     }];
 }
 
@@ -74,9 +77,7 @@
         
         pasteboard.string = str;
         
-        [GiftBagModel showAlertWithMessage:@"已复制礼包兑换码" dismiss:^{
-            
-        }];
+        [GiftRequest showAlertWithMessage:@"已复制礼包兑换码" dismiss:nil];
     }
 }
 

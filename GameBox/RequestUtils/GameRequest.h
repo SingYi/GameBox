@@ -10,7 +10,7 @@
 
 #import <MJRefresh.h>
 #import <UIImageView+WebCache.h>
-
+#import "AppModel.h"
 
 /** 新游,热门,排行榜 */
 typedef enum : NSUInteger {
@@ -172,8 +172,6 @@ typedef enum : NSUInteger {
                              Page:(NSString *_Nonnull)page
                        Completion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
 
-/** 显示提示信息 */
-+ (void)showAlertWithMessage:(NSString *_Nullable)message dismiss:(void(^_Nullable)(void))dismiss;
 
 @end
 

@@ -8,7 +8,7 @@
 
 #import "ForgetPassWordView.h"
 #import "NewPassWordView.h"
-#import "MineModel.h"
+#import "UserModel.h"
 
 
 @interface ForgetPassWordView ()<UITextFieldDelegate>
@@ -26,6 +26,11 @@
 @property (nonatomic, strong) UIButton *next;
 
 @property (nonatomic, strong) NewPassWordView *newPassWordView;
+
+/** 计时器 */
+@property (nonatomic, strong) NSTimer *timer;
+//当前的时间;
+@property (nonatomic, assign) NSInteger currnetTime;
 
 @end
 
@@ -58,24 +63,92 @@
 #pragma mark - responds
 /** 下一步 */
 - (void)respondsToNext {
-#warning ===================================
-    [MineModel postCheckPhoneCodeWithPhoneNumber:self.phoneNumber.text PhoneCode:self.securityCode.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        if (success) {
-//            syLog(@"%@",content);
-//            syLog(@"%@",REQUESTMSG);
+    NSString *MOBILE = @"^1(3[0-9]|4[0-9]|5[0-9]|8[0-9]|7[0-9])\\d{8}$";
+    
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
+    //手机号有误
+    if (![regextestmobile evaluateWithObject:self.phoneNumber.text]) {
+        [UserModel showAlertWithMessage:@"手机号码有误" dismiss:nil];
+        return;
+    }
+    
+    [UserModel userCheckMessageWithPhoneNumber:self.phoneNumber.text MessageCode:self.securityCode.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        
+        if (success && REQUESTSUCCESS) {
+            self.newPassWordView.userId = content[@"data"][@"id"];
+            self.newPassWordView.userToken = content[@"data"][@"token"];
+            [self.navigationController pushViewController:self.newPassWordView animated:YES];
+        } else {
+            [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
         }
-
-        self.newPassWordView.userId = content[@"data"][@"id"];
-        self.newPassWordView.userToken = content[@"data"][@"token"];
-        [self.navigationController pushViewController:self.newPassWordView animated:YES];
+        
     }];
 }
 
 /** 发送验证码 */
 - (void)respondsToSendCodeBtn {
-    [MineModel postPhoneCodeWithPhoneNumber:self.phoneNumber.text isVerify:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-
+    NSString *MOBILE = @"^1(3[0-9]|4[0-9]|5[0-9]|8[0-9]|7[0-9])\\d{8}$";
+    
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
+    //手机号有误
+    if (![regextestmobile evaluateWithObject:self.phoneNumber.text]) {
+        [UserModel showAlertWithMessage:@"手机号码有误" dismiss:nil];
+        return;
+    }
+    
+    [UserModel userSendMessageWithPhoneNumber:self.phoneNumber.text IsVerify:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        _currnetTime = 59;
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(refreshTime) userInfo:nil repeats:YES];
+        [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
     }];
+}
+
+- (void)refreshTime {
+    [self.sendCodeBtn setTitle:[NSString stringWithFormat:@"%lds",_currnetTime] forState:(UIControlStateNormal)];
+    [self.sendCodeBtn setUserInteractionEnabled:NO];
+    if (_currnetTime <= 0) {
+        [self stopTimer];
+        [self.sendCodeBtn setUserInteractionEnabled:YES];
+        [self.sendCodeBtn setTitle:@"发送验证码" forState:(UIControlStateNormal)];
+    }
+    _currnetTime--;
+}
+
+- (void)stopTimer {
+    [self.timer invalidate];
+    self.timer = nil;
+}
+#pragma mark - textfieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self.phoneNumber) {
+        [textField resignFirstResponder];
+        [self.securityCode becomeFirstResponder];
+    } else if (textField == self.securityCode) {
+        [self respondsToNext];
+    }
+    
+    return YES;
+}
+
+//限制用户名和密码长度
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if (textField == self.phoneNumber) {
+        if (range.length == 1 && string.length == 0) {
+            return YES;
+        } else if (self.phoneNumber.text.length >= 11) {
+            self.phoneNumber.text = [textField.text substringToIndex:11];
+            return NO;
+        }
+    } else if (textField == self.securityCode) {
+        if (range.length == 1 && string.length == 0) {
+            return YES;
+        } else if (self.securityCode.text.length >= 6) {
+            self.securityCode.text = [textField.text substringToIndex:6];
+            return NO;
+        }
+    }
+    return YES;
 }
 
 #pragma mark - getter
@@ -88,7 +161,8 @@
         _phoneNumber.borderStyle = UITextBorderStyleRoundedRect;
         _phoneNumber.placeholder = @"请输入手机号码";
         _phoneNumber.delegate = self;
-        _phoneNumber.returnKeyType = UIReturnKeySend;
+        _phoneNumber.returnKeyType = UIReturnKeyNext;
+        _phoneNumber.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     }
     return _phoneNumber;
 }
@@ -105,7 +179,9 @@
         _securityCode.borderStyle = UITextBorderStyleRoundedRect;
         _securityCode.placeholder = @"请输入验证码";
         _securityCode.delegate = self;
+        
         _securityCode.returnKeyType = UIReturnKeyNext;
+        _securityCode.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     }
     return _securityCode;
 }

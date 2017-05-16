@@ -8,7 +8,7 @@
 
 #import "NewPassWordView.h"
 #import "LoginViewController.h"
-#import "MineModel.h"
+#import "UserModel.h"
 
 //@class LoginViewController;
 
@@ -27,6 +27,12 @@
 
 @implementation NewPassWordView
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.passWord.text = @"";
+    self.affimPassWord.text = @"";
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -43,17 +49,57 @@
 
 #pragma mark - responds
 - (void)respondsToCompleteBtn {
+    //密码太短
+    if (self.passWord.text.length < 6 || self.affimPassWord.text.length < 6) {
+        [UserModel showAlertWithMessage:@"密码长度太短" dismiss:nil];
+        return;
+    }
     
-    [MineModel postResetPassWordWithUserID:self.userId PassWord:self.passWord.text ConfirmPassWord:self.affimPassWord.text Token:self.userToken Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        
+    if (![self.passWord.text isEqualToString:self.affimPassWord.text]) {
+        [UserModel showAlertWithMessage:@"两次密码不相同" dismiss:nil];
+        return;
+    }
+    
+    [UserModel userForgetPasswordWithUserID:self.userId Password:self.passWord.text RePassword:self.affimPassWord.text Token:self.userToken Completion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success) {
             [self.navigationController popToRootViewControllerAnimated:YES];
-            CLog(@"%@",content);
-            CLog(@"%@",content[@"msg"]);
         }
-        
+        [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
     }];
     
+}
+
+#pragma mark - textfieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self.passWord) {
+        [textField resignFirstResponder];
+        [self.affimPassWord becomeFirstResponder];
+    } else if (textField == self.affimPassWord) {
+        [self respondsToCompleteBtn];
+    }
+    
+    return YES;
+}
+
+//限制用户名和密码长度
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if (textField == self.passWord) {
+        if (range.length == 1 && string.length == 0) {
+            return YES;
+        } else if (self.passWord.text.length >= 16) {
+            self.passWord.text = [textField.text substringToIndex:16];
+            return NO;
+        }
+    } else if (textField == self.affimPassWord) {
+        if (range.length == 1 && string.length == 0) {
+            return YES;
+        } else if (self.affimPassWord.text.length >= 16) {
+            self.affimPassWord.text = [textField.text substringToIndex:16];
+            return NO;
+        }
+    }
+    return YES;
 }
 
 #pragma mark - getter
@@ -63,11 +109,12 @@
         _passWord.bounds = CGRectMake(0, 0, kSCREEN_WIDTH * 0.8, 44);
         _passWord.center = CGPointMake(kSCREEN_WIDTH / 2, 120);
         
+        _passWord.delegate = self;
         _passWord.borderStyle = UITextBorderStyleRoundedRect;
         _passWord.placeholder = @"请输入新密码";
         _passWord.secureTextEntry = YES;
         _passWord.delegate = self;
-        _passWord.returnKeyType = UIReturnKeySend;
+        _passWord.returnKeyType = UIReturnKeyNext;
     }
     return _passWord;
 }
@@ -82,7 +129,7 @@
         _affimPassWord.placeholder = @"确认密码";
         _affimPassWord.secureTextEntry = YES;
         _affimPassWord.delegate = self;
-        _affimPassWord.returnKeyType = UIReturnKeySend;
+        _affimPassWord.returnKeyType = UIReturnKeyDone;
     }
     return _affimPassWord;
 }

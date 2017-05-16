@@ -8,7 +8,7 @@
 
 #import "RGiftBagController.h"
 #import "GiftBagCell.h"
-#import "GiftBagModel.h"
+#import "GiftRequest.h"
 #import "RecommentTableHeader.h" //滚动轮播图
 #import "ControllerManager.h"
 
@@ -17,7 +17,7 @@
 
 #define CELLIDE @"GiftBagCell"
 
-@interface RGiftBagController ()<UITableViewDataSource,UITableViewDelegate,GiftBagCellDelegate,UISearchControllerDelegate,UISearchResultsUpdating,UISearchBarDelegate>
+@interface RGiftBagController ()<UITableViewDataSource,UITableViewDelegate,GiftBagCellDelegate,UISearchBarDelegate>
 
 /**< 列表 */
 @property (nonatomic, strong) UITableView *tableView;
@@ -81,12 +81,9 @@
 
 - (void)initDataSource {
     [self.tableView.mj_header beginRefreshing];
-    [GiftBagModel postGiftRollingViewWithChannelID:@"185" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        if (success) {
-            self.rollingHeader.rollingArray = content[@"data"];
-        } else {
-            
-        }
+    [GiftRequest giftBannerWithCompletion:^(NSDictionary * _Nullable content, BOOL success) {
+        self.rollingHeader.rollingArray = content[@"data"];
+        
     }];
 }
 
@@ -97,10 +94,6 @@
     self.navigationItem.rightBarButtonItem = self.mineGiftBagBtn;
 }
 
-#pragma mark - search updateing 
-- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
-    
-}
 
 #pragma mark - searchBar delegate
 //即将开始搜索
@@ -158,12 +151,7 @@
     }
 
     
-    NSString *uid = GETUSERID;
-    if (!uid) {
-        uid = @"0";
-    }
-    
-    [GiftBagModel postGiftBagListWithUid:[UserModel uid] ChannelID:@"185" Search:searchBar.text Order:nil OrderType:nil Page:@"1" Andcompletion:^(NSDictionary * _Nullable content, BOOL success) {
+    [GiftRequest giftSearchWithkeyWord:searchBar.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success) {
             _resultArray = content[@"data"][@"list"];
             
@@ -171,24 +159,29 @@
                 _showArray = [_resultArray mutableCopy];
                 [self.tableView reloadData];
             } else {
-                [GiftBagModel showAlertWithMessage:@"未查询到相关礼包" dismiss:nil];
+                [GiftRequest showAlertWithMessage:@"未查询到相关礼包" dismiss:nil];
             }
         } else {
-            [GiftBagModel showAlertWithMessage:@"网络不知道飞到哪里去了" dismiss:nil];
+            [GiftRequest showAlertWithMessage:@"网络不知道飞到哪里去了" dismiss:nil];
         }
 
     }];
+
     [searchBar resignFirstResponder];
 }
 
 #pragma mark - method
 - (void)refreshData {
-    [GiftBagModel postGiftBagListWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        _dataArray = [content[@"data"][@"list"] mutableCopy];
-        if (!_isSearch) {
-            _showArray = [_dataArray mutableCopy];
-            _isAll = NO;
-            _currentPage = 1;
+    [GiftRequest giftListWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        
+        if (success && REQUESTSUCCESS) {
+            _dataArray = [content[@"data"][@"list"] mutableCopy];
+            if (!_isSearch) {
+                _showArray = [_dataArray mutableCopy];
+                _isAll = NO;
+                _currentPage = 1;
+            }
+            
         }
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer endRefreshing];
@@ -202,18 +195,20 @@
     } else {
         _currentPage++;
         
-        [GiftBagModel postGiftBagListWithPage:[NSString stringWithFormat:@"%ld",(long)_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        [GiftRequest giftListWithPage:[NSString stringWithFormat:@"%ld",(long)_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
             
-            CLog(@"%ld  %@",_currentPage,content);
-            
-            NSArray *array = content[@"data"][@"list"];
-            if (array.count == 0) {
-                _isAll = YES;
-                [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            if (content && REQUESTSUCCESS && !_isSearch) {
+                NSArray *array = content[@"data"][@"list"];
+                if (array.count == 0) {
+                    _isAll = YES;
+                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+                } else {
+                    [_showArray addObjectsFromArray:array];
+                    [self.tableView.mj_footer endRefreshing];
+                    [self.tableView reloadData];
+                }
             } else {
-                [_showArray addObjectsFromArray:array];
-                [self.tableView.mj_footer endRefreshing];
-                [self.tableView reloadData];
+                [self.tableView.mj_footer endRefreshingWithNoMoreData];
             }
         }];
     }
@@ -243,28 +238,22 @@
 /**< 点击cell的领取按钮的响应事件 */
 - (void)getGiftBagCellAtIndex:(NSInteger)idx {
     NSString *str = _showArray[idx][@"card"];
-
+    
     if ([str isKindOfClass:[NSNull class]]) {
-        
-        NSString *uid = [[NSUserDefaults standardUserDefaults] objectForKey:@"USERID"];
-        
-        if (uid.length == 0) {
-            uid = @"0";
-        }
-        
         //领取礼包
-        [GiftBagModel postGiftBagWithBagID:_showArray[idx][@"id"] Uid:@"0" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-            if (success) {
-                NSLog(@"%@",content);
+        [GiftRequest getGiftWithGiftID:_showArray[idx][@"id"] Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            if (success && REQUESTSUCCESS) {
                 NSMutableDictionary *dict = [_showArray[idx] mutableCopy];
                 [dict setObject:content[@"data"] forKey:@"card"];
                 [_showArray replaceObjectAtIndex:idx withObject:dict];
                 
                 [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:(UITableViewRowAnimationNone)];
                 
-                [GiftBagModel showAlertWithMessage:@"已领取礼包兑换码" dismiss:^{
+                [GiftRequest showAlertWithMessage:@"已领取礼包兑换码" dismiss:^{
                     
                 }];
+            } else {
+                [GiftRequest showAlertWithMessage:@"礼包发送完了" dismiss:nil];
             }
         }];
         
@@ -273,7 +262,7 @@
         
         pasteboard.string = str;
         
-        [GiftBagModel showAlertWithMessage:@"已复制礼包兑换码" dismiss:^{
+        [GiftRequest showAlertWithMessage:@"已复制礼包兑换码" dismiss:^{
             
         }];
     }

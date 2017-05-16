@@ -110,45 +110,23 @@
 /**刷新数据*/
 - (void)refreshData {
 //    [ControllerManager starLoadingAnimation];
+    WeakSelf;
     [GameRequest recommendGameWithPage:nil Completion:^(NSDictionary * _Nullable content, BOOL success) {
-//        syLog(@"%@",content);
+
         if (success && !((NSString *)content[@"status"]).boolValue) {
             self.rollHeader.rollingArray = content[@"data"][@"banner"];
             _showArray = [content[@"data"][@"gamelist"] mutableCopy];
             
             _currentPage = 1;
             _isAll = NO;
-            [AppModel getLocalGamesWithBlock:^(NSArray * _Nullable games, BOOL success) {
-                if (success) {
-                    _localArray = games;
-                    
-//                    syLog(@"%@ === %@ ",_showArray,games);
-                    
-                    for (NSInteger i = 0; i < _showArray.count; i++) {
-                        for (NSInteger j = 0; j < _localArray.count; j++) {
-                            if ([_showArray[i][@"ios_pack"] isEqualToString:_localArray[j][@"bundleID"]]) {
-                                NSMutableDictionary *dict = [_showArray[i] mutableCopy];
-                                [dict setObject:@"1" forKey:@"isLocal"];
-                                [_showArray replaceObjectAtIndex:i withObject:dict];
-                            }
-                        }
-                    }
-   
-                    [self.tableView reloadData];
-                    
-                } else {
-                    _localArray = nil;
-                }
-                
-                [self.tableView.mj_header endRefreshing];
-                [self.tableView.mj_footer endRefreshing];
-            }];
             
-  
+            [weakSelf checkLocalGamesWith:_showArray];
+            
             
         } else {
             _currentPage = 0;
         }
+        [self.tableView.mj_header endRefreshing];
     }];
 }
 
@@ -162,14 +140,13 @@
         
         [GameRequest recommendGameWithPage:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
             if (success && !((NSString *)content[@"status"]).boolValue) {
-                NSArray *array = content[@"data"][@"gamelist"];
+                NSMutableArray *array = [content[@"data"][@"gamelist"] mutableCopy];
                 if (array.count == 0) {
                     _isAll = YES;
                     [self.tableView.mj_footer endRefreshingWithNoMoreData];
                 } else {
+                    [self checkLocalGamesWith:array];
                     [_showArray addObjectsFromArray:array];
-                    [self.tableView.mj_footer endRefreshing];
-                    [self.tableView reloadData];
                 }
             } else {
                 _isAll = YES;
@@ -179,6 +156,30 @@
     }
 }
 
+- (void)checkLocalGamesWith:(NSMutableArray *)array {
+    [AppModel getLocalGamesWithBlock:^(NSArray * _Nullable games, BOOL success) {
+        if (success) {
+            _localArray = games;
+            for (NSInteger i = 0; i < array.count; i++) {
+                for (NSInteger j = 0; j < _localArray.count; j++) {
+                    if ([array[i][@"ios_pack"] isEqualToString:_localArray[j][@"bundleID"]]) {
+                        NSMutableDictionary *dict = [array[i] mutableCopy];
+                        [dict setObject:@"1" forKey:@"isLocal"];
+                        [array replaceObjectAtIndex:i withObject:dict];
+                    }
+                }
+            }
+            
+            [self.tableView reloadData];
+            
+        } else {
+            _localArray = nil;
+        }
+        
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+    }];
+}
 
 
 #pragma mark - tableViewDataSource

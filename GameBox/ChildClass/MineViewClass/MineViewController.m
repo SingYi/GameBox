@@ -15,7 +15,7 @@
 #import "UserModel.h"
 
 //我的页面的7个子视图
-#import "AppManagerView.h"
+
 @class MyGiftBagViewController;
 #import "MyNewsView.h"
 #import "ResetPassWordViewController.h"
@@ -95,7 +95,7 @@
 }
 
 - (void)initDataSource {
-    _showArray = @[@"我的游戏",@"我的礼包",@"我的消息",@"修改密码",@"我的关注",@"设置",@"关于",@"",@""];
+    _showArray = @[@"我的游戏",@"我的礼包",@"我的消息",@"修改密码",@"我的收藏",@"设置",@"关于",@"",@""];
     _imageArray = @[@"mine_yingyongguanli",@"mine_libao",@"mine_wodexiaoxi",@"mine_xiugaimima",@"mine_guanzhu",@"mine_shezhi",@"mine_guanyu"];
 
 }
@@ -294,11 +294,14 @@
     self.hidesBottomBarWhenPushed = YES;
     
     switch (indexPath.row) {
-        //应用
+        //我的游戏
         case 0:
         {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-services://?action=download-manifest&url=https%3A%2F%2Fdownload.fir.im%2Fapps%2F58a5b4c0548b7a169b00006a%2Finstall%3Fdownload_token%3D280a9c300900931027c741d4090280b1%26release_id%3D58b62c59959d69056d0001ae"]];
-//            [self.navigationController pushViewController:[ControllerManager shareManager].myAppViewController animated:YES];
+            
+//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-services://?action=download-manifest&url=https://dnqof95d40fo6.cloudfront.net/bBYvno.plist"]];
+            
+        
+            [self.navigationController pushViewController:[ControllerManager shareManager].myAppViewController animated:YES];
 
         }
             break;
@@ -474,6 +477,9 @@
         _resetNickNameBtn.backgroundColor = [UIColor orangeColor];
         _resetNickNameBtn.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT / 3.3 + 60);
         [_resetNickNameBtn addTarget:self action:@selector(clickResetNickNameBtn) forControlEvents:(UIControlEventTouchUpInside)];
+        
+        _resetNickNameBtn.layer.cornerRadius = 4;
+        _resetNickNameBtn.layer.masksToBounds = YES;
     }
     return _resetNickNameBtn;
 }

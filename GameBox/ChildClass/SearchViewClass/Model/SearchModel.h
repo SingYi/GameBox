@@ -21,5 +21,13 @@
 /** 清空搜索记录 */
 + (BOOL)clearSearchHistory;
 
+/** 礼包搜索记录 */
++ (NSArray *)getGiftSearchHistory;
+
+/** 添加礼包搜索记录 */
++ (void)addGiftSearchHistoryWithKeyword:(NSString *)keyword;
+
+/** 清空搜索记录 */
++ (BOOL)clearGiftSearchHistory;
 
 @end

@@ -90,6 +90,10 @@
     }];
 }
 
+- (void)loadMoreData {
+    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+}
+
 
 
 #pragma makr - setter

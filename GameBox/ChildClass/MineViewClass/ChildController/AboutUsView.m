@@ -24,6 +24,12 @@
 //微信
 @property (nonatomic, strong) UIView *viewWeixin;
 
+//文字
+@property (nonatomic, strong) UIImageView *wenzi;
+
+//版本
+@property (nonatomic, strong) UILabel *version;
+
 @end
 
 @implementation AboutUsView
@@ -39,9 +45,11 @@
     self.view.backgroundColor = RGBCOLOR(228, 217, 219);
     self.navigationItem.title = @"关于我们";
     [self.view addSubview:self.imageView];
+    [self.view addSubview:self.version];
     [self.view addSubview:self.viewIE];
     [self.view addSubview:self.viewWeiBo];
     [self.view addSubview:self.viewWeixin];
+    [self.view addSubview:self.wenzi];
 }
 
 #pragma mark - getter 
@@ -51,11 +59,24 @@
         _imageView.bounds = CGRectMake(0, 0, 80, 80);
         _imageView.center = CGPointMake(kSCREEN_WIDTH / 2, 120);
 
-        _imageView.image = [UIImage imageNamed:@"aboutUs"];
+        _imageView.image = [UIImage imageNamed:@"aboutus_icon"];
         _imageView.layer.cornerRadius = 8;
         _imageView.layer.masksToBounds = YES;
     }
     return _imageView;
+}
+
+- (UILabel *)version {
+    if (!_version) {
+        _version = [[UILabel alloc] init];
+        _version.bounds = CGRectMake(0, 0, 100, 44);
+        _version.center = CGPointMake(kSCREEN_WIDTH / 2, 180);
+        _version.textAlignment = NSTextAlignmentCenter;
+        _version.textColor = [UIColor lightGrayColor];
+        NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
+        _version.text = [NSString stringWithFormat:@"版本:%@",[infoDic objectForKey:@"CFBundleShortVersionString"]];
+    }
+    return _version;
 }
 
 
@@ -129,6 +150,18 @@
         
     }
     return _viewWeixin;
+}
+
+- (UIImageView *)wenzi {
+    if (!_wenzi) {
+        _wenzi = [[UIImageView alloc] init];
+        _wenzi.bounds = CGRectMake(0, 0, 147, 25);
+        _wenzi.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT - 100);
+        
+        _wenzi.image = [UIImage imageNamed:@"aboutus_wenzi"];
+
+    }
+    return _wenzi;
 }
 
 

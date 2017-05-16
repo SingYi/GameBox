@@ -8,7 +8,7 @@
 
 #import "SettingView.h"
 #import "UserModel.h"
-
+#import <UserNotifications/UserNotifications.h>
 #define CELLIDE @"SettingCell"
 
 @interface SettingView ()<UITableViewDataSource,UITableViewDelegate>
@@ -19,6 +19,9 @@
 
 /** 退出登录 */
 @property (nonatomic, strong) UIButton *logoutBtn;
+
+/** 是否打开通知 */
+@property (nonatomic, assign) BOOL isOpenNotifi;
 
 @end
 
@@ -31,7 +34,21 @@
     } else {
         self.tableView.tableFooterView = [UIView new];
     }
-//    self.tableView.tableFooterView = self.logoutBtn;
+    
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 9.0f) {
+        
+        UIUserNotificationSettings *setting = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        
+        if (UIUserNotificationTypeNone == setting.types) {
+            _isOpenNotifi = NO;
+            syLog(@"1");
+        } else {
+            _isOpenNotifi = YES;
+                     syLog(@"2");
+        }
+        [self.tableView reloadData];
+    }
+
 }
 
 - (void)viewDidLoad {
@@ -57,23 +74,78 @@
     [UserModel showAlertWithMessage:@"退出登录" dismiss:nil];
 }
 
+- (void)respondsToWifiSwitch:(UISwitch *)sender {
+    if (sender.on) {
+        syLog(@"wifi打开");
+    } else {
+        syLog(@"wifi关闭");
+    }
+}
+
+- (void)respondsToNotificationSwitch:(UISwitch *)sender {
+    if (sender.on) {
+        syLog(@"消息打开");
+        
+        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+        
+        //iOS 10 使用以下方法注册，才能得到授权，注册通知以后，会自动注册 deviceToken，如果获取不到 deviceToken，Xcode8下要注意开启 Capability->Push Notification。
+        [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert + UNAuthorizationOptionSound)completionHandler:^(BOOL granted, NSError * _Nullable error) {
+            if (granted == YES) {
+                SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:granted], NOTIFICATIONSETTING);
+            } else {
+                SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:NO], NOTIFICATIONSETTING);
+            }
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }];
+        
+        //获取当前的通知设置，UNNotificationSettings 是只读对象，不能直接修改，只能通过以下方法获取
+        [center getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
+            
+        }];
+    } else {
+        syLog(@"消息关闭");
+    }
+}
+
+
 #pragma mark - tableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.showArray.count;
+    return self.showArray[_isOpenNotifi].count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.showArray[section].count;
+    NSArray *array = self.showArray[_isOpenNotifi][section];
+    return array.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDE];
-    
-    cell.textLabel.text = self.showArray[indexPath.section][indexPath.row];
-    
-    cell.accessoryView = [[UISwitch alloc]init];
-    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    NSNumber *number = OBJECT_FOR_USERDEFAULTS(NOTIFICATIONSETTING);
+    
+    cell.textLabel.text = self.showArray[number.integerValue][indexPath.section][indexPath.row];
+    
+    if (indexPath.section == 0 && indexPath.row == 0) {
+        UISwitch *wifiSwitch = [[UISwitch alloc] init];
+        [wifiSwitch addTarget:self action:@selector(respondsToWifiSwitch:) forControlEvents:(UIControlEventValueChanged)];
+        cell.accessoryView = wifiSwitch;
+        cell.detailTextLabel.text = @"";
+    } else if (indexPath.section == 1 && indexPath.row == 0) {
+        UISwitch *wifiSwitch = [[UISwitch alloc] init];
+        [wifiSwitch addTarget:self action:@selector(respondsToNotificationSwitch:) forControlEvents:(UIControlEventValueChanged)];
+        
+        if (_isOpenNotifi) {
+            wifiSwitch.on = YES;
+        } else {
+            wifiSwitch.on = NO;
+        }
+        cell.accessoryView = wifiSwitch;
+        cell.detailTextLabel.text = @"";
+    } else {
+        
+        cell.accessoryView = nil;
+    }
+    
     
     
     return cell;
@@ -81,16 +153,16 @@
 
 #pragma mark - tableViewDeleagte
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 20;
+    return 30;
 }
 
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 120, 20)];
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 120, 30)];
     
-    label.backgroundColor = [UIColor orangeColor];
+    label.backgroundColor = [UIColor lightGrayColor];
     
-    label.font = [UIFont systemFontOfSize:12];
+    label.font = [UIFont systemFontOfSize:13];
     
     switch (section) {
         case 0:
@@ -105,9 +177,6 @@
         default:
             break;
     }
-    
-    
-    
     return label;
 }
 
@@ -150,10 +219,14 @@
 
 - (NSArray *)showArray {
     if (!_showArray) {
-        _showArray = @[@[@"仅使用WiFi下载",
-                         @"清空缓存"],
-                       @[@"开启消息通知"],
-                       @[@"检测更新"]];
+        _showArray = @[@[@[@"仅使用WiFi下载",
+                           @"清空缓存"],
+                         @[@"开启消息通知"],
+                         @[@"检测更新"]],
+                       @[@[@"仅使用WiFi下载",
+                           @"清空缓存"],
+                         @[@"开启消息通知",@"声音",@"震动"],
+                         @[@"检测更新"]]];
     }
     return _showArray;
 }
