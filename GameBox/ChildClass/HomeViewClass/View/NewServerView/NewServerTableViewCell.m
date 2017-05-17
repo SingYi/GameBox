@@ -57,7 +57,7 @@
     //设置按钮
     if ([[NSDate date] timeIntervalSinceDate:starDate] < 0.0f) {
         [self.remindButton setBackgroundImage:[UIImage imageNamed:@"button_circle"] forState:(UIControlStateNormal)];
-        [self.remindButton setTitle:@"提醒" forState:(UIControlStateNormal)];
+        [self.remindButton setTitle:@"未开服" forState:(UIControlStateNormal)];
         [self.remindButton setTitleColor:[UIColor orangeColor] forState:(UIControlStateNormal)];
     } else {
         [self.remindButton setBackgroundImage:[UIImage imageNamed:@"downLoadButton"] forState:(UIControlStateNormal)];

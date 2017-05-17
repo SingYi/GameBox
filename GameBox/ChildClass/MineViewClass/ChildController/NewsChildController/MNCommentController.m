@@ -53,29 +53,29 @@
 
 /**刷新数据*/
 - (void)refreshData {
-    [ChangyanSDK getUserNewReply:@"" pageNo:@"" completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
-        if (statusCode == 0) {
-            NSData *jsonData = [responseStr dataUsingEncoding:NSUTF8StringEncoding];
-            NSError *err;
-            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
-            
-            _showarray = dic[@"replies"];
-//            syLog(@"%@",dic);
-//            self.userid = dic[@"user_id"];
-            [self.tableView reloadData];
-            [self.tableView.mj_header endRefreshing];
-        }
-    }];
-    
-//    [ChangyanSDK getUserInfo:^(CYStatusCode statusCode, NSString *responseStr) {
+//    [ChangyanSDK getUserNewReply:@"" pageNo:@"" completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
 //        if (statusCode == 0) {
 //            NSData *jsonData = [responseStr dataUsingEncoding:NSUTF8StringEncoding];
 //            NSError *err;
 //            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
 //            
-//            self.userid = dic[@"user_id"];
+//            _showarray = dic[@"replies"];
+////            syLog(@"%@",dic);
+////            self.userid = dic[@"user_id"];
+//            [self.tableView reloadData];
+//            [self.tableView.mj_header endRefreshing];
 //        }
 //    }];
+    
+    [ChangyanSDK getUserInfo:^(CYStatusCode statusCode, NSString *responseStr) {
+        if (statusCode == 0) {
+            NSData *jsonData = [responseStr dataUsingEncoding:NSUTF8StringEncoding];
+            NSError *err;
+            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
+            
+            self.userid = dic[@"user_id"];
+        }
+    }];
 }
 
 /** 加载更多数据 */
