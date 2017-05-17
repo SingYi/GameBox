@@ -8,6 +8,9 @@
 
 #import "RegisterViewController.h"
 #import "UserModel.h"
+#import "ChangyanSDK.h"
+
+
 
 @interface RegisterViewController ()<UITextFieldDelegate>
 
@@ -132,6 +135,17 @@
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 
                 [self.navigationController popToRootViewControllerAnimated:YES];
+                
+                //畅言单点登录
+                [ChangyanSDK loginSSO:content[@"data"][@"id"] userName:content[@"data"][@"nicename"] profileUrl:@"" imgUrl:[NSString stringWithFormat:IMAGEURL,content[@"data"][@"avatar"]] completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
+                    
+                    /*
+                     CYSuccess           = 0,     成功
+                     CYParamsError       = 1,     参数错误
+                     CYLoginError        = 2,     登录错误
+                     CYOtherError        = 3,     其他错误 */
+                    
+                }];
                 
                 [UserModel logIn];
                 [UserModel showAlertWithMessage:@"注册成功" dismiss:nil];

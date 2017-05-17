@@ -10,4 +10,6 @@
 
 @interface GDCommentDetailController : UIViewController
 
+@property (nonatomic, strong) NSString *gameID;
+
 @end

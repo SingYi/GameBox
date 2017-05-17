@@ -77,6 +77,8 @@
 		B59FEDC41E9CC97600A64D84 /* GiftBagCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B59FEDC21E9CC97600A64D84 /* GiftBagCell.xib */; };
 		B59FEDCF1E9CD91400A64D84 /* MineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FEDCD1E9CD91400A64D84 /* MineCell.m */; };
 		B5A266681E9F480300F0C38E /* HomeHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A266671E9F480300F0C38E /* HomeHeader.m */; };
+		B5C542961ECC311A00B35590 /* WriteCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C542951ECC311A00B35590 /* WriteCommentController.m */; };
+		B5C542991ECC3BF100B35590 /* CommentStarGradeView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C542981ECC3BF100B35590 /* CommentStarGradeView.m */; };
 		B5C5D4AB1EA073AA008A46DE /* StrategyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4A91EA073AA008A46DE /* StrategyCell.m */; };
 		B5C5D4AC1EA073AA008A46DE /* StrategyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5C5D4AA1EA073AA008A46DE /* StrategyCell.xib */; };
 		B5C5D4B41EA078BF008A46DE /* ActivityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4B21EA078BF008A46DE /* ActivityCell.m */; };
@@ -235,6 +237,10 @@
 		B59FEDCD1E9CD91400A64D84 /* MineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineCell.m; sourceTree = "<group>"; };
 		B5A266661E9F480300F0C38E /* HomeHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeHeader.h; sourceTree = "<group>"; };
 		B5A266671E9F480300F0C38E /* HomeHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeHeader.m; sourceTree = "<group>"; };
+		B5C542941ECC311A00B35590 /* WriteCommentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WriteCommentController.h; sourceTree = "<group>"; };
+		B5C542951ECC311A00B35590 /* WriteCommentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WriteCommentController.m; sourceTree = "<group>"; };
+		B5C542971ECC3BF100B35590 /* CommentStarGradeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentStarGradeView.h; sourceTree = "<group>"; };
+		B5C542981ECC3BF100B35590 /* CommentStarGradeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentStarGradeView.m; sourceTree = "<group>"; };
 		B5C5D4A81EA073AA008A46DE /* StrategyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrategyCell.h; sourceTree = "<group>"; };
 		B5C5D4A91EA073AA008A46DE /* StrategyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StrategyCell.m; sourceTree = "<group>"; };
 		B5C5D4AA1EA073AA008A46DE /* StrategyCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StrategyCell.xib; sourceTree = "<group>"; };
@@ -512,6 +518,8 @@
 				B554161D1EA853F40043A36D /* GameOpenServerViewController.m */,
 				B52B2FD71EBC5A30002A572D /* GDCommentDetailController.h */,
 				B52B2FD81EBC5A30002A572D /* GDCommentDetailController.m */,
+				B5C542941ECC311A00B35590 /* WriteCommentController.h */,
+				B5C542951ECC311A00B35590 /* WriteCommentController.m */,
 			);
 			path = ChildViewController;
 			sourceTree = "<group>";
@@ -680,6 +688,8 @@
 		B5C5D4B71EA09AA5008A46DE /* View */ = {
 			isa = PBXGroup;
 			children = (
+				B5C542971ECC3BF100B35590 /* CommentStarGradeView.h */,
+				B5C542981ECC3BF100B35590 /* CommentStarGradeView.m */,
 				B5C5D4D11EA0B3A6008A46DE /* ChildView */,
 				B5C5D4BC1EA09E44008A46DE /* DetailHeader.h */,
 				B5C5D4BD1EA09E44008A46DE /* DetailHeader.m */,
@@ -1019,12 +1029,14 @@
 				B54FCA361EC959B800BACAF7 /* NSTodayServerController.m in Sources */,
 				B5E2C8181E9E2E59002CEC61 /* MyAttentionView.m in Sources */,
 				B5691C451EC1B8DB0094BE0F /* AFURLRequestSerialization.m in Sources */,
+				B5C542961ECC311A00B35590 /* WriteCommentController.m in Sources */,
 				B59A76EE1EBB2B9900FE2B50 /* GDLikesTableViewCell.m in Sources */,
 				B5E2C81E1E9E2E96002CEC61 /* AboutUsView.m in Sources */,
 				B5E2C8241E9F2A27002CEC61 /* HomeViewController.m in Sources */,
 				B560ECB71EC0480400F5C559 /* SearchModel.m in Sources */,
 				B5A266681E9F480300F0C38E /* HomeHeader.m in Sources */,
 				B5C70F271EA9EA920073FDA4 /* RecommentTableHeader.m in Sources */,
+				B5C542991ECC3BF100B35590 /* CommentStarGradeView.m in Sources */,
 				B5C5D4E21EA0C60F008A46DE /* CustomLayout.m in Sources */,
 				B59FEDC31E9CC97600A64D84 /* GiftBagCell.m in Sources */,
 				B59A76E91EBB21D200FE2B50 /* GDCommentTableViewCell.m in Sources */,

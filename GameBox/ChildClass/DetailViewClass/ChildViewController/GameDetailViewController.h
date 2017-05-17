@@ -31,6 +31,8 @@
 /** 评论数组 */
 @property (nonatomic, strong) NSArray *commentArray;
 
+/** 游戏ID */
+@property (nonatomic, strong) NSString *gameID;
 
 
 /** 返回顶部 */

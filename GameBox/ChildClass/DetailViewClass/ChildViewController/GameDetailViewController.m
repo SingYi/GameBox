@@ -56,6 +56,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -102,6 +103,7 @@
 #pragma mark - respond
 - (void)respondsToMoreCommentBtn {
     self.parentViewController.hidesBottomBarWhenPushed = YES;
+    self.GDCommentController.gameID = _gameID;
     [self.navigationController pushViewController:self.GDCommentController animated:YES];
 }
 
@@ -179,8 +181,11 @@
 
 - (void)setCommentArray:(NSArray *)commentArray {
     _commentArray = commentArray;
-    
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:(UITableViewRowAnimationNone)];
+}
+
+- (void)setGameID:(NSString *)gameID {
+    _gameID = gameID;
 }
 
 /** 计算字符串需要的尺寸 */
@@ -411,8 +416,8 @@
         _tableView.autoresizesSubviews = YES;
         
         _tableView.tableHeaderView = self.headerView;
-//        _tableView.tableFooterView = self.footerView;
-        _tableView.tableFooterView = [UIView new];
+        _tableView.tableFooterView = self.footerView;
+//        _tableView.tableFooterView = [UIView new];
         
         
         _tableView.showsVerticalScrollIndicator = NO;

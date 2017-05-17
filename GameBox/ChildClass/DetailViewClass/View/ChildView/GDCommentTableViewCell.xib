@@ -20,7 +20,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ID" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Q4-Eu-gGu">
-                        <rect key="frame" x="0.0" y="0.0" width="16.5" height="30"/>
+                        <rect key="frame" x="8" y="0.0" width="16.5" height="30"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="30" id="1ze-WX-WtC"/>
                         </constraints>
@@ -35,7 +35,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="发表的评论:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bnd-Uh-AhW">
-                        <rect key="frame" x="16.5" y="0.0" width="80" height="30"/>
+                        <rect key="frame" x="24.5" y="0.0" width="80" height="30"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="30" id="mYQ-Ng-U2U"/>
                             <constraint firstAttribute="width" constant="80" id="oQ1-5R-KEq"/>
@@ -55,7 +55,7 @@
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="8Q4-Eu-gGu" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="0xX-Q7-MV6"/>
+                    <constraint firstItem="8Q4-Eu-gGu" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="0xX-Q7-MV6"/>
                     <constraint firstItem="wh3-1a-3oP" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="2eC-WZ-feY"/>
                     <constraint firstItem="bnd-Uh-AhW" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="DQB-7t-1lh"/>
                     <constraint firstAttribute="bottom" secondItem="uzY-hn-0rU" secondAttribute="bottom" id="PBO-2l-qRu"/>

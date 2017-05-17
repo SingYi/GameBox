@@ -18,6 +18,8 @@
 #import "GameGiftBagViewController.h"
 #import "GameOpenServerViewController.h"
 
+#import "WriteCommentController.h"
+
 #import "ChangyanSDK.h"
 #import "UIImageView+WebCache.h"
 
@@ -39,6 +41,8 @@
 @property (nonatomic, strong) GameGiftBagViewController *gameGiftBag;
 /**游戏开服*/
 @property (nonatomic, strong) GameOpenServerViewController *gameOpenServer;
+/** 评论页面 */
+@property (nonatomic, strong) WriteCommentController *writeComment;
 /**当前视图*/
 @property (nonatomic, strong) UIViewController *currentViewController;
 /**当前下标*/
@@ -47,6 +51,8 @@
 @property (nonatomic, assign) BOOL isAnimation;
 /**向左滑*/
 @property (nonatomic, assign) BOOL isLeft;
+/** 评论按钮 */
+@property (nonatomic, strong) UIBarButtonItem *commentButton;
 
 /**游戏数据*/
 @property (nonatomic, strong) NSDictionary * gameinfo;
@@ -61,6 +67,9 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    if (_gameID != nil) {
+        [self getGameComments];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -94,7 +103,7 @@
     [self.view addSubview:self.gameDetail.view];
     [self.view addSubview:self.detailFooter];
     
-    
+    self.navigationItem.rightBarButtonItem = self.commentButton;
     //页面添加左右轻扫手势
     UISwipeGestureRecognizer *leftSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(respondsToSwipe:)];
     leftSwipe.direction = UISwipeGestureRecognizerDirectionLeft;
@@ -119,6 +128,11 @@
         [self didselectBtnAtIndex:_currentIndex - 1];  //切换视图
         self.detailHeader.index = _currentIndex;  //切换标签
     }
+}
+
+- (void)respondsToCommentButton {
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:self.writeComment animated:YES];
 }
 
 #pragma mark - setter
@@ -153,41 +167,34 @@
                 
         }
     }];
-    
     self.gameGiftBag.gameID = gameID;
     self.gameOpenServer.gameID = gameID;
     self.gameStrategy.gameID = gameID;
-
     
-#warning get comment list
+    [self getGameComments];
+
+}
+
+
+/** 获取游戏评论 */
+- (void)getGameComments {
     //获取游戏评论
-    [ChangyanSDK loadTopic:@"" topicTitle:nil topicSourceID:[NSString stringWithFormat:@"game_%@",gameID] pageSize:@"3" hotSize:nil orderBy:nil style:nil depth:nil subSize:nil completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
+    [ChangyanSDK loadTopic:@"" topicTitle:nil topicSourceID:[NSString stringWithFormat:@"game_%@",_gameID] pageSize:@"3" hotSize:nil orderBy:nil style:nil depth:nil subSize:nil completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
         
-        NSData *jsonData = [responseStr dataUsingEncoding:NSUTF8StringEncoding];
-        NSError *err;
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
-        NSArray *array = dic[@"comments"];
-        self.gameDetail.commentArray = dic[@"comments"];
-        
-        [array enumerateObjectsUsingBlock:^(NSDictionary * obj, NSUInteger idx, BOOL * _Nonnull stop) {
-
-        }];
-                             
+        if (statusCode == 0) {
+            
+            NSData *jsonData = [responseStr dataUsingEncoding:NSUTF8StringEncoding];
+            NSError *err;
+            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
+            self.gameDetail.commentArray = dic[@"comments"];
+            self.writeComment.gameName = dic[@"topic_id"];
+            self.gameDetail.gameID = _gameID;
+        } else {
+            
+            
+        }
+    
     }];
-    
-    [ChangyanSDK getCommentCount:@"" topicSourceID:[NSString stringWithFormat:@"game_%@",gameID]  topicUrl:@"" completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
-        
-//        NSData *jsonData = [responseStr dataUsingEncoding:NSUTF8StringEncoding];
-//        NSError *err;
-//        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
-        
-        //评论数
-//        syLog(@"%@",dic[@"result"][[NSString stringWithFormat:@"game_%@",gameID]][@"comments"]);
-        
-    }];
-    
-    
-
 }
 
 #pragma markg - gameInfo
@@ -519,6 +526,20 @@
 
     }
     return _gameOpenServer;
+}
+
+- (WriteCommentController *)writeComment {
+    if (!_writeComment) {
+        _writeComment = [[WriteCommentController alloc] init];
+    }
+    return _writeComment;
+}
+
+- (UIBarButtonItem *)commentButton {
+    if (!_commentButton) {
+        _commentButton = [[UIBarButtonItem alloc] initWithTitle:@"我要评论" style:(UIBarButtonItemStyleDone) target:self action:@selector(respondsToCommentButton)];
+    }
+    return _commentButton;
 }
 
 
