@@ -65,7 +65,7 @@
 
     NSDictionary *dict = _showArray[indexPath.row];
     
-    cell.gameLogoImage = dict[@"appIcon"];
+    cell.gameLogoImage = dict[@"logo"];
     cell.gameVersionText = dict[@"shortVersionString"];
     cell.gameNameText = dict[@"localizedName"];
     NSNumber *size = dict[@"size"];

@@ -108,7 +108,7 @@
         //app大小
         NSNumber *staticDiskUsage = [LSApplicationProxy_class performSelector:@selector(staticDiskUsage)];
         [dict setObject:staticDiskUsage forKey:@"size"];
-        
+/*============================================================================================
         //app图标
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
@@ -135,7 +135,7 @@
         UIImage *icon = [UIImage imageWithCGImage:cgImage];
         
         [dict setObject:icon forKey:@"appIcon"];
-        
+============================================================================================*/
         [list setValue:dict forKey:bundleID];
         
         [appBundleID addObject:bundleID];
@@ -151,7 +151,8 @@
             NSArray *array = content[@"data"];
             NSMutableDictionary *netBackage = [NSMutableDictionary dictionary];
             [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                [netBackage setObject:obj[@"id"] forKey:obj[@"ios_pack"]];
+                [netBackage setObject:obj forKey:obj[@"ios_pack"]];
+//                [netBackage setObject:obj[@"logo"] forKey:@"logo"];
             }];
             
             NSDictionary *localApps = [AppModel getLocalAllGameIde];
@@ -161,13 +162,20 @@
             NSMutableSet *netGamesBackage = [NSMutableSet setWithArray:[netBackage allKeys]];
             
             [localGamesBackage intersectSet:netGamesBackage];
+            
             NSMutableArray *localGames = [NSMutableArray arrayWithCapacity:localGamesBackage.count];
+            
             [localGamesBackage enumerateObjectsUsingBlock:^(NSString * obj, BOOL * _Nonnull stop) {
                 NSMutableDictionary *dict = [localApps[obj] mutableCopy];
                 
-                [dict setObject:netBackage[obj] forKey:@"id"];
+                NSDictionary *dict1 = netBackage[obj];
                 
-                [dict setObject:obj forKey:@"bundleID"];
+                [dict setObject:dict1[@"id"] forKey:@"id"];
+                
+                [dict setObject:dict1[@"ios_pack"] forKey:@"bundleID"];
+                
+                [dict setObject:dict1[@"logo"] forKey:@"logo"];
+                
                 
                 [localGames addObject:dict];
                 
@@ -243,37 +251,37 @@
         //app大小
         NSNumber *staticDiskUsage = [LSApplicationProxy_class performSelector:@selector(staticDiskUsage)];
         [dict setObject:staticDiskUsage forKey:@"size"];
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        
-        NSData *data = (NSData *)[LSApplicationProxy_class performSelector:NSSelectorFromString(@"iconDataForVariant:") withObject:@(2)];
-        
-#pragma clang diagnostic pop
-        
-        NSInteger lenth = data.length;
-        NSInteger width = 87;
-        NSInteger height = 87;
-        uint32_t *pixels = (uint32_t *)malloc(width * height * sizeof(uint32_t));
-        [data getBytes:pixels range:NSMakeRange(32, lenth - 32)];
-        
-        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-        
-        //  注意此处的 bytesPerRow 多加了 4 个字节
-        CGContextRef ctx = CGBitmapContextCreate(pixels, width, height, 8, (width + 1) * sizeof(uint32_t), colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
-        
-        CGImageRef cgImage = CGBitmapContextCreateImage(ctx);
-        CGContextRelease(ctx);
-        CGColorSpaceRelease(colorSpace);
-        
-        UIImage *icon = [UIImage imageWithCGImage:cgImage];
-        
-        [dict setObject:icon forKey:@"appIcon"];
-        
-        [list setValue:dict forKey:bundleID];
-        
+/*============================================================================================*/
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+//        
+//        NSData *data = (NSData *)[LSApplicationProxy_class performSelector:NSSelectorFromString(@"iconDataForVariant:") withObject:@(2)];
+//        
+//#pragma clang diagnostic pop
+//        
+//        NSInteger lenth = data.length;
+//        NSInteger width = 87;
+//        NSInteger height = 87;
+//        uint32_t *pixels = (uint32_t *)malloc(width * height * sizeof(uint32_t));
+//        [data getBytes:pixels range:NSMakeRange(32, lenth - 32)];
+//        
+//        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+//        
+//        //  注意此处的 bytesPerRow 多加了 4 个字节
+//        CGContextRef ctx = CGBitmapContextCreate(pixels, width, height, 8, (width + 1) * sizeof(uint32_t), colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+//        
+//        CGImageRef cgImage = CGBitmapContextCreateImage(ctx);
+//        CGContextRelease(ctx);
+//        CGColorSpaceRelease(colorSpace);
+//        
+//        UIImage *icon = [UIImage imageWithCGImage:cgImage];
+//        
+//        [dict setObject:icon forKey:@"appIcon"];
+//        
+//        [list setValue:dict forKey:bundleID];
+//        
         [appBundleID addObject:bundleID];
-        
+/*============================================================================================*/
         
         
         
@@ -383,30 +391,25 @@
 }
 
 
+/** 获取路径 */
++ (NSString *)getPlistPath {
+    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    NSString *plistPath = [path stringByAppendingPathComponent:@"LocalGames"];
+    return plistPath;
+}
+
+
+
 + (void)saveLocalGamesWithArray:(NSArray *)games {
     //这里使用位于沙盒的plist（程序会自动新建的那一个）
-    NSArray *pathArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *path = [pathArray objectAtIndex:0];
-    //获取文件的完整路径
-    NSString *filePatch = [path stringByAppendingPathComponent:@"LocalGames.plist"];
+    NSArray *array = [NSArray arrayWithArray:games];
 
-    [games writeToFile:filePatch atomically:YES];
-    
-    
-    //这里使用的是位于工程自身的plist（手动新建的那一个）
-//    NSString *plistPath = [[NSBundle mainBundle]pathForResource:@"PropertyListTest" ofType:@"plist"];
-//    NSMutableDictionary *dataDic = [[NSMutableDictionary alloc]initWithContentsOfFile:plistPath];
-//
+    [array writeToFile:[AppModel getPlistPath] atomically:YES];
  
 }
 
 + (NSArray *)getLocalGamesWithPlist {
-    //这里使用位于沙盒的plist（程序会自动新建的那一个）
-    NSArray *pathArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *path = [pathArray objectAtIndex:0];
-    //获取文件的完整路径
-    NSString *filePatch = [path stringByAppendingPathComponent:@"LocalGames.plist"];
-    NSArray *array = [NSArray arrayWithContentsOfFile:filePatch];
+    NSArray *array = [NSArray arrayWithContentsOfFile:[AppModel getPlistPath]];
     return array;
 }
 

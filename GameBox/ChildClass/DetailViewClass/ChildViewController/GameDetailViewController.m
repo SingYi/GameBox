@@ -181,7 +181,6 @@
     _commentArray = commentArray;
     
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:(UITableViewRowAnimationNone)];
-//    [self.tableView reloadData];
 }
 
 /** 计算字符串需要的尺寸 */
@@ -277,6 +276,17 @@
             cell.userNick = _commentArray[indexPath.row][@"passport"][@"nickname"];
             
             cell.contentStr = _commentArray[indexPath.row][@"content"];
+            
+            NSMutableString *time = [NSMutableString stringWithFormat:@"%@",_commentArray[indexPath.row][@"create_time"]];
+            
+            time = [[time substringToIndex:time.length - 3] mutableCopy];
+            
+            NSDate *creatDate = [NSDate dateWithTimeIntervalSince1970:time.integerValue];
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            formatter.dateFormat = @"YYYY-MM-dd";
+            cell.time = [formatter stringFromDate:creatDate];
+            
+            
             
             return cell;
         }
@@ -401,7 +411,8 @@
         _tableView.autoresizesSubviews = YES;
         
         _tableView.tableHeaderView = self.headerView;
-        _tableView.tableFooterView = self.footerView;
+//        _tableView.tableFooterView = self.footerView;
+        _tableView.tableFooterView = [UIView new];
         
         
         _tableView.showsVerticalScrollIndicator = NO;

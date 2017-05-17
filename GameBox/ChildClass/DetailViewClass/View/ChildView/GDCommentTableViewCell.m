@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *content;
 
 
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
 
 @end
@@ -45,6 +46,11 @@
     _content.text = contentStr;
     _content.numberOfLines = 0;
     [_content sizeToFit];
+}
+
+- (void)setTime:(NSString *)time {
+    _timeLabel.text = time;
+    [_timeLabel sizeToFit];
 }
 
 

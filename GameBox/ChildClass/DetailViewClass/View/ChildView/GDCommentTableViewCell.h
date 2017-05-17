@@ -16,4 +16,7 @@
 /** 内容 */
 @property (nonatomic, strong) NSString *contentStr;
 
+/** 评论时间 */
+@property (nonatomic, strong) NSString *time;
+
 @end

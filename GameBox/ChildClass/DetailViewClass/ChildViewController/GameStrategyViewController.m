@@ -8,6 +8,7 @@
 
 #import "GameStrategyViewController.h"
 #import "StrategyCell.h"
+#import "GameRequest.h"
 
 #import <MJRefresh.h>
 
@@ -47,20 +48,20 @@
 
 #pragma mark - setter
 - (void)reloadData {
-//    
-//    [g]
-//    
-//    [GameModel postStrategyWithGameID:_gameID Page:@"1" ChannelID:nil Completion:^(NSDictionary * _Nullable content, BOOL success) {
-//        
-//        if ([content[@"data"][@"list"] isKindOfClass:[NSNull class]]) {
-//            _showArray = nil;
-//        } else {
-//            _showArray = content[@"data"][@"list"];
-//        }
-//        
-//
-//        [self.tableView reloadData];
-//    }];
+    _showArray = nil;
+    [GameRequest setrategyWIthGameID:_gameID Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success && REQUESTSUCCESS) {
+            if ([content[@"data"][@"list"] isKindOfClass:[NSNull class]]) {
+                _showArray = nil;
+            } else {
+                _showArray = content[@"data"][@"list"];
+            }
+        } else {
+            _showArray = nil;
+        }
+        [self.tableView reloadData];
+        
+    }];
 }
 
 
@@ -68,6 +69,10 @@
 - (void)setGameID:(NSString *)gameID {
     _gameID = gameID;
     [self reloadData];
+}
+
+- (void)setGameLogo:(UIImage *)gameLogo {
+    _gameLogo = gameLogo;
 }
 
 #pragma mark - tableViewDataSource
@@ -82,18 +87,26 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     StrategyCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDE];
-
-    cell.strategyName.text = _showArray[indexPath.row][@"title"];
-    cell.gameName.text = _showArray[indexPath.row][@"gamename"];
-    cell.strategyTime.text = _showArray[indexPath.row][@"release_time"];
-    cell.strategyAuthor.text = _showArray[indexPath.row][@"author"];
-
+    
+//    [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] placeholderImage:nil];
+    cell.gameLogo.image = _gameLogo;
+    
+    cell.dict = _showArray[indexPath.row];
+    
     return cell;
 }
 
 #pragma mark - tableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 200;
+    return 150;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    //info_url
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    [ControllerManager shareManager].webController.webURL = _showArray[indexPath.row][@"info_url"];
+    self.parentViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:[ControllerManager shareManager].webController animated:YES];
 }
 
 #pragma mark - getter
@@ -106,6 +119,7 @@
         
         [_tableView registerNib:[UINib nibWithNibName:@"StrategyCell" bundle:nil] forCellReuseIdentifier:CELLIDE];
         
+        _tableView.tableFooterView = [UIView new];
         
     }
     return _tableView;

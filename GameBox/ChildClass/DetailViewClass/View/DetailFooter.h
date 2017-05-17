@@ -31,4 +31,7 @@
 /** 代理 */
 @property (nonatomic, weak) id<DetailFooterDelegate> delegate;
 
+/** 设置按钮打开还是下载 */
+@property (nonatomic, assign) BOOL isOpen;
+
 @end

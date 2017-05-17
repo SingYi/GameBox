@@ -18,7 +18,7 @@
 
 @interface MyGamesCell : UITableViewCell
 
-@property (nonatomic, strong) UIImage *gameLogoImage;
+@property (nonatomic, strong) NSString *gameLogoImage;
 
 @property (nonatomic, strong) NSString *gameNameText;
 

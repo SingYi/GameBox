@@ -12,6 +12,7 @@
 #import "RequestUtils.h"
 #import "AppModel.h"
 #import "ChangyanSDK.h"
+#import "GameRequest.h"
 #import <UserNotifications/UserNotifications.h>
 
 @interface AppDelegate ()<UNUserNotificationCenterDelegate>
@@ -31,6 +32,7 @@
     
     [self.window makeKeyAndVisible];
     
+    //畅言SDK
     [ChangyanSDK registerApp:@"cysYKUClL"
                       appKey:@"6c88968800e8b236e5c69b8634db704d"
                  redirectUrl:nil
@@ -45,6 +47,8 @@
 //    [ChangyanSDK setAllowQQLogin:NO];
 //    [ChangyanSDK setAllowSohuLogin:NO];
     
+    
+    //第一次登陆
     NSString *isFirst = [[NSUserDefaults standardUserDefaults] stringForKey:@"isFirst"];
     
     
@@ -67,7 +71,7 @@
             [keys enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 SAVEOBJECT_AT_USERDEFAULTS(dict[obj], obj);
             }];
-            syLog(@"%@",content);
+//            syLog(@"%@",content);
             SAVEOBJECT_AT_USERDEFAULTS(keys, @"MAP");
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
@@ -80,8 +84,15 @@
         }
     }];
     
-    
+    //注册通知
     [self resignNotifacation];
+    
+    //仅在WIFI下下载游戏
+    SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:YES], WIFIDOWNLOAD);
+    SAVEOBJECT;
+    
+    //检查更新
+    [self cheackVersion];
     
     return YES;
 }
@@ -108,6 +119,22 @@
     }];
 }
 
+//检查版本更新
+- (void)cheackVersion {
+    [GameRequest chechBoxVersionCompletion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success && REQUESTSUCCESS) {
+
+            NSString *update = content[@"data"];
+            if ([update isKindOfClass:[NSNull class]]) {
+                
+            } else {
+                [GameRequest boxUpdateWithUrl:content[@"data"]];
+            }
+        }
+//        [GameRequest boxUpdateWithUrl:content[@""]];
+    }];
+}
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -122,7 +149,8 @@
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+
+    [self cheackVersion];
 }
 
 

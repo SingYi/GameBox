@@ -8,7 +8,11 @@
 
 #import "SettingView.h"
 #import "UserModel.h"
-#import <UserNotifications/UserNotifications.h>
+#import "GameRequest.h"
+#import <SDWebImageManager.h>
+#import <SDImageCache.h>
+
+
 #define CELLIDE @"SettingCell"
 
 @interface SettingView ()<UITableViewDataSource,UITableViewDelegate>
@@ -23,32 +27,90 @@
 /** 是否打开通知 */
 @property (nonatomic, assign) BOOL isOpenNotifi;
 
+/** 缓存大小 */
+@property (nonatomic, assign) CGFloat cache;
+
+
+
 @end
 
 @implementation SettingView
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    //检查是否已经登录
     if ([UserModel CurrentUser]) {
         self.tableView.tableFooterView = self.logoutBtn;
     } else {
         self.tableView.tableFooterView = [UIView new];
     }
     
+    //检查消息通知是否打开
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 9.0f) {
         
         UIUserNotificationSettings *setting = [[UIApplication sharedApplication] currentUserNotificationSettings];
         
         if (UIUserNotificationTypeNone == setting.types) {
             _isOpenNotifi = NO;
-            syLog(@"1");
         } else {
             _isOpenNotifi = YES;
-                     syLog(@"2");
         }
-        [self.tableView reloadData];
     }
 
+    //检查缓存
+    _cache = [self folderSizeAtPath:@""];
+    
+    [self.tableView reloadData];
+}
+
+//计算文件大小
+- (long long)fileSizeAtPath:(NSString *)path {
+    NSFileManager *fileManager=[NSFileManager defaultManager];
+    if([fileManager fileExistsAtPath:path]){
+        long long size=[fileManager attributesOfItemAtPath:path error:nil].fileSize;
+        return size;
+    }
+    return 0;
+}
+
+- (float)folderSizeAtPath:(NSString *)path {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+    cachePath = [cachePath stringByAppendingPathComponent:path];
+    long long folderSize = 0;
+    if ([fileManager fileExistsAtPath:cachePath])
+    {
+        NSArray *childerFiles=[fileManager subpathsAtPath:cachePath];
+        for (NSString *fileName in childerFiles)
+        {
+            NSString * fileAbsolutePath = [cachePath stringByAppendingPathComponent:fileName];
+            long long size= [self fileSizeAtPath:fileAbsolutePath];
+            folderSize += size;
+        }
+        //SDWebImage框架自身计算缓存的实现
+        folderSize += [[SDImageCache sharedImageCache] getSize];
+        return folderSize/1024.0/1024.0;
+    }
+    return 0;
+}
+
+//清楚缓存
+-(void)clearCache:(NSString *)path {
+    NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+    
+    cachePath = [cachePath stringByAppendingPathComponent:path];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:cachePath]) {
+        NSArray *childerFiles = [fileManager subpathsAtPath:cachePath];
+        
+        for (NSString *fileName in childerFiles) {
+            //如有需要，加入条件，过滤掉不想删除的文件
+            NSString *fileAbsolutePath=[cachePath stringByAppendingPathComponent:fileName];
+            
+            [fileManager removeItemAtPath:fileAbsolutePath error:nil];
+        }
+    }
 }
 
 - (void)viewDidLoad {
@@ -76,73 +138,64 @@
 
 - (void)respondsToWifiSwitch:(UISwitch *)sender {
     if (sender.on) {
-        syLog(@"wifi打开");
+        
     } else {
-        syLog(@"wifi关闭");
+        [GameRequest showAlertWithMessage:@"仅用WIFI下载已关闭" dismiss:nil];
     }
+    SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:sender.on], WIFIDOWNLOAD);
+    SAVEOBJECT;
 }
-
-- (void)respondsToNotificationSwitch:(UISwitch *)sender {
-    if (sender.on) {
-        syLog(@"消息打开");
-        
-        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-        
-        //iOS 10 使用以下方法注册，才能得到授权，注册通知以后，会自动注册 deviceToken，如果获取不到 deviceToken，Xcode8下要注意开启 Capability->Push Notification。
-        [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert + UNAuthorizationOptionSound)completionHandler:^(BOOL granted, NSError * _Nullable error) {
-            if (granted == YES) {
-                SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:granted], NOTIFICATIONSETTING);
-            } else {
-                SAVEOBJECT_AT_USERDEFAULTS([NSNumber numberWithBool:NO], NOTIFICATIONSETTING);
-            }
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }];
-        
-        //获取当前的通知设置，UNNotificationSettings 是只读对象，不能直接修改，只能通过以下方法获取
-        [center getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
-            
-        }];
-    } else {
-        syLog(@"消息关闭");
-    }
-}
-
 
 #pragma mark - tableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.showArray[_isOpenNotifi].count;
+    return self.showArray.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSArray *array = self.showArray[_isOpenNotifi][section];
+    NSArray *array = self.showArray[section];
     return array.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDE];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:(UITableViewCellStyleValue1) reuseIdentifier:CELLIDE];
+    }
+    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    NSNumber *number = OBJECT_FOR_USERDEFAULTS(NOTIFICATIONSETTING);
+
+    cell.textLabel.text = self.showArray[indexPath.section][indexPath.row];
     
-    cell.textLabel.text = self.showArray[number.integerValue][indexPath.section][indexPath.row];
-    
-    if (indexPath.section == 0 && indexPath.row == 0) {
-        UISwitch *wifiSwitch = [[UISwitch alloc] init];
-        [wifiSwitch addTarget:self action:@selector(respondsToWifiSwitch:) forControlEvents:(UIControlEventValueChanged)];
-        cell.accessoryView = wifiSwitch;
-        cell.detailTextLabel.text = @"";
-    } else if (indexPath.section == 1 && indexPath.row == 0) {
-        UISwitch *wifiSwitch = [[UISwitch alloc] init];
-        [wifiSwitch addTarget:self action:@selector(respondsToNotificationSwitch:) forControlEvents:(UIControlEventValueChanged)];
-        
-        if (_isOpenNotifi) {
-            wifiSwitch.on = YES;
-        } else {
-            wifiSwitch.on = NO;
+    if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
+            UISwitch *wifiSwitch = [[UISwitch alloc] init];
+            [wifiSwitch addTarget:self action:@selector(respondsToWifiSwitch:) forControlEvents:(UIControlEventValueChanged)];
+            
+            NSNumber *isOpen = OBJECT_FOR_USERDEFAULTS(WIFIDOWNLOAD);
+
+            wifiSwitch.on = isOpen.boolValue;
+            
+            
+            cell.accessoryView = wifiSwitch;
+            cell.detailTextLabel.text = @"";
+        } else if (indexPath.row == 1) {
+            cell.accessoryView = nil;
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%.2lfM",_cache];
         }
-        cell.accessoryView = wifiSwitch;
-        cell.detailTextLabel.text = @"";
-    } else {
         
+        
+    } else if (indexPath.section == 1 && indexPath.row == 0) {
+        if (_isOpenNotifi) {
+            cell.detailTextLabel.text = @"已打开";
+        } else {
+            cell.detailTextLabel.text = @"已关闭";
+        }
+        cell.accessoryView = nil;
+    } else if (indexPath.section == 2) {
+        
+        NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"当前版本:%@",[infoDic objectForKey:@"CFBundleShortVersionString"]];
         cell.accessoryView = nil;
     }
     
@@ -154,6 +207,10 @@
 #pragma mark - tableViewDeleagte
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 30;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 60;
 }
 
 
@@ -169,7 +226,7 @@
             label.text = @"    通用";
             break;
         case 1:
-            label.text = @"    消息管理";
+            label.text = @"    消息通知 : 请在 系统设置 -> 通知 中进行相关设置";
             break;
         case 2:
             label.text = @"    版本";
@@ -178,6 +235,29 @@
             break;
     }
     return label;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0 && indexPath.row == 1) {
+        [self clearCache:@""];
+        [self viewWillAppear:YES];
+    } else if (indexPath.section == 2 && indexPath.row == 0) {
+        [self cheackVersion];
+    }
+}
+
+//检查版本更新
+- (void)cheackVersion {
+    [GameRequest chechBoxVersionCompletion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success && REQUESTSUCCESS) {
+            NSString *update = content[@"data"];
+            if ([update isKindOfClass:[NSNull class]]) {
+                [GameRequest showAlertWithMessage:@"当前为最新版本" dismiss:nil];
+            } else {
+                [GameRequest boxUpdateWithUrl:content[@"data"]];
+            }
+        }
+    }];
 }
 
 
@@ -194,7 +274,7 @@
         _tableView.showsHorizontalScrollIndicator = NO;
         _tableView.scrollEnabled = NO;
         
-        [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CELLIDE];
+//        [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CELLIDE];
         
         _tableView.tableFooterView = [UIView new];
         
@@ -219,14 +299,10 @@
 
 - (NSArray *)showArray {
     if (!_showArray) {
-        _showArray = @[@[@[@"仅使用WiFi下载",
+        _showArray = @[@[@"仅使用WiFi下载",
                            @"清空缓存"],
-                         @[@"开启消息通知"],
-                         @[@"检测更新"]],
-                       @[@[@"仅使用WiFi下载",
-                           @"清空缓存"],
-                         @[@"开启消息通知",@"声音",@"震动"],
-                         @[@"检测更新"]]];
+                         @[@"消息通知"],
+                         @[@"检测更新"]];
     }
     return _showArray;
 }

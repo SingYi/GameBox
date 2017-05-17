@@ -138,7 +138,6 @@
 
 /** 获取礼包也轮播图 */
 + (void)giftBannerWithCompletion:(void (^)(NSDictionary * _Nullable, BOOL))completion {
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     
     
     NSString *urlStr = OBJECT_FOR_USERDEFAULTS(@"PACKS_SLIDE");

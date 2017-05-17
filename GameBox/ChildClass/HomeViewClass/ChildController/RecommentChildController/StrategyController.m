@@ -67,7 +67,7 @@
 /** 刷新数据 */
 - (void)refreshData {
     [GameRequest setrategyWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        syLog(@"%@",content);
+
         if (success && REQUESTSUCCESS) {
             _currentPage = 1;
             _isAll = NO;

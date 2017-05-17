@@ -171,9 +171,20 @@ typedef enum : NSUInteger {
 + (void)searchStrategyWithKeyword:(NSString *_Nonnull)keyword
                              Page:(NSString *_Nonnull)page
                        Completion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
+/** 游戏相关攻略 */
++ (void)setrategyWIthGameID:(NSString * _Nonnull)gameID
+                 Completion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
+
+#pragma mark ========================================================================
+/** 客户端检测更新 */
++ (void)chechBoxVersionCompletion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
+/** 更新 */
++ (void)boxUpdateWithUrl:(NSString *_Nonnull)url;
 
 
 @end
+
+
 
 
 

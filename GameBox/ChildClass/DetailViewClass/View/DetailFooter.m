@@ -67,6 +67,15 @@
     }
 }
 
+- (void)setIsOpen:(BOOL)isOpen {
+    _isOpen = isOpen;
+    if (_isOpen) {
+        [self.downLoadBtn setTitle:@"打开" forState:(UIControlStateNormal)];
+    } else {
+        [self.downLoadBtn setTitle:@"下载" forState:(UIControlStateNormal)];
+    }
+}
+
 
 #pragma mark - getter 
 - (UIButton *)collectionBtn {

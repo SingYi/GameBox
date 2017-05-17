@@ -7,6 +7,7 @@
 //
 
 #import "MyGamesCell.h"
+#import <UIImageView+WebCache.h>
 
 @interface MyGamesCell ()
 
@@ -66,8 +67,10 @@
 }
 
 //游戏图标
-- (void)setGameLogoImage:(UIImage *)gameLogoImage {
-    self.gameLogo.image = gameLogoImage;
+- (void)setGameLogoImage:(NSString *)gameLogoImage {
+    
+    
+    [self.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,gameLogoImage]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
 }
 
 

@@ -141,6 +141,11 @@
                     break;
                 }
             }
+            if ([self.gameinfo[@"isLocal"] isEqualToString:@"1"]) {
+                self.detailFooter.isOpen = YES;
+            } else {
+                self.detailFooter.isOpen = NO;
+            }
             
             //设置收藏按钮的代理
             self.detailFooter.delegate = self;
@@ -155,16 +160,15 @@
 
     
 #warning get comment list
+    //获取游戏评论
     [ChangyanSDK loadTopic:@"" topicTitle:nil topicSourceID:[NSString stringWithFormat:@"game_%@",gameID] pageSize:@"3" hotSize:nil orderBy:nil style:nil depth:nil subSize:nil completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
         
         NSData *jsonData = [responseStr dataUsingEncoding:NSUTF8StringEncoding];
-        
         NSError *err;
-        
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
-//        syLog(@"%@",dic[@"comments"]);
         NSArray *array = dic[@"comments"];
         self.gameDetail.commentArray = dic[@"comments"];
+        
         [array enumerateObjectsUsingBlock:^(NSDictionary * obj, NSUInteger idx, BOOL * _Nonnull stop) {
 
         }];
@@ -267,11 +271,11 @@
     
     if ([data1 isEqual:data2] || gameLogo == nil) {
         [self.detailHeader.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_gameinfo[@"logo"]]] placeholderImage:image];
-    
+        self.gameStrategy.gameLogo = self.detailHeader.imageView.image;
     } else {
         
         self.detailHeader.imageView.image = gameLogo;
-
+        self.gameStrategy.gameLogo = gameLogo;
     }
     
     self.gameOpenServer.logoImage = self.detailHeader.imageView.image;
@@ -424,7 +428,6 @@
         
         [GameRequest downLoadAppWithURL:url];
     }
-    syLog(@"下载");
 }
 
 

@@ -30,14 +30,17 @@
 
 /** 保存系统单利 */
 #define SAVEOBJECT_AT_USERDEFAULTS(object,key) [[NSUserDefaults standardUserDefaults] setObject:object forKey:key]
+#define SAVEOBJECT [[NSUserDefaults standardUserDefaults] synchronize]
 
 #define WeakSelf __weak typeof(self) weakSelf = self
 
 /** 渠道ID */
 #define CHANNELID @"185"
 
+//通知
 #define NOTIFICATIONSETTING @"Notification"
-
+//WIFI下载
+#define WIFIDOWNLOAD @"ONLYWIFIDOWNLOAD"
 
 #define USERID [UserModel uid]
 

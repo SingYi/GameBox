@@ -27,17 +27,78 @@
 #define GAME_INSTALL @"http://www.185sy.com/api-game-gameInstall"
 #define GAME_UNINSTALL @"http://www.185sy.com/api-game-gameUninstall"
 #define GAME_GRADE @"http://www.185sy.com/api-game-gameGrade"
-#define GAMESTRAURL @"http://www.185sy.com/api-article-get_list_by_game"
+#define GAME_GONGLUE @"http://www.185sy.com/api-article-get_list_by_game"
 //18
 #define INDEX_ARTICLE @"http://www.185sy.com/api-article-get_list"
+#define GAME_CHECK_CLIENT @"http://www.185sy.com/api-game-checkClient"
 
 @implementation GameRequest
 
+
+//下载游戏
 + (void)downLoadAppWithURL:(NSString *)url {
     if (url && url.length != 0) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+        //网路状态
+        NSString *state = [GameRequest getNetWorkStates];
+        if ([state isEqualToString:@"wifi"]) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+        } else {
+            NSNumber *isWifiDown = OBJECT_FOR_USERDEFAULTS(WIFIDOWNLOAD);
+            if (isWifiDown.boolValue) {
+                [GameRequest showAlertWithMessage:@"请链接WIFI下载,或者在设置中将仅用WIFI下载关闭" dismiss:nil];
+            } else {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+            }
+        }
+    } else {
+        [GameRequest showAlertWithMessage:@"下载地址有误" dismiss:nil];
     }
 }
+
++ (NSString *)getNetWorkStates {
+    UIApplication *app = [UIApplication sharedApplication];
+    NSArray *children = [[[app valueForKeyPath:@"statusBar"]valueForKeyPath:@"foregroundView"]subviews];
+    NSString *state = [[NSString alloc]init];
+    int netType = 0;
+    //获取到网络返回码
+    for (id child in children) {
+        if ([child isKindOfClass:NSClassFromString(@"UIStatusBarDataNetworkItemView")]) {
+            //获取到状态栏
+            netType = [[child valueForKeyPath:@"dataNetworkType"]intValue];
+            
+            switch (netType) {
+                case 0:
+                    state = @"无网络";
+                    //无网模式
+                    break;
+                case 1:
+                    state =  @"2G";
+                    break;
+                case 2:
+                    state =  @"3G";
+                    break;
+                case 3:
+                    state =   @"4G";
+                    break;
+                case 5:
+                {
+                    state =  @"wifi";
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+        //根据状态选择
+    }
+    return state;
+}
+
+
+
+
+
+
 
 /** 推荐游戏 
  *  URLKey:GAME_INDEX
@@ -473,7 +534,76 @@
         urlStr = INDEX_ARTICLE;
     }
     [GameRequest postRequestWithURL:urlStr params:dict completion:completion];
+}
+
+/** 游戏相关攻略 */
++ (void)setrategyWIthGameID:(NSString *)gameID Completion:(void (^)(NSDictionary * _Nullable, BOOL))completion {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+
+    [dict setObject:gameID forKey:@"game_id"];
     
+    [dict setObject:@"1" forKey:@"type"];
+    [dict setObject:CHANNELID forKey:@"channel_id"];
+    [dict setObject:@"1" forKey:@"page"];
+    
+    
+    
+    NSString *urlStr = OBJECT_FOR_USERDEFAULTS(@"GAME_GONGLUE");
+    if (!urlStr) {
+        urlStr = GAME_GONGLUE;
+    }
+    [GameRequest postRequestWithURL:urlStr params:dict completion:completion];
+}
+
+/** 客户端检查更新 */
++ (void)chechBoxVersionCompletion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObject:@"2" forKey:@"system"];
+    [dict setObject:CHANNELID forKey:@"channel_id"];
+    
+    NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
+    NSString *version = [NSString stringWithFormat:@"%@",[infoDic objectForKey:@"CFBundleVersion"]];
+    [dict setObject:version forKey:@"version"];
+    
+    NSString *urlStr = OBJECT_FOR_USERDEFAULTS(@"GAME_CHECK_CLIENT");
+    if (!urlStr) {
+        urlStr = GAME_CHECK_CLIENT;
+    }
+    
+    [GameRequest postRequestWithURL:urlStr params:dict completion:completion];
+}
+
++ (void)boxUpdateWithUrl:(NSString *)url {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil  message:@"游戏有更新,前往更新" preferredStyle:UIAlertControllerStyleAlert];
+    
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertController animated:YES completion:nil];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }]];
+    
+    
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        if ([[self getNetWorkStates] isEqualToString:@"wifi"]) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+            
+        } else {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"当前为流量" message:@"是否前去更新" preferredStyle:UIAlertControllerStyleAlert];
+            
+            [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertController animated:YES completion:nil];
+            
+            [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                
+            }]];
+            
+            [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+            }]];
+        }
+    }]];
+
 }
 
 
