@@ -19,6 +19,7 @@
 #import "GameOpenServerViewController.h"
 
 #import "WriteCommentController.h"
+#import "UserModel.h"
 
 #import "ChangyanSDK.h"
 #import "UIImageView+WebCache.h"
@@ -132,7 +133,12 @@
 
 - (void)respondsToCommentButton {
     self.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:self.writeComment animated:YES];
+    if ([UserModel CurrentUser]) {
+        
+        [self.navigationController pushViewController:self.writeComment animated:YES];
+    } else {
+        [self.navigationController pushViewController:[ControllerManager shareManager].loginViewController animated:YES];
+    }
 }
 
 #pragma mark - setter

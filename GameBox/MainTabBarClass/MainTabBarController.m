@@ -20,7 +20,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initDataSource];
-    [self initUserInterface];
 }
 
 //初始化数据源
@@ -54,17 +53,7 @@
     self.viewControllers = viewControllers;
 }
 
-//初始化用户界面
-- (void)initUserInterface {
-    
-    
-}
 
-- (void)setSelectedViewController:(__kindof UIViewController *)selectedViewController {
-    
-    [super setSelectedViewController:selectedViewController];
-    
-}
 
 
 

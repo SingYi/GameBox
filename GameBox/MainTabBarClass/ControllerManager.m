@@ -84,17 +84,6 @@ static ControllerManager *manager = nil;
     return _tabbarController;
 }
 
-//- (MineViewController *)minViewController {
-//    if (!_minViewController) {
-//        _minViewController = self.tabbarController.viewControllers[3];
-////        _minViewController = [[MineViewController alloc] init];
-//        syLog(@"mine1");
-//    }
-//    syLog(@"mine2");
-//    return _minViewController;
-//}
-
-
 /** 我的礼包视图 */
 - (MyGiftBagViewController *)myGiftBagView {
     if (!_myGiftBagView) {

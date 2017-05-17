@@ -39,7 +39,6 @@
         anonymousAccessToken:nil];
     
 //    [ChangyanSDK setAllowSelfLogin:YES];
-//    
 //    [ChangyanSDK setAllowAnonymous:NO];
 //    [ChangyanSDK setAllowRate:NO];
 //    [ChangyanSDK setAllowUpload:YES];
@@ -71,7 +70,6 @@
             [keys enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 SAVEOBJECT_AT_USERDEFAULTS(dict[obj], obj);
             }];
-//            syLog(@"%@",content);
             SAVEOBJECT_AT_USERDEFAULTS(keys, @"MAP");
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
@@ -113,10 +111,8 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }];
     
-    //获取当前的通知设置，UNNotificationSettings 是只读对象，不能直接修改，只能通过以下方法获取
-    [center getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
-        
-    }];
+    
+    
 }
 
 //检查版本更新
@@ -131,7 +127,6 @@
                 [GameRequest boxUpdateWithUrl:content[@"data"]];
             }
         }
-//        [GameRequest boxUpdateWithUrl:content[@""]];
     }];
 }
 

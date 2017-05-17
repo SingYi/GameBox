@@ -84,8 +84,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    //打开app
-//    [AppModel openAPPWithIde:_showArray[indexPath.row][@"bundleID"]];
+
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

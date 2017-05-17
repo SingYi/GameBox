@@ -17,7 +17,7 @@
 
 @interface UserModel : RequestUtils
 
-#pragma mark =======================================================
+#pragma mark =======================用户属性================================
 /** 用户id */
 @property (nonatomic, strong) NSString * _Nullable userID;
 
@@ -36,9 +36,7 @@
 /** 用户昵称 */
 @property (nonatomic, strong) NSString * _Nullable nickName;
 
-#pragma mark =======================================================
-
-#pragma mark =======================================================
+#pragma mark ========================模型方法===============================
 /** 当前的用户 */
 + (UserModel *_Nullable)CurrentUser;
 
@@ -57,9 +55,8 @@
 
 /** 获取本地头像 */
 + (UIImage *_Nonnull)getImg;
-#pragma mark =======================================================
 
-#pragma mark =======================================================
+#pragma mark =======================登录注册方法==============================
 /** 用户登录接口
  *  username:用户名或者手机号
  */
