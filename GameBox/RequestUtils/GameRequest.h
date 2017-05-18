@@ -182,6 +182,12 @@ typedef enum : NSUInteger {
 + (void)boxUpdateWithUrl:(NSString *_Nonnull)url;
 
 
+#pragma mark - ===========================添加通知======================================
++ (void)registerNotificationWith:(NSDate * _Nonnull)alerTime
+                           Title:(NSString * _Nullable)title
+                          Detail:(NSString * _Nullable)detail
+                      Identifier:(NSString * _Nonnull)identifier;
+
 @end
 
 

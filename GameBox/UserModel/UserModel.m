@@ -7,7 +7,7 @@
 //
 
 #import "UserModel.h"
-
+#import "ChangyanSDK.h"
 #import "AFHTTPSessionManager.h"
 
 /** url */
@@ -48,7 +48,6 @@ static UserModel *currentUser = nil;
 
     } else {
         return nil;
-    
     }
 }
 
@@ -75,10 +74,15 @@ static UserModel *currentUser = nil;
     [[NSUserDefaults standardUserDefaults] synchronize];
     USERLOGOUT;
     
+    //退出畅言
+    [ChangyanSDK logout];
+    
+    
     //创建通知
     NSNotification *notification =[NSNotification notificationWithName:LOGINNOTIFICATION object:nil userInfo:nil];
     //通过通知中心发送通知
     [[NSNotificationCenter defaultCenter] postNotification:notification];
+    
     
 }
 
@@ -319,22 +323,7 @@ static UserModel *currentUser = nil;
     }];
     
     [task resume];
-    
-    
-    
-    
-    
-//    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-//    [dict setObject:userID forKey:@"id"];
-//    
-//    [dict setObject:image forKey:@"img"];
-//    
-//    NSString *urlStr = OBJECT_FOR_USERDEFAULTS(@"USER_UPLOAD");
-//    if (!urlStr) {
-//        urlStr = USER_UPLOAD;
-//    }
-//    
-//    [UserModel postRequestWithURL:urlStr params:dict completion:completion];
+
 }
 
 

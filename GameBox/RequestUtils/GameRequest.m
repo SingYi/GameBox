@@ -8,6 +8,7 @@
 
 #import "GameRequest.h"
 #import "UserModel.h"
+#import <UserNotifications/UserNotifications.h>
 
 #define GAME_INDEX @"http://www.185sy.com/api-game-index"
 #define GAME_TYPE @"http://www.185sy.com/api-game-gameType"
@@ -604,6 +605,50 @@
         }
     }]];
 
+}
+
+
+//使用 UNNotification 本地通知
++ (void)registerNotificationWith:(NSDate * _Nonnull)alerTime
+                           Title:(NSString * _Nullable)title
+                         Detail:(NSString * _Nullable)detail
+                      Identifier:(NSString * _Nonnull)identifier {
+    
+    // 使用 UNUserNotificationCenter 来管理通知
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    
+    //需创建一个包含待通知内容的 UNMutableNotificationContent 对象，注意不是 UNNotificationContent ,此对象为不可变对象。
+    UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+    
+    content.title = [NSString localizedUserNotificationStringForKey:title arguments:nil];
+    
+    content.body = [NSString localizedUserNotificationStringForKey:detail arguments:nil];
+    content.sound = [UNNotificationSound defaultSound];
+
+    //设置推送时间
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"d";
+    NSString *day = [formatter stringFromDate:alerTime];
+    formatter.dateFormat = @"H";
+    NSString *hour = [formatter stringFromDate:alerTime];
+    formatter.dateFormat = @"m";
+    NSString *minute = [formatter stringFromDate:alerTime];
+    
+
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    components.day = day.integerValue;
+    components.hour = hour.integerValue;
+    components.minute = minute.integerValue;
+
+    
+    UNCalendarNotificationTrigger *calendarTrigger = [UNCalendarNotificationTrigger triggerWithDateMatchingComponents:components repeats:NO];
+
+    UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:identifier content:content trigger:calendarTrigger];
+    
+    //添加推送成功后的处理！
+    [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+        [GameRequest showAlertWithMessage:@"提醒添加成功" dismiss:nil];
+    }];
 }
 
 

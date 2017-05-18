@@ -92,6 +92,11 @@
     //检查更新
     [self cheackVersion];
     
+    
+    //发送通知
+//    [GameRequest registerNotification:10];
+    [GameRequest registerNotificationWith:[NSDate dateWithTimeIntervalSinceNow:60] Title:@"开服提醒" Detail:@"hahahahaha" Identifier:@"testSing"];
+    
     return YES;
 }
 
@@ -159,4 +164,26 @@
 }
 
 
+
+#pragma mark - UNUserNotificationCenterDelegate
+//在展示通知前进行处理，即有机会在展示通知前再修改通知内容。
+-(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+    //1. 处理通知
+    
+    
+    
+    
+    
+    
+    //2. 处理完成后条用 completionHandler ，用于指示在前台显示通知的形式
+    completionHandler(UNNotificationPresentationOptionAlert);
+}
+
+
 @end
+
+
+
+
+
+
