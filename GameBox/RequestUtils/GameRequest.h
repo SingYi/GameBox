@@ -204,6 +204,15 @@ typedef enum : NSUInteger {
 /** 删除全部通知记录 */
 + (void)deleteAllNotificationRecord;
 
+#pragma mark - ===========================微信分享======================================
+/** 分享到朋友圈 */
++ (void)shareToFirednCircleWithTitle:(NSString * _Nullable)title
+                            SubTitle:(NSString * _Nullable)subTitle
+                                 Url:(NSString * _Nonnull)url
+                               Image:(UIImage * _Nullable)image;
+
+
+
 @end
 
 

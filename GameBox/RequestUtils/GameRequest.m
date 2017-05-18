@@ -9,6 +9,7 @@
 #import "GameRequest.h"
 #import "UserModel.h"
 #import <UserNotifications/UserNotifications.h>
+#import <WXApi.h>
 
 #define GAME_INDEX @"http://www.185sy.com/api-game-index"
 #define GAME_TYPE @"http://www.185sy.com/api-game-gameType"
@@ -714,6 +715,31 @@
     
     [center removeAllDeliveredNotifications];
     [center removeAllPendingNotificationRequests];
+}
+
+#pragma mark - ===========================微信分享======================================
++ (void)shareToFirednCircleWithTitle:(NSString *)title
+                            SubTitle:(NSString *)subTitle
+                                 Url:(NSString *)url
+                               Image:(UIImage *)image {
+    
+    WXWebpageObject *object = [WXWebpageObject object];
+    object.webpageUrl = url;
+    
+    
+    WXMediaMessage *message = [WXMediaMessage message];
+    message.title = title;
+    message.description = subTitle;
+    [message setThumbImage:image];
+    message.mediaObject = object;
+    
+    
+    SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
+    req.bText = NO;
+    req.message = message;
+    req.scene = WXSceneTimeline;
+    
+    [WXApi sendReq:req];
 }
 
 

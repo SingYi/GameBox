@@ -415,19 +415,22 @@
     }
 }
 
+#pragma mark - share
+/** share */
 - (void)DetailFooter:(DetailFooter *)detailFooter clickShareBtn:(UIButton *)sender {
     if (self.gameinfo) {
-
-    }
-    
-    if ([UserModel CurrentUser]) {
+        if (self.gameLogo) {
+            
+            [GameRequest shareToFirednCircleWithTitle:_gameinfo[@"gamename"] SubTitle:_gameinfo[@"abstract"] Url:[NSString stringWithFormat:@"http://m.185sy.com/Game-appGameinfo-id-%@.html",_gameinfo[@"id"]] Image:self.gameLogo];
+        } else {
+            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_gameinfo[@"logo"]]] options:(SDWebImageDownloaderLowPriority) progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+                if (finished) {
+                    [GameRequest shareToFirednCircleWithTitle:_gameinfo[@"gamename"] SubTitle:_gameinfo[@"abstract"] Url:[NSString stringWithFormat:@"http://m.185sy.com/Game-appGameinfo-id-%@.html",_gameinfo[@"id"]] Image:image];
+                }
+            }];
+        }
         
-    } else {
-
-        return;
     }
-    
-    
 }
 
 - (void)DetailFooter:(DetailFooter *)detailFooter clickDownLoadBtn:(UIButton *)sender {

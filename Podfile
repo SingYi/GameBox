@@ -4,6 +4,7 @@
 pod 'MJRefresh','~> 3.1.12'
 #3.1.12
 pod 'SDWebImage'
+pod 'WechatOpenSDK'
 
 target 'GameBox' do
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks

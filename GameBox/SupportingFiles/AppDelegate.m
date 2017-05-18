@@ -14,8 +14,9 @@
 #import "ChangyanSDK.h"
 #import "GameRequest.h"
 #import <UserNotifications/UserNotifications.h>
+#import <WXApi.h>
 
-@interface AppDelegate ()<UNUserNotificationCenterDelegate>
+@interface AppDelegate ()<UNUserNotificationCenterDelegate,WXApiDelegate>
 
 
 
@@ -45,6 +46,10 @@
 //    [ChangyanSDK setAllowWeiboLogin:NO];
 //    [ChangyanSDK setAllowQQLogin:NO];
 //    [ChangyanSDK setAllowSohuLogin:NO];
+    
+    //注册微信
+    [WXApi registerApp:@"wx7ec31aabe8cc710d"];
+    
     
     
     //第一次登陆
