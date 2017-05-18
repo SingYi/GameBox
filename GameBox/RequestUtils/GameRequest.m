@@ -612,7 +612,8 @@
 + (void)registerNotificationWith:(NSDate * _Nonnull)alerTime
                            Title:(NSString * _Nullable)title
                          Detail:(NSString * _Nullable)detail
-                      Identifier:(NSString * _Nonnull)identifier {
+                      Identifier:(NSString * _Nonnull)identifier
+                        GameDict:(NSDictionary *_Nonnull)dict {
     
     // 使用 UNUserNotificationCenter 来管理通知
     UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
@@ -627,6 +628,8 @@
 
     //设置推送时间
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"M";
+    NSString *month = [formatter stringFromDate:alerTime];
     formatter.dateFormat = @"d";
     NSString *day = [formatter stringFromDate:alerTime];
     formatter.dateFormat = @"H";
@@ -636,6 +639,7 @@
     
 
     NSDateComponents *components = [[NSDateComponents alloc] init];
+    components.month = month.integerValue;
     components.day = day.integerValue;
     components.hour = hour.integerValue;
     components.minute = minute.integerValue;
@@ -645,11 +649,73 @@
 
     UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:identifier content:content trigger:calendarTrigger];
     
+    
     //添加推送成功后的处理！
     [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
-        [GameRequest showAlertWithMessage:@"提醒添加成功" dismiss:nil];
+        if (error) {
+            [GameRequest showAlertWithMessage:@"提醒添加失败" dismiss:nil];
+        } else {
+            [GameRequest addNotificationRecordWith:dict];
+            [GameRequest showAlertWithMessage:@"提醒添加成功" dismiss:nil];
+        }
     }];
 }
+
+/** 移除通知 */
++ (void)deleteNotificationWithIdentifier:(NSString *)identifier {
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    
+    [center removeDeliveredNotificationsWithIdentifiers:@[identifier]];
+}
+
+/** 获取路径 */
++ (NSString *)getPlistPathWithFileName:(NSString *)fileName {
+    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    NSString *plistPath = [path stringByAppendingPathComponent:fileName];
+    return plistPath;
+}
+
+/** 获取通知记录 */
++ (NSArray *)notificationRecord {
+    NSArray *array = [NSArray arrayWithContentsOfFile:[GameRequest getPlistPathWithFileName:@"NotificationRecord"]];
+    return array;
+}
+
+/** 添加通知记录 */
++ (void)addNotificationRecordWith:(NSDictionary *)dict {
+    NSMutableArray *array = [NSMutableArray arrayWithContentsOfFile:[GameRequest getPlistPathWithFileName:@"NotificationRecord"]];
+    if (array == nil) {
+        array = [NSMutableArray array];
+    }
+    [array addObject:dict];
+    [array writeToFile:[GameRequest getPlistPathWithFileName:@"NotificationRecord"] atomically:YES];
+    
+}
+
+/** 删除通知记录 */
++ (void)deleteNotificationRecordWith:(NSInteger)index {
+    NSMutableArray *array = [NSMutableArray arrayWithContentsOfFile:[GameRequest getPlistPathWithFileName:@"NotificationRecord"]];
+    if (array == nil) {
+        
+    } else {
+        [GameRequest deleteNotificationWithIdentifier:array[index][@"tag"]];
+        [array removeObjectAtIndex:index];
+    }
+    [array writeToFile:[GameRequest getPlistPathWithFileName:@"NotificationRecord"] atomically:YES];
+}
+
+/** 删除全部通知记录 */
++ (void)deleteAllNotificationRecord {
+    NSMutableArray *array = [NSMutableArray new];
+
+    [array writeToFile:[GameRequest getPlistPathWithFileName:@"NotificationRecord"] atomically:YES];
+    
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    
+    [center removeAllDeliveredNotifications];
+    [center removeAllPendingNotificationRequests];
+}
+
 
 
 @end

@@ -53,7 +53,6 @@
 		B5691C451EC1B8DB0094BE0F /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B5691C441EC1B8DB0094BE0F /* AFURLRequestSerialization.m */; };
 		B5691C481EC1B8E70094BE0F /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = B5691C471EC1B8E70094BE0F /* AFSecurityPolicy.m */; };
 		B57DB6DC1EB08E9B00A0D8A0 /* SearchResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B57DB6DB1EB08E9B00A0D8A0 /* SearchResultViewController.m */; };
-		B5824FB41EA0594400966640 /* NewServerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5824FB31EA0594400966640 /* NewServerCell.m */; };
 		B5824FB81EA05B6800966640 /* NewServerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5824FB61EA05B6800966640 /* NewServerTableViewCell.m */; };
 		B5824FB91EA05B6800966640 /* NewServerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5824FB71EA05B6800966640 /* NewServerTableViewCell.xib */; };
 		B5858D5B1ECA9737003A2414 /* SearchGiftController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5858D5A1ECA9737003A2414 /* SearchGiftController.m */; };
@@ -193,8 +192,6 @@
 		B5691C471EC1B8E70094BE0F /* AFSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSecurityPolicy.m; sourceTree = "<group>"; };
 		B57DB6DA1EB08E9B00A0D8A0 /* SearchResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultViewController.h; sourceTree = "<group>"; };
 		B57DB6DB1EB08E9B00A0D8A0 /* SearchResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultViewController.m; sourceTree = "<group>"; };
-		B5824FB21EA0594400966640 /* NewServerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewServerCell.h; sourceTree = "<group>"; };
-		B5824FB31EA0594400966640 /* NewServerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewServerCell.m; sourceTree = "<group>"; };
 		B5824FB51EA05B6800966640 /* NewServerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewServerTableViewCell.h; sourceTree = "<group>"; };
 		B5824FB61EA05B6800966640 /* NewServerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewServerTableViewCell.m; sourceTree = "<group>"; };
 		B5824FB71EA05B6800966640 /* NewServerTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewServerTableViewCell.xib; sourceTree = "<group>"; };
@@ -560,8 +557,6 @@
 		B5824FB11EA0592500966640 /* NewServerView */ = {
 			isa = PBXGroup;
 			children = (
-				B5824FB21EA0594400966640 /* NewServerCell.h */,
-				B5824FB31EA0594400966640 /* NewServerCell.m */,
 				B5824FB51EA05B6800966640 /* NewServerTableViewCell.h */,
 				B5824FB61EA05B6800966640 /* NewServerTableViewCell.m */,
 				B5824FB71EA05B6800966640 /* NewServerTableViewCell.xib */,
@@ -1021,7 +1016,6 @@
 				B5858D5E1ECA9B23003A2414 /* SearchGiftResultController.m in Sources */,
 				B5824FB81EA05B6800966640 /* NewServerTableViewCell.m in Sources */,
 				B5858D651ECADB76003A2414 /* GiftRequest.m in Sources */,
-				B5824FB41EA0594400966640 /* NewServerCell.m in Sources */,
 				B5691C421EC1B8CC0094BE0F /* AFURLResponseSerialization.m in Sources */,
 				B5C5D4B41EA078BF008A46DE /* ActivityCell.m in Sources */,
 				B54FCA321EC94EAD00BACAF7 /* NSCommingServerController.m in Sources */,

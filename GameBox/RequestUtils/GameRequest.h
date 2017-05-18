@@ -183,10 +183,26 @@ typedef enum : NSUInteger {
 
 
 #pragma mark - ===========================添加通知======================================
+/** 添加通知 */
 + (void)registerNotificationWith:(NSDate * _Nonnull)alerTime
                            Title:(NSString * _Nullable)title
                           Detail:(NSString * _Nullable)detail
-                      Identifier:(NSString * _Nonnull)identifier;
+                      Identifier:(NSString * _Nonnull)identifier
+                        GameDict:(NSDictionary *_Nonnull)dict;
+
+/** 获取通知记录 */
++ (NSArray *_Nullable)notificationRecord;
+
+
+/** 添加通知记录 */
++ (void)addNotificationRecordWith:(NSDictionary *_Nonnull)dict;
+
+
+/** 删除通知记录 */
++ (void)deleteNotificationRecordWith:(NSInteger )index;
+
+/** 删除全部通知记录 */
++ (void)deleteAllNotificationRecord;
 
 @end
 

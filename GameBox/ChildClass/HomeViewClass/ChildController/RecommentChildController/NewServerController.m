@@ -8,7 +8,6 @@
 
 #import "NewServerController.h"
 #import "HomeHeader.h"
-#import "NewServerCell.h"
 #import "GameRequest.h"
 
 #import "NSTodayServerController.h"
@@ -78,7 +77,7 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NewServerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CELLIDE forIndexPath:indexPath];
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CELLIDE forIndexPath:indexPath];
     
     [cell.contentView addSubview:self.showArray[indexPath.row].view];
     
@@ -130,7 +129,7 @@
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         
-        [_collectionView registerClass:[NewServerCell class] forCellWithReuseIdentifier:CELLIDE];
+        [_collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:CELLIDE];
 
         
         _collectionView.pagingEnabled = YES;

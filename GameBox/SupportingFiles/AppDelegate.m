@@ -92,10 +92,8 @@
     //检查更新
     [self cheackVersion];
     
-    
-    //发送通知
-//    [GameRequest registerNotification:10];
-    [GameRequest registerNotificationWith:[NSDate dateWithTimeIntervalSinceNow:60] Title:@"开服提醒" Detail:@"hahahahaha" Identifier:@"testSing"];
+//    [GameRequest registerNotificationWith:[NSDate dateWithTimeIntervalSinceNow:120] Title:@"开服提醒" Detail:@"hahaha" Identifier:@"text______111111" GameDict:@{}];
+
     
     return YES;
 }
@@ -105,6 +103,8 @@
     UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
     //监听回调事件
     center.delegate = self;
+    
+    [center removeAllDeliveredNotifications];
     
     //iOS 10 使用以下方法注册，才能得到授权，注册通知以后，会自动注册 deviceToken，如果获取不到 deviceToken，Xcode8下要注意开启 Capability->Push Notification。
     [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert + UNAuthorizationOptionSound)completionHandler:^(BOOL granted, NSError * _Nullable error) {
