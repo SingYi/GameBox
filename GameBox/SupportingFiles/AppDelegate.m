@@ -15,6 +15,12 @@
 #import "GameRequest.h"
 #import <UserNotifications/UserNotifications.h>
 #import <WXApi.h>
+#import <TencentOpenAPI/TencentOAuth.h>
+
+
+
+#define WEIXINAPPID @"wx7ec31aabe8cc710d"
+#define QQAPPID @"1106099979"
 
 @interface AppDelegate ()<UNUserNotificationCenterDelegate,WXApiDelegate>
 
@@ -25,6 +31,7 @@
 @implementation AppDelegate
 
 
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
@@ -33,23 +40,17 @@
     
     [self.window makeKeyAndVisible];
     
-    //畅言SDK
+    //注册畅言SDK
     [ChangyanSDK registerApp:@"cysYKUClL"
                       appKey:@"6c88968800e8b236e5c69b8634db704d"
                  redirectUrl:nil
         anonymousAccessToken:nil];
     
-//    [ChangyanSDK setAllowSelfLogin:YES];
-//    [ChangyanSDK setAllowAnonymous:NO];
-//    [ChangyanSDK setAllowRate:NO];
-//    [ChangyanSDK setAllowUpload:YES];
-//    [ChangyanSDK setAllowWeiboLogin:NO];
-//    [ChangyanSDK setAllowQQLogin:NO];
-//    [ChangyanSDK setAllowSohuLogin:NO];
-    
     //注册微信
-    [WXApi registerApp:@"wx7ec31aabe8cc710d"];
+    [WXApi registerApp:WEIXINAPPID];
     
+    //注册QQ
+    TencentOAuth *oAuth = [[TencentOAuth alloc] initWithAppId:QQAPPID andDelegate:nil];
     
     
     //第一次登陆
@@ -96,8 +97,8 @@
     
     //检查更新
     [self cheackVersion];
+
     
-//    [GameRequest registerNotificationWith:[NSDate dateWithTimeIntervalSinceNow:120] Title:@"开服提醒" Detail:@"hahaha" Identifier:@"text______111111" GameDict:@{}];
 
     
     return YES;
@@ -167,6 +168,9 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+
+
 
 
 

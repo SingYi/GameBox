@@ -26,6 +26,8 @@
 
 
 
+
+
 @interface DetailViewController ()<DetailHeaderDelegate,DetailFooterDelegate>
 
 /**头部视图*/
@@ -60,6 +62,18 @@
 /**猜你喜欢*/
 @property (nonatomic, strong) NSArray *likes;
 
+
+/** 分享页面 */
+@property (nonatomic, strong) UIWindow *sharedWindow;
+@property (nonatomic, strong) UIView *sharedView;
+@property (nonatomic, strong) UIButton *cancleShared;
+
+/** 分享到QQ空间 */
+@property (nonatomic, strong) UIButton *sharedQQZone;
+@property (nonatomic, strong) UILabel *QzoneLabel;
+/** 分享到朋友圈 */
+@property (nonatomic, strong) UIButton *sharedFirendcycle;
+@property (nonatomic, strong) UILabel *firendLabel;
 
 
 @end
@@ -419,16 +433,8 @@
 /** share */
 - (void)DetailFooter:(DetailFooter *)detailFooter clickShareBtn:(UIButton *)sender {
     if (self.gameinfo) {
-        if (self.gameLogo) {
-            
-            [GameRequest shareToFirednCircleWithTitle:_gameinfo[@"gamename"] SubTitle:_gameinfo[@"abstract"] Url:[NSString stringWithFormat:@"http://m.185sy.com/Game-appGameinfo-id-%@.html",_gameinfo[@"id"]] Image:self.gameLogo];
-        } else {
-            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_gameinfo[@"logo"]]] options:(SDWebImageDownloaderLowPriority) progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
-                if (finished) {
-                    [GameRequest shareToFirednCircleWithTitle:_gameinfo[@"gamename"] SubTitle:_gameinfo[@"abstract"] Url:[NSString stringWithFormat:@"http://m.185sy.com/Game-appGameinfo-id-%@.html",_gameinfo[@"id"]] Image:image];
-                }
-            }];
-        }
+        
+        [self showSharedView];
         
     }
 }
@@ -443,6 +449,55 @@
         NSString *url = self.gameinfo[@"ios_url"];
         
         [GameRequest downLoadAppWithURL:url];
+    }
+}
+
+- (void)showSharedView {
+    
+    self.sharedView.transform = CGAffineTransformMakeTranslation(0, 120);
+    self.cancleShared.transform = CGAffineTransformMakeTranslation(0, 120);
+    [self.sharedWindow makeKeyAndVisible];
+    [UIView animateWithDuration:0.2 animations:^{
+        self.sharedView.transform = CGAffineTransformIdentity;
+        self.cancleShared.transform = CGAffineTransformIdentity;
+    }];
+    
+    
+}
+
+- (void)hideSharedView {
+    self.sharedWindow = nil;
+}
+
+- (void)tapSharedWindow:(UITapGestureRecognizer *)sender {
+    [self hideSharedView];
+}
+
+- (void)respondsToSharedFirend {
+    [self hideSharedView];
+    if (self.gameLogo) {
+        
+        [GameRequest shareToFirednCircleWithTitle:_gameinfo[@"gamename"] SubTitle:_gameinfo[@"abstract"] Url:[NSString stringWithFormat:@"http://m.185sy.com/Game-appGameinfo-id-%@.html",_gameinfo[@"id"]] Image:self.gameLogo];
+
+        
+    } else {
+        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_gameinfo[@"logo"]]] options:(SDWebImageDownloaderLowPriority) progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+                if (finished) {
+                    [GameRequest shareToFirednCircleWithTitle:_gameinfo[@"gamename"] SubTitle:_gameinfo[@"abstract"] Url:[NSString stringWithFormat:@"http://m.185sy.com/Game-appGameinfo-id-%@.html",_gameinfo[@"id"]] Image:image];
+                }
+            }];
+    }
+}
+
+- (void)respondsToSharedQQZone {
+    [self hideSharedView];
+    if (self.gameLogo) {
+
+        [GameRequest shareToQQZoneWithTitle:_gameinfo[@"gamename"] SubTitle:_gameinfo[@"abstract"] Url:[NSString stringWithFormat:@"http://m.185sy.com/Game-appGameinfo-id-%@.html",_gameinfo[@"id"]] Image:[NSString stringWithFormat:IMAGEURL,_gameinfo[@"logo"]]];
+        
+    } else {
+
+        [GameRequest shareToQQZoneWithTitle:_gameinfo[@"gamename"] SubTitle:_gameinfo[@"abstract"] Url:[NSString stringWithFormat:@"http://m.185sy.com/Game-appGameinfo-id-%@.html",_gameinfo[@"id"]] Image:[NSString stringWithFormat:IMAGEURL,_gameinfo[@"logo"]]];
     }
 }
 
@@ -549,6 +604,112 @@
         _commentButton = [[UIBarButtonItem alloc] initWithTitle:@"我要评论" style:(UIBarButtonItemStyleDone) target:self action:@selector(respondsToCommentButton)];
     }
     return _commentButton;
+}
+
+/** 分享页面 */
+- (UIWindow *)sharedWindow {
+    if (!_sharedWindow) {
+        _sharedWindow = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT)];
+        _sharedWindow.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.3];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapSharedWindow:)];
+        tap.numberOfTouchesRequired = 1;
+        tap.numberOfTapsRequired = 1;
+        
+        [_sharedWindow addGestureRecognizer:tap];
+        [_sharedWindow addSubview:self.sharedView];
+        [_sharedWindow addSubview:self.cancleShared];
+    }
+    return _sharedWindow;
+}
+
+- (UIView *)sharedView {
+    if (!_sharedView) {
+        _sharedView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 120)];
+        _sharedView.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT - 120);
+        _sharedView.backgroundColor = RGBCOLOR(247, 247, 247);
+        
+        
+        UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, 119, kSCREEN_WIDTH, 1)];
+        line.backgroundColor = [UIColor lightGrayColor];
+        
+        [_sharedView addSubview:line];
+//        _sharedView.layer.cornerRadius = 10;
+//        _sharedView.layer.masksToBounds = YES;
+        
+        [_sharedView addSubview:self.sharedFirendcycle];
+        [_sharedView addSubview:self.firendLabel];
+        [_sharedView addSubview:self.sharedQQZone];
+        [_sharedView addSubview:self.QzoneLabel];
+    }
+    return _sharedView;
+}
+
+/** 取消分享按钮 */
+- (UIButton *)cancleShared {
+    if (!_cancleShared) {
+        _cancleShared = [UIButton buttonWithType:(UIButtonTypeCustom)];
+        _cancleShared.bounds = CGRectMake(0, 0, kSCREEN_WIDTH, 60);
+        _cancleShared.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_HEIGHT - 30);
+        _cancleShared.backgroundColor = RGBCOLOR(247, 247, 247);
+        [_cancleShared setTitle:@"取消" forState:(UIControlStateNormal)];
+        [_cancleShared setTitleColor:[UIColor lightGrayColor] forState:(UIControlStateNormal)];
+        [_cancleShared addTarget:self action:@selector(hideSharedView) forControlEvents:(UIControlEventTouchUpInside)];
+        
+//        _cancleShared.layer.cornerRadius = 10;
+//        _cancleShared.layer.masksToBounds = YES;
+    }
+    return _cancleShared;
+}
+
+/** 分享到朋友圈 */
+- (UIButton *)sharedFirendcycle {
+    if (!_sharedFirendcycle) {
+        _sharedFirendcycle = [[UIButton alloc] init];
+        _sharedFirendcycle.bounds = CGRectMake(0, 0, 35, 35);
+        _sharedFirendcycle.center = CGPointMake(self.firendLabel.center.x, 50);
+        [_sharedFirendcycle setBackgroundImage:[UIImage imageNamed:@"shared_firend"] forState:(UIControlStateNormal)];
+        [_sharedFirendcycle setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
+        [_sharedFirendcycle addTarget:self action:@selector(respondsToSharedFirend) forControlEvents:(UIControlEventTouchUpInside)];
+        
+        
+    }
+    return _sharedFirendcycle;
+}
+
+- (UILabel *)firendLabel {
+    if (!_firendLabel) {
+        _firendLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 75, kSCREEN_WIDTH / 4, 30)];
+        _firendLabel.text = @"朋友圈";
+        _firendLabel.textAlignment = NSTextAlignmentCenter;
+        _firendLabel.textColor = [UIColor lightGrayColor];
+    }
+    return _firendLabel;
+}
+
+/** 分享到QQ空间 */
+- (UIButton *)sharedQQZone {
+    if (!_sharedQQZone) {
+        _sharedQQZone = [[UIButton alloc] init];
+        _sharedQQZone.bounds = CGRectMake(0, 0, 35, 35);
+        _sharedQQZone.center = CGPointMake(self.QzoneLabel.center.x, 50);
+        [_sharedQQZone setBackgroundImage:[UIImage imageNamed:@"shared_Qzone"] forState:(UIControlStateNormal)];
+        [_sharedQQZone setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
+        [_sharedQQZone addTarget:self action:@selector(respondsToSharedQQZone) forControlEvents:(UIControlEventTouchUpInside)];
+        
+        
+    }
+    return _sharedQQZone;
+}
+
+- (UILabel *)QzoneLabel {
+    if (!_QzoneLabel) {
+        _QzoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(kSCREEN_WIDTH / 4, 75, kSCREEN_WIDTH / 4, 30)];
+        _QzoneLabel.text = @"QQ空间";
+        _QzoneLabel.textAlignment = NSTextAlignmentCenter;
+        _QzoneLabel.textColor = [UIColor lightGrayColor];
+    }
+    return _QzoneLabel;
 }
 
 

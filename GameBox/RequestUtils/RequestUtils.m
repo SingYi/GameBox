@@ -129,6 +129,7 @@
         return deviceID;
     } else {
         NSString *idfv = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        
         [[NSUserDefaults standardUserDefaults] setObject:idfv forKey:@"deviceID"];
         return idfv;
     }

@@ -10,6 +10,7 @@
 #import "UserModel.h"
 #import <UserNotifications/UserNotifications.h>
 #import <WXApi.h>
+#import <TencentOpenAPI/QQApiInterface.h>
 
 #define GAME_INDEX @"http://www.185sy.com/api-game-index"
 #define GAME_TYPE @"http://www.185sy.com/api-game-gameType"
@@ -741,6 +742,24 @@
     
     [WXApi sendReq:req];
 }
+
++ (void)shareToQQZoneWithTitle:(NSString *)title
+                            SubTitle:(NSString *)subTitle
+                                 Url:(NSString *)url
+                               Image:(NSString *)imageUrl {
+
+    
+    QQApiNewsObject *object = [QQApiNewsObject objectWithURL:[NSURL URLWithString:url] title:title description:subTitle previewImageURL:[NSURL URLWithString:imageUrl]];
+    
+    object.shareDestType = ShareDestTypeQQ;
+    
+    SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:object];
+    
+    [QQApiInterface SendReqToQZone:req];
+}
+
+
+
 
 
 

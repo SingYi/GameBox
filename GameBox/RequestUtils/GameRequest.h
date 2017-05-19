@@ -211,6 +211,11 @@ typedef enum : NSUInteger {
                                  Url:(NSString * _Nonnull)url
                                Image:(UIImage * _Nullable)image;
 
+/** 分享到QQ空间 */
++ (void)shareToQQZoneWithTitle:(NSString *_Nullable)title
+                      SubTitle:(NSString *_Nullable)subTitle
+                           Url:(NSString *_Nonnull)url
+                         Image:(NSString *_Nullable)imageUrl;
 
 
 @end
