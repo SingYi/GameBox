@@ -10,6 +10,11 @@
 #import <UIKit/UIKit.h>
 #import <ifaddrs.h>
 #import <arpa/inet.h>
+#import "SSKeychain.h"
+
+
+#define KEYCHAINSERVICE @"tenoneTec.com"
+#define DEVICEID @"deviceID%forGAMEbox"
 
 
 @implementation RequestUtils
@@ -123,17 +128,14 @@
 
 + (NSString *)DeviceID {
     
-    NSString *deviceID = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceID"];
+    NSString *deviceID = [SSKeychain passwordForService:KEYCHAINSERVICE account:DEVICEID];
     
-    if (deviceID.length != 0) {
-        return deviceID;
-    } else {
-        NSString *idfv = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-        
-        [[NSUserDefaults standardUserDefaults] setObject:idfv forKey:@"deviceID"];
-        return idfv;
+    if (deviceID == nil) {
+        deviceID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        [SSKeychain setPassword:deviceID forService:KEYCHAINSERVICE account:DEVICEID];
     }
-
+    
+    return deviceID;
 }
 
 + (NSString *)DeviceIP {

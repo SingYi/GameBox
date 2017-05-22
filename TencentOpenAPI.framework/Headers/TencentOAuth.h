@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "sdkdef.h"
 #import "TencentOAuthObject.h"
+#pragma clang diagnostic ignored "-Wdocumentation"
 #import "TencentApiInterface.h"
 
 @protocol TencentSessionDelegate;

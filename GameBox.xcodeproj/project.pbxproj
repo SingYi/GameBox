@@ -53,6 +53,15 @@
 		B57C70F91ECEAB4900C7DE60 /* libPods-GameBox.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0830EB8A36A7F8F58E00C379 /* libPods-GameBox.a */; };
 		B57C71011ECEEA1A00C7DE60 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B57C71001ECEEA1A00C7DE60 /* Assets.xcassets */; };
 		B57DB6DC1EB08E9B00A0D8A0 /* SearchResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B57DB6DB1EB08E9B00A0D8A0 /* SearchResultViewController.m */; };
+		B5816D591ED289D900E6149D /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = B5816D581ED289D900E6149D /* SSKeychain.m */; };
+		B5816D5B1ED296B300E6149D /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B5816D5A1ED296B300E6149D /* libiconv.tbd */; };
+		B5816D5D1ED296C000E6149D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5816D5C1ED296C000E6149D /* SystemConfiguration.framework */; };
+		B5816D5F1ED296CB00E6149D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5816D5E1ED296CB00E6149D /* CoreGraphics.framework */; };
+		B5816D611ED296D400E6149D /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B5816D601ED296D400E6149D /* libsqlite3.tbd */; };
+		B5816D631ED296DD00E6149D /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5816D621ED296DD00E6149D /* CoreTelephony.framework */; };
+		B5816D651ED296E900E6149D /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B5816D641ED296E900E6149D /* libstdc++.tbd */; };
+		B5816D671ED296F500E6149D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B5816D661ED296F500E6149D /* libz.tbd */; };
+		B5816D6B1ED2F1BF00E6149D /* ExceptionHandlerTool.m in Sources */ = {isa = PBXBuildFile; fileRef = B5816D6A1ED2F1BF00E6149D /* ExceptionHandlerTool.m */; };
 		B5824FB81EA05B6800966640 /* NewServerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5824FB61EA05B6800966640 /* NewServerTableViewCell.m */; };
 		B5824FB91EA05B6800966640 /* NewServerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5824FB71EA05B6800966640 /* NewServerTableViewCell.xib */; };
 		B5858D5B1ECA9737003A2414 /* SearchGiftController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5858D5A1ECA9737003A2414 /* SearchGiftController.m */; };
@@ -192,6 +201,17 @@
 		B57C71001ECEEA1A00C7DE60 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = SupportingFiles/Assets.xcassets; sourceTree = "<group>"; };
 		B57DB6DA1EB08E9B00A0D8A0 /* SearchResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultViewController.h; sourceTree = "<group>"; };
 		B57DB6DB1EB08E9B00A0D8A0 /* SearchResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultViewController.m; sourceTree = "<group>"; };
+		B5816D571ED289D900E6149D /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
+		B5816D581ED289D900E6149D /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
+		B5816D5A1ED296B300E6149D /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		B5816D5C1ED296C000E6149D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		B5816D5E1ED296CB00E6149D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		B5816D601ED296D400E6149D /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		B5816D621ED296DD00E6149D /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		B5816D641ED296E900E6149D /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
+		B5816D661ED296F500E6149D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		B5816D691ED2F1BF00E6149D /* ExceptionHandlerTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExceptionHandlerTool.h; sourceTree = "<group>"; };
+		B5816D6A1ED2F1BF00E6149D /* ExceptionHandlerTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExceptionHandlerTool.m; sourceTree = "<group>"; };
 		B5824FB51EA05B6800966640 /* NewServerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewServerTableViewCell.h; sourceTree = "<group>"; };
 		B5824FB61EA05B6800966640 /* NewServerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewServerTableViewCell.m; sourceTree = "<group>"; };
 		B5824FB71EA05B6800966640 /* NewServerTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewServerTableViewCell.xib; sourceTree = "<group>"; };
@@ -292,6 +312,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5816D671ED296F500E6149D /* libz.tbd in Frameworks */,
+				B5816D651ED296E900E6149D /* libstdc++.tbd in Frameworks */,
+				B5816D631ED296DD00E6149D /* CoreTelephony.framework in Frameworks */,
+				B5816D611ED296D400E6149D /* libsqlite3.tbd in Frameworks */,
+				B5816D5F1ED296CB00E6149D /* CoreGraphics.framework in Frameworks */,
+				B5816D5D1ED296C000E6149D /* SystemConfiguration.framework in Frameworks */,
+				B5816D5B1ED296B300E6149D /* libiconv.tbd in Frameworks */,
 				B52CC1501EB8581100A1A792 /* Security.framework in Frameworks */,
 				B57C70E71ECE98D700C7DE60 /* TencentOpenAPI.framework in Frameworks */,
 				B57C70F91ECEAB4900C7DE60 /* libPods-GameBox.a in Frameworks */,
@@ -336,6 +363,7 @@
 				5E8DE54E1E9BD35A007E719D /* AppDelegate.m */,
 				B59816E21EC45F250017599F /* LaunchScreen.h */,
 				B59816E31EC45F250017599F /* LaunchScreen.m */,
+				B5816D681ED2F12800E6149D /* ExceptionHandling */,
 				5E8DE5441E9BD255007E719D /* ControllerManager */,
 				B58A5C031EB1C09B00CC1D00 /* UserModel */,
 				B58A5C071EB1DEF600CC1D00 /* AppManager */,
@@ -447,6 +475,8 @@
 				B52B2FDB1EBC73B3002A572D /* GameRequest.m */,
 				B5858D631ECADB76003A2414 /* GiftRequest.h */,
 				B5858D641ECADB76003A2414 /* GiftRequest.m */,
+				B5816D571ED289D900E6149D /* SSKeychain.h */,
+				B5816D581ED289D900E6149D /* SSKeychain.m */,
 			);
 			path = RequestUtils;
 			sourceTree = "<group>";
@@ -553,6 +583,15 @@
 				B5691C471EC1B8E70094BE0F /* AFSecurityPolicy.m */,
 			);
 			path = AFNetWorking;
+			sourceTree = "<group>";
+		};
+		B5816D681ED2F12800E6149D /* ExceptionHandling */ = {
+			isa = PBXGroup;
+			children = (
+				B5816D691ED2F1BF00E6149D /* ExceptionHandlerTool.h */,
+				B5816D6A1ED2F1BF00E6149D /* ExceptionHandlerTool.m */,
+			);
+			path = ExceptionHandling;
 			sourceTree = "<group>";
 		};
 		B5824FB11EA0592500966640 /* NewServerView */ = {
@@ -816,6 +855,13 @@
 		F4CDF0BFB766E73D87B7A702 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B5816D661ED296F500E6149D /* libz.tbd */,
+				B5816D641ED296E900E6149D /* libstdc++.tbd */,
+				B5816D621ED296DD00E6149D /* CoreTelephony.framework */,
+				B5816D601ED296D400E6149D /* libsqlite3.tbd */,
+				B5816D5E1ED296CB00E6149D /* CoreGraphics.framework */,
+				B5816D5C1ED296C000E6149D /* SystemConfiguration.framework */,
+				B5816D5A1ED296B300E6149D /* libiconv.tbd */,
 				B57C70E61ECE98D700C7DE60 /* TencentOpenAPI.framework */,
 				B52CC14F1EB8581100A1A792 /* Security.framework */,
 				B52CC1491EB857AA00A1A792 /* libChangyanSDK.a */,
@@ -969,6 +1015,7 @@
 				B5E2C80C1E9E1A37002CEC61 /* MyGiftBagViewController.m in Sources */,
 				B52B2FD91EBC5A30002A572D /* GDCommentDetailController.m in Sources */,
 				5E8DE5681E9BD7D2007E719D /* MineViewController.m in Sources */,
+				B5816D591ED289D900E6149D /* SSKeychain.m in Sources */,
 				B5858D5B1ECA9737003A2414 /* SearchGiftController.m in Sources */,
 				5E8DE5621E9BD7A4007E719D /* RankingListViewController.m in Sources */,
 				B5691C3C1EC1B8310094BE0F /* AFHTTPSessionManager.m in Sources */,
@@ -984,6 +1031,7 @@
 				B5E2C81B1E9E2E6F002CEC61 /* SettingView.m in Sources */,
 				B5C5D4DC1EA0C484008A46DE /* DetialTableHeader.m in Sources */,
 				B5E2C8091E9E0AB2002CEC61 /* RegisterViewController.m in Sources */,
+				B5816D6B1ED2F1BF00E6149D /* ExceptionHandlerTool.m in Sources */,
 				B59816E41EC45F250017599F /* LaunchScreen.m in Sources */,
 				B59816DF1EC412DC0017599F /* HCDetailController.m in Sources */,
 				B5691C481EC1B8E70094BE0F /* AFSecurityPolicy.m in Sources */,

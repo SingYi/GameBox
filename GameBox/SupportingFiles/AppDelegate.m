@@ -15,6 +15,7 @@
 #import "GameRequest.h"
 #import <UserNotifications/UserNotifications.h>
 #import <WXApi.h>
+#pragma clang diagnostic ignored "-Wdocumentation"
 #import <TencentOpenAPI/TencentOAuth.h>
 
 
@@ -27,6 +28,7 @@
 
 
 @end
+
 
 @implementation AppDelegate
 
@@ -52,19 +54,45 @@
     //注册QQ
     TencentOAuth *oAuth = [[TencentOAuth alloc] initWithAppId:QQAPPID andDelegate:nil];
     
+    [oAuth isSessionValid];
     
     //第一次登陆
-    NSString *isFirst = [[NSUserDefaults standardUserDefaults] stringForKey:@"isFirst"];
-    
-    
-    if (!isFirst) {
-        
-        
+    NSString *isFirstGuide = [[NSUserDefaults standardUserDefaults] stringForKey:@"isFirstGuide"];
+    //引导页
+    if (!isFirstGuide) {
         [self.window addSubview:[LaunchScreen new]];
         
-        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"isFirst"];
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"isFirstGuide"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
+    
+    
+    
+    //第一次安装
+    NSString *isFirstInstall = [[NSUserDefaults standardUserDefaults] stringForKey:@"isFirstInstall"];
+    if (!isFirstInstall) {
+        
+        //每次启动统计
+        [GameRequest gameBoxStarUpWithCompletion:^(NSDictionary * _Nullable content, BOOL success) {
+            syLog(@"启动 ===== %@",content);
+            if (success && REQUESTSUCCESS) {
+                [GameRequest gameBoxInstallWithCompletion:^(NSDictionary * _Nullable content, BOOL success) {
+                    syLog(@"安装%@",content);
+                    if (success && REQUESTSUCCESS) {
+                        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"isFirstInstall"];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                    }
+                }];
+            }
+        }];
+        
+    } else {
+        //每次启动统计
+        [GameRequest gameBoxStarUpWithCompletion:^(NSDictionary * _Nullable content, BOOL success) {
+            syLog(@"每次=====启动%@",content);
+        }];
+    }
+    
     
     
     
@@ -78,6 +106,7 @@
             }];
             SAVEOBJECT_AT_USERDEFAULTS(keys, @"MAP");
             [[NSUserDefaults standardUserDefaults] synchronize];
+            syLog(@"%@",content);
         }
     }];
     
@@ -98,10 +127,26 @@
     //检查更新
     [self cheackVersion];
 
-    
+    //获取崩溃信息
+    NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
 
-    
     return YES;
+}
+
+/** 异常处理 */
+void UncaughtExceptionHandler(NSException *exception) {
+    // 异常的堆栈信息
+    NSArray *stackArray = [exception callStackSymbols];
+    // 出现异常的原因
+    NSString *reason = [exception reason];
+    // 异常名称
+    NSString *name = [exception name];
+    
+    NSString *exceptionInfo = [NSString stringWithFormat:@"Exception reason：%@\nException name：%@\nException stack：%@",name, reason, stackArray];
+    
+    
+    
+    NSLog(@"========================================%@", exceptionInfo);
 }
 
 /** 注册通知 */
@@ -121,9 +166,6 @@
         }
         [[NSUserDefaults standardUserDefaults] synchronize];
     }];
-    
-    
-    
 }
 
 //检查版本更新

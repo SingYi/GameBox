@@ -116,6 +116,7 @@
         if (success && !((NSString *)content[@"status"]).boolValue) {
             self.rollHeader.rollingArray = content[@"data"][@"banner"];
             _showArray = [content[@"data"][@"gamelist"] mutableCopy];
+//            _showArray = [@[@"",@""] mutableCopy];
             
             _currentPage = 1;
             _isAll = NO;

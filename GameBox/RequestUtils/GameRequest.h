@@ -217,6 +217,12 @@ typedef enum : NSUInteger {
                            Url:(NSString *_Nonnull)url
                          Image:(NSString *_Nullable)imageUrl;
 
+#pragma mark - ===========================数据统计======================================
+/** 盒子安装记录统计 */
++ (void)gameBoxInstallWithCompletion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
+
+/** 盒子启动记录统计 */
++ (void)gameBoxStarUpWithCompletion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
 
 @end
 

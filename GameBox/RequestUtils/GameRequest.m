@@ -11,6 +11,7 @@
 #import <UserNotifications/UserNotifications.h>
 #import <WXApi.h>
 #import <TencentOpenAPI/QQApiInterface.h>
+#import <sys/utsname.h>
 
 #define GAME_INDEX @"http://www.185sy.com/api-game-index"
 #define GAME_TYPE @"http://www.185sy.com/api-game-gameType"
@@ -34,6 +35,10 @@
 //18
 #define INDEX_ARTICLE @"http://www.185sy.com/api-article-get_list"
 #define GAME_CHECK_CLIENT @"http://www.185sy.com/api-game-checkClient"
+#define GAME_BOX_INSTALL_INFO @"http://www.185sy.com/api-game-boxInstallInfo"
+#define GAME_BOX_START_INFO @"http://www.185sy.com/api-game-boxStartInfo"
+
+
 
 @implementation GameRequest
 
@@ -759,7 +764,171 @@
 }
 
 
+#pragma mark - ===========================数据统计======================================
+/** 盒子安装 */
++ (void)gameBoxInstallWithCompletion:(void (^)(NSDictionary * _Nullable, BOOL))completion {
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    //系统
+    [dict setObject:@"2" forKey:@"system"];
+    //版本
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    [dict setObject:version forKey:@"version"];
+    //渠道
+    [dict setObject:CHANNELID forKey:@"channel"];
+    //手机厂商
+    [dict setObject:@"ios" forKey:@"maker"];
+    //手机型号
+    [dict setObject:[GameRequest iphoneType] forKey:@"mobile_model"];
+    //唯一标识符
+    [dict setObject:[GameRequest DeviceID] forKey:@"code"];
+    //系统版本
+    [dict setObject:[[UIDevice currentDevice] systemVersion] forKey:@"system_version"];
+    //iP地址
+    NSString *ip = [GameRequest DeviceIP];
+    if (ip) {
+        [dict setObject:ip forKey:@"ip"];
+    }
+    
+//    syLog(@"%@",dict);
+    
+    NSString *urlStr = OBJECT_FOR_USERDEFAULTS(@"GAME_BOX_INSTALL_INFO");
+    if (!urlStr) {
+        urlStr = GAME_BOX_INSTALL_INFO;
+    }
+    
+    [GameRequest postRequestWithURL:urlStr params:dict completion:completion];
+}
 
+
+/** 盒子启动统计 */
++ (void)gameBoxStarUpWithCompletion:(void (^)(NSDictionary * _Nullable, BOOL))completion {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    //系统
+    [dict setObject:@"2" forKey:@"system"];
+    //版本
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    [dict setObject:version forKey:@"version"];
+    //渠道
+    [dict setObject:CHANNELID forKey:@"channel"];
+    //唯一标识符
+    [dict setObject:[GameRequest DeviceID] forKey:@"code"];
+    //系统版本
+    [dict setObject:[[UIDevice currentDevice] systemVersion] forKey:@"system_version"];
+    //iP地址
+    NSString *ip = [GameRequest DeviceIP];
+    if (ip) {
+        [dict setObject:ip forKey:@"ip"];
+    }
+    
+//        syLog(@"%@",dict);
+    
+    NSString *urlStr = OBJECT_FOR_USERDEFAULTS(@"GAME_BOX_START_INFO");
+    if (!urlStr) {
+        urlStr = GAME_BOX_START_INFO;
+    }
+    
+    [GameRequest postRequestWithURL:urlStr params:dict completion:completion];
+}
+
+
+
+
+
+
+#pragma mark - ===========================手机型号======================================
++ (NSString *)iphoneType {
+
+    struct utsname systemInfo;
+    
+    uname(&systemInfo);
+    
+    NSString *platform = [NSString stringWithCString:systemInfo.machine encoding:NSASCIIStringEncoding];
+    
+    
+    if ([platform isEqualToString:@"iPhone5,1"]) return @"iPhone 5";
+    
+    if ([platform isEqualToString:@"iPhone5,2"]) return @"iPhone 5";
+    
+    if ([platform isEqualToString:@"iPhone5,3"]) return @"iPhone 5c";
+    
+    if ([platform isEqualToString:@"iPhone5,4"]) return @"iPhone 5c";
+    
+    if ([platform isEqualToString:@"iPhone6,1"]) return @"iPhone 5s";
+    
+    if ([platform isEqualToString:@"iPhone6,2"]) return @"iPhone 5s";
+    
+    if ([platform isEqualToString:@"iPhone7,1"]) return @"iPhone 6 Plus";
+    
+    if ([platform isEqualToString:@"iPhone7,2"]) return @"iPhone 6";
+    
+    if ([platform isEqualToString:@"iPhone8,1"]) return @"iPhone 6s";
+    
+    if ([platform isEqualToString:@"iPhone8,2"]) return @"iPhone 6s Plus";
+    
+    if ([platform isEqualToString:@"iPhone8,4"]) return @"iPhone SE";
+    
+    if ([platform isEqualToString:@"iPhone9,1"]) return @"iPhone 7";
+    
+    if ([platform isEqualToString:@"iPhone9,2"]) return @"iPhone 7 Plus";
+    
+    if ([platform isEqualToString:@"iPod1,1"])   return @"iPod Touch 1G";
+    
+    if ([platform isEqualToString:@"iPod2,1"])   return @"iPod Touch 2G";
+    
+    if ([platform isEqualToString:@"iPod3,1"])   return @"iPod Touch 3G";
+    
+    if ([platform isEqualToString:@"iPod4,1"])   return @"iPod Touch 4G";
+    
+    if ([platform isEqualToString:@"iPod5,1"])   return @"iPod Touch 5G";
+    
+    if ([platform isEqualToString:@"iPad1,1"])   return @"iPad 1G";
+    
+    if ([platform isEqualToString:@"iPad2,1"])   return @"iPad 2";
+    
+    if ([platform isEqualToString:@"iPad2,2"])   return @"iPad 2";
+    
+    if ([platform isEqualToString:@"iPad2,3"])   return @"iPad 2";
+    
+    if ([platform isEqualToString:@"iPad2,4"])   return @"iPad 2";
+    
+    if ([platform isEqualToString:@"iPad2,5"])   return @"iPad Mini 1G";
+    
+    if ([platform isEqualToString:@"iPad2,6"])   return @"iPad Mini 1G";
+    
+    if ([platform isEqualToString:@"iPad2,7"])   return @"iPad Mini 1G";
+    
+    if ([platform isEqualToString:@"iPad3,1"])   return @"iPad 3";
+    
+    if ([platform isEqualToString:@"iPad3,2"])   return @"iPad 3";
+    
+    if ([platform isEqualToString:@"iPad3,3"])   return @"iPad 3";
+    
+    if ([platform isEqualToString:@"iPad3,4"])   return @"iPad 4";
+    
+    if ([platform isEqualToString:@"iPad3,5"])   return @"iPad 4";
+    
+    if ([platform isEqualToString:@"iPad3,6"])   return @"iPad 4";
+    
+    if ([platform isEqualToString:@"iPad4,1"])   return @"iPad Air";
+    
+    if ([platform isEqualToString:@"iPad4,2"])   return @"iPad Air";
+    
+    if ([platform isEqualToString:@"iPad4,3"])   return @"iPad Air";
+    
+    if ([platform isEqualToString:@"iPad4,4"])   return @"iPad Mini 2G";
+    
+    if ([platform isEqualToString:@"iPad4,5"])   return @"iPad Mini 2G";
+    
+    if ([platform isEqualToString:@"iPad4,6"])   return @"iPad Mini 2G";
+    
+    if ([platform isEqualToString:@"i386"])      return @"iPhone Simulator";
+    
+    if ([platform isEqualToString:@"x86_64"])    return @"iPhone Simulator";
+    
+    return platform;
+    
+}
 
 
 
