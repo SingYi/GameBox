@@ -6,9 +6,6 @@
 //  Copyright © 2017年 SingYi. All rights reserved.
 //
 
-#import "GameRequest.h"
-#import "UserModel.h"
-
 #define GAME_INDEX @"http://www.185sy.com/api-game-index"
 #define GAME_TYPE @"http://www.185sy.com/api-game-gameType"
 #define OPEN_SERVER @"http://www.185sy.com/api-game-openServer"
@@ -33,6 +30,13 @@
 #define GAME_CHECK_CLIENT @"http://www.185sy.com/api-game-checkClient"
 #define GAME_BOX_INSTALL_INFO @"http://www.185sy.com/api-game-boxInstallInfo"
 #define GAME_BOX_START_INFO @"http://www.185sy.com/api-game-boxStartInfo"
+
+
+#import "GameRequest.h"
+#import "UserModel.h"
+
+#import "AppDelegate.h"
+#import "GameNet+CoreDataProperties.h"
 
 
 
@@ -828,6 +832,60 @@
 }
 
 
+#pragma mark - ===========================数据库数据持久化======================================
++ (NSManagedObjectContext *)context {
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    return delegate.managedObjectContext;
+}
+
+
++ (void)saveGameAtLocalWithDictionary:(NSDictionary *_Nonnull)dict {
+    
+    GameNet *game = [NSEntityDescription insertNewObjectForEntityForName:@"GameNet" inManagedObjectContext:[GameRequest context]];
+    
+    game.abstract = [NSString stringWithFormat:@"%@",dict[@"abstract"]];
+    game.download = [NSString stringWithFormat:@"%@",dict[@"download"]];
+    game.feature = [NSString stringWithFormat:@"%@",dict[@"feature"]];
+    game.gameName = [NSString stringWithFormat:@"%@",dict[@"gamename"]];
+    game.gameID = [NSString stringWithFormat:@"%@",dict[@"id"]];
+    game.imgs = dict[@"imgs"];
+    game.bundleID = [NSString stringWithFormat:@"%@",dict[@"ios_pack"]];
+    game.downLoadUrl = [NSString stringWithFormat:@"%@",dict[@"ios_url"]];
+    game.logoUrl = [NSString stringWithFormat:@"%@",dict[@"logo"]];
+    game.gameSource = [NSString stringWithFormat:@"%@",dict[@"score"]];
+    game.size = [NSString stringWithFormat:@"%@",dict[@"size"]];
+    game.gameTag = [NSString stringWithFormat:@"%@",dict[@"tag"]];
+    game.gameTypes = [NSString stringWithFormat:@"%@",dict[@"types"]];
+    game.gameVsersion = [NSString stringWithFormat:@"%@",dict[@"version"]];
+    
+    NSError *error = nil;
+    
+    if ([[GameRequest context] save:&error] == NO) {
+        NSAssert(NO, @"Error saving Context :%@\n%@",error.localizedDescription,error.userInfo);
+    } else {
+        syLog(@"%@保存成功",game.gameID);
+    }
+
+}
+
+
++ (NSDictionary *)gameWithGameID:(NSString *)gameID {
+    NSFetchRequest *request = [GameNet fetchRequest];
+    NSManagedObjectContext *context = [GameRequest context];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"gameID == %@", gameID];
+    request.predicate = predicate;
+    
+    NSArray<GameNet *> *array = [context executeFetchRequest:request error:nil];
+    
+    [array enumerateObjectsUsingBlock:^(GameNet * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        syLog(@"%@ == %@\n %@",obj.gameName,obj.gameID,obj.imgs);
+    }];
+    
+//    syLog(@"===================================array%@",array);
+    
+    return  nil;
+}
 
 
 

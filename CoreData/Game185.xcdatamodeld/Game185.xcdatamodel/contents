@@ -22,7 +22,7 @@
         <attribute name="size" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="GameNet" positionX="-45" positionY="0" width="128" height="255"/>
         <element name="GameLocal" positionX="-18" positionY="99" width="128" height="90"/>
+        <element name="GameNet" positionX="-45" positionY="0" width="128" height="255"/>
     </elements>
 </model>

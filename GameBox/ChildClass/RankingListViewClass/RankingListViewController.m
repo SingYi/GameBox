@@ -86,6 +86,8 @@
     [super viewDidLoad];
     [self initDataSourece];
     [self initUserinterface];
+    
+    [GameRequest gameWithGameID:@"86"];
 
 }
 

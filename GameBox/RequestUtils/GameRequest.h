@@ -16,6 +16,7 @@
 #import <sys/utsname.h>
 #import <UserNotifications/UserNotifications.h>
 
+
 /** 新游,热门,排行榜 */
 typedef enum : NSUInteger {
     newGame = 0,
@@ -181,14 +182,14 @@ typedef enum : NSUInteger {
 + (void)setrategyWIthGameID:(NSString * _Nonnull)gameID
                  Completion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
 
-#pragma mark ========================================================================
+#pragma mark ============================检查更新=======================================
 /** 客户端检测更新 */
 + (void)chechBoxVersionCompletion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
 /** 更新 */
 + (void)boxUpdateWithUrl:(NSString *_Nonnull)url;
 
 
-#pragma mark - ===========================添加通知======================================
+#pragma mark ==============================添加通知===================================
 /** 添加通知 */
 + (void)registerNotificationWith:(NSDate * _Nonnull)alerTime
                            Title:(NSString * _Nullable)title
@@ -210,7 +211,7 @@ typedef enum : NSUInteger {
 /** 删除全部通知记录 */
 + (void)deleteAllNotificationRecord;
 
-#pragma mark - ===========================微信分享======================================
+#pragma mark - ===========================分享======================================
 /** 分享到朋友圈 */
 + (void)shareToFirednCircleWithTitle:(NSString * _Nullable)title
                             SubTitle:(NSString * _Nullable)subTitle
@@ -230,7 +231,18 @@ typedef enum : NSUInteger {
 /** 盒子启动记录统计 */
 + (void)gameBoxStarUpWithCompletion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
 
+#pragma mark - ===========================数据库数据持久化======================================
+/** 保存游戏信息到本地 */
++ (void)saveGameAtLocalWithDictionary:(NSDictionary *_Nonnull)dict;
+
+/** 根据游戏ID获取游戏信息 */
++ (NSDictionary *_Nullable)gameWithGameID:(NSString *_Nonnull)gameID;
+
+
 @end
+
+
+
 
 
 

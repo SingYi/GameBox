@@ -94,7 +94,7 @@
     
     
     
-    //请求数据总借口
+    //请求数据总接口
     [RequestUtils postRequestWithURL:URLMAP params:nil completion:^(NSDictionary *content, BOOL success) {
         if (success && !((NSString *)content[@"status"]).boolValue) {
             NSDictionary *dict = content[@"data"];
@@ -139,41 +139,28 @@
     }];
     
     
+    //多线程加载数据(请求所有游戏的详细信息,保存在本地)
     [GameRequest allGameWithType:AllBackage Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        
         if (success && REQUESTSUCCESS) {
-            
+
             NSArray *array = content[@"data"];
-        
-            //多线程加载数据
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                 
                 [array enumerateObjectsUsingBlock:^(NSDictionary * obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    
+                        
                     [GameRequest gameInfoWithGameID:obj[@"id"] Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
-                        
+                    
                         if (success && REQUESTSUCCESS) {
-                            
+                        
                             NSDictionary *dict = content[@"data"][@"gameinfo"];
-                            
-                            
-                            syLog(@"ganme ============================ %@",content[@"data"][@"gameinfo"]);
-                            [self saveContext];
+                        
+                            [GameRequest saveGameAtLocalWithDictionary:dict];
+                        
                         }
-                        
-                        
                     }];
-                    
                 }];
-                
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    
-                    
-                });
-                
             });
         }
-        
     }];
     
     
