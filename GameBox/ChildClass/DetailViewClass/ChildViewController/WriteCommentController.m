@@ -9,6 +9,7 @@
 #import "WriteCommentController.h"
 #import "CommentStarGradeView.h"
 #import "ChangyanSDK.h"
+#import "UserModel.h"
 
 @interface WriteCommentController ()<UITextViewDelegate,CommentStarGradeDeleagete>
 

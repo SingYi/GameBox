@@ -11,6 +11,10 @@
 #import <MJRefresh.h>
 #import <UIImageView+WebCache.h>
 #import "AppModel.h"
+#import <TencentOpenAPI/QQApiInterface.h>
+#import <WXApi.h>
+#import <sys/utsname.h>
+#import <UserNotifications/UserNotifications.h>
 
 /** 新游,热门,排行榜 */
 typedef enum : NSUInteger {

@@ -15,6 +15,7 @@
 #import <SDWebImageDownloader.h>
 #import <UIImageView+WebCache.h>
 #import <UIButton+WebCache.h>
+#import "ControllerManager.h"
 
 #import <MJRefresh.h>
 

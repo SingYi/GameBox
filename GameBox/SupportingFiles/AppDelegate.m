@@ -9,14 +9,12 @@
 #import "AppDelegate.h"
 #import "ControllerManager.h"
 #import "LaunchScreen.h"
-#import "RequestUtils.h"
-#import "AppModel.h"
+
 #import "ChangyanSDK.h"
 #import "GameRequest.h"
-#import <UserNotifications/UserNotifications.h>
-#import <WXApi.h>
-#pragma clang diagnostic ignored "-Wdocumentation"
 #import <TencentOpenAPI/TencentOAuth.h>
+
+#import "ExceptionHandlerTool.h"
 
 
 
@@ -128,7 +126,8 @@
     [self cheackVersion];
 
     //获取崩溃信息
-    NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
+//    NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
+    InstallUncaughtExceptionHandler();
 
     return YES;
 }
@@ -144,9 +143,7 @@ void UncaughtExceptionHandler(NSException *exception) {
     
     NSString *exceptionInfo = [NSString stringWithFormat:@"Exception reason：%@\nException name：%@\nException stack：%@",name, reason, stackArray];
     
-    
-    
-    NSLog(@"========================================%@", exceptionInfo);
+    syLog(@"========================================%@", exceptionInfo);
 }
 
 /** 注册通知 */

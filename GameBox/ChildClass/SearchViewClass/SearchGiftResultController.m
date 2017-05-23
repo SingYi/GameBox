@@ -9,6 +9,7 @@
 #import "SearchGiftResultController.h"
 #import "GiftRequest.h"
 #import "GiftBagCell.h"
+#import "ControllerManager.h"
 
 #import <UIImageView+WebCache.h>
 

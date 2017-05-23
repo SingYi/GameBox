@@ -8,10 +8,6 @@
 
 #import "GameRequest.h"
 #import "UserModel.h"
-#import <UserNotifications/UserNotifications.h>
-#import <WXApi.h>
-#import <TencentOpenAPI/QQApiInterface.h>
-#import <sys/utsname.h>
 
 #define GAME_INDEX @"http://www.185sy.com/api-game-index"
 #define GAME_TYPE @"http://www.185sy.com/api-game-gameType"

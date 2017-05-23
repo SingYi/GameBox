@@ -10,8 +10,17 @@
 
 @interface ExceptionHandlerTool : NSObject
 
+/** app是否消失(强行续) */
 @property (nonatomic, assign) BOOL dismissed;
 
-void InstallUncaughtExceptionHandler();
 
 @end
+
+/** 奔溃的信息 */
+void HandleException(NSException *exception);
+/** 奔溃信号处理 */
+void SignalHandler(int signal);
+/** 设置获取崩溃信号句柄 */
+void InstallUncaughtExceptionHandler(void);
+
+

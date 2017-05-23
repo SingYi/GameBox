@@ -8,6 +8,7 @@
 
 #import "GiftRequest.h"
 #import <CommonCrypto/CommonDigest.h>
+#import "UserModel.h"
 
 #define PACKS_LIST @"http://www.185sy.com/api-packs-get_list"
 #define GAME_PACK @"http://www.185sy.com/api-packs-get_list_by_game"

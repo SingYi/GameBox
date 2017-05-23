@@ -8,6 +8,7 @@
 
 #import "NSTodayServerController.h"
 #import "NewServerTableViewCell.h"
+#import "ControllerManager.h"
 
 #import "GameRequest.h"
 #import <MJRefresh.h>

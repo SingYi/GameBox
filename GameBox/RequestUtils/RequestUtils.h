@@ -7,6 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import <ifaddrs.h>
+#import <arpa/inet.h>
+
+#import "SSKeychain.h"
 
 #define REQUESTSUCCESS !((NSString *)content[@"status"]).boolValue
 #define REQUESTMSG content[@"msg"]

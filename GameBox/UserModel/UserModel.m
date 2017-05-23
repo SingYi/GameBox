@@ -6,9 +6,9 @@
 //  Copyright © 2017年 SingYi. All rights reserved.
 //
 
-#import "UserModel.h"
 #import "ChangyanSDK.h"
 #import "AFHTTPSessionManager.h"
+#import "UserModel.h"
 
 /** url */
 #define USER_LOGIN @"http://www.185sy.com/api-user-login"

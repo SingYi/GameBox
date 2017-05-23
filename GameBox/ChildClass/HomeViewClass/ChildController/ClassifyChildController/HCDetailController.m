@@ -9,6 +9,7 @@
 #import "HCDetailController.h"
 #import "SearchCell.h"
 #import "GameRequest.h"
+#import "ControllerManager.h"
 
 #import "MJRefresh.h"
 #import "UIImageView+WebCache.h"

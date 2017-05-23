@@ -9,6 +9,7 @@
 #import "GameStrategyViewController.h"
 #import "StrategyCell.h"
 #import "GameRequest.h"
+#import "ControllerManager.h"
 
 #import <MJRefresh.h>
 

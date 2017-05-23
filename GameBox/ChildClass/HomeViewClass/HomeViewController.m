@@ -9,6 +9,7 @@
 #import "HomeViewController.h"
 #import "HomeHeader.h"
 #import "ControllerManager.h"
+#import "UserModel.h"
 
 
 #import "HomeRecommentController.h"

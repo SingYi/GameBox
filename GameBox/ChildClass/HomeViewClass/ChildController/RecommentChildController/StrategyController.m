@@ -10,7 +10,7 @@
 #import "StrategyCell.h"
 #import "GDLikesTableViewCell.h"
 #import "GameRequest.h"
-
+#import "ControllerManager.h"
 #import <UIImageView+WebCache.h>
 #import <MJRefresh.h>
 

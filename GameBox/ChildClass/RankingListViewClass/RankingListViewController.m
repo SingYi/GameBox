@@ -11,7 +11,7 @@
 #import "GameRequest.h"
 #import "ControllerManager.h"
 #import "SearchModel.h"
-
+#import "UserModel.h"
 #import <UIImageView+WebCache.h>
 #import <MJRefresh.h>
 

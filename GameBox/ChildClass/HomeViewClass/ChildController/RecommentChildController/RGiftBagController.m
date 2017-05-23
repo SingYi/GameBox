@@ -15,6 +15,8 @@
 #import <UIImageView+WebCache.h>
 #import <MJRefresh.h>
 
+#import "UserModel.h"
+
 #define CELLIDE @"GiftBagCell"
 
 @interface RGiftBagController ()<UITableViewDataSource,UITableViewDelegate,GiftBagCellDelegate,UISearchBarDelegate>

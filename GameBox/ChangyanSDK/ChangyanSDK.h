@@ -38,6 +38,8 @@
 //    sdk所提供的界面只考虑了通用的一些情况，基本能满足正常的需求。如有更多需求sdk无法满足，可以调用数据接口自己开发界面。
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 typedef enum  CYStatusCode
 {
@@ -51,8 +53,6 @@ typedef void (^CompleteBlock)(CYStatusCode statusCode,NSString *responseStr);
 
 #define kChangyanLoginNotification @"kChangyanLoginNotification"
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 
 @interface ChangyanSDK : NSObject
 

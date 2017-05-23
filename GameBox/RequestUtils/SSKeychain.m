@@ -9,8 +9,10 @@
 
 #import "SSKeychain.h"
 
-NSString *const kSSKeychainErrorDomain = @"com.samsoffes.sskeychain";
 
+
+
+NSString *const kSSKeychainErrorDomain = @"com.samsoffes.sskeychain";
 NSString *const kSSKeychainAccountKey = @"acct";
 NSString *const kSSKeychainCreatedAtKey = @"cdat";
 NSString *const kSSKeychainClassKey = @"labl";
@@ -18,6 +20,7 @@ NSString *const kSSKeychainDescriptionKey = @"desc";
 NSString *const kSSKeychainLabelKey = @"labl";
 NSString *const kSSKeychainLastModifiedKey = @"mdat";
 NSString *const kSSKeychainWhereKey = @"svce";
+
 
 #if __IPHONE_4_0 && TARGET_OS_IPHONE  
 CFTypeRef SSKeychainAccessibilityType = NULL;

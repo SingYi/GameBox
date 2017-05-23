@@ -6,7 +6,7 @@
 //  Copyright © 2017年 SingYi. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "RequestUtils.h"
 
 @interface GiftRequest : RequestUtils
 

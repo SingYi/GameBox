@@ -16,6 +16,7 @@
 #import "SearchGiftResultController.h"
 #import <UIImageView+WebCache.h>
 #import <MJRefresh.h>
+#import "UserModel.h"
 
 
 #define CELLIDENTIFIER @"GiftBagCell"

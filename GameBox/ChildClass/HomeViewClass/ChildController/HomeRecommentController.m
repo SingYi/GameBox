@@ -111,13 +111,18 @@
 - (void)refreshData {
 //    [ControllerManager starLoadingAnimation];
     WeakSelf;
+
+
+    
     [GameRequest recommendGameWithPage:nil Completion:^(NSDictionary * _Nullable content, BOOL success) {
 
         if (success && !((NSString *)content[@"status"]).boolValue) {
             self.rollHeader.rollingArray = content[@"data"][@"banner"];
             _showArray = [content[@"data"][@"gamelist"] mutableCopy];
+        
+            //测试崩溃收集的数据
 //            _showArray = [@[@"",@""] mutableCopy];
-            
+
             _currentPage = 1;
             _isAll = NO;
             
@@ -127,8 +132,13 @@
         } else {
             _currentPage = 0;
         }
+        
+        
         [self.tableView.mj_header endRefreshing];
+        
     }];
+    
+    
 }
 
 /** 加载更多数据 */

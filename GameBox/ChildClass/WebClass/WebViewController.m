@@ -8,6 +8,7 @@
 
 #import "WebViewController.h"
 #import <WebKit/WebKit.h>
+#import "ControllerManager.h"
 
 @interface WebViewController ()<WKUIDelegate,WKNavigationDelegate>
 

@@ -7,10 +7,6 @@
 //
 
 #import "RequestUtils.h"
-#import <UIKit/UIKit.h>
-#import <ifaddrs.h>
-#import <arpa/inet.h>
-#import "SSKeychain.h"
 
 
 #define KEYCHAINSERVICE @"tenoneTec.com"
