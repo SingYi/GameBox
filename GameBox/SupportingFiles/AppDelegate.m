@@ -127,13 +127,9 @@
 
     //获取崩溃信息
 //    NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
-//    InstallUncaughtExceptionHandler();
+    InstallUncaughtExceptionHandler();
     
     
-    
-
-
-
     [GameRequest allGameWithType:AllName Completion:^(NSDictionary * _Nullable content, BOOL success) {
 //        syLog(@"allname =============== %@",content);
     }];
@@ -144,6 +140,13 @@
         if (success && REQUESTSUCCESS) {
 
             NSArray *array = content[@"data"];
+            
+//            dispatch_async(<#dispatch_queue_t  _Nonnull queue#>, <#^(void)block#>)
+//            dispatch_get_global_queue(<#long identifier#>, <#unsigned long flags#>)
+            
+//            dispatch_queue_create(@"testldkjf", DISPATCH_QUEUE_CONCURRENT);
+            
+            
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                 
                 [array enumerateObjectsUsingBlock:^(NSDictionary * obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -162,6 +165,7 @@
             });
         }
     }];
+    
     
     
     
@@ -293,7 +297,7 @@ void UncaughtExceptionHandler(NSException *exception) {
                      * The store could not be migrated to the current model version.
                      Check the error message to determine what the actual problem was.
                      */
-                    NSLog(@"Unresolved error %@, %@", error, error.userInfo);
+//                    NSLog(@"Unresolved error %@, %@", error, error.userInfo);
                     abort();
                 }
             }];
@@ -318,7 +322,7 @@ void UncaughtExceptionHandler(NSException *exception) {
     if ([context hasChanges] && ![context save:&error]) {
         // Replace this implementation with code to handle the error appropriately.
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-        NSLog(@"Unresolved error %@, %@", error, error.userInfo);
+//        NSLog(@"Unresolved error %@, %@", error, error.userInfo);
         abort();
     }
 }
@@ -374,7 +378,7 @@ void UncaughtExceptionHandler(NSException *exception) {
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc]initWithManagedObjectModel:self.managedObjectModel];
     
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
-        NSLog(@"%@",error.localizedDescription);
+//        NSLog(@"%@",error.localizedDescription);
     }
     return _persistentStoreCoordinator;
 }
