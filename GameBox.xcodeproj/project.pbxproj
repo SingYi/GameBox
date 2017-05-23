@@ -8,52 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		5E8DE5471E9BD255007E719D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E8DE53B1E9BD255007E719D /* LaunchScreen.storyboard */; };
-		5E8DE5551E9BD3AB007E719D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE5501E9BD35A007E719D /* main.m */; };
-		5E8DE5561E9BD3AB007E719D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE54E1E9BD35A007E719D /* AppDelegate.m */; };
-		5E8DE55C1E9BD497007E719D /* MainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE55B1E9BD497007E719D /* MainTabBarController.m */; };
-		5E8DE55F1E9BD786007E719D /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE55E1E9BD786007E719D /* SearchViewController.m */; };
-		5E8DE5621E9BD7A4007E719D /* RankingListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE5611E9BD7A4007E719D /* RankingListViewController.m */; };
-		5E8DE5651E9BD7BC007E719D /* GiftBagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE5641E9BD7BC007E719D /* GiftBagViewController.m */; };
-		5E8DE5681E9BD7D2007E719D /* MineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE5671E9BD7D2007E719D /* MineViewController.m */; };
-		5E8DE56C1E9BDA66007E719D /* RequestUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE56B1E9BDA66007E719D /* RequestUtils.m */; };
 		B506F26D1EC551B5005C1B2A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B506F26C1EC551B5005C1B2A /* Images.xcassets */; };
-		B50FD18F1EB314AB00CA5E85 /* GameDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B50FD18D1EB314AB00CA5E85 /* GameDetailTableViewCell.m */; };
 		B50FD1901EB314AB00CA5E85 /* GameDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B50FD18E1EB314AB00CA5E85 /* GameDetailTableViewCell.xib */; };
-		B52B2FD91EBC5A30002A572D /* GDCommentDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = B52B2FD81EBC5A30002A572D /* GDCommentDetailController.m */; };
-		B52B2FDC1EBC73B3002A572D /* GameRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B52B2FDB1EBC73B3002A572D /* GameRequest.m */; };
 		B52CC14A1EB857AA00A1A792 /* libChangyanSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B52CC1491EB857AA00A1A792 /* libChangyanSDK.a */; };
 		B52CC1501EB8581100A1A792 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B52CC14F1EB8581100A1A792 /* Security.framework */; };
-		B54378CD1EADD35200B25D47 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54378CC1EADD35200B25D47 /* WebViewController.m */; };
-		B54FCA321EC94EAD00BACAF7 /* NSCommingServerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54FCA311EC94EAD00BACAF7 /* NSCommingServerController.m */; };
-		B54FCA351EC94EC100BACAF7 /* NSAlredayServerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54FCA341EC94EC100BACAF7 /* NSAlredayServerController.m */; };
-		B54FCA361EC959B800BACAF7 /* NSTodayServerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54FCA2E1EC94E9300BACAF7 /* NSTodayServerController.m */; };
-		B55416151EA8535F0043A36D /* GameDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416141EA8535F0043A36D /* GameDetailViewController.m */; };
-		B55416181EA853AD0043A36D /* GameStrategyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416171EA853AD0043A36D /* GameStrategyViewController.m */; };
-		B554161B1EA853C90043A36D /* GameGiftBagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B554161A1EA853C90043A36D /* GameGiftBagViewController.m */; };
-		B554161E1EA853F40043A36D /* GameOpenServerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B554161D1EA853F40043A36D /* GameOpenServerViewController.m */; };
-		B55416211EA88E690043A36D /* HomeRecommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416201EA88E690043A36D /* HomeRecommentController.m */; };
-		B55416241EA88E7B0043A36D /* HomeNewGameController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416231EA88E7B0043A36D /* HomeNewGameController.m */; };
-		B55416271EA88E900043A36D /* HomeHotGameController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416261EA88E900043A36D /* HomeHotGameController.m */; };
-		B554162A1EA88E9F0043A36D /* HomeClassifyController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416291EA88E9F0043A36D /* HomeClassifyController.m */; };
-		B55416321EA89A7B0043A36D /* ActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = B554162D1EA89A7B0043A36D /* ActivityController.m */; };
-		B55416331EA89A7B0043A36D /* NewServerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B554162F1EA89A7B0043A36D /* NewServerController.m */; };
-		B55416341EA89A7B0043A36D /* StrategyController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416311EA89A7B0043A36D /* StrategyController.m */; };
-		B560ECAF1EC01CB000F5C559 /* SearchView.m in Sources */ = {isa = PBXBuildFile; fileRef = B560ECAE1EC01CB000F5C559 /* SearchView.m */; };
-		B560ECB31EC0444C00F5C559 /* SearchCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B560ECB11EC0444C00F5C559 /* SearchCollectionCell.m */; };
 		B560ECB41EC0444C00F5C559 /* SearchCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B560ECB21EC0444C00F5C559 /* SearchCollectionCell.xib */; };
-		B560ECB71EC0480400F5C559 /* SearchModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B560ECB61EC0480400F5C559 /* SearchModel.m */; };
-		B563A3BC1EC5958E007D4142 /* MyGamesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B563A3BA1EC5958E007D4142 /* MyGamesCell.m */; };
 		B563A3BD1EC5958E007D4142 /* MyGamesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B563A3BB1EC5958E007D4142 /* MyGamesCell.xib */; };
-		B5691C3C1EC1B8310094BE0F /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5691C3B1EC1B8310094BE0F /* AFHTTPSessionManager.m */; };
-		B5691C3F1EC1B86B0094BE0F /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5691C3E1EC1B86B0094BE0F /* AFURLSessionManager.m */; };
-		B5691C421EC1B8CC0094BE0F /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B5691C411EC1B8CC0094BE0F /* AFURLResponseSerialization.m */; };
-		B5691C451EC1B8DB0094BE0F /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B5691C441EC1B8DB0094BE0F /* AFURLRequestSerialization.m */; };
-		B5691C481EC1B8E70094BE0F /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = B5691C471EC1B8E70094BE0F /* AFSecurityPolicy.m */; };
 		B57C70E71ECE98D700C7DE60 /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57C70E61ECE98D700C7DE60 /* TencentOpenAPI.framework */; };
 		B57C70F91ECEAB4900C7DE60 /* libPods-GameBox.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0830EB8A36A7F8F58E00C379 /* libPods-GameBox.a */; };
 		B57C71011ECEEA1A00C7DE60 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B57C71001ECEEA1A00C7DE60 /* Assets.xcassets */; };
-		B57DB6DC1EB08E9B00A0D8A0 /* SearchResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B57DB6DB1EB08E9B00A0D8A0 /* SearchResultViewController.m */; };
-		B5816D591ED289D900E6149D /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = B5816D581ED289D900E6149D /* SSKeychain.m */; };
 		B5816D5B1ED296B300E6149D /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B5816D5A1ED296B300E6149D /* libiconv.tbd */; };
 		B5816D5D1ED296C000E6149D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5816D5C1ED296C000E6149D /* SystemConfiguration.framework */; };
 		B5816D5F1ED296CB00E6149D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5816D5E1ED296CB00E6149D /* CoreGraphics.framework */; };
@@ -61,57 +24,96 @@
 		B5816D631ED296DD00E6149D /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5816D621ED296DD00E6149D /* CoreTelephony.framework */; };
 		B5816D651ED296E900E6149D /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B5816D641ED296E900E6149D /* libstdc++.tbd */; };
 		B5816D671ED296F500E6149D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B5816D661ED296F500E6149D /* libz.tbd */; };
-		B5816D6B1ED2F1BF00E6149D /* ExceptionHandlerTool.m in Sources */ = {isa = PBXBuildFile; fileRef = B5816D6A1ED2F1BF00E6149D /* ExceptionHandlerTool.m */; };
-		B5824FB81EA05B6800966640 /* NewServerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5824FB61EA05B6800966640 /* NewServerTableViewCell.m */; };
+		B5816E981ED426B400E6149D /* Game185.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B5816E2F1ED422D100E6149D /* Game185.xcdatamodeld */; };
+		B5816E9B1ED426B400E6149D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE54E1E9BD35A007E719D /* AppDelegate.m */; };
+		B5816E9C1ED426B400E6149D /* LaunchScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = B59816E31EC45F250017599F /* LaunchScreen.m */; };
+		B5816E9D1ED426B400E6149D /* ExceptionHandlerTool.m in Sources */ = {isa = PBXBuildFile; fileRef = B5816D6A1ED2F1BF00E6149D /* ExceptionHandlerTool.m */; };
+		B5816E9E1ED426B400E6149D /* ControllerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FED9F1E9C614B00A64D84 /* ControllerManager.m */; };
+		B5816E9F1ED426B400E6149D /* MainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE55B1E9BD497007E719D /* MainTabBarController.m */; };
+		B5816EA01ED426B400E6149D /* UserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C051EB1C0B400CC1D00 /* UserModel.m */; };
+		B5816EA11ED426B400E6149D /* MyAppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C091EB1DF1D00CC1D00 /* MyAppViewController.m */; };
+		B5816EA21ED426B400E6149D /* AppModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C0C1EB1DFBC00CC1D00 /* AppModel.m */; };
+		B5816EA31ED426B400E6149D /* MyGamesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B563A3BA1EC5958E007D4142 /* MyGamesCell.m */; };
+		B5816EA41ED426B400E6149D /* RequestUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE56B1E9BDA66007E719D /* RequestUtils.m */; };
+		B5816EA51ED426B400E6149D /* GameRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B52B2FDB1EBC73B3002A572D /* GameRequest.m */; };
+		B5816EA61ED426B400E6149D /* GiftRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B5858D641ECADB76003A2414 /* GiftRequest.m */; };
+		B5816EA71ED426B400E6149D /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = B5816D581ED289D900E6149D /* SSKeychain.m */; };
+		B5816EA81ED426B400E6149D /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54378CC1EADD35200B25D47 /* WebViewController.m */; };
+		B5816EA91ED426B400E6149D /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE55E1E9BD786007E719D /* SearchViewController.m */; };
+		B5816EAA1ED426B400E6149D /* SearchGiftController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5858D5A1ECA9737003A2414 /* SearchGiftController.m */; };
+		B5816EAB1ED426B400E6149D /* SearchResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B57DB6DB1EB08E9B00A0D8A0 /* SearchResultViewController.m */; };
+		B5816EAC1ED426B400E6149D /* SearchGiftResultController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5858D5D1ECA9B23003A2414 /* SearchGiftResultController.m */; };
+		B5816EAD1ED426B400E6149D /* SearchView.m in Sources */ = {isa = PBXBuildFile; fileRef = B560ECAE1EC01CB000F5C559 /* SearchView.m */; };
+		B5816EAE1ED426B400E6149D /* SearchModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B560ECB61EC0480400F5C559 /* SearchModel.m */; };
+		B5816EAF1ED426B400E6149D /* SearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FEDBA1E9C8AF300A64D84 /* SearchCell.m */; };
+		B5816EB01ED426B400E6149D /* SearchCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B560ECB11EC0444C00F5C559 /* SearchCollectionCell.m */; };
+		B5816EB11ED426B400E6149D /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4BA1EA09AC8008A46DE /* DetailViewController.m */; };
+		B5816EB21ED426B400E6149D /* GameDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416141EA8535F0043A36D /* GameDetailViewController.m */; };
+		B5816EB31ED426B400E6149D /* GameStrategyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416171EA853AD0043A36D /* GameStrategyViewController.m */; };
+		B5816EB41ED426B400E6149D /* GameGiftBagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B554161A1EA853C90043A36D /* GameGiftBagViewController.m */; };
+		B5816EB51ED426B400E6149D /* GameOpenServerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B554161D1EA853F40043A36D /* GameOpenServerViewController.m */; };
+		B5816EB61ED426B400E6149D /* GDCommentDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = B52B2FD81EBC5A30002A572D /* GDCommentDetailController.m */; };
+		B5816EB71ED426B400E6149D /* WriteCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C542951ECC311A00B35590 /* WriteCommentController.m */; };
+		B5816EB81ED426B400E6149D /* CommentStarGradeView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C542981ECC3BF100B35590 /* CommentStarGradeView.m */; };
+		B5816EB91ED426B400E6149D /* DetailTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4D31EA0B6B3008A46DE /* DetailTableCell.m */; };
+		B5816EBA1ED426B400E6149D /* DetialTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4DB1EA0C484008A46DE /* DetialTableHeader.m */; };
+		B5816EBB1ED426B400E6149D /* CustomLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4E11EA0C60F008A46DE /* CustomLayout.m */; };
+		B5816EBC1ED426B400E6149D /* GameDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B50FD18D1EB314AB00CA5E85 /* GameDetailTableViewCell.m */; };
+		B5816EBD1ED426B400E6149D /* GDLikesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59A76EC1EBB2B9900FE2B50 /* GDLikesTableViewCell.m */; };
+		B5816EBE1ED426B400E6149D /* GDCommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59A76E71EBB21D200FE2B50 /* GDCommentTableViewCell.m */; };
+		B5816EBF1ED426B400E6149D /* DetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4BD1EA09E44008A46DE /* DetailHeader.m */; };
+		B5816EC01ED426B400E6149D /* DetailFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4C01EA0AC64008A46DE /* DetailFooter.m */; };
+		B5816EC11ED426B400E6149D /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8231E9F2A27002CEC61 /* HomeViewController.m */; };
+		B5816EC21ED426B400E6149D /* HomeRecommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416201EA88E690043A36D /* HomeRecommentController.m */; };
+		B5816EC31ED426B400E6149D /* NewServerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B554162F1EA89A7B0043A36D /* NewServerController.m */; };
+		B5816EC41ED426B400E6149D /* NSTodayServerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54FCA2E1EC94E9300BACAF7 /* NSTodayServerController.m */; };
+		B5816EC51ED426B400E6149D /* NSCommingServerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54FCA311EC94EAD00BACAF7 /* NSCommingServerController.m */; };
+		B5816EC61ED426B400E6149D /* NSAlredayServerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54FCA341EC94EC100BACAF7 /* NSAlredayServerController.m */; };
+		B5816EC71ED426B400E6149D /* ActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = B554162D1EA89A7B0043A36D /* ActivityController.m */; };
+		B5816EC81ED426B400E6149D /* RGiftBagController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5F10BDD1EAF272C0061B43E /* RGiftBagController.m */; };
+		B5816EC91ED426B400E6149D /* StrategyController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416311EA89A7B0043A36D /* StrategyController.m */; };
+		B5816ECA1ED426B400E6149D /* HomeNewGameController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416231EA88E7B0043A36D /* HomeNewGameController.m */; };
+		B5816ECB1ED426B400E6149D /* HomeHotGameController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416261EA88E900043A36D /* HomeHotGameController.m */; };
+		B5816ECC1ED426B400E6149D /* HomeClassifyController.m in Sources */ = {isa = PBXBuildFile; fileRef = B55416291EA88E9F0043A36D /* HomeClassifyController.m */; };
+		B5816ECD1ED426B400E6149D /* HCDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = B59816DE1EC412DC0017599F /* HCDetailController.m */; };
+		B5816ECE1ED426B400E6149D /* RecommentTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C70F261EA9EA920073FDA4 /* RecommentTableHeader.m */; };
+		B5816ECF1ED426B400E6149D /* RCCCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FAB14A1EB97B0E002B29BD /* RCCCollectionViewCell.m */; };
+		B5816ED01ED426B400E6149D /* NewServerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5824FB61EA05B6800966640 /* NewServerTableViewCell.m */; };
+		B5816ED11ED426B400E6149D /* ActivityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4B21EA078BF008A46DE /* ActivityCell.m */; };
+		B5816ED21ED426B400E6149D /* StrategyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4A91EA073AA008A46DE /* StrategyCell.m */; };
+		B5816ED31ED426B400E6149D /* HomeHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A266671E9F480300F0C38E /* HomeHeader.m */; };
+		B5816ED41ED426B400E6149D /* RankingListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE5611E9BD7A4007E719D /* RankingListViewController.m */; };
+		B5816ED51ED426B400E6149D /* GiftBagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE5641E9BD7BC007E719D /* GiftBagViewController.m */; };
+		B5816ED61ED426B400E6149D /* GiftBagCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FEDC11E9CC97600A64D84 /* GiftBagCell.m */; };
+		B5816ED71ED426B400E6149D /* MineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE5671E9BD7D2007E719D /* MineViewController.m */; };
+		B5816ED81ED426B400E6149D /* ForgetPassWordView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C7FF1E9E0AB2002CEC61 /* ForgetPassWordView.m */; };
+		B5816ED91ED426B400E6149D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8011E9E0AB2002CEC61 /* LoginViewController.m */; };
+		B5816EDA1ED426B400E6149D /* NewPassWordView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8031E9E0AB2002CEC61 /* NewPassWordView.m */; };
+		B5816EDB1ED426B400E6149D /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8051E9E0AB2002CEC61 /* RegisterViewController.m */; };
+		B5816EDC1ED426B400E6149D /* MyGiftBagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C80B1E9E1A37002CEC61 /* MyGiftBagViewController.m */; };
+		B5816EDD1ED426B400E6149D /* MyNewsView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8141E9E2E0C002CEC61 /* MyNewsView.m */; };
+		B5816EDE1ED426B400E6149D /* MNCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = B59816D71EC3F7B20017599F /* MNCommentController.m */; };
+		B5816EDF1ED426B400E6149D /* MNNtificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B59816DA1EC3F7CB0017599F /* MNNtificationController.m */; };
+		B5816EE01ED426B400E6149D /* ResetPassWordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C80E1E9E27E7002CEC61 /* ResetPassWordViewController.m */; };
+		B5816EE11ED426B400E6149D /* MyAttentionView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8171E9E2E59002CEC61 /* MyAttentionView.m */; };
+		B5816EE21ED426B400E6149D /* SettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C81A1E9E2E6F002CEC61 /* SettingView.m */; };
+		B5816EE31ED426B400E6149D /* AboutUsView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C81D1E9E2E96002CEC61 /* AboutUsView.m */; };
+		B5816EE41ED426B400E6149D /* MineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FEDCD1E9CD91400A64D84 /* MineCell.m */; };
+		B5816EE51ED426B400E6149D /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5691C3B1EC1B8310094BE0F /* AFHTTPSessionManager.m */; };
+		B5816EE61ED426B400E6149D /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5691C3E1EC1B86B0094BE0F /* AFURLSessionManager.m */; };
+		B5816EE71ED426B400E6149D /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B5691C411EC1B8CC0094BE0F /* AFURLResponseSerialization.m */; };
+		B5816EE81ED426B400E6149D /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B5691C441EC1B8DB0094BE0F /* AFURLRequestSerialization.m */; };
+		B5816EE91ED426B400E6149D /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = B5691C471EC1B8E70094BE0F /* AFSecurityPolicy.m */; };
+		B5816EEA1ED426B400E6149D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE5501E9BD35A007E719D /* main.m */; };
+		B5816EEB1ED426B400E6149D /* Info.plist in Sources */ = {isa = PBXBuildFile; fileRef = 5E8DE5571E9BD3D2007E719D /* Info.plist */; };
 		B5824FB91EA05B6800966640 /* NewServerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5824FB71EA05B6800966640 /* NewServerTableViewCell.xib */; };
-		B5858D5B1ECA9737003A2414 /* SearchGiftController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5858D5A1ECA9737003A2414 /* SearchGiftController.m */; };
-		B5858D5E1ECA9B23003A2414 /* SearchGiftResultController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5858D5D1ECA9B23003A2414 /* SearchGiftResultController.m */; };
-		B5858D651ECADB76003A2414 /* GiftRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B5858D641ECADB76003A2414 /* GiftRequest.m */; };
-		B58A5C061EB1C0B400CC1D00 /* UserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C051EB1C0B400CC1D00 /* UserModel.m */; };
-		B58A5C0A1EB1DF1D00CC1D00 /* MyAppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C091EB1DF1D00CC1D00 /* MyAppViewController.m */; };
-		B58A5C0D1EB1DFBC00CC1D00 /* AppModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B58A5C0C1EB1DFBC00CC1D00 /* AppModel.m */; };
-		B59816D81EC3F7B20017599F /* MNCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = B59816D71EC3F7B20017599F /* MNCommentController.m */; };
-		B59816DB1EC3F7CB0017599F /* MNNtificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B59816DA1EC3F7CB0017599F /* MNNtificationController.m */; };
-		B59816DF1EC412DC0017599F /* HCDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = B59816DE1EC412DC0017599F /* HCDetailController.m */; };
-		B59816E41EC45F250017599F /* LaunchScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = B59816E31EC45F250017599F /* LaunchScreen.m */; };
-		B59A76E91EBB21D200FE2B50 /* GDCommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59A76E71EBB21D200FE2B50 /* GDCommentTableViewCell.m */; };
 		B59A76EA1EBB21D200FE2B50 /* GDCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B59A76E81EBB21D200FE2B50 /* GDCommentTableViewCell.xib */; };
-		B59A76EE1EBB2B9900FE2B50 /* GDLikesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59A76EC1EBB2B9900FE2B50 /* GDLikesTableViewCell.m */; };
 		B59A76EF1EBB2B9900FE2B50 /* GDLikesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B59A76ED1EBB2B9900FE2B50 /* GDLikesTableViewCell.xib */; };
-		B59FEDA01E9C614B00A64D84 /* ControllerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FED9F1E9C614B00A64D84 /* ControllerManager.m */; };
-		B59FEDBC1E9C8AF300A64D84 /* SearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FEDBA1E9C8AF300A64D84 /* SearchCell.m */; };
 		B59FEDBD1E9C8AF300A64D84 /* SearchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B59FEDBB1E9C8AF300A64D84 /* SearchCell.xib */; };
-		B59FEDC31E9CC97600A64D84 /* GiftBagCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FEDC11E9CC97600A64D84 /* GiftBagCell.m */; };
 		B59FEDC41E9CC97600A64D84 /* GiftBagCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B59FEDC21E9CC97600A64D84 /* GiftBagCell.xib */; };
-		B59FEDCF1E9CD91400A64D84 /* MineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B59FEDCD1E9CD91400A64D84 /* MineCell.m */; };
-		B5A266681E9F480300F0C38E /* HomeHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A266671E9F480300F0C38E /* HomeHeader.m */; };
-		B5C542961ECC311A00B35590 /* WriteCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C542951ECC311A00B35590 /* WriteCommentController.m */; };
-		B5C542991ECC3BF100B35590 /* CommentStarGradeView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C542981ECC3BF100B35590 /* CommentStarGradeView.m */; };
-		B5C5D4AB1EA073AA008A46DE /* StrategyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4A91EA073AA008A46DE /* StrategyCell.m */; };
 		B5C5D4AC1EA073AA008A46DE /* StrategyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5C5D4AA1EA073AA008A46DE /* StrategyCell.xib */; };
-		B5C5D4B41EA078BF008A46DE /* ActivityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4B21EA078BF008A46DE /* ActivityCell.m */; };
 		B5C5D4B51EA078BF008A46DE /* ActivityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5C5D4B31EA078BF008A46DE /* ActivityCell.xib */; };
-		B5C5D4BB1EA09AC8008A46DE /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4BA1EA09AC8008A46DE /* DetailViewController.m */; };
-		B5C5D4BE1EA09E44008A46DE /* DetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4BD1EA09E44008A46DE /* DetailHeader.m */; };
-		B5C5D4C11EA0AC64008A46DE /* DetailFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4C01EA0AC64008A46DE /* DetailFooter.m */; };
-		B5C5D4D51EA0B6B3008A46DE /* DetailTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4D31EA0B6B3008A46DE /* DetailTableCell.m */; };
 		B5C5D4D61EA0B6B3008A46DE /* DetailTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5C5D4D41EA0B6B3008A46DE /* DetailTableCell.xib */; };
-		B5C5D4DC1EA0C484008A46DE /* DetialTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4DB1EA0C484008A46DE /* DetialTableHeader.m */; };
-		B5C5D4E21EA0C60F008A46DE /* CustomLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C5D4E11EA0C60F008A46DE /* CustomLayout.m */; };
-		B5C70F271EA9EA920073FDA4 /* RecommentTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C70F261EA9EA920073FDA4 /* RecommentTableHeader.m */; };
-		B5E2C8061E9E0AB2002CEC61 /* ForgetPassWordView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C7FF1E9E0AB2002CEC61 /* ForgetPassWordView.m */; };
-		B5E2C8071E9E0AB2002CEC61 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8011E9E0AB2002CEC61 /* LoginViewController.m */; };
-		B5E2C8081E9E0AB2002CEC61 /* NewPassWordView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8031E9E0AB2002CEC61 /* NewPassWordView.m */; };
-		B5E2C8091E9E0AB2002CEC61 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8051E9E0AB2002CEC61 /* RegisterViewController.m */; };
-		B5E2C80C1E9E1A37002CEC61 /* MyGiftBagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C80B1E9E1A37002CEC61 /* MyGiftBagViewController.m */; };
-		B5E2C80F1E9E27E7002CEC61 /* ResetPassWordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C80E1E9E27E7002CEC61 /* ResetPassWordViewController.m */; };
-		B5E2C8151E9E2E0C002CEC61 /* MyNewsView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8141E9E2E0C002CEC61 /* MyNewsView.m */; };
-		B5E2C8181E9E2E59002CEC61 /* MyAttentionView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8171E9E2E59002CEC61 /* MyAttentionView.m */; };
-		B5E2C81B1E9E2E6F002CEC61 /* SettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C81A1E9E2E6F002CEC61 /* SettingView.m */; };
-		B5E2C81E1E9E2E96002CEC61 /* AboutUsView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C81D1E9E2E96002CEC61 /* AboutUsView.m */; };
-		B5E2C8241E9F2A27002CEC61 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2C8231E9F2A27002CEC61 /* HomeViewController.m */; };
-		B5F10BDE1EAF272C0061B43E /* RGiftBagController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5F10BDD1EAF272C0061B43E /* RGiftBagController.m */; };
-		B5FAB14B1EB97B0E002B29BD /* RCCCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FAB14A1EB97B0E002B29BD /* RCCCollectionViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -212,6 +214,7 @@
 		B5816D661ED296F500E6149D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		B5816D691ED2F1BF00E6149D /* ExceptionHandlerTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExceptionHandlerTool.h; sourceTree = "<group>"; };
 		B5816D6A1ED2F1BF00E6149D /* ExceptionHandlerTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExceptionHandlerTool.m; sourceTree = "<group>"; };
+		B5816E301ED422D100E6149D /* Game185.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Game185.xcdatamodel; sourceTree = "<group>"; };
 		B5824FB51EA05B6800966640 /* NewServerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewServerTableViewCell.h; sourceTree = "<group>"; };
 		B5824FB61EA05B6800966640 /* NewServerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewServerTableViewCell.m; sourceTree = "<group>"; };
 		B5824FB71EA05B6800966640 /* NewServerTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewServerTableViewCell.xib; sourceTree = "<group>"; };
@@ -341,6 +344,7 @@
 		5E8DE5131E9BD0A6007E719D = {
 			isa = PBXGroup;
 			children = (
+				B5816D6C1ED4082300E6149D /* CoreData */,
 				5E8DE5371E9BD255007E719D /* GameBox */,
 				5E8DE51D1E9BD0A6007E719D /* Products */,
 				3DC5BAA65198ACEF98D9953C /* Pods */,
@@ -592,6 +596,14 @@
 				B5816D6A1ED2F1BF00E6149D /* ExceptionHandlerTool.m */,
 			);
 			path = ExceptionHandling;
+			sourceTree = "<group>";
+		};
+		B5816D6C1ED4082300E6149D /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				B5816E2F1ED422D100E6149D /* Game185.xcdatamodeld */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 		B5824FB11EA0592500966640 /* NewServerView */ = {
@@ -1003,86 +1015,88 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B560ECAF1EC01CB000F5C559 /* SearchView.m in Sources */,
-				B55416341EA89A7B0043A36D /* StrategyController.m in Sources */,
-				B55416321EA89A7B0043A36D /* ActivityController.m in Sources */,
-				B554162A1EA88E9F0043A36D /* HomeClassifyController.m in Sources */,
-				B58A5C0A1EB1DF1D00CC1D00 /* MyAppViewController.m in Sources */,
-				B55416241EA88E7B0043A36D /* HomeNewGameController.m in Sources */,
-				B5C5D4AB1EA073AA008A46DE /* StrategyCell.m in Sources */,
-				5E8DE5551E9BD3AB007E719D /* main.m in Sources */,
-				B554161B1EA853C90043A36D /* GameGiftBagViewController.m in Sources */,
-				B5E2C80C1E9E1A37002CEC61 /* MyGiftBagViewController.m in Sources */,
-				B52B2FD91EBC5A30002A572D /* GDCommentDetailController.m in Sources */,
-				5E8DE5681E9BD7D2007E719D /* MineViewController.m in Sources */,
-				B5816D591ED289D900E6149D /* SSKeychain.m in Sources */,
-				B5858D5B1ECA9737003A2414 /* SearchGiftController.m in Sources */,
-				5E8DE5621E9BD7A4007E719D /* RankingListViewController.m in Sources */,
-				B5691C3C1EC1B8310094BE0F /* AFHTTPSessionManager.m in Sources */,
-				B560ECB31EC0444C00F5C559 /* SearchCollectionCell.m in Sources */,
-				B5E2C80F1E9E27E7002CEC61 /* ResetPassWordViewController.m in Sources */,
-				B5E2C8081E9E0AB2002CEC61 /* NewPassWordView.m in Sources */,
-				B55416331EA89A7B0043A36D /* NewServerController.m in Sources */,
-				B54FCA351EC94EC100BACAF7 /* NSAlredayServerController.m in Sources */,
-				B5E2C8061E9E0AB2002CEC61 /* ForgetPassWordView.m in Sources */,
-				B55416151EA8535F0043A36D /* GameDetailViewController.m in Sources */,
-				B59816D81EC3F7B20017599F /* MNCommentController.m in Sources */,
-				5E8DE56C1E9BDA66007E719D /* RequestUtils.m in Sources */,
-				B5E2C81B1E9E2E6F002CEC61 /* SettingView.m in Sources */,
-				B5C5D4DC1EA0C484008A46DE /* DetialTableHeader.m in Sources */,
-				B5E2C8091E9E0AB2002CEC61 /* RegisterViewController.m in Sources */,
-				B5816D6B1ED2F1BF00E6149D /* ExceptionHandlerTool.m in Sources */,
-				B59816E41EC45F250017599F /* LaunchScreen.m in Sources */,
-				B59816DF1EC412DC0017599F /* HCDetailController.m in Sources */,
-				B5691C481EC1B8E70094BE0F /* AFSecurityPolicy.m in Sources */,
-				B5F10BDE1EAF272C0061B43E /* RGiftBagController.m in Sources */,
-				B554161E1EA853F40043A36D /* GameOpenServerViewController.m in Sources */,
-				B5E2C8071E9E0AB2002CEC61 /* LoginViewController.m in Sources */,
-				B5FAB14B1EB97B0E002B29BD /* RCCCollectionViewCell.m in Sources */,
-				B52B2FDC1EBC73B3002A572D /* GameRequest.m in Sources */,
-				B59816DB1EC3F7CB0017599F /* MNNtificationController.m in Sources */,
-				B55416271EA88E900043A36D /* HomeHotGameController.m in Sources */,
-				B5C5D4BB1EA09AC8008A46DE /* DetailViewController.m in Sources */,
-				B563A3BC1EC5958E007D4142 /* MyGamesCell.m in Sources */,
-				B5C5D4BE1EA09E44008A46DE /* DetailHeader.m in Sources */,
-				B5C5D4D51EA0B6B3008A46DE /* DetailTableCell.m in Sources */,
-				B58A5C061EB1C0B400CC1D00 /* UserModel.m in Sources */,
-				5E8DE5561E9BD3AB007E719D /* AppDelegate.m in Sources */,
-				5E8DE5651E9BD7BC007E719D /* GiftBagViewController.m in Sources */,
-				B59FEDCF1E9CD91400A64D84 /* MineCell.m in Sources */,
-				B59FEDA01E9C614B00A64D84 /* ControllerManager.m in Sources */,
-				B58A5C0D1EB1DFBC00CC1D00 /* AppModel.m in Sources */,
-				B50FD18F1EB314AB00CA5E85 /* GameDetailTableViewCell.m in Sources */,
-				B59FEDBC1E9C8AF300A64D84 /* SearchCell.m in Sources */,
-				B5691C3F1EC1B86B0094BE0F /* AFURLSessionManager.m in Sources */,
-				B55416211EA88E690043A36D /* HomeRecommentController.m in Sources */,
-				5E8DE55F1E9BD786007E719D /* SearchViewController.m in Sources */,
-				B54378CD1EADD35200B25D47 /* WebViewController.m in Sources */,
-				B57DB6DC1EB08E9B00A0D8A0 /* SearchResultViewController.m in Sources */,
-				B5C5D4C11EA0AC64008A46DE /* DetailFooter.m in Sources */,
-				B5E2C8151E9E2E0C002CEC61 /* MyNewsView.m in Sources */,
-				B5858D5E1ECA9B23003A2414 /* SearchGiftResultController.m in Sources */,
-				B5824FB81EA05B6800966640 /* NewServerTableViewCell.m in Sources */,
-				B5858D651ECADB76003A2414 /* GiftRequest.m in Sources */,
-				B5691C421EC1B8CC0094BE0F /* AFURLResponseSerialization.m in Sources */,
-				B5C5D4B41EA078BF008A46DE /* ActivityCell.m in Sources */,
-				B54FCA321EC94EAD00BACAF7 /* NSCommingServerController.m in Sources */,
-				B55416181EA853AD0043A36D /* GameStrategyViewController.m in Sources */,
-				B54FCA361EC959B800BACAF7 /* NSTodayServerController.m in Sources */,
-				B5E2C8181E9E2E59002CEC61 /* MyAttentionView.m in Sources */,
-				B5691C451EC1B8DB0094BE0F /* AFURLRequestSerialization.m in Sources */,
-				B5C542961ECC311A00B35590 /* WriteCommentController.m in Sources */,
-				B59A76EE1EBB2B9900FE2B50 /* GDLikesTableViewCell.m in Sources */,
-				B5E2C81E1E9E2E96002CEC61 /* AboutUsView.m in Sources */,
-				B5E2C8241E9F2A27002CEC61 /* HomeViewController.m in Sources */,
-				B560ECB71EC0480400F5C559 /* SearchModel.m in Sources */,
-				B5A266681E9F480300F0C38E /* HomeHeader.m in Sources */,
-				B5C70F271EA9EA920073FDA4 /* RecommentTableHeader.m in Sources */,
-				B5C542991ECC3BF100B35590 /* CommentStarGradeView.m in Sources */,
-				B5C5D4E21EA0C60F008A46DE /* CustomLayout.m in Sources */,
-				B59FEDC31E9CC97600A64D84 /* GiftBagCell.m in Sources */,
-				B59A76E91EBB21D200FE2B50 /* GDCommentTableViewCell.m in Sources */,
-				5E8DE55C1E9BD497007E719D /* MainTabBarController.m in Sources */,
+				B5816E981ED426B400E6149D /* Game185.xcdatamodeld in Sources */,
+				B5816E9B1ED426B400E6149D /* AppDelegate.m in Sources */,
+				B5816E9C1ED426B400E6149D /* LaunchScreen.m in Sources */,
+				B5816E9D1ED426B400E6149D /* ExceptionHandlerTool.m in Sources */,
+				B5816E9E1ED426B400E6149D /* ControllerManager.m in Sources */,
+				B5816E9F1ED426B400E6149D /* MainTabBarController.m in Sources */,
+				B5816EA01ED426B400E6149D /* UserModel.m in Sources */,
+				B5816EA11ED426B400E6149D /* MyAppViewController.m in Sources */,
+				B5816EA21ED426B400E6149D /* AppModel.m in Sources */,
+				B5816EA31ED426B400E6149D /* MyGamesCell.m in Sources */,
+				B5816EA41ED426B400E6149D /* RequestUtils.m in Sources */,
+				B5816EA51ED426B400E6149D /* GameRequest.m in Sources */,
+				B5816EA61ED426B400E6149D /* GiftRequest.m in Sources */,
+				B5816EA71ED426B400E6149D /* SSKeychain.m in Sources */,
+				B5816EA81ED426B400E6149D /* WebViewController.m in Sources */,
+				B5816EA91ED426B400E6149D /* SearchViewController.m in Sources */,
+				B5816EAA1ED426B400E6149D /* SearchGiftController.m in Sources */,
+				B5816EAB1ED426B400E6149D /* SearchResultViewController.m in Sources */,
+				B5816EAC1ED426B400E6149D /* SearchGiftResultController.m in Sources */,
+				B5816EAD1ED426B400E6149D /* SearchView.m in Sources */,
+				B5816EAE1ED426B400E6149D /* SearchModel.m in Sources */,
+				B5816EAF1ED426B400E6149D /* SearchCell.m in Sources */,
+				B5816EB01ED426B400E6149D /* SearchCollectionCell.m in Sources */,
+				B5816EB11ED426B400E6149D /* DetailViewController.m in Sources */,
+				B5816EB21ED426B400E6149D /* GameDetailViewController.m in Sources */,
+				B5816EB31ED426B400E6149D /* GameStrategyViewController.m in Sources */,
+				B5816EB41ED426B400E6149D /* GameGiftBagViewController.m in Sources */,
+				B5816EB51ED426B400E6149D /* GameOpenServerViewController.m in Sources */,
+				B5816EB61ED426B400E6149D /* GDCommentDetailController.m in Sources */,
+				B5816EB71ED426B400E6149D /* WriteCommentController.m in Sources */,
+				B5816EB81ED426B400E6149D /* CommentStarGradeView.m in Sources */,
+				B5816EB91ED426B400E6149D /* DetailTableCell.m in Sources */,
+				B5816EBA1ED426B400E6149D /* DetialTableHeader.m in Sources */,
+				B5816EBB1ED426B400E6149D /* CustomLayout.m in Sources */,
+				B5816EBC1ED426B400E6149D /* GameDetailTableViewCell.m in Sources */,
+				B5816EBD1ED426B400E6149D /* GDLikesTableViewCell.m in Sources */,
+				B5816EBE1ED426B400E6149D /* GDCommentTableViewCell.m in Sources */,
+				B5816EBF1ED426B400E6149D /* DetailHeader.m in Sources */,
+				B5816EC01ED426B400E6149D /* DetailFooter.m in Sources */,
+				B5816EC11ED426B400E6149D /* HomeViewController.m in Sources */,
+				B5816EC21ED426B400E6149D /* HomeRecommentController.m in Sources */,
+				B5816EC31ED426B400E6149D /* NewServerController.m in Sources */,
+				B5816EC41ED426B400E6149D /* NSTodayServerController.m in Sources */,
+				B5816EC51ED426B400E6149D /* NSCommingServerController.m in Sources */,
+				B5816EC61ED426B400E6149D /* NSAlredayServerController.m in Sources */,
+				B5816EC71ED426B400E6149D /* ActivityController.m in Sources */,
+				B5816EC81ED426B400E6149D /* RGiftBagController.m in Sources */,
+				B5816EC91ED426B400E6149D /* StrategyController.m in Sources */,
+				B5816ECA1ED426B400E6149D /* HomeNewGameController.m in Sources */,
+				B5816ECB1ED426B400E6149D /* HomeHotGameController.m in Sources */,
+				B5816ECC1ED426B400E6149D /* HomeClassifyController.m in Sources */,
+				B5816ECD1ED426B400E6149D /* HCDetailController.m in Sources */,
+				B5816ECE1ED426B400E6149D /* RecommentTableHeader.m in Sources */,
+				B5816ECF1ED426B400E6149D /* RCCCollectionViewCell.m in Sources */,
+				B5816ED01ED426B400E6149D /* NewServerTableViewCell.m in Sources */,
+				B5816ED11ED426B400E6149D /* ActivityCell.m in Sources */,
+				B5816ED21ED426B400E6149D /* StrategyCell.m in Sources */,
+				B5816ED31ED426B400E6149D /* HomeHeader.m in Sources */,
+				B5816ED41ED426B400E6149D /* RankingListViewController.m in Sources */,
+				B5816ED51ED426B400E6149D /* GiftBagViewController.m in Sources */,
+				B5816ED61ED426B400E6149D /* GiftBagCell.m in Sources */,
+				B5816ED71ED426B400E6149D /* MineViewController.m in Sources */,
+				B5816ED81ED426B400E6149D /* ForgetPassWordView.m in Sources */,
+				B5816ED91ED426B400E6149D /* LoginViewController.m in Sources */,
+				B5816EDA1ED426B400E6149D /* NewPassWordView.m in Sources */,
+				B5816EDB1ED426B400E6149D /* RegisterViewController.m in Sources */,
+				B5816EDC1ED426B400E6149D /* MyGiftBagViewController.m in Sources */,
+				B5816EDD1ED426B400E6149D /* MyNewsView.m in Sources */,
+				B5816EDE1ED426B400E6149D /* MNCommentController.m in Sources */,
+				B5816EDF1ED426B400E6149D /* MNNtificationController.m in Sources */,
+				B5816EE01ED426B400E6149D /* ResetPassWordViewController.m in Sources */,
+				B5816EE11ED426B400E6149D /* MyAttentionView.m in Sources */,
+				B5816EE21ED426B400E6149D /* SettingView.m in Sources */,
+				B5816EE31ED426B400E6149D /* AboutUsView.m in Sources */,
+				B5816EE41ED426B400E6149D /* MineCell.m in Sources */,
+				B5816EE51ED426B400E6149D /* AFHTTPSessionManager.m in Sources */,
+				B5816EE61ED426B400E6149D /* AFURLSessionManager.m in Sources */,
+				B5816EE71ED426B400E6149D /* AFURLResponseSerialization.m in Sources */,
+				B5816EE81ED426B400E6149D /* AFURLRequestSerialization.m in Sources */,
+				B5816EE91ED426B400E6149D /* AFSecurityPolicy.m in Sources */,
+				B5816EEA1ED426B400E6149D /* main.m in Sources */,
+				B5816EEB1ED426B400E6149D /* Info.plist in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1273,6 +1287,19 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		B5816E2F1ED422D100E6149D /* Game185.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				B5816E301ED422D100E6149D /* Game185.xcdatamodel */,
+			);
+			currentVersion = B5816E301ED422D100E6149D /* Game185.xcdatamodel */;
+			path = Game185.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 5E8DE5141E9BD0A6007E719D /* Project object */;
 }

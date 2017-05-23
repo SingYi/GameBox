@@ -122,11 +122,11 @@
         
             //测试崩溃收集的数据
 //            _showArray = [@[@"",@""] mutableCopy];
-
             _currentPage = 1;
             _isAll = NO;
             
             [weakSelf checkLocalGamesWith:_showArray];
+//            syLog(@"%@",_showArray);
             
             
         } else {

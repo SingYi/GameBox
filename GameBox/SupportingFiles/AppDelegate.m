@@ -127,7 +127,61 @@
 
     //获取崩溃信息
 //    NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
-    InstallUncaughtExceptionHandler();
+//    InstallUncaughtExceptionHandler();
+    
+    
+    
+
+
+
+    [GameRequest allGameWithType:AllName Completion:^(NSDictionary * _Nullable content, BOOL success) {
+//        syLog(@"allname =============== %@",content);
+    }];
+    
+    
+    [GameRequest allGameWithType:AllBackage Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        
+        if (success && REQUESTSUCCESS) {
+            
+            NSArray *array = content[@"data"];
+        
+            //多线程加载数据
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                
+                [array enumerateObjectsUsingBlock:^(NSDictionary * obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    
+                    [GameRequest gameInfoWithGameID:obj[@"id"] Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
+                        
+                        if (success && REQUESTSUCCESS) {
+                            
+                            NSDictionary *dict = content[@"data"][@"gameinfo"];
+                            
+                            
+                            syLog(@"ganme ============================ %@",content[@"data"][@"gameinfo"]);
+                            [self saveContext];
+                        }
+                        
+                        
+                    }];
+                    
+                }];
+                
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    
+                    
+                });
+                
+            });
+        }
+        
+    }];
+    
+    
+    
+    
+    
+    
+    
 
     return YES;
 }
@@ -206,6 +260,9 @@ void UncaughtExceptionHandler(NSException *exception) {
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    
+    //保存上下文
+    [self saveContext];
 }
 
 
@@ -218,14 +275,123 @@ void UncaughtExceptionHandler(NSException *exception) {
 -(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
     //1. 处理通知
     
-    
-    
-    
-    
+
     
     //2. 处理完成后条用 completionHandler ，用于指示在前台显示通知的形式
     completionHandler(UNNotificationPresentationOptionAlert);
 }
+
+
+
+#pragma mark - ============================CoreData==========================================
+#pragma mark - Core Data stack
+
+@synthesize persistentContainer = _persistentContainer;
+
+- (NSPersistentContainer *)persistentContainer {
+    // The persistent container for the application. This implementation creates and returns a container, having loaded the store for the application to it.
+    @synchronized (self) {
+        if (_persistentContainer == nil) {
+            _persistentContainer = [[NSPersistentContainer alloc] initWithName:@"Game185"];
+            [_persistentContainer loadPersistentStoresWithCompletionHandler:^(NSPersistentStoreDescription *storeDescription, NSError *error) {
+                if (error != nil) {
+                    // Replace this implementation with code to handle the error appropriately.
+                    // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                    
+                    /*
+                     Typical reasons for an error here include:
+                     * The parent directory does not exist, cannot be created, or disallows writing.
+                     * The persistent store is not accessible, due to permissions or data protection when the device is locked.
+                     * The device is out of space.
+                     * The store could not be migrated to the current model version.
+                     Check the error message to determine what the actual problem was.
+                     */
+                    NSLog(@"Unresolved error %@, %@", error, error.userInfo);
+                    abort();
+                }
+            }];
+        }
+    }
+    
+    return _persistentContainer;
+}
+
+#pragma mark - Core Data Saving support
+
+- (void)saveContext {
+    NSManagedObjectContext *context;
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) {
+        context = self.persistentContainer.viewContext;
+        
+    } else {
+        
+        context = self.managedObjectContext;
+    }
+    NSError *error = nil;
+    if ([context hasChanges] && ![context save:&error]) {
+        // Replace this implementation with code to handle the error appropriately.
+        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+        NSLog(@"Unresolved error %@, %@", error, error.userInfo);
+        abort();
+    }
+}
+
+#pragma mark - Core Data stack 9.0
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+
+- (NSManagedObjectContext *)managedObjectContext {
+    if (_managedObjectContext != nil) {
+        return _managedObjectContext;
+    }
+    
+    
+    NSPersistentStoreCoordinator *cordinator = [self persistentStoreCoordinator];
+    
+    if (cordinator != nil) {
+        _managedObjectContext = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSMainQueueConcurrencyType];
+        [_managedObjectContext setPersistentStoreCoordinator:cordinator];
+    }
+    
+    
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) {
+        return self.persistentContainer.viewContext;
+    } else {
+        return _managedObjectContext;
+    }
+    
+}
+
+- (NSManagedObjectModel *)managedObjectModel {
+    if (_managedObjectModel != nil) {
+        return _managedObjectModel;
+    }
+    
+    NSURL *modelUrl = [[NSBundle mainBundle] URLForResource:@"Game185" withExtension:@"momd"];
+    
+    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelUrl];
+    
+    return _managedObjectModel;
+}
+
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
+    if (_persistentStoreCoordinator != nil) {
+        return _persistentStoreCoordinator;
+    }
+    
+    NSString *docs = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject];
+    
+    NSURL *storeURL = [NSURL fileURLWithPath:[docs stringByAppendingPathComponent:@"Game185.sqlite"]];
+    NSError *error = nil;
+    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc]initWithManagedObjectModel:self.managedObjectModel];
+    
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+        NSLog(@"%@",error.localizedDescription);
+    }
+    return _persistentStoreCoordinator;
+}
+
 
 
 @end

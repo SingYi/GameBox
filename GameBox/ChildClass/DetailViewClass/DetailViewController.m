@@ -166,6 +166,7 @@
             self.gameinfo = content[@"data"][@"gameinfo"];
             
             self.likes = content[@"data"][@"like"];
+            
             NSArray *array = [AppModel getLocalGamesWithPlist];
             for (NSInteger i = 0; i < array.count; i++) {
                 if ([array[i][@"bundleID"] isEqualToString:self.gameinfo[@"ios_pack"]]) {

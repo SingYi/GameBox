@@ -117,7 +117,9 @@ typedef enum : NSUInteger {
 
 
 //====================================================================//
-/** 所有游戏接口 */
+/** 所有游戏接口 
+ *  type == 1 :游戏名  type == 2: 包名
+ */
 + (void)allGameWithType:(AllType)type
              Completion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
 
