@@ -52,16 +52,11 @@
 #define kSCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define kSCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 
-#ifdef DEBUG
-#define CLog(format, ...) NSLog(format, ## __VA_ARGS__)
-#else
-#define CLog(format, ...)
-#endif
 
 #ifdef DEBUG
 #define syLog(format, ...) NSLog(format, ## __VA_ARGS__)
 #else
-#define syog(format, ...)
+#define syLog(format, ...)
 #endif
 
 

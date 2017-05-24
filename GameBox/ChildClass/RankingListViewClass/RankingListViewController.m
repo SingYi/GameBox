@@ -69,7 +69,6 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.navigationItem.titleView = nil;
-//    [self clickCancelBtn];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -87,7 +86,7 @@
     [self initDataSourece];
     [self initUserinterface];
     
-    [GameRequest gameWithGameID:@"86"];
+    syLog(@"%@",[GameRequest gameWithGameID:@"86"]);
 
 }
 
@@ -251,29 +250,28 @@
 
 //开始搜索
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-    //    NSLog(@"searchBarTextDidBeginEditing");
+
 }
 
 //即将结束搜索
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
-    
     
     return YES;
 }
 
 //结束搜索
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-    //    NSLog(@"searchBarTextDidEndEditing");
+
 }
 
 //文本已经改变
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    //    NSLog(@"textDidChange");
+
 }
 
 //文编即将改变
 - (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    //    NSLog(@"shouldChangeTextInRange");
+
     return YES;
 }
 

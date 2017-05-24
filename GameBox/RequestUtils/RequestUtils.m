@@ -41,7 +41,7 @@
                         completion(nil,false);
                     }
                 });
-                CLog(@"NSJSONSerialization error");
+                syLog(@"NSJSONSerialization error");
             } else {
                 if (obj && [obj isKindOfClass:[NSDictionary class]]) {
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -53,7 +53,7 @@
                 }
             }
         } else {
-            CLog(@"Request Failed...");
+            syLog(@"Request Failed...");
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completion) {
                     completion(nil,false);

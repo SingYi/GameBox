@@ -34,48 +34,31 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    //视图
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
     self.window.rootViewController = [ControllerManager shareManager].rootViewController;
     
     [self.window makeKeyAndVisible];
     
-    //注册畅言SDK
-    [ChangyanSDK registerApp:@"cysYKUClL"
-                      appKey:@"6c88968800e8b236e5c69b8634db704d"
-                 redirectUrl:nil
-        anonymousAccessToken:nil];
-    
-    //注册微信
-    [WXApi registerApp:WEIXINAPPID];
-    
-    //注册QQ
-    TencentOAuth *oAuth = [[TencentOAuth alloc] initWithAppId:QQAPPID andDelegate:nil];
-    
-    [oAuth isSessionValid];
-    
     //第一次登陆
     NSString *isFirstGuide = [[NSUserDefaults standardUserDefaults] stringForKey:@"isFirstGuide"];
+    
     //引导页
     if (!isFirstGuide) {
         [self.window addSubview:[LaunchScreen new]];
-        
         [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"isFirstGuide"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
     
-    
     //第一次安装
     NSString *isFirstInstall = [[NSUserDefaults standardUserDefaults] stringForKey:@"isFirstInstall"];
     if (!isFirstInstall) {
-        
         //每次启动统计
         [GameRequest gameBoxStarUpWithCompletion:^(NSDictionary * _Nullable content, BOOL success) {
-            syLog(@"启动 ===== %@",content);
             if (success && REQUESTSUCCESS) {
                 [GameRequest gameBoxInstallWithCompletion:^(NSDictionary * _Nullable content, BOOL success) {
-                    syLog(@"安装%@",content);
                     if (success && REQUESTSUCCESS) {
                         [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"isFirstInstall"];
                         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -83,27 +66,23 @@
                 }];
             }
         }];
-        
     } else {
         //每次启动统计
-        [GameRequest gameBoxStarUpWithCompletion:^(NSDictionary * _Nullable content, BOOL success) {
-            syLog(@"每次=====启动%@",content);
-        }];
+        [GameRequest gameBoxStarUpWithCompletion:nil];
     }
     
-    
-    
+
     
     //请求数据总接口
     [RequestUtils postRequestWithURL:URLMAP params:nil completion:^(NSDictionary *content, BOOL success) {
-        if (success && !((NSString *)content[@"status"]).boolValue) {
+        if (success && REQUESTSUCCESS) {
             NSDictionary *dict = content[@"data"];
             NSArray *keys = [dict allKeys];
             [keys enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 SAVEOBJECT_AT_USERDEFAULTS(dict[obj], obj);
             }];
             SAVEOBJECT_AT_USERDEFAULTS(keys, @"MAP");
-            [[NSUserDefaults standardUserDefaults] synchronize];
+            SAVEOBJECT;
             syLog(@"%@",content);
         }
     }];
@@ -125,14 +104,17 @@
     //检查更新
     [self cheackVersion];
 
-    //获取崩溃信息
-//    NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
+    //监听崩溃
     InstallUncaughtExceptionHandler();
     
-    
-    [GameRequest allGameWithType:AllName Completion:^(NSDictionary * _Nullable content, BOOL success) {
-//        syLog(@"allname =============== %@",content);
-    }];
+    //获取所有的游戏名
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [GameRequest allGameWithType:AllName Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            if (success && REQUESTSUCCESS) {
+                syLog(@"allname =============== %@",content);
+            }
+        }];
+    });
     
     
     //多线程加载数据(请求所有游戏的详细信息,保存在本地)
@@ -141,55 +123,50 @@
 
             NSArray *array = content[@"data"];
             
-//            dispatch_async(<#dispatch_queue_t  _Nonnull queue#>, <#^(void)block#>)
-//            dispatch_get_global_queue(<#long identifier#>, <#unsigned long flags#>)
-            
-//            dispatch_queue_create(@"testldkjf", DISPATCH_QUEUE_CONCURRENT);
-            
-            
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                 
-                [array enumerateObjectsUsingBlock:^(NSDictionary * obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                        
-                    [GameRequest gameInfoWithGameID:obj[@"id"] Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
+                [array enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    [GameRequest saveGameAtLocalWithDictionary:obj];
                     
-                        if (success && REQUESTSUCCESS) {
-                        
-                            NSDictionary *dict = content[@"data"][@"gameinfo"];
-                        
-                            [GameRequest saveGameAtLocalWithDictionary:dict];
-                        
-                        }
-                    }];
                 }];
+                
             });
         }
     }];
     
+    syLog(@"diviceID ===== %@",[GameRequest DeviceID]);
     
-    
-    
-    
-    
-    
-    
+    //上传异常
+    NSString *waringString = OBJECT_FOR_USERDEFAULTS(@"BoxWarring");
+    if (waringString) {
+        [GameRequest gameBOxUploadWarring:waringString Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            if (success && REQUESTSUCCESS) {
+                SAVEOBJECT_AT_USERDEFAULTS(nil, @"BoxWarring");
+                SAVEOBJECT;
+            }
+        }];
+    }
 
+    
+    //注册畅言SDK
+    [ChangyanSDK registerApp:@"cysYKUClL"
+                      appKey:@"6c88968800e8b236e5c69b8634db704d"
+                 redirectUrl:nil
+        anonymousAccessToken:nil];
+    
+    //注册微信
+    [WXApi registerApp:WEIXINAPPID];
+    
+    //注册QQ
+    TencentOAuth *oAuth = [[TencentOAuth alloc] initWithAppId:QQAPPID andDelegate:nil];
+    
+    [oAuth isSessionValid];
+    
+    
+    
     return YES;
 }
 
-/** 异常处理 */
-void UncaughtExceptionHandler(NSException *exception) {
-    // 异常的堆栈信息
-    NSArray *stackArray = [exception callStackSymbols];
-    // 出现异常的原因
-    NSString *reason = [exception reason];
-    // 异常名称
-    NSString *name = [exception name];
-    
-    NSString *exceptionInfo = [NSString stringWithFormat:@"Exception reason：%@\nException name：%@\nException stack：%@",name, reason, stackArray];
-    
-    syLog(@"========================================%@", exceptionInfo);
-}
 
 /** 注册通知 */
 - (void)resignNotifacation {
@@ -297,7 +274,6 @@ void UncaughtExceptionHandler(NSException *exception) {
                      * The store could not be migrated to the current model version.
                      Check the error message to determine what the actual problem was.
                      */
-//                    NSLog(@"Unresolved error %@, %@", error, error.userInfo);
                     abort();
                 }
             }];
@@ -322,7 +298,6 @@ void UncaughtExceptionHandler(NSException *exception) {
     if ([context hasChanges] && ![context save:&error]) {
         // Replace this implementation with code to handle the error appropriately.
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-//        NSLog(@"Unresolved error %@, %@", error, error.userInfo);
         abort();
     }
 }
@@ -378,7 +353,6 @@ void UncaughtExceptionHandler(NSException *exception) {
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc]initWithManagedObjectModel:self.managedObjectModel];
     
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
-//        NSLog(@"%@",error.localizedDescription);
     }
     return _persistentStoreCoordinator;
 }

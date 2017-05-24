@@ -10,6 +10,7 @@
 #import "NewServerTableViewCell.h"
 #import "GameRequest.h"
 #import <MJRefresh.h>
+#import "ControllerManager.h"
 
 #define CELLIDE @"NewServerTableViewCell"
 
@@ -106,6 +107,20 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 80;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    self.parentViewController.hidesBottomBarWhenPushed = YES;
+    
+    [ControllerManager shareManager].detailView.gameID = self.showArray[indexPath.row][@"id"];
+    
+    NewServerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    [ControllerManager shareManager].detailView.gameLogo = cell.gameLogo.image;
+    
+    [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
 }
 #pragma makr - getter
 - (UITableView *)tableView {

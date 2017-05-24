@@ -213,7 +213,7 @@
 
 //开始搜索
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-    //    NSLog(@"searchBarTextDidBeginEditing");
+
 }
 
 //即将结束搜索
@@ -225,17 +225,17 @@
 
 //结束搜索
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-    //    NSLog(@"searchBarTextDidEndEditing");
+
 }
 
 //文本已经改变
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    //    NSLog(@"textDidChange");
+
 }
 
 //文编即将改变
 - (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    //    NSLog(@"shouldChangeTextInRange");
+
     return YES;
 }
 

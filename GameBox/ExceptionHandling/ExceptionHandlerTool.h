@@ -18,7 +18,7 @@
 
 /** 奔溃的信息 */
 void HandleException(NSException *exception);
-/** 奔溃信号处理 */
+/** 异常信息号 */
 void SignalHandler(int signal);
 /** 设置获取崩溃信号句柄 */
 void InstallUncaughtExceptionHandler(void);

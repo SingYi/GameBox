@@ -290,6 +290,7 @@ static UserModel *currentUser = nil;
                                                          @"image/png",
                                                          @"application/octet-stream",
                                                          @"text/json",
+                                                         @"text/txt",
                                                          nil];
     
     NSString *urlStr = OBJECT_FOR_USERDEFAULTS(@"USER_UPLOAD");

@@ -237,7 +237,7 @@
 
 //文编即将改变
 - (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    //    NSLog(@"shouldChangeTextInRange");
+
     return YES;
 }
 

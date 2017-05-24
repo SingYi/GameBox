@@ -231,6 +231,8 @@ typedef enum : NSUInteger {
 /** 盒子启动记录统计 */
 + (void)gameBoxStarUpWithCompletion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
 
+/** 上传异常 */
++ (void)gameBOxUploadWarring:(NSString *_Nonnull)warringString Completion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
 #pragma mark - ===========================数据库数据持久化======================================
 /** 保存游戏信息到本地 */
 + (void)saveGameAtLocalWithDictionary:(NSDictionary *_Nonnull)dict;

@@ -30,6 +30,7 @@
 #define GAME_CHECK_CLIENT @"http://www.185sy.com/api-game-checkClient"
 #define GAME_BOX_INSTALL_INFO @"http://www.185sy.com/api-game-boxInstallInfo"
 #define GAME_BOX_START_INFO @"http://www.185sy.com/api-game-boxStartInfo"
+#define GAME_ERROR_LOG @"http://www.185sy.com/api-game-uploadErrorLog"
 
 
 #import "GameRequest.h"
@@ -37,6 +38,7 @@
 
 #import "AppDelegate.h"
 #import "GameNet+CoreDataProperties.h"
+#import "AFHTTPSessionManager.h"
 
 
 
@@ -831,6 +833,59 @@
     [GameRequest postRequestWithURL:urlStr params:dict completion:completion];
 }
 
+/** 上传崩溃信息 */
++ (void)gameBOxUploadWarring:(NSString *)warringString Completion:(void (^)(NSDictionary * _Nullable, BOOL))completion {
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    //系统
+    [dict setObject:@"2" forKey:@"system"];
+
+    NSString *urlStr = OBJECT_FOR_USERDEFAULTS(@"GAME_ERROR_LOG");
+    if (!urlStr) {
+        urlStr = GAME_ERROR_LOG;
+    }
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    //接收类型不一致请替换一致text/html或别的
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:
+                                                         @"application/json",
+                                                         @"text/html",
+                                                         @"image/jpeg",
+                                                         @"image/png",
+                                                         @"application/octet-stream",
+                                                         @"text/json",
+                                                         @"text/text",
+                                                         nil];
+    
+    NSURLSessionDataTask *task = [manager POST:urlStr parameters:@{@"system":@"2"} constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+        
+    NSData *stringData = [warringString dataUsingEncoding:NSUTF8StringEncoding];
+
+    [formData appendPartWithFileData:stringData
+                                name:@"error_log"
+                            fileName:@"warringStr.txt"
+                            mimeType:@"text/txt"];
+
+    } progress:^(NSProgress *_Nonnull uploadProgress) {
+        
+        
+    } success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+        if (completion) {
+            completion(responseObject,true);
+        }
+    } failure:^(NSURLSessionDataTask *_Nullable task, NSError * _Nonnull error) {
+        
+        if (completion) {
+            completion(nil,false);
+        }
+        
+    }];
+    
+    [task resume];
+
+    
+}
+
 
 #pragma mark - ===========================数据库数据持久化======================================
 + (NSManagedObjectContext *)context {
@@ -841,7 +896,13 @@
 
 + (void)saveGameAtLocalWithDictionary:(NSDictionary *_Nonnull)dict {
     
-    GameNet *game = [NSEntityDescription insertNewObjectForEntityForName:@"GameNet" inManagedObjectContext:[GameRequest context]];
+    GameNet *game = [GameRequest gameNetWithGameID:dict[@"id"]];
+    
+    if (game) {
+        
+    } else {
+        game = [NSEntityDescription insertNewObjectForEntityForName:@"GameNet" inManagedObjectContext:[GameRequest context]];
+    }
     
     game.abstract = [NSString stringWithFormat:@"%@",dict[@"abstract"]];
     game.download = [NSString stringWithFormat:@"%@",dict[@"download"]];
@@ -863,7 +924,7 @@
     if ([[GameRequest context] save:&error] == NO) {
         NSAssert(NO, @"Error saving Context :%@\n%@",error.localizedDescription,error.userInfo);
     } else {
-        syLog(@"%@保存成功",game.gameID);
+//        syLog(@"%@保存成功",game.gameID);
     }
 
 }
@@ -878,13 +939,71 @@
     
     NSArray<GameNet *> *array = [context executeFetchRequest:request error:nil];
     
-    [array enumerateObjectsUsingBlock:^(GameNet * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        syLog(@"%@ == %@\n %@",obj.gameName,obj.gameID,obj.imgs);
-    }];
+    NSDictionary *dict = nil;
+    if (array.count > 0) {
+        dict = [GameRequest translateGameNetToDictionary:array[0]];
+    } else {
+        dict = nil;
+    }
+    return  dict;
+}
+
++ (GameNet *)gameNetWithGameID:(NSString *)gameID {
+    NSFetchRequest *request = [GameNet fetchRequest];
+    NSManagedObjectContext *context = [GameRequest context];
     
-//    syLog(@"===================================array%@",array);
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"gameID == %@", gameID];
+    request.predicate = predicate;
     
-    return  nil;
+    NSArray<GameNet *> *array = [context executeFetchRequest:request error:nil];
+    
+    if (array.count > 0) {
+        return array[0];
+    } else {
+        return nil;
+    }
+}
+
++ (void)translateDictionary:(NSDictionary *)dict ToGameNet:(GameNet *)game {
+    game.abstract = [NSString stringWithFormat:@"%@",dict[@"abstract"]];
+    game.download = [NSString stringWithFormat:@"%@",dict[@"download"]];
+    game.feature = [NSString stringWithFormat:@"%@",dict[@"feature"]];
+    game.gameName = [NSString stringWithFormat:@"%@",dict[@"gamename"]];
+    game.gameID = [NSString stringWithFormat:@"%@",dict[@"id"]];
+    game.imgs = dict[@"imgs"];
+    game.bundleID = [NSString stringWithFormat:@"%@",dict[@"ios_pack"]];
+    game.downLoadUrl = [NSString stringWithFormat:@"%@",dict[@"ios_url"]];
+    game.logoUrl = [NSString stringWithFormat:@"%@",dict[@"logo"]];
+    game.gameSource = [NSString stringWithFormat:@"%@",dict[@"score"]];
+    game.size = [NSString stringWithFormat:@"%@",dict[@"size"]];
+    game.gameTag = [NSString stringWithFormat:@"%@",dict[@"tag"]];
+    game.gameTypes = [NSString stringWithFormat:@"%@",dict[@"types"]];
+    game.gameVsersion = [NSString stringWithFormat:@"%@",dict[@"version"]];
+}
+
++ (NSDictionary *)translateGameNetToDictionary:(GameNet *)game {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObject:game.abstract forKey:@"abstract"];
+    [dict setObject:game.download forKey:@"download"];
+    [dict setObject:game.feature forKey:@"feature"];
+    [dict setObject:game.gameName forKey:@"gamename"];
+    [dict setObject:game.gameID forKey:@"id"];
+    
+    NSArray *array = (NSArray *)game.imgs;
+    if (array) {
+        
+        [dict setObject:array forKey:@"imgs"];
+    }
+    
+    [dict setObject:game.bundleID forKey:@"ios_pack"];
+    [dict setObject:game.downLoadUrl forKey:@"ios_url"];
+    [dict setObject:game.logoUrl forKey:@"logo"];
+    [dict setObject:game.gameSource forKey:@"score"];
+    [dict setObject:game.size forKey:@"size"];
+    [dict setObject:game.gameTag forKey:@"tag"];
+    [dict setObject:game.gameTypes forKey:@"types"];
+    [dict setObject:game.gameVsersion forKey:@"version"];
+    return dict;
 }
 
 
