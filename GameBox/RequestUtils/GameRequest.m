@@ -565,6 +565,8 @@
     [GameRequest postRequestWithURL:urlStr params:dict completion:completion];
 }
 
+
+#pragma mark - ========================== 检查更新 =====================================
 /** 客户端检查更新 */
 + (void)chechBoxVersionCompletion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -616,7 +618,7 @@
 
 }
 
-
+#pragma mark - ========================== 本地通知 =====================================
 //使用 UNNotification 本地通知
 + (void)registerNotificationWith:(NSDate * _Nonnull)alerTime
                            Title:(NSString * _Nullable)title
@@ -677,7 +679,7 @@
     [center removeDeliveredNotificationsWithIdentifiers:@[identifier]];
 }
 
-/** 获取路径 */
+/** 获取文件路径 */
 + (NSString *)getPlistPathWithFileName:(NSString *)fileName {
     NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
     NSString *plistPath = [path stringByAppendingPathComponent:fileName];
@@ -1006,6 +1008,18 @@
     return dict;
 }
 
+
++ (void)saveAllGameNameWithArry:(NSArray *)array {
+    NSArray *localArray = array;
+    
+    [localArray writeToFile:[GameRequest getPlistPathWithFileName:@"allGameName"] atomically:YES];
+}
+
++ (NSArray *)getAllGameName {
+    NSArray * array = [NSArray arrayWithContentsOfFile:[GameRequest getPlistPathWithFileName:@"allGameName"]];
+    
+    return array;
+}
 
 
 

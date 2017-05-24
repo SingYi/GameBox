@@ -85,9 +85,6 @@
     [super viewDidLoad];
     [self initDataSourece];
     [self initUserinterface];
-    
-    syLog(@"%@",[GameRequest gameWithGameID:@"86"]);
-
 }
 
 /**初始化数据*/

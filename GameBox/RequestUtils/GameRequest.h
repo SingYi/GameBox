@@ -204,7 +204,6 @@ typedef enum : NSUInteger {
 /** 添加通知记录 */
 + (void)addNotificationRecordWith:(NSDictionary *_Nonnull)dict;
 
-
 /** 删除通知记录 */
 + (void)deleteNotificationRecordWith:(NSInteger )index;
 
@@ -233,6 +232,7 @@ typedef enum : NSUInteger {
 
 /** 上传异常 */
 + (void)gameBOxUploadWarring:(NSString *_Nonnull)warringString Completion:(void(^_Nullable)(NSDictionary * _Nullable content, BOOL success))completion;
+
 #pragma mark - ===========================数据库数据持久化======================================
 /** 保存游戏信息到本地 */
 + (void)saveGameAtLocalWithDictionary:(NSDictionary *_Nonnull)dict;
@@ -240,6 +240,11 @@ typedef enum : NSUInteger {
 /** 根据游戏ID获取游戏信息 */
 + (NSDictionary *_Nullable)gameWithGameID:(NSString *_Nonnull)gameID;
 
+/** 保存所有游戏名称 */
++ (void)saveAllGameNameWithArry:(NSArray *_Nonnull)array;
+
+/** 获取所有游戏名称 */
++ (NSArray *)getAllGameName;
 
 @end
 

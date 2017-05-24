@@ -83,7 +83,7 @@
             }];
             SAVEOBJECT_AT_USERDEFAULTS(keys, @"MAP");
             SAVEOBJECT;
-            syLog(@"%@",content);
+//            syLog(@"%@",content);
         }
     }];
     
@@ -111,7 +111,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         [GameRequest allGameWithType:AllName Completion:^(NSDictionary * _Nullable content, BOOL success) {
             if (success && REQUESTSUCCESS) {
-                syLog(@"allname =============== %@",content);
+                [GameRequest saveAllGameNameWithArry:content[@"data"]];
             }
         }];
     });
@@ -126,7 +126,11 @@
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                 
                 [array enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    [GameRequest saveGameAtLocalWithDictionary:obj];
+                    [GameRequest gameInfoWithGameID:obj[@"id"] Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
+                        if (success && REQUESTSUCCESS) {
+                            [GameRequest saveGameAtLocalWithDictionary:content[@"data"][@"gameinfo"]];
+                        }
+                    }];
                     
                 }];
                 
@@ -134,7 +138,6 @@
         }
     }];
     
-    syLog(@"diviceID ===== %@",[GameRequest DeviceID]);
     
     //上传异常
     NSString *waringString = OBJECT_FOR_USERDEFAULTS(@"BoxWarring");
@@ -162,10 +165,26 @@
     
     [oAuth isSessionValid];
     
+//    //3DTouch
+//    UIApplicationShortcutIcon *shareIcon = [UIApplicationShortcutIcon iconWithType:UIApplicationShortcutIconTypeShare];
+//    UIApplicationShortcutItem *shareItem = [[UIApplicationShortcutItem alloc] initWithType:@"item2" localizedTitle:@"分享" localizedSubtitle:@"" icon:shareIcon userInfo:nil];
+//    
+//    /** 将items 添加到app图标 */
+//    application.shortcutItems = @[shareItem];
     
+    
+    
+    syLog(@"diviceID ===== %@",[GameRequest DeviceID]);
     
     return YES;
 }
+
+//- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void(^)(BOOL succeeded))completionHandler {
+//    if ([shortcutItem.localizedTitle isEqualToString:@"分享"]) {
+//       
+//    }
+//    
+//}
 
 
 /** 注册通知 */

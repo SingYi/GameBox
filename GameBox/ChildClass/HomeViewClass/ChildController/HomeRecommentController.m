@@ -71,21 +71,15 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.rollHeader startTimer];
-//    [ControllerManager shareManager].rootViewController.navigationBar.hidden = NO;
-//    self.navigationController.navigationBar.hidden = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.rollHeader stopTimer];
-    
-//    [ControllerManager shareManager].rootViewController.navigationBar.hidden = YES;
-//    self.navigationController.navigationBar.hidden = NO;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     [self initDataSource];
     [self initUserInterface];
 }
@@ -109,11 +103,7 @@
 #pragma mkar - method
 /**刷新数据*/
 - (void)refreshData {
-//    [ControllerManager starLoadingAnimation];
     WeakSelf;
-
-
-    
     [GameRequest recommendGameWithPage:nil Completion:^(NSDictionary * _Nullable content, BOOL success) {
 
         if (success && !((NSString *)content[@"status"]).boolValue) {
@@ -126,11 +116,21 @@
             _isAll = NO;
             
             [weakSelf checkLocalGamesWith:_showArray];
-//            syLog(@"%@",_showArray);
-            
-            
+        
         } else {
             _currentPage = 0;
+        }
+        
+        if (_showArray && _showArray.count > 0) {
+            weakSelf.tableView.backgroundView = nil;
+        } else {
+            weakSelf.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"wuwangluo"]];
+        }
+        
+        if (self.rollHeader.rollingArray.count > 0) {
+            weakSelf.tableView.tableHeaderView = weakSelf.rollHeader;
+        } else {
+            weakSelf.tableView.tableHeaderView = nil;
         }
         
         
@@ -236,8 +236,13 @@
     self.parentViewController.hidesBottomBarWhenPushed = NO;
 }
 
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return kSCREEN_WIDTH * 0.218 + 4;
+    if (_showArray && _showArray.count != 0) {
+        return kSCREEN_WIDTH * 0.218 + 4;
+    } else {
+        return 0;
+    }
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -260,9 +265,6 @@
         
         [GameRequest downLoadAppWithURL:url];
     }
-
-//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-services://?action=download-manifest&url=https%3A%2F%2Fdownload.fir.im%2Fapps%2F58c78f29ca87a86ab50000ee%2Finstall%3Fdownload_token%3Dfb0f242cdf75f7007568a491321dac4d%26release_id%3D58c78faeca87a86b4c00012e"]];
-    
 }
 
 #pragma mark - rollingDeleagte
