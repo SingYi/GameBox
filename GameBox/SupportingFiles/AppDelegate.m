@@ -83,16 +83,9 @@
             }];
             SAVEOBJECT_AT_USERDEFAULTS(keys, @"MAP");
             SAVEOBJECT;
-//            syLog(@"%@",content);
         }
     }];
     
-    //存入本地游戏列表
-    [AppModel getLocalGamesWithBlock:^(NSArray * _Nullable games, BOOL success) {
-        if (success) {
-            [AppModel saveLocalGamesWithArray:games];
-        }
-    }];
     
     //注册通知
     [self resignNotifacation];
@@ -117,40 +110,6 @@
     });
     
     
-    //多线程加载数据(请求所有游戏的详细信息,保存在本地)
-    [GameRequest allGameWithType:AllBackage Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        if (success && REQUESTSUCCESS) {
-
-            NSArray *array = content[@"data"];
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                
-                [array enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    [GameRequest gameInfoWithGameID:obj[@"id"] Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
-                        if (success && REQUESTSUCCESS) {
-                            [GameRequest saveGameAtLocalWithDictionary:content[@"data"][@"gameinfo"]];
-                        }
-                    }];
-                    
-                }];
-                
-            });
-        }
-    }];
-    
-    
-    //上传异常
-    NSString *waringString = OBJECT_FOR_USERDEFAULTS(@"BoxWarring");
-    if (waringString) {
-        [GameRequest gameBOxUploadWarring:waringString Completion:^(NSDictionary * _Nullable content, BOOL success) {
-            if (success && REQUESTSUCCESS) {
-                SAVEOBJECT_AT_USERDEFAULTS(nil, @"BoxWarring");
-                SAVEOBJECT;
-            }
-        }];
-    }
-
-    
     //注册畅言SDK
     [ChangyanSDK registerApp:@"cysYKUClL"
                       appKey:@"6c88968800e8b236e5c69b8634db704d"
@@ -164,6 +123,58 @@
     TencentOAuth *oAuth = [[TencentOAuth alloc] initWithAppId:QQAPPID andDelegate:nil];
     
     [oAuth isSessionValid];
+    
+    
+    //上传异常
+    NSString *waringString = OBJECT_FOR_USERDEFAULTS(@"BoxWarring");
+    if (waringString) {
+        [GameRequest gameBOxUploadWarring:waringString Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            if (success && REQUESTSUCCESS) {
+                SAVEOBJECT_AT_USERDEFAULTS(nil, @"BoxWarring");
+                SAVEOBJECT;
+            }
+        }];
+    }
+    
+    
+    //多线程加载数据(请求所有游戏的详细信息,保存在本地)
+    [GameRequest allGameWithType:AllBackage Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success && REQUESTSUCCESS) {
+
+            NSArray *array = content[@"data"];
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                
+                [array enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    //请求每个游戏信息
+                    [GameRequest gameInfoWithGameID:obj[@"id"] Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
+                        if (success && REQUESTSUCCESS) {
+                            //请求道的游戏信息保存到数据库
+                            [GameRequest saveGameAtLocalWithDictionary:content[@"data"][@"gameinfo"]];
+                            //所有游戏本地保存完毕,获取本地所有应用,比对,获取到本地的游戏
+                            if (idx == array.count - 1) {
+                                [GameRequest saveLocalGameAtLocal];
+                            }
+
+                        }
+                    }];
+                    
+                }];
+                
+                
+                [AppModel getLocalGamesWithBlock:^(NSArray * _Nullable games, BOOL success) {
+                    if (success) {
+                        [AppModel saveLocalGamesWithArray:games];
+                    }
+                }];
+                
+                
+            });
+        }
+    }];
+    
+
+    
     
 //    //3DTouch
 //    UIApplicationShortcutIcon *shareIcon = [UIApplicationShortcutIcon iconWithType:UIApplicationShortcutIconTypeShare];
@@ -369,9 +380,15 @@
     
     NSURL *storeURL = [NSURL fileURLWithPath:[docs stringByAppendingPathComponent:@"Game185.sqlite"]];
     NSError *error = nil;
+    
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc]initWithManagedObjectModel:self.managedObjectModel];
     
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+    //版本迁移
+    NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption:@(YES),
+                NSInferMappingModelAutomaticallyOption:@(YES)};
+    
+    
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
     }
     return _persistentStoreCoordinator;
 }

@@ -117,23 +117,36 @@
 #pragma mark - responsd
 /**刷新数据*/
 - (void)refreshData {
+    
+    WeakSelf;
+    
     [GameRequest rankGameWithhPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success && REQUESTSUCCESS) {
+            
             _showArray = [content[@"data"] mutableCopy];
             [self checkLocalGamesWith:_showArray];
             _currentPage = 1;
             _isAll = NO;
+            
             [self.tableView reloadData];
         } else {
-//            [GameRequest showAlertWithMessage:@"网络不知道飞到哪里去了" dismiss:nil];
+            _currentPage = 0;
         }
+        
+        if (_showArray && _showArray.count > 0) {
+            weakSelf.tableView.backgroundView = nil;
+        } else {
+            weakSelf.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"wuwangluo"]];
+        }
+    
+        
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer endRefreshing];
     }];
 }
 
 - (void)loadMoreData {
-    if (_isAll) {
+    if (_isAll || _currentPage == 0) {
         [self.tableView.mj_footer endRefreshingWithNoMoreData];
     } else {
         _currentPage++;
@@ -144,16 +157,13 @@
                     _isAll = YES;
                     [self.tableView.mj_footer endRefreshingWithNoMoreData];
                 } else {
-                    [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    }];
+                    [self checkLocalGamesWith:array];
                     [_showArray addObjectsFromArray:array];
-                    [self checkLocalGamesWith:_showArray];
-//                    [self.tableView reloadData];
-//                    [self.tableView.mj_footer endRefreshing];
+                    [self.tableView reloadData];
+                    [self.tableView.mj_footer endRefreshing];
                 }
-
             } else {
-                [self.tableView.mj_footer endRefreshing];
+                [self.tableView.mj_footer endRefreshingWithNoMoreData];
             }
         }];
     }
@@ -161,27 +171,14 @@
 
 
 - (void)checkLocalGamesWith:(NSMutableArray *)array {
-    [AppModel getLocalGamesWithBlock:^(NSArray * _Nullable games, BOOL success) {
-        NSArray *localArray = nil;
-        if (success) {
-            localArray = games;
-            for (NSInteger i = 0; i < array.count; i++) {
-                for (NSInteger j = 0; j < localArray.count; j++) {
-                    if ([array[i][@"ios_pack"] isEqualToString:localArray[j][@"bundleID"]]) {
-                        NSMutableDictionary *dict = [array[i] mutableCopy];
-                        [dict setObject:@"1" forKey:@"isLocal"];
-                        [array replaceObjectAtIndex:i withObject:dict];
-                    }
-                }
-            }
-            
-        } else {
-            localArray = nil;
+    for (NSInteger i = 0; i < array.count; i++) {
+        NSDictionary *dictLocal = [GameRequest gameLocalWithGameID:array[i][@"id"]];
+        if (dictLocal && dictLocal.count > 0) {
+            NSMutableDictionary *dict = [array[i] mutableCopy];
+            [dict setObject:@"1" forKey:@"isLocal"];
+            [array replaceObjectAtIndex:i withObject:dict];
         }
-        
-        [self.tableView.mj_footer endRefreshing];
-        [self.tableView reloadData];
-    }];
+    }
 }
 
 #pragma mark - cellDeleagte
@@ -229,25 +226,20 @@
 #pragma mark - searchDeleagete
 //即将开始搜索
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-
+        
     self.navigationItem.rightBarButtonItem = self.cancelBtn;
     self.navigationItem.leftBarButtonItem = nil;
-    
-    [ControllerManager shareManager].searchViewController.currentParentController = 2;
-    
-    [[ControllerManager shareManager].searchViewController removeFromParentViewController];
-    [self.view addSubview:[ControllerManager shareManager].searchViewController.view];
-    [self addChildViewController:[ControllerManager shareManager].searchViewController];
-    
-    
-//    [self.view addSubview:[ControllerManager shareManager].searchResultController.view];
     
     return YES;
 }
 
 //开始搜索
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-
+    [ControllerManager shareManager].searchViewController.currentParentController = 2;
+    
+    [[ControllerManager shareManager].searchViewController removeFromParentViewController];
+    [self.view addSubview:[ControllerManager shareManager].searchViewController.view];
+    [self addChildViewController:[ControllerManager shareManager].searchViewController];
 }
 
 //即将结束搜索
@@ -279,12 +271,15 @@
     searchBar.showsCancelButton = NO;
 }
 
+//点击搜索按钮
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     
     if (![searchBar.text isEqualToString:@""]) {
         [SearchModel addSearchHistoryWithKeyword:searchBar.text];
         [ControllerManager shareManager].searchResultController.keyword = searchBar.text;
+        self.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:[ControllerManager shareManager].searchResultController animated:YES];
+        self.hidesBottomBarWhenPushed = NO;
     }
 
     
@@ -306,7 +301,20 @@
     
     cell.dict = _showArray[indexPath.row];
     
-    [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] placeholderImage:nil];
+    //从本地去找头像数据,如果没有就下载
+    NSDictionary *dic = [GameRequest gameWithGameID:_showArray[indexPath.row][@"id"]];
+    NSData *logoData = dic[@"logoData"];
+    if (logoData) {
+        cell.gameLogo.image = [UIImage imageWithData:logoData];
+    } else {
+        cell.gameLogo.image = [UIImage imageNamed:@"image_downloading"];
+        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] options:SDWebImageDownloaderHighPriority progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+            
+            cell.gameLogo.image = image;
+            
+            [GameRequest saveGameLogoData:image WithGameID:_showArray[indexPath.row][@"id"]];
+        }];
+    }
     
     
     return cell;

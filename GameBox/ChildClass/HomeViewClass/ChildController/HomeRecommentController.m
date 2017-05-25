@@ -116,6 +116,8 @@
             _isAll = NO;
             
             [weakSelf checkLocalGamesWith:_showArray];
+            
+            [self.tableView reloadData];
         
         } else {
             _currentPage = 0;
@@ -132,9 +134,10 @@
         } else {
             weakSelf.tableView.tableHeaderView = nil;
         }
-        
+
         
         [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
         
     }];
     
@@ -158,6 +161,9 @@
                 } else {
                     [self checkLocalGamesWith:array];
                     [_showArray addObjectsFromArray:array];
+                    
+                    [self.tableView reloadData];
+                    [self.tableView.mj_footer endRefreshing];
                 }
             } else {
                 _isAll = YES;
@@ -168,28 +174,16 @@
 }
 
 - (void)checkLocalGamesWith:(NSMutableArray *)array {
-    [AppModel getLocalGamesWithBlock:^(NSArray * _Nullable games, BOOL success) {
-        if (success) {
-            _localArray = games;
-            for (NSInteger i = 0; i < array.count; i++) {
-                for (NSInteger j = 0; j < _localArray.count; j++) {
-                    if ([array[i][@"ios_pack"] isEqualToString:_localArray[j][@"bundleID"]]) {
-                        NSMutableDictionary *dict = [array[i] mutableCopy];
-                        [dict setObject:@"1" forKey:@"isLocal"];
-                        [array replaceObjectAtIndex:i withObject:dict];
-                    }
-                }
-            }
-            
-            [self.tableView reloadData];
-            
-        } else {
-            _localArray = nil;
+    
+    for (NSInteger i = 0; i < array.count; i++) {
+        NSDictionary *dictLocal = [GameRequest gameLocalWithGameID:array[i][@"id"]];
+        if (dictLocal && dictLocal.count > 0) {
+            NSMutableDictionary *dict = [array[i] mutableCopy];
+            [dict setObject:@"1" forKey:@"isLocal"];
+            [array replaceObjectAtIndex:i withObject:dict];
         }
-        
-        [self.tableView.mj_header endRefreshing];
-        [self.tableView.mj_footer endRefreshing];
-    }];
+    }
+    
 }
 
 
@@ -209,7 +203,21 @@
     
     cell.dict = _showArray[indexPath.row];
     
-    [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
+    //从本地去找头像数据,如果没有就下载
+    NSDictionary *dic = [GameRequest gameWithGameID:_showArray[indexPath.row][@"id"]];
+    NSData *logoData = dic[@"logoData"];
+    if (logoData) {
+        cell.gameLogo.image = [UIImage imageWithData:logoData];
+    } else {
+        cell.gameLogo.image = [UIImage imageNamed:@"image_downloading"];
+        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] options:SDWebImageDownloaderHighPriority progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+            
+            cell.gameLogo.image = image;
+            
+            [GameRequest saveGameLogoData:image WithGameID:_showArray[indexPath.row][@"id"]];
+        }];
+    }
+    
     
     return cell;
 }
@@ -272,11 +280,17 @@
 - (void)RecommentTableHeader:(RecommentTableHeader *)header didSelectImageWithInfo:(NSDictionary *)info {
     NSString *type = info[@"type"];
     if (type.integerValue == 1) {
+        self.parentViewController.hidesBottomBarWhenPushed = YES;
         [ControllerManager shareManager].detailView.gameID = info[@"gid"];
         [ControllerManager shareManager].detailView.gameLogo = nil;
         [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
+        self.parentViewController.hidesBottomBarWhenPushed = NO;
     } else {
-//        syLog(@"%@",info);
+
+        self.parentViewController.hidesBottomBarWhenPushed = YES;
+        [ControllerManager shareManager].webController.webURL = info[@"url"];
+        [self.navigationController pushViewController:[ControllerManager shareManager].webController animated:YES];
+        self.parentViewController.hidesBottomBarWhenPushed = NO;
     }
 }
 

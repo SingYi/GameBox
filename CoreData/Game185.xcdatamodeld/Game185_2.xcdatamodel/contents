@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16E195" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+    <entity name="GameLocal" representedClassName="GameLocal" syncable="YES" codeGenerationType="class">
+        <attribute name="bundleID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gameID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gameName" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="GameNet" representedClassName="GameNet" syncable="YES" codeGenerationType="class">
+        <attribute name="abstract" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="bundleID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="download" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="downLoadUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="feature" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gameID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gameName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gameSource" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gameTag" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gameTypes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gameVsersion" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imgs" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="logoData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="logoUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="size" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="GameLocal" positionX="-18" positionY="99" width="128" height="90"/>
+        <element name="GameNet" positionX="-45" positionY="0" width="128" height="270"/>
+    </elements>
+</model>

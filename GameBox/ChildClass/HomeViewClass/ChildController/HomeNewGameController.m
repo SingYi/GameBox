@@ -40,9 +40,9 @@
 
 @implementation HomeNewGameController
 
+#pragma makr - life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     [self initDataSource];
     [self initUserInterface];
 }
@@ -58,16 +58,29 @@
 
 #pragma markr - method
 - (void)refreshData {
+    WeakSelf;
     [GameRequest newGameWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        if (success && !((NSString *)content[@"status"]).boolValue) {
+        if (success && REQUESTSUCCESS) {
             _dataArray = [content[@"data"] mutableCopy];
+            
             [self checkLocalGamesWith:_dataArray];
             [self clearUpData:_dataArray];
+            
             _currentPage = 1;
             _isAll = NO;
         
             [self.tableView reloadData];
+        } else {
+            _currentPage = 0;
         }
+        
+        if (_dataArray && _dataArray.count > 0) {
+            weakSelf.tableView.backgroundView = nil;
+        } else {
+            weakSelf.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"wuwangluo"]];
+        }
+        
+        
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer endRefreshing];
 
@@ -75,20 +88,20 @@
 }
 
 - (void)loadMoreData {
-    if (_isAll) {
+    if (_isAll || _currentPage == 0) {
         [self.tableView.mj_footer endRefreshingWithNoMoreData];
     } else {
         _currentPage++;
         
         [GameRequest newGameWithPage:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
             if (success && !((NSString *)content[@"status"]).boolValue) {
-                NSArray *array = content[@"data"];
+                NSMutableArray *array = [content[@"data"] mutableCopy];
                 if (array.count == 0) {
                     _isAll = YES;
                     [self.tableView.mj_footer endRefreshingWithNoMoreData];
                 } else {
+                    [self checkLocalGamesWith:array];
                     [_dataArray addObjectsFromArray:array];
-                    [self checkLocalGamesWith:_dataArray];
                     [self clearUpData:_dataArray];
                     [self.tableView reloadData];
                     [self.tableView.mj_footer endRefreshing];
@@ -98,28 +111,16 @@
     }
 }
 
+/** 检查是否是本地游戏 */
 - (void)checkLocalGamesWith:(NSMutableArray *)array {
-    [AppModel getLocalGamesWithBlock:^(NSArray * _Nullable games, BOOL success) {
-        NSArray *localArray = nil;
-        if (success) {
-            localArray = games;
-            for (NSInteger i = 0; i < array.count; i++) {
-                for (NSInteger j = 0; j < localArray.count; j++) {
-                    if ([array[i][@"ios_pack"] isEqualToString:localArray[j][@"bundleID"]]) {
-                        NSMutableDictionary *dict = [array[i] mutableCopy];
-                        [dict setObject:@"1" forKey:@"isLocal"];
-                        [array replaceObjectAtIndex:i withObject:dict];
-                    }
-                }
-            }
-            
-        } else {
-            localArray = nil;
+    for (NSInteger i = 0; i < array.count; i++) {
+        NSDictionary *dictLocal = [GameRequest gameLocalWithGameID:array[i][@"id"]];
+        if (dictLocal && dictLocal.count > 0) {
+            NSMutableDictionary *dict = [array[i] mutableCopy];
+            [dict setObject:@"1" forKey:@"isLocal"];
+            [array replaceObjectAtIndex:i withObject:dict];
         }
-        [self.tableView.mj_header endRefreshing];
-        [self.tableView.mj_footer endRefreshing];
-        [self.tableView reloadData];
-    }];
+    }
 }
 
 - (NSMutableArray *)clearUpData:(NSMutableArray *)array {

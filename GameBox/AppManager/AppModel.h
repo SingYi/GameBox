@@ -11,7 +11,7 @@
 @interface AppModel : NSObject
 
 /** 获取用户所有安装的app */
-+ (NSMutableDictionary *_Nullable)Apps;
++ (NSMutableDictionary *_Nullable)getLocalAllGameIde;
 
 /** 根据app的bundleID打开app */
 + (void)openAPPWithIde:(NSString *_Nullable)ide;

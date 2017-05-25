@@ -16,6 +16,9 @@
 #import <sys/utsname.h>
 #import <UserNotifications/UserNotifications.h>
 
+#import "GameNet+CoreDataProperties.h"
+#import "GameLocal+CoreDataProperties.h"
+
 
 /** 新游,热门,排行榜 */
 typedef enum : NSUInteger {
@@ -237,14 +240,32 @@ typedef enum : NSUInteger {
 /** 保存游戏信息到本地 */
 + (void)saveGameAtLocalWithDictionary:(NSDictionary *_Nonnull)dict;
 
+/** 保存本地游戏到本地 */
++ (void)saveLocalGameAtLocal;
+
 /** 根据游戏ID获取游戏信息 */
 + (NSDictionary *_Nullable)gameWithGameID:(NSString *_Nonnull)gameID;
++ (GameNet *_Nullable)gameNetWithGameID:(NSString *_Nonnull)gameID;
+
+/** 根据游戏ID获取本地游戏信息 */
++ (NSDictionary *_Nullable)gameLocalWithGameID:(NSString *_Nonnull)gameID;
+
+/** 根据游戏ID保存logo */
++ (void)saveGameLogoData:(UIImage *_Nonnull)image WithGameID:(NSString *_Nonnull)gameID;
+/** 根据游戏ID获取logo */
++ (NSData *_Nullable)getGameLogoDataWithGameID:(NSString *_Nonnull)gameID;
+
+/** 获取所有游戏信息 */
++ (NSArray *_Nullable)getAllgameInfo;
+
+/** 获取所有本地游戏 */
++ (NSArray *_Nullable)getAllLocalGame;
 
 /** 保存所有游戏名称 */
 + (void)saveAllGameNameWithArry:(NSArray *_Nonnull)array;
 
 /** 获取所有游戏名称 */
-+ (NSArray *)getAllGameName;
++ (NSArray *_Nullable)getAllGameName;
 
 @end
 

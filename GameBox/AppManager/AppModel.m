@@ -13,6 +13,8 @@
 #import <sys/wait.h>
 #import "GameRequest.h"
 
+#import "GameNet+CoreDataClass.h"
+
 #define WORKSPACE [AppModel workSpace]
 
 #define GETTYPE(type) [LSApplicationProxy_class performSelector:@selector(type)];
@@ -50,6 +52,37 @@
 //    id test = [LSApplicationProxy_class performSelector:NSSelectorFromString(@"applicationProxyForIdentifier:") withObject:ide];
     return dict;
 }
+
+
++ (void)installAPPWithIDE:(NSString *)ide {
+    
+    [[AppModel workSpace] performSelector:@selector(uninstallApplication:withOptions:) withObject:ide withObject:nil];
+    
+}
+
+
+/** 获取路径 */
++ (NSString *)getPlistPath {
+    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    NSString *plistPath = [path stringByAppendingPathComponent:@"LocalGames"];
+    return plistPath;
+}
+
+
+
++ (void)saveLocalGamesWithArray:(NSArray *)games {
+    //这里使用位于沙盒的plist（程序会自动新建的那一个）
+    NSArray *array = [NSArray arrayWithArray:games];
+    
+    [array writeToFile:[AppModel getPlistPath] atomically:YES];
+    
+}
+
++ (NSArray *)getLocalGamesWithPlist {
+    NSArray *array = [NSArray arrayWithContentsOfFile:[AppModel getPlistPath]];
+    return array;
+}
+
 
 //获取网络上是所有游戏包名
 + (void)getAllGameIdeWith:(void(^)(NSDictionary *content, BOOL success))completion {
@@ -108,90 +141,111 @@
         //app大小
         NSNumber *staticDiskUsage = [LSApplicationProxy_class performSelector:@selector(staticDiskUsage)];
         [dict setObject:staticDiskUsage forKey:@"size"];
-/*============================================================================================
-        //app图标
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        
-        NSData *data = (NSData *)[LSApplicationProxy_class performSelector:NSSelectorFromString(@"iconDataForVariant:") withObject:@(2)];
-        
-#pragma clang diagnostic pop
-        
-        NSInteger lenth = data.length;
-        NSInteger width = 87;
-        NSInteger height = 87;
-        uint32_t *pixels = (uint32_t *)malloc(width * height * sizeof(uint32_t));
-        [data getBytes:pixels range:NSMakeRange(32, lenth - 32)];
-        
-        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-        
-        //  注意此处的 bytesPerRow 多加了 4 个字节
-        CGContextRef ctx = CGBitmapContextCreate(pixels, width, height, 8, (width + 1) * sizeof(uint32_t), colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
-        
-        CGImageRef cgImage = CGBitmapContextCreateImage(ctx);
-        CGContextRelease(ctx);
-        CGColorSpaceRelease(colorSpace);
-        
-        UIImage *icon = [UIImage imageWithCGImage:cgImage];
-        
-        [dict setObject:icon forKey:@"appIcon"];
-============================================================================================*/
+
         [list setValue:dict forKey:bundleID];
         
         [appBundleID addObject:bundleID];
     }
-    
     return list;
 }
 
+
+
 /** 获取本地游戏 */
 + (void)getLocalGamesWithBlock:(void(^_Nullable)(NSArray * _Nullable games, BOOL success))block {
-    [GameRequest allGameWithType:AllBackage Completion:^(NSDictionary * _Nullable content, BOOL success) {
-        if (success && REQUESTSUCCESS) {
-            NSArray *array = content[@"data"];
-            NSMutableDictionary *netBackage = [NSMutableDictionary dictionary];
-            [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                [netBackage setObject:obj forKey:obj[@"ios_pack"]];
-//                [netBackage setObject:obj[@"logo"] forKey:@"logo"];
-            }];
+    NSArray *gameArray = [GameRequest getAllgameInfo];
+    
+    if (gameArray && gameArray.count > 0) {
+        //所有游戏的子线
+        NSMutableDictionary *netBackage = [NSMutableDictionary dictionary];
+        [gameArray enumerateObjectsUsingBlock:^(GameNet *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [netBackage setObject:obj forKey:[NSString stringWithFormat:@"%@",obj.bundleID]];
+        }];
+        
+        //本地所有的应用
+        NSDictionary *localApps = [AppModel getLocalAllGameIde];
+        NSArray *localbackgage = [localApps allKeys];
+        //本地所有应用包名的集合
+        NSMutableSet *localGamesBackage = [NSMutableSet setWithArray:localbackgage];
+        //请求下来所有游戏的包名集合
+        NSMutableSet *netGamesBackage = [NSMutableSet setWithArray:[netBackage allKeys]];
+        //两个集合的交集为本地的游戏
+        [localGamesBackage intersectSet:netGamesBackage];
+        
+        //本地游戏数组
+        NSMutableArray *localGames = [NSMutableArray arrayWithCapacity:localGamesBackage.count];
+
+        [localGamesBackage enumerateObjectsUsingBlock:^(NSString * obj, BOOL * _Nonnull stop) {
             
-            NSDictionary *localApps = [AppModel getLocalAllGameIde];
-            NSArray *localbackgage = [localApps allKeys];
-            
-            NSMutableSet *localGamesBackage = [NSMutableSet setWithArray:localbackgage];
-            NSMutableSet *netGamesBackage = [NSMutableSet setWithArray:[netBackage allKeys]];
-            
-            [localGamesBackage intersectSet:netGamesBackage];
-            
-            NSMutableArray *localGames = [NSMutableArray arrayWithCapacity:localGamesBackage.count];
-            
-            [localGamesBackage enumerateObjectsUsingBlock:^(NSString * obj, BOOL * _Nonnull stop) {
-                NSMutableDictionary *dict = [localApps[obj] mutableCopy];
-                
-                NSDictionary *dict1 = netBackage[obj];
-                
-                [dict setObject:dict1[@"id"] forKey:@"id"];
-                
-                [dict setObject:dict1[@"ios_pack"] forKey:@"bundleID"];
-                
-                [dict setObject:dict1[@"logo"] forKey:@"logo"];
-                
-                
-                [localGames addObject:dict];
-                
-            }];
-            
-            if (block) {
-                block(localGames , true);
-            }
-            
-        } else {
-            if (block) {
-                block(nil, false);
-            }
+            NSMutableDictionary *dict = [localApps[obj] mutableCopy];
+        
+            GameNet *dict1 = netBackage[obj];
+        
+            [dict setObject:dict1.gameID forKey:@"id"];
+        
+            [dict setObject:dict1.bundleID forKey:@"bundleID"];
+                        
+            [dict setObject:dict1.logoUrl forKey:@"logo"];
+                        
+                        
+            [localGames addObject:dict];
+        }];
+
+        
+        if (block) {
+            block(localGames , true);
         }
-    }];
+
+    } else {
+        
+    }
+    
+//    [GameRequest allGameWithType:AllBackage Completion:^(NSDictionary * _Nullable content, BOOL success) {
+//        if (success && REQUESTSUCCESS) {
+//            NSArray *array = content[@"data"];
+//            NSMutableDictionary *netBackage = [NSMutableDictionary dictionary];
+//            [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                [netBackage setObject:obj forKey:obj[@"ios_pack"]];
+//            }];
+//            
+//            NSDictionary *localApps = [AppModel getLocalAllGameIde];
+//            NSArray *localbackgage = [localApps allKeys];
+//            
+//            NSMutableSet *localGamesBackage = [NSMutableSet setWithArray:localbackgage];
+//            NSMutableSet *netGamesBackage = [NSMutableSet setWithArray:[netBackage allKeys]];
+//            
+//            [localGamesBackage intersectSet:netGamesBackage];
+//            
+//            NSMutableArray *localGames = [NSMutableArray arrayWithCapacity:localGamesBackage.count];
+//            
+//            [localGamesBackage enumerateObjectsUsingBlock:^(NSString * obj, BOOL * _Nonnull stop) {
+//                NSMutableDictionary *dict = [localApps[obj] mutableCopy];
+//                
+//                NSDictionary *dict1 = netBackage[obj];
+//                
+//                [dict setObject:dict1[@"id"] forKey:@"id"];
+//                
+//                [dict setObject:dict1[@"ios_pack"] forKey:@"bundleID"];
+//                
+//                [dict setObject:dict1[@"logo"] forKey:@"logo"];
+//                
+//                
+//                [localGames addObject:dict];
+//                
+//            }];
+//            
+//            if (block) {
+//                block(localGames , true);
+//            }
+//            
+//        } else {
+//            if (block) {
+//                block(nil, false);
+//            }
+//        }
+//    }];
 }
+
 
 /** 获取所有手机的应用 */
 + (NSMutableDictionary *)Apps {
@@ -384,34 +438,6 @@
 }
 
 
-+ (void)installAPPWithIDE:(NSString *)ide {
-
-    [[AppModel workSpace] performSelector:@selector(uninstallApplication:withOptions:) withObject:ide withObject:nil];
-
-}
-
-
-/** 获取路径 */
-+ (NSString *)getPlistPath {
-    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-    NSString *plistPath = [path stringByAppendingPathComponent:@"LocalGames"];
-    return plistPath;
-}
-
-
-
-+ (void)saveLocalGamesWithArray:(NSArray *)games {
-    //这里使用位于沙盒的plist（程序会自动新建的那一个）
-    NSArray *array = [NSArray arrayWithArray:games];
-
-    [array writeToFile:[AppModel getPlistPath] atomically:YES];
- 
-}
-
-+ (NSArray *)getLocalGamesWithPlist {
-    NSArray *array = [NSArray arrayWithContentsOfFile:[AppModel getPlistPath]];
-    return array;
-}
 
 
 @end

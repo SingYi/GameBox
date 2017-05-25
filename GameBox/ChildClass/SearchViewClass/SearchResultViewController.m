@@ -90,6 +90,7 @@
     
     [ControllerManager shareManager].detailView.gameLogo = cell.gameLogo.image;
     
+    self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:[ControllerManager shareManager].detailView animated:YES];
 }
 

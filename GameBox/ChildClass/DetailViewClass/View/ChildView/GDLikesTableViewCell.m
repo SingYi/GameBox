@@ -9,6 +9,7 @@
 #import "GDLikesTableViewCell.h"
 
 #import <UIButton+WebCache.h>
+#import "GameRequest.h"
 
 #define BUTTONTAG 10090
 
@@ -87,6 +88,22 @@
         labeArry[i].hidden = NO;
         
         labeArry[i].text = array[i][@"gamename"];
+    
+        //从本地去找头像数据,如果没有就下载
+//        NSDictionary *dic = [GameRequest gameWithGameID:array[i][@"id"]];
+//        NSData *logoData = dic[@"logoData"];
+//        if (logoData) {
+//            UIImage *image = [UIImage imageWithData:logoData];
+//            [logoArray[i] setBackgroundImage:image forState:(UIControlStateNormal)];
+//        } else {
+//            [logoArray[i] setBackgroundImage:[UIImage imageNamed:@"image_downloading"] forState:(UIControlStateNormal)];
+//            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,array[i][@"logo"]]] options:SDWebImageDownloaderHighPriority progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+//                
+//                [logoArray[i] setBackgroundImage:image forState:(UIControlStateNormal)];
+//                
+//                [GameRequest saveGameLogoData:image WithGameID:array[i][@"id"]];
+//            }];
+//        }
         
         [logoArray[i] sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,array[i][@"logo"]]] forState:(UIControlStateNormal)];
     }

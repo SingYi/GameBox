@@ -52,12 +52,16 @@
     [GameRequest ClassifyWithID:_dict[@"id"] Page:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success && REQUESTSUCCESS) {
             _showArray = [content[@"data"] mutableCopy];
+            [self checkLocalGamesWith:_showArray];
+        
             _currentPage = 1;
             _isAll = NO;
+            
+            
             [self.tableView reloadData];
             
         } else {
-            
+            _currentPage = 0;
         }
         
         [self.tableView.mj_header endRefreshing];
@@ -66,17 +70,19 @@
 }
 
 - (void)loadMoreData {
-    if (_isAll) {
+    if (_isAll || _currentPage == 0) {
         [self.tableView.mj_footer endRefreshingWithNoMoreData];
     } else {
         _currentPage++;
         [GameRequest ClassifyWithID:_dict[@"id"] Page:[NSString stringWithFormat:@"%ld",_currentPage] Completion:^(NSDictionary * _Nullable content, BOOL success) {
             if (success && REQUESTSUCCESS) {
-                NSArray *array = content[@"data"];
+                
+                NSMutableArray *array = [content[@"data"] mutableCopy];
                 if (array == nil || array.count == 0) {
                     _isAll = YES;
                     [self.tableView.mj_footer endRefreshingWithNoMoreData];
                 } else {
+                    [self checkLocalGamesWith:array];
                     [_showArray addObjectsFromArray:array];
                     [self.tableView reloadData];
                     [self.tableView.mj_footer endRefreshing];
@@ -87,6 +93,19 @@
             }
         }];
     }
+}
+
+- (void)checkLocalGamesWith:(NSMutableArray *)array {
+    
+    for (NSInteger i = 0; i < array.count; i++) {
+        NSDictionary *dictLocal = [GameRequest gameLocalWithGameID:array[i][@"id"]];
+        if (dictLocal && dictLocal.count > 0) {
+            NSMutableDictionary *dict = [array[i] mutableCopy];
+            [dict setObject:@"1" forKey:@"isLocal"];
+            [array replaceObjectAtIndex:i withObject:dict];
+        }
+    }
+    
 }
 
 #pragma mark - tableViewDatasource
@@ -106,7 +125,22 @@
     
     cell.dict = _showArray[indexPath.row];
     
-    [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
+//    [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
+    
+    //从本地去找头像数据,如果没有就下载
+    NSDictionary *dic = [GameRequest gameWithGameID:_showArray[indexPath.row][@"id"]];
+    NSData *logoData = dic[@"logoData"];
+    if (logoData) {
+        cell.gameLogo.image = [UIImage imageWithData:logoData];
+    } else {
+        cell.gameLogo.image = [UIImage imageNamed:@"image_downloading"];
+        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] options:SDWebImageDownloaderHighPriority progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+            
+            cell.gameLogo.image = image;
+            
+            [GameRequest saveGameLogoData:image WithGameID:_showArray[indexPath.row][@"id"]];
+        }];
+    }
     
     
     return cell;
@@ -134,14 +168,22 @@
 
 #pragma mark - cellDelegate
 - (void)didSelectCellRowAtIndexpath:(NSDictionary *)dict {
-    
-    
+    NSString *isLocal = dict[@"isLocal"];
+    if ([isLocal isEqualToString:@"1"]) {
+        [AppModel openAPPWithIde:dict[@"ios_pack"]];
+        
+    } else {
+        NSString *url = dict[@"ios_url"];
+        
+        [GameRequest downLoadAppWithURL:url];
+    }
 }
 
 #pragma mark - setter
 - (void)setDict:(NSDictionary *)dict {
     if (dict != nil && ![dict[@"id"] isEqualToString:_dict[@"id"]]) {
         _showArray = nil;
+        [self.tableView reloadData];
         _dict = dict;
         self.navigationItem.title = dict[@"name"];
         [self.tableView.mj_header beginRefreshing];

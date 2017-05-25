@@ -37,7 +37,6 @@
 #import "UserModel.h"
 
 #import "AppDelegate.h"
-#import "GameNet+CoreDataProperties.h"
 #import "AFHTTPSessionManager.h"
 
 
@@ -931,6 +930,62 @@
 
 }
 
++ (void)saveLocalGameAtLocal {
+    //晚上请求下来的所有游戏数组
+    NSArray *allGame = [GameRequest getAllgameInfo];
+    //本地所有应用的字典
+    NSDictionary *localApp = [AppModel getLocalAllGameIde];
+    
+    
+    //所有游戏的包名
+    NSMutableDictionary *allGameBundleID = [NSMutableDictionary dictionaryWithCapacity:allGame.count];
+    [allGame enumerateObjectsUsingBlock:^(GameNet *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [allGameBundleID setObject:obj forKey:obj.bundleID];
+    }];
+    
+    //本地所有应用的包名
+    NSMutableSet *allGameBundleIDSet = [NSMutableSet setWithArray:[allGameBundleID allKeys]];
+    NSMutableSet *localAppBundleIDSet = [NSMutableSet setWithArray:[localApp allKeys]];
+    
+    //两个集合的交集为本地的游戏
+    [allGameBundleIDSet intersectSet:localAppBundleIDSet];
+    
+    
+    NSFetchRequest *request = [GameLocal fetchRequest];
+    NSManagedObjectContext *context = [GameRequest context];
+    
+    
+    [allGameBundleIDSet enumerateObjectsUsingBlock:^(NSString *obj, BOOL * _Nonnull stop) {
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"gameID == %@", obj];
+        request.predicate = predicate;
+        
+        NSArray<GameLocal *> *array = [context executeFetchRequest:request error:nil];
+        
+        GameLocal *game = nil;
+        
+        if (array && array.count > 0) {
+            game = array[0];
+        } else {
+            game = [NSEntityDescription insertNewObjectForEntityForName:@"GameLocal" inManagedObjectContext:[GameRequest context]];
+        }
+        
+        GameNet *gameNet = allGameBundleID[obj];
+        
+        game.bundleID = obj;
+        game.gameID = gameNet.gameID;
+        game.gameName = gameNet.gameName;
+        
+        NSError *error = nil;
+        if ([[GameRequest context] save:&error] == NO) {
+            NSAssert(NO, @"Error saving Context :%@\n%@",error.localizedDescription,error.userInfo);
+        } else {
+            //        syLog(@"%@保存成功",game.gameID);
+        }
+        
+    }];
+}
+
 
 + (NSDictionary *)gameWithGameID:(NSString *)gameID {
     NSFetchRequest *request = [GameNet fetchRequest];
@@ -950,6 +1005,20 @@
     return  dict;
 }
 
++ (NSArray *)getAllgameInfo {
+    NSFetchRequest *request = [GameNet fetchRequest];
+    NSManagedObjectContext *context = [GameRequest context];
+    NSArray<GameNet *> *array = [context executeFetchRequest:request error:nil];
+    return array;
+}
+
++ (NSArray *)getAllLocalGame {
+    NSFetchRequest *request = [GameLocal fetchRequest];
+    NSManagedObjectContext *context = [GameRequest context];
+    NSArray<GameLocal *> *array = [context executeFetchRequest:request error:nil];
+    return array;
+}
+
 + (GameNet *)gameNetWithGameID:(NSString *)gameID {
     NSFetchRequest *request = [GameNet fetchRequest];
     NSManagedObjectContext *context = [GameRequest context];
@@ -964,6 +1033,56 @@
     } else {
         return nil;
     }
+}
+
++ (NSDictionary *)gameLocalWithGameID:(NSString *)gameID {
+    NSFetchRequest *request = [GameLocal fetchRequest];
+    NSManagedObjectContext *context = [GameRequest context];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"gameID == %@", gameID];
+    request.predicate = predicate;
+    
+    NSArray<GameLocal *> *array = [context executeFetchRequest:request error:nil];
+    
+    
+    if (array.count > 0) {
+        GameLocal *game = array[0];
+        NSDictionary *dict = @{@"gameID":game.gameID,@"bundleID":game.bundleID,@"gameName":game.gameName};
+        return dict;
+    } else {
+        return nil;
+    }
+}
+
+/** 保存头像数据 */
++ (void)saveGameLogoData:(UIImage *)image WithGameID:(NSString *)gameID {
+    NSFetchRequest *request = [GameNet fetchRequest];
+    NSManagedObjectContext *context = [GameRequest context];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"gameID == %@", gameID];
+    request.predicate = predicate;
+    
+    NSArray<GameNet *> *array = [context executeFetchRequest:request error:nil];
+    
+    NSData *logoData = UIImagePNGRepresentation(image);
+    syLog(@"logodata === %@",logoData);
+    
+    
+    if (array.count == 1) {
+        GameNet *game = array[0];
+        game.logoData = logoData;
+        NSError *error = nil;
+        if ([context save:&error] == NO) {
+            NSAssert(NO, @"Error saving Context :%@\n%@",error.localizedDescription,error.userInfo);
+        }
+    }
+}
+
+/** 获取头像数据 */
++ (NSData *)getGameLogoDataWithGameID:(NSString *_Nonnull)gameID {
+    NSData *data = [GameRequest gameWithGameID:gameID][@"logoData"];
+    
+    return data;
 }
 
 + (void)translateDictionary:(NSDictionary *)dict ToGameNet:(GameNet *)game {
@@ -1005,6 +1124,13 @@
     [dict setObject:game.gameTag forKey:@"tag"];
     [dict setObject:game.gameTypes forKey:@"types"];
     [dict setObject:game.gameVsersion forKey:@"version"];
+    
+    NSData *logoData = (NSData *)game.logoData;
+    if (logoData) {
+        
+        [dict setObject:logoData forKey:@"logoData"];
+    }
+
     return dict;
 }
 

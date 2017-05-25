@@ -32,7 +32,7 @@
 /** 分类详情 */
 @property (nonatomic, strong) HCDetailController *detailController;
 
-@property (nonatomic, strong) NSMutableArray<NSDictionary *> *showArry;
+@property (nonatomic, strong) NSMutableArray<NSDictionary *> *showArray;
 
 /** 分类数组 */
 @property (nonatomic, strong) NSMutableArray *classifyArray;
@@ -49,6 +49,7 @@
 
 @implementation HomeClassifyController
 
+#pragma mark - life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUserInterface];
@@ -63,36 +64,45 @@
     [self.view addSubview:self.tableView];
 }
 
+#pragma mark - method
 - (void)refreshData {
+    WeakSelf;
     [GameRequest gameClassifyWithPage:@"1" Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success && REQUESTSUCCESS) {
             self.classifyArray = [content[@"data"][@"class"] mutableCopy];
             NSArray *array = content[@"data"][@"classData"];
-            self.showArry = [NSMutableArray array];
+            _showArray = [NSMutableArray array];
+            
             [array enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 NSArray *list = obj[@"list"];
                 if (list.count == 0 || list == nil) {
                     
                 } else {
-                    [self.showArry addObject:obj];
+                    [_showArray addObject:obj];
                 }
             }];
 
-//            _currentPage = 1;
-//            _isAll = NO;
-
             [self.tableView reloadData];
         } else {
-            self.showArry = nil;
+            self.classifyArray = nil;
+            _showArray = nil;
         }
         
-//        [self.tableView.mj_footer endRefreshing];
+        if (_showArray && _showArray.count > 0) {
+            weakSelf.tableView.backgroundView = nil;
+        } else {
+            weakSelf.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"wuwangluo"]];
+        }
+        
+        
+        if (weakSelf.classifyArray.count > 0) {
+            weakSelf.tableView.tableHeaderView = weakSelf.headerView;
+        } else {
+            weakSelf.tableView.tableHeaderView = nil;
+        }
+
         [self.tableView.mj_header endRefreshing];
     }];
-}
-
-- (void)loadMoreData {
-    [self.tableView.mj_footer endRefreshingWithNoMoreData];
 }
 
 
@@ -127,15 +137,11 @@
 //            背景视图
             UIView *view = [[UIView alloc] initWithFrame:CGRectMake(kSCREEN_WIDTH / 4 * (idx % 4), kSCREEN_WIDTH / 4 * (idx / 4), kSCREEN_WIDTH / 4, kSCREEN_WIDTH / 4 )];
             view.backgroundColor = RGBCOLOR(247, 247, 247);
-//            view.layer.borderColor = [UIColor lightGrayColor].CGColor;
-//            view.layer.borderWidth = 0.5;
             
             UIButton *button = [UIButton buttonWithType:(UIButtonTypeCustom)];
             
             button.bounds = CGRectMake(0, 0, kSCREEN_WIDTH / 8, kSCREEN_WIDTH / 8);
             button.center = CGPointMake(kSCREEN_WIDTH / 8, kSCREEN_WIDTH / 9);
-            
-//            [button sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,obj[@"logo"]]] forState:(UIControlStateNormal)];
 
             [button sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,obj[@"logo"]]] forState:(UIControlStateNormal) placeholderImage:[UIImage imageNamed:@"image_downloading"]];
             
@@ -173,18 +179,18 @@
 
 /** section按钮点击事件 */
 - (void)respondstoSectionBtn:(UIButton *)button {
-    NSString *classifyId = self.showArry[button.tag - SECTIONTAG][@"list"][0][@"tid"];
-    NSDictionary *dict = @{@"id":classifyId,@"name":self.showArry[button.tag - SECTIONTAG][@"className"]};
+    NSString *classifyId = _showArray[button.tag - SECTIONTAG][@"list"][0][@"tid"];
+    NSDictionary *dict = @{@"id":classifyId,@"name":_showArray[button.tag - SECTIONTAG][@"className"]};
     
     self.detailController.dict = dict;
-    self.hidesBottomBarWhenPushed = YES;
+    self.parentViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:self.detailController animated:YES];
-    self.hidesBottomBarWhenPushed = NO;
+    self.parentViewController.hidesBottomBarWhenPushed = NO;
 }
 
 #pragma mark - tableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.showArry.count;
+    return _showArray.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -196,7 +202,7 @@
     GDLikesTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIDE];
     
     cell.delegate = self;
-    cell.array = self.showArry[indexPath.section][@"list"];
+    cell.array = _showArray[indexPath.section][@"list"];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
@@ -218,7 +224,7 @@
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 2, kSCREEN_WIDTH, 26)];
     label.backgroundColor = RGBCOLOR(247, 247, 247);
-    NSString *string = self.showArry[section][@"className"];
+    NSString *string = _showArray[section][@"className"];
     
     UIButton *button = [UIButton buttonWithType:(UIButtonTypeCustom)];
     button.frame  = CGRectMake(kSCREEN_WIDTH - 75, 5, 60, 20);
@@ -282,8 +288,6 @@
         
         _tableView.mj_header = customRef;
         
-//        //上拉刷新
-        _tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
         
         _tableView.tableHeaderView = self.headerView;
         _tableView.tableFooterView = [UIView new];
@@ -313,14 +317,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

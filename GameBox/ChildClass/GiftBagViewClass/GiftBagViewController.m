@@ -17,6 +17,7 @@
 #import <UIImageView+WebCache.h>
 #import <MJRefresh.h>
 #import "UserModel.h"
+#import "GameRequest.h"
 
 
 #define CELLIDENTIFIER @"GiftBagCell"
@@ -192,13 +193,16 @@
         SearchGiftResultController *search = [SearchGiftResultController new];
         search.keyword = searchBar.text;
         
+        self.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:search animated:YES];
+        self.hidesBottomBarWhenPushed = NO;
     }
 }
 
 
 /**刷新数据*/
 - (void)refreshData {
+    WeakSelf;
     [GiftRequest giftListWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         if (REQUESTSUCCESS && success) {
             
@@ -207,8 +211,13 @@
             _currentPage = 1;
             
         } else {
-            _showArray = nil;
             _currentPage = 0;
+        }
+        
+        if (_showArray && _showArray.count > 0) {
+            weakSelf.tableView.backgroundView = nil;
+        } else {
+            weakSelf.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"wuwangluo"]];
         }
         
         [self.tableView.mj_header endRefreshing];
@@ -302,11 +311,9 @@
     
     cell.currentIdx = indexPath.row;
     
-    //礼包logo
-    [cell.packLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"pack_logo"]]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
-    
     cell.dict = _showArray[indexPath.row];
     
+    [cell.packLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"pack_logo"]]]  placeholderImage:[UIImage imageNamed:@"image_downloading"]];
     
     return cell;
     

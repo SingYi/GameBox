@@ -147,7 +147,7 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
         _label.backgroundColor = [UIColor whiteColor];
         _label.layer.cornerRadius = 10;
         _label.layer.masksToBounds = YES;
-        _label.text = @"发生了不可预知的错误,程序崩溃了.建议您关闭应用程序,然后重新打开以解决问题\n点击确定关闭应用";
+        _label.text = @"发生了不可预知的错误,程序崩溃了.建议您关闭应用程序,然后重新打开以解决问题\n如果依然存在问题,可能是应用版本过低,建议您卸载后重新下载安装.\n点击确定关闭应用";
         _label.numberOfLines = 0;
         _label.textAlignment = NSTextAlignmentCenter;
     }
