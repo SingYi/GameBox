@@ -338,8 +338,14 @@
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 - (NSManagedObjectContext *)managedObjectContext {
+    
+    
     if (_managedObjectContext != nil) {
         return _managedObjectContext;
+    }
+    
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) {
+        return self.persistentContainer.viewContext;
     }
     
     
@@ -349,13 +355,8 @@
         _managedObjectContext = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSMainQueueConcurrencyType];
         [_managedObjectContext setPersistentStoreCoordinator:cordinator];
     }
-    
-    
-    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) {
-        return self.persistentContainer.viewContext;
-    } else {
-        return _managedObjectContext;
-    }
+
+    return _managedObjectContext;
     
 }
 

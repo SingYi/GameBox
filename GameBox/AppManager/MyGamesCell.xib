@@ -78,7 +78,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="gameLogo" destination="y1L-Kv-fVC" id="Fq6-7v-ZXZ"/>
+                <outlet property="gameLogo" destination="y1L-Kv-fVC" id="qfw-Bf-uhw"/>
                 <outlet property="gameName" destination="KB5-m7-b4g" id="Scy-9a-dUO"/>
                 <outlet property="gameSize" destination="EPv-4H-21q" id="sZq-fW-pHp"/>
                 <outlet property="gameVersion" destination="r1l-mf-JUP" id="Dga-9N-7zA"/>

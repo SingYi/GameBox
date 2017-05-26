@@ -179,7 +179,7 @@
      NSArray *array = self.dataDictionary[self.timeArray[indexPath.section]];
     
     
-    [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,array[indexPath.row][@"logo"]]] placeholderImage:nil];
+    [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,array[indexPath.row][@"logo"]]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
     
     cell.delegate = self;
     

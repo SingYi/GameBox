@@ -92,6 +92,25 @@
     _collectionImage = @[@"homePage_newServer",@"homePage_rankList",@"homePage_giftBag",@"homePage_strategy"];
     //刷新视图
     [self.tableView.mj_header beginRefreshing];
+    
+    
+    //缓存logo
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    
+    
+        NSArray<GameNet *> *array = [GameRequest getAllgameInfo];
+        [array enumerateObjectsUsingBlock:^(GameNet *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,obj.logoUrl]] options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+                if (finished) {
+                    [GameRequest saveGameLogoData:image WithGameID:obj.gameID];
+                }
+            }];
+        }];
+    
+        
+        
+        
+//    });
 }
 
 - (void)initUserInterface {
@@ -203,21 +222,7 @@
     
     cell.dict = _showArray[indexPath.row];
     
-    //从本地去找头像数据,如果没有就下载
-    NSDictionary *dic = [GameRequest gameWithGameID:_showArray[indexPath.row][@"id"]];
-    NSData *logoData = dic[@"logoData"];
-    if (logoData) {
-        cell.gameLogo.image = [UIImage imageWithData:logoData];
-    } else {
-        cell.gameLogo.image = [UIImage imageNamed:@"image_downloading"];
-        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] options:SDWebImageDownloaderHighPriority progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
-            
-            cell.gameLogo.image = image;
-            
-            [GameRequest saveGameLogoData:image WithGameID:_showArray[indexPath.row][@"id"]];
-        }];
-    }
-    
+    [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];    
     
     return cell;
 }

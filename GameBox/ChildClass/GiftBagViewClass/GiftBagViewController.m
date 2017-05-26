@@ -336,6 +336,10 @@
     return titleLabel;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    
+}
 
 #pragma mark - getter
 - (UITableView *)tableView {

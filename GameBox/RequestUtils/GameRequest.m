@@ -793,7 +793,7 @@
         [dict setObject:ip forKey:@"ip"];
     }
     
-//    syLog(@"%@",dict);
+
     
     NSString *urlStr = OBJECT_FOR_USERDEFAULTS(@"GAME_BOX_INSTALL_INFO");
     if (!urlStr) {
@@ -905,6 +905,7 @@
         game = [NSEntityDescription insertNewObjectForEntityForName:@"GameNet" inManagedObjectContext:[GameRequest context]];
     }
     
+    
     game.abstract = [NSString stringWithFormat:@"%@",dict[@"abstract"]];
     game.download = [NSString stringWithFormat:@"%@",dict[@"download"]];
     game.feature = [NSString stringWithFormat:@"%@",dict[@"feature"]];
@@ -951,13 +952,14 @@
     [allGameBundleIDSet intersectSet:localAppBundleIDSet];
     
     
-    NSFetchRequest *request = [GameLocal fetchRequest];
+    
     NSManagedObjectContext *context = [GameRequest context];
     
     
     [allGameBundleIDSet enumerateObjectsUsingBlock:^(NSString *obj, BOOL * _Nonnull stop) {
         
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"gameID == %@", obj];
+        NSFetchRequest *request = [GameLocal fetchRequest];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"bundleID == %@", obj];
         request.predicate = predicate;
         
         NSArray<GameLocal *> *array = [context executeFetchRequest:request error:nil];
@@ -998,7 +1000,7 @@
     
     NSDictionary *dict = nil;
     if (array.count > 0) {
-        dict = [GameRequest translateGameNetToDictionary:array[0]];
+        dict = [[GameRequest translateGameNetToDictionary:array[0]] copy];
     } else {
         dict = nil;
     }
@@ -1065,27 +1067,22 @@
     NSArray<GameNet *> *array = [context executeFetchRequest:request error:nil];
     
     NSData *logoData = UIImagePNGRepresentation(image);
-    syLog(@"logodata === %@",logoData);
-    
     
     if (array.count == 1) {
         GameNet *game = array[0];
-        game.logoData = logoData;
-        NSError *error = nil;
-        if ([context save:&error] == NO) {
-            NSAssert(NO, @"Error saving Context :%@\n%@",error.localizedDescription,error.userInfo);
-        }
+        [logoData writeToFile:[GameRequest getPlistPathWithFileName:game.gameID] atomically:YES];
     }
 }
 
 /** 获取头像数据 */
 + (NSData *)getGameLogoDataWithGameID:(NSString *_Nonnull)gameID {
-    NSData *data = [GameRequest gameWithGameID:gameID][@"logoData"];
+    NSData *data = [NSData dataWithContentsOfFile:[GameRequest getPlistPathWithFileName:gameID]];
     
     return data;
 }
 
 + (void)translateDictionary:(NSDictionary *)dict ToGameNet:(GameNet *)game {
+//    syLog(@"dict ==== %@",dict);
     game.abstract = [NSString stringWithFormat:@"%@",dict[@"abstract"]];
     game.download = [NSString stringWithFormat:@"%@",dict[@"download"]];
     game.feature = [NSString stringWithFormat:@"%@",dict[@"feature"]];
@@ -1103,6 +1100,7 @@
 }
 
 + (NSDictionary *)translateGameNetToDictionary:(GameNet *)game {
+//    syLog(@"%@",game);
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:game.abstract forKey:@"abstract"];
     [dict setObject:game.download forKey:@"download"];
@@ -1124,12 +1122,7 @@
     [dict setObject:game.gameTag forKey:@"tag"];
     [dict setObject:game.gameTypes forKey:@"types"];
     [dict setObject:game.gameVsersion forKey:@"version"];
-    
-    NSData *logoData = (NSData *)game.logoData;
-    if (logoData) {
-        
-        [dict setObject:logoData forKey:@"logoData"];
-    }
+
 
     return dict;
 }

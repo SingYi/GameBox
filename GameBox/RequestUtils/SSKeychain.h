@@ -295,8 +295,7 @@ extern NSString *const kSSKeychainWhereKey;
  @param serviceName The service for which to set the corresponding password.
  
  @param account The account for which to set the corresponding password.
- 
- @param error If setting the password fails, upon return contains an error that describes the problem.
+
  
  @return Returns `YES` on success, or `NO` on failure.
  

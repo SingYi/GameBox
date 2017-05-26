@@ -309,6 +309,7 @@
         _clearHistoryBtn = [UIButton buttonWithType:(UIButtonTypeCustom)];
         _clearHistoryBtn.frame = CGRectMake(0, 0, kSCREEN_WIDTH , 44);
         [_clearHistoryBtn setTitle:@"清除历史记录" forState:(UIControlStateNormal)];
+        [_clearHistoryBtn setImage:[UIImage imageNamed:@"search_delete"] forState:(UIControlStateNormal)];
         [_clearHistoryBtn addTarget:self action:@selector(clickClearHistoryBtn) forControlEvents:(UIControlEventTouchUpInside)];
         [_clearHistoryBtn setTitleColor:[UIColor grayColor] forState:(UIControlStateNormal)];
         [_clearHistoryBtn setBackgroundColor:RGBCOLOR(247, 247, 247)];

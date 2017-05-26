@@ -125,21 +125,14 @@
     
     cell.dict = _showArray[indexPath.row];
     
-//    [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
     
     //从本地去找头像数据,如果没有就下载
-    NSDictionary *dic = [GameRequest gameWithGameID:_showArray[indexPath.row][@"id"]];
-    NSData *logoData = dic[@"logoData"];
+
+    NSData *logoData = [GameRequest getGameLogoDataWithGameID:_showArray[indexPath.row][@"id"]];
     if (logoData) {
         cell.gameLogo.image = [UIImage imageWithData:logoData];
     } else {
-        cell.gameLogo.image = [UIImage imageNamed:@"image_downloading"];
-        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] options:SDWebImageDownloaderHighPriority progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
-            
-            cell.gameLogo.image = image;
-            
-            [GameRequest saveGameLogoData:image WithGameID:_showArray[indexPath.row][@"id"]];
-        }];
+    [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_showArray[indexPath.row][@"logo"]]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
     }
     
     

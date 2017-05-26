@@ -251,7 +251,9 @@
     if (![searchBar.text isEqualToString:@""]) {
         [SearchModel addSearchHistoryWithKeyword:searchBar.text];
         [ControllerManager shareManager].searchResultController.keyword = searchBar.text;
+        self.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:[ControllerManager shareManager].searchResultController animated:YES];
+        self.hidesBottomBarWhenPushed = NO;
     }
 }
 

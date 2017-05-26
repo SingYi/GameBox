@@ -1298,7 +1298,7 @@
 				B58B6CD21ED689F600FF00FE /* Game185_2.xcdatamodel */,
 				B5816E301ED422D100E6149D /* Game185.xcdatamodel */,
 			);
-			currentVersion = B58B6CD21ED689F600FF00FE /* Game185_2.xcdatamodel */;
+			currentVersion = B5816E301ED422D100E6149D /* Game185.xcdatamodel */;
 			path = Game185.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

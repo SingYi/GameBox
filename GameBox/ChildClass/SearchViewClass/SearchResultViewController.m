@@ -83,7 +83,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-    
+//    
     [ControllerManager shareManager].detailView.gameID = _showArray[indexPath.row][@"id"];
     
     SearchCell *cell = [tableView cellForRowAtIndexPath:indexPath];

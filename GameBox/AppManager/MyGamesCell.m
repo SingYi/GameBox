@@ -11,8 +11,6 @@
 
 @interface MyGamesCell ()
 
-/** 游戏logo */
-@property (weak, nonatomic) IBOutlet UIImageView *gameLogo;
 /** 游戏名称 */
 @property (weak, nonatomic) IBOutlet UILabel *gameName;
 /** 游戏大小 */
@@ -67,10 +65,11 @@
 }
 
 //游戏图标
-- (void)setGameLogoImage:(NSString *)gameLogoImage {
+- (void)setGameLogoImage:(UIImageView *)gameLogoImage {
     
+    self.gameLogo.image = gameLogoImage.image;
     
-    [self.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,gameLogoImage]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
+//    [self.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,gameLogoImage]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
 }
 
 
