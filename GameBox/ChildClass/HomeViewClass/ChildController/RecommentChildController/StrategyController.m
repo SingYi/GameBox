@@ -41,6 +41,9 @@
 
 @property (nonatomic, strong) UISearchBar *searchBar;
 
+/** 是否有网络 */
+@property (nonatomic, assign) BOOL isNet;
+
 @end
 
 @implementation StrategyController
@@ -60,6 +63,8 @@
     self.navigationItem.title = @"攻略";
 
     [self.view addSubview:self.tableView];
+    
+    _isNet = NO;
 
 }
 
@@ -69,6 +74,8 @@
     [GameRequest setrategyWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
 
         if (success && REQUESTSUCCESS) {
+            _isNet = YES;
+            self.tableView.backgroundView = nil;
             _currentPage = 1;
             _isAll = NO;
             _dataArray = [content[@"data"][@"list"] mutableCopy];
@@ -76,8 +83,19 @@
             _hotGameArray = content[@"data"][@"hot_game"];
             [self.tableView reloadData];
             [self.tableView.mj_footer endRefreshing];
+            if (_showArray) {
+                self.tableView.backgroundView = nil;
+            } else {
+                self.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"noNews"]];
+            }
         } else {
+            _isNet = NO;
             _currentPage = 0;
+            if (_showArray) {
+                self.tableView.backgroundView = nil;
+            } else {
+                self.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"wuwangluo"]];
+            }
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
         }
         [self.tableView.mj_header endRefreshing];
@@ -111,7 +129,11 @@
 
 #pragma mark - tableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    if (_isNet) {
+        return 2;
+    } else {
+        return 0;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

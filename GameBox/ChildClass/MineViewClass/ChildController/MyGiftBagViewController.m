@@ -47,10 +47,23 @@
     
     [GiftRequest userGiftListWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success && REQUESTSUCCESS) {
+            self.tableView.backgroundView = nil;
             _showArray = [content[@"data"][@"list"] mutableCopy];
             [self.tableView reloadData];
+            if (_showArray) {
+                self.tableView.backgroundView = nil;
+            } else {
+                
+                self.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"noGifts"]];
+            }
+
         } else {
-            
+            if (_showArray) {
+                self.tableView.backgroundView = nil;
+            } else {
+                
+                self.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"wuwangluo"]];
+            }
         }
         [self.tableView.mj_header endRefreshing];
     }];

@@ -69,6 +69,7 @@
 
 - (void)setIndex:(NSInteger)index {
     _index = index;
+    
     if (_lastBtn) {
         [_lastBtn setTitleColor:[UIColor lightGrayColor] forState:(UIControlStateNormal)];
     }
@@ -99,6 +100,11 @@
 }
 
 - (void)reomveLabelWithX:(CGFloat)x {
+    if (x == 0) {
+        [_lastBtn setTitleColor:[UIColor lightGrayColor] forState:(UIControlStateNormal)];
+        [_buttons[0] setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
+        _lastBtn = _buttons[0];
+    }
     
     self.seleView.center = CGPointMake(_buttons[0].center.x + x, 42.5);
 }

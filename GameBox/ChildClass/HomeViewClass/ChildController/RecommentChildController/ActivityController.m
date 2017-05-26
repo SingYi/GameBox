@@ -70,15 +70,26 @@
 - (void)refreshData {
     [GameRequest activityWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success && REQUESTSUCCESS) {
+            self.tableView.backgroundView = nil;
             _currentPage = 1;
             _isAll = NO;
             _showArray = [content[@"data"][@"list"] mutableCopy];
 //            syLog(@"%@",content[@"data"][@"list"]);
             [self.tableView reloadData];
             [self.tableView.mj_footer endRefreshing];
+            if (_showArray) {
+                self.tableView.backgroundView = nil;
+            } else {
+                self.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"noNews"]];
+            }
         } else {
             _currentPage = 0;
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            if (_showArray) {
+                self.tableView.backgroundView = nil;
+            } else {
+                self.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"wuwangluo"]];
+            }
         }
         [self.tableView.mj_header endRefreshing];
     }];

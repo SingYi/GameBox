@@ -38,26 +38,55 @@
 
 - (void)initDataSource {
  
-    NSArray<GameLocal *> *array = [GameRequest getAllLocalGame];
-
+    NSArray *array = [GameRequest getAllLocalGame];
     if (array && array.count) {
+        self.tableView.backgroundView = nil;
         _showArray = [NSMutableArray arrayWithCapacity:array.count];
         [array enumerateObjectsUsingBlock:^(GameLocal * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             GameNet *game = [GameRequest gameNetWithGameID:obj.gameID];
             [_showArray addObject:game];
         }];
-        [self.tableView reloadData];
+    } else {
+        self.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"mine_myGame"]];
     }
+    
+    [self.tableView reloadData];
+    
+    //多线程加载数据(请求所有游戏的详细信息,保存在本地)
+    [GameRequest allGameWithType:AllBackage Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        if (success && REQUESTSUCCESS) {
+            NSArray *array = content[@"data"];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                [array enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    //请求每个游戏信息
+                    [GameRequest gameInfoWithGameID:obj[@"id"] Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
+                        if (success && REQUESTSUCCESS) {
+                            //请求道的游戏信息保存到数据库
+                            [GameRequest saveGameAtLocalWithDictionary:content[@"data"][@"gameinfo"]];
+                            //所有游戏本地保存完毕,获取本地所有应用,比对,获取到本地的游戏
+                            if (idx == array.count - 1) {
+                                [GameRequest saveLocalGameAtLocal];
+                            }
+                        }
+                    }];
+                }];
+            });
+        }
+    }];
+
 }
 
 - (void)refreshData {
     NSArray *array = [GameRequest getAllLocalGame];
     if (array && array.count) {
+        self.tableView.backgroundView = nil;
         _showArray = [NSMutableArray arrayWithCapacity:array.count];
         [array enumerateObjectsUsingBlock:^(GameLocal * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             GameNet *game = [GameRequest gameNetWithGameID:obj.gameID];
             [_showArray addObject:game];
         }];
+    } else {
+        self.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"mine_myGame"]];
     }
     
     [self.tableView reloadData];

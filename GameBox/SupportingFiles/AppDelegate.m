@@ -151,8 +151,16 @@
                         if (success && REQUESTSUCCESS) {
                             //请求道的游戏信息保存到数据库
                             [GameRequest saveGameAtLocalWithDictionary:content[@"data"][@"gameinfo"]];
+                            
+                            //缓存图片
+                            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,content[@"data"][@"gameinfo"][@"logo"]]] options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+                                if (finished) {
+                                    [GameRequest saveGameLogoData:image WithGameID:obj[@"id"]];
+                                }
+                            }];
                             //所有游戏本地保存完毕,获取本地所有应用,比对,获取到本地的游戏
                             if (idx == array.count - 1) {
+                                //获取本地游戏保存
                                 [GameRequest saveLocalGameAtLocal];
                             }
 

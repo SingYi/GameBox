@@ -84,8 +84,12 @@
 - (void)initDataSource {
     [self.tableView.mj_header beginRefreshing];
     [GiftRequest giftBannerWithCompletion:^(NSDictionary * _Nullable content, BOOL success) {
-        self.rollingHeader.rollingArray = content[@"data"];
-        
+        if (success && REQUESTSUCCESS) {
+            self.rollingHeader.rollingArray = content[@"data"];
+            self.tableView.tableHeaderView = self.rollingHeader;
+        } else {
+            self.tableView.tableHeaderView = nil;
+        }
     }];
 }
 

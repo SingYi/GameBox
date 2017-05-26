@@ -77,6 +77,12 @@
     NSMutableDictionary *dict = [_showArray[indexPath.row] mutableCopy];
     [dict setObject:_gamename forKey:@"gamename"];
     
+    GameNet *game = [GameRequest gameNetWithGameID:_gameID];
+    
+    [dict setObject:game.logoUrl forKey:@"logo"];
+    
+    syLog(@"%@",dict);
+    
     cell.dict = dict;
     
     cell.gameLogo.image = self.logoImage;

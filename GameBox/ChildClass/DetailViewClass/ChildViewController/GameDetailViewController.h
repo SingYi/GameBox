@@ -28,6 +28,9 @@
 /** 游戏返利 */
 @property (nonatomic, strong) NSString *rebate;
 
+/** vip */
+@property (nonatomic, strong) NSString *vip;
+
 /** 评论数组 */
 @property (nonatomic, strong) NSArray *commentArray;
 

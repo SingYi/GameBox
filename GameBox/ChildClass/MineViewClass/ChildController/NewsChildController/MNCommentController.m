@@ -74,6 +74,10 @@
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
             
             self.userid = dic[@"user_id"];
+            self.tableView.backgroundView = nil;
+        } else {
+            self.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"wuwangluo"]];
+            [self.tableView.mj_header endRefreshing];
         }
     }];
 }
@@ -126,7 +130,22 @@
             self.showarray = dic[@"comments"];
             [self.tableView reloadData];
 //            syLog(@"%@",dic);
+            self.tableView.backgroundView = nil;
+            if (_showarray) {
+                self.tableView.backgroundView = nil;
+            } else {
+                
+                self.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"noComments"]];
+            }
             
+            
+        } else {
+            if (_showarray) {
+                self.tableView.backgroundView = nil;
+            } else {
+                
+                self.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"wuwangluo"]];
+            }
         }
         [self.tableView.mj_header endRefreshing];
         

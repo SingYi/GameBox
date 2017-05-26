@@ -80,6 +80,18 @@
 
 @implementation DetailViewController
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.detailHeader.btnArray = @[@"详情",@"攻略",@"礼包",@"开服"];
+        self.currentViewController = self.gameDetail;
+        _currentIndex = 0;
+        _isAnimation = NO;
+        _isLeft = NO;
+    }
+    return self;
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if (_gameID != nil) {
@@ -101,16 +113,12 @@
 
 - (void)initDataSource {
     [self addChildViewController:self.gameDetail];
-    self.currentViewController = self.gameDetail;
-    _currentIndex = 0;
-    _isAnimation = NO;
-    _isLeft = NO;
     [self.view addSubview:self.gameDetail.view];
 }
 
 - (void)initUserInterface {
     self.view.backgroundColor = [UIColor colorWithWhite:1 alpha:1];
-    self.detailHeader.btnArray = @[@"详情",@"攻略",@"礼包",@"开服"];
+
     
     self.navigationItem.title = @"游戏详情";
     
@@ -159,12 +167,34 @@
 - (void)setGameID:(NSString *)gameID {
     self.detailFooter.delegate = nil;
     _gameID = gameID;
+
+    if (self.currentViewController == self.gameDetail) {
+        
+    } else {
+        [self replaceController:self.currentViewController newController:self.gameDetail];
+        [self.detailHeader.selectView reomveLabelWithX:0];
+        _currentIndex = 0;
+    }
+    
+
+    
+    
+    self.gameGiftBag.gameID = gameID;
+    self.gameOpenServer.gameID = gameID;
+    self.gameStrategy.gameID = gameID;
+    
         //请求游戏详情
+    
+    NSDictionary *dict = [GameRequest gameWithGameID:_gameID];
+//    syLog(@"%@",dict);
+    self.gameinfo = dict;
 
     [GameRequest gameInfoWithGameID:_gameID Comoletion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success && REQUESTSUCCESS) {
             self.gameinfo = content[@"data"][@"gameinfo"];
             
+//            syLog(@"%@",content[@"data"][@"gameinfo"][@"vip"]);
+
             self.likes = content[@"data"][@"like"];
             
             NSArray *array = [AppModel getLocalGamesWithPlist];
@@ -185,13 +215,12 @@
             //设置收藏按钮的代理
             self.detailFooter.delegate = self;
         } else {
+            
                 
         }
     }];
-    self.gameGiftBag.gameID = gameID;
-    self.gameOpenServer.gameID = gameID;
-    self.gameStrategy.gameID = gameID;
     
+    //获取游戏评论
     [self getGameComments];
 
 }
@@ -274,6 +303,11 @@
     //设置游戏返利
     self.gameDetail.rebate = gameinfo[@"rebate"];
     
+    //vip
+    self.gameDetail.vip = gameinfo[@"vip"];
+    
+//    syLog(@"%@",gameinfo[@"vip"]);
+    
     //是否收藏
     NSString *isCollection = gameinfo[@"collect"];
     self.detailFooter.isCollection = isCollection.boolValue;
@@ -284,7 +318,6 @@
 //设置猜你喜欢
 - (void)setLikes:(NSArray *)likes {
     self.gameDetail.likes = likes;
-//    syLog(@"%@",likes);
 }
 
 
@@ -298,6 +331,7 @@
     NSData *data2 = UIImagePNGRepresentation(gameLogo);
     
     if ([data1 isEqual:data2] || gameLogo == nil) {
+        
         [self.detailHeader.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_gameinfo[@"logo"]]] placeholderImage:image];
         self.gameStrategy.gameLogo = self.detailHeader.imageView.image;
     } else {

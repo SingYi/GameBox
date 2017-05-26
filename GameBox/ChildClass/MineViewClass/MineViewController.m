@@ -278,11 +278,18 @@
     
     if ([_showArray[indexPath.row] isEqualToString:@""]) {
         cell.titleImageView.hidden = YES;
-        cell.hidden = YES;
+//        cell.hidden = YES;
+        cell.hidden = NO;
     } else {
         cell.hidden = NO;
         cell.titleImageView.hidden = NO;
         cell.titleImageView.image = [UIImage imageNamed:_imageArray[indexPath.row]];
+    }
+    
+    if (indexPath.row == 2) {
+        cell.titleImageView.bounds = CGRectMake(0, 0, cell.frame.size.height * 0.26, cell.frame.size.height * 0.26);
+    } else {
+        cell.titleImageView.bounds = CGRectMake(0, 0, cell.frame.size.height * 0.22, cell.frame.size.height * 0.22);
     }
     
     return cell;

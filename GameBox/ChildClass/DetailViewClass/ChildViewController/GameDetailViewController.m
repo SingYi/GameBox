@@ -67,9 +67,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUserInterFace];
-    _sectionTitleArray = @[@"    游戏简介:",@"    游戏特征:",@"    游戏返利:",@"    猜你喜欢:",@"    用户评论:"];
+    _sectionTitleArray = @[@"    游戏简介:",@"    游戏特征:",@"    游戏返利:",@"     VIP价格:",@"    猜你喜欢:",@"    用户评论:"];
     
-    _rowHeightArray = [@[@100.f,@100.f,@100.f] mutableCopy];
+    _rowHeightArray = [@[@100.f,@100.f,@100.f,@100.f] mutableCopy];
     _commentArray = @[];
 
 }
@@ -130,7 +130,8 @@
 
     
     _abstract = str;
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:(UITableViewRowAnimationNone)];
+//    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:(UITableViewRowAnimationNone)];
+    [self.tableView reloadData];
 }
 
 //游戏特征
@@ -179,9 +180,29 @@
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:(UITableViewRowAnimationNone)];
 }
 
+// vip
+- (void)setVip:(NSString *)vip {
+    NSMutableString *str = [vip mutableCopy];
+    
+    CGSize size = [self sizeForString:str Width:kSCREEN_WIDTH Height:MAXFLOAT];
+    
+    
+    if ((size.height + 10.f) > 100.f) {
+        [_rowHeightArray replaceObjectAtIndex:3 withObject:[NSNumber numberWithFloat:(size.height + 30.f)]];
+    } else {
+        [_rowHeightArray replaceObjectAtIndex:3 withObject:@100.f];
+    }
+    
+    
+    _vip = str;
+    
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:3]] withRowAnimation:(UITableViewRowAnimationNone)];
+}
+
+//评论
 - (void)setCommentArray:(NSArray *)commentArray {
     _commentArray = commentArray;
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:(UITableViewRowAnimationNone)];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:_sectionTitleArray.count - 1] withRowAnimation:(UITableViewRowAnimationNone)];
 }
 
 - (void)setGameID:(NSString *)gameID {
@@ -209,7 +230,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 4) {
+    if (section == _sectionTitleArray.count - 1) {
         return _commentArray.count;
     }
     return 1;
@@ -263,8 +284,21 @@
             }
             break;
         }
-            //猜你喜欢
+            //VIP价格
         case 3: {
+            cell.detail.text = self.vip;
+            cell.detail.bounds = CGRectMake(0, 0, kSCREEN_WIDTH, ((NSNumber *)_rowHeightArray[indexPath.section]).floatValue);
+            cell.isOpen = NO;
+            cell.tag = 10086;
+            if (cell.isOpen) {
+                cell.detail.lineBreakMode = NSLineBreakByWordWrapping;
+            } else {
+                cell.detail.lineBreakMode = NSLineBreakByTruncatingMiddle;
+            }
+            break;
+        }
+            //猜你喜欢
+        case 4: {
             GDLikesTableViewCell *celllieks = [tableView dequeueReusableCellWithIdentifier:GDLIKESCELL];
             celllieks.array = self.likes;
             
@@ -306,7 +340,7 @@
 #pragma mark - tableViewdelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section < 3) {
+    if (indexPath.section < 4) {
         
         GameDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         
@@ -343,16 +377,17 @@
     switch (indexPath.section) {
         case 0:
         case 1:
-        case 2: {
+        case 2:
+        case 3: {
             GameDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             if (cell.isOpen) {
                 return ((NSNumber *)_rowHeightArray[indexPath.section]).floatValue;
-//                return 400;
+                //                return 400;
             } else {
                 return 100;
             }
         }
-        case 3:
+       case 4:
             return 100;
         default:
             return 80;
@@ -371,7 +406,7 @@
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 30)];
     view.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
     
-    if (section < 3) {
+    if (section < 4) {
         
         label.text = self.sectionTitleArray[section];
     } else {

@@ -7,7 +7,6 @@
 //
 
 #import "DetailHeader.h"
-#import "HomeHeader.h"
 
 @interface DetailHeader ()<HomeHeaderDelegate>
 
@@ -18,8 +17,6 @@
 /**分割线*/
 @property (nonatomic, strong) UIView *lineView;
 
-/**选择标签*/
-@property (nonatomic, strong) HomeHeader *selectView;
 
 /** 评分星级 */
 @property (nonatomic, strong) NSMutableArray<UIImageView *> *stars;

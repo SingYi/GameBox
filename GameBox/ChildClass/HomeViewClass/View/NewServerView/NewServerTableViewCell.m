@@ -64,6 +64,7 @@
     if (_dict != dict) {
         _dict = dict;
     }
+
     
     NSArray *notificationArray = [GameRequest notificationRecord];
     
@@ -90,21 +91,20 @@
     
     //设置按钮
     if ([[NSDate date] timeIntervalSinceDate:starDate] < 0.0f) {
-    
-        [self.remindButton setBackgroundImage:[UIImage imageNamed:@"button_circle"] forState:(UIControlStateNormal)];
         if ([_dict[@"isRemind"] isEqualToString:@"1"]) {
             [self.remindButton setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
             [self.remindButton setTitle:@"已添加" forState:(UIControlStateNormal)];
             [self.remindButton setBackgroundImage:[UIImage imageNamed:@"downLoadButton"] forState:(UIControlStateNormal)];
             [self.remindButton removeTarget:self action:@selector(respondsToremindButtn:) forControlEvents:UIControlEventTouchUpInside];
         } else {
+            [self.remindButton setBackgroundImage:[UIImage imageNamed:@"button_circle"] forState:(UIControlStateNormal)];
             [self.remindButton setTitle:@"提醒" forState:(UIControlStateNormal)];
-            [self.remindButton addTarget:self action:@selector(respondsToremindButtn:) forControlEvents:(UIControlEventTouchUpInside)];
             [self.remindButton setTitleColor:[UIColor orangeColor] forState:(UIControlStateNormal)];
+            [self.remindButton addTarget:self action:@selector(respondsToremindButtn:) forControlEvents:(UIControlEventTouchUpInside)];
         }
-        
+        [self.remindButton setBackgroundColor:[UIColor whiteColor]];
     } else {
-
+        [self.remindButton setBackgroundImage:[UIImage imageNamed:@""] forState:(UIControlStateNormal)];
         [self.remindButton setBackgroundColor:[UIColor lightGrayColor]];
         [self.remindButton setTitle:@"已开服" forState:(UIControlStateNormal)];
         [self.remindButton setTitleColor:[UIColor darkGrayColor] forState:(UIControlStateNormal)];

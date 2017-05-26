@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HomeHeader.h"
 
 @protocol DetailHeaderDelegate <NSObject>
 
@@ -42,6 +43,9 @@
 
 /** 游戏大小 */
 @property (nonatomic, strong) UILabel *sizeLabel;
+
+/**选择标签*/
+@property (nonatomic, strong) HomeHeader *selectView;
 
 @end
 

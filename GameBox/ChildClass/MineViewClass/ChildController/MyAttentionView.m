@@ -51,14 +51,29 @@
 - (void)refreshData {
     [GameRequest myCollectionGameWithPage:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         if (success && REQUESTSUCCESS) {
+            self.tableView.backgroundView = nil;
             _showArray = [content[@"data"] mutableCopy];
             [self checkLocalGamesWith:_showArray];
             _currentPage = 1;
             _isAll = NO;
             [self.tableView reloadData];
+            
+            if (_showArray) {
+                self.tableView.backgroundView = nil;
+            } else {
+                
+                self.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"noCollection"]];
+            }
+            
+            //noCollection
         } else {
             _currentPage = 0;
-            //            [GameRequest showAlertWithMessage:@"网络不知道飞到哪里去了" dismiss:nil];
+            if (_showArray) {
+                self.tableView.backgroundView = nil;
+            } else {
+                
+                self.tableView.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"wuwangluo"]];
+            }
         }
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer endRefreshing];
@@ -66,7 +81,7 @@
 }
 
 - (void)loadMoreData {
-    if (_isAll) {
+    if (_isAll || _currentPage == 0) {
         [self.tableView.mj_footer endRefreshingWithNoMoreData];
     } else {
         _currentPage++;
@@ -77,41 +92,28 @@
                     _isAll = YES;
                     [self.tableView.mj_footer endRefreshingWithNoMoreData];
                 } else {
-                    [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    }];
+
+                    [self checkLocalGamesWith:array];
                     [_showArray addObjectsFromArray:array];
-                    [self checkLocalGamesWith:_showArray];
+                    [self.tableView reloadData];
                 }
-                
-            } else {
                 [self.tableView.mj_footer endRefreshing];
+            } else {
+                [self.tableView.mj_footer endRefreshingWithNoMoreData];
             }
         }];
     }
 }
 
 - (void)checkLocalGamesWith:(NSMutableArray *)array {
-    [AppModel getLocalGamesWithBlock:^(NSArray * _Nullable games, BOOL success) {
-        NSArray *localArray = nil;
-        if (success) {
-            localArray = games;
-            for (NSInteger i = 0; i < array.count; i++) {
-                for (NSInteger j = 0; j < localArray.count; j++) {
-                    if ([array[i][@"ios_pack"] isEqualToString:localArray[j][@"bundleID"]]) {
-                        NSMutableDictionary *dict = [array[i] mutableCopy];
-                        [dict setObject:@"1" forKey:@"isLocal"];
-                        [array replaceObjectAtIndex:i withObject:dict];
-                    }
-                }
-            }
-            
-        } else {
-            localArray = nil;
+    for (NSInteger i = 0; i < array.count; i++) {
+        NSDictionary *dictLocal = [GameRequest gameLocalWithGameID:array[i][@"id"]];
+        if (dictLocal && dictLocal.count > 0) {
+            NSMutableDictionary *dict = [array[i] mutableCopy];
+            [dict setObject:@"1" forKey:@"isLocal"];
+            [array replaceObjectAtIndex:i withObject:dict];
         }
-        
-        [self.tableView.mj_footer endRefreshing];
-        [self.tableView reloadData];
-    }];
+    }
 }
 
 #pragma mark - tableViewDataSource 
@@ -197,14 +199,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
