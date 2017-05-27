@@ -193,7 +193,7 @@
         if (success && REQUESTSUCCESS) {
             self.gameinfo = content[@"data"][@"gameinfo"];
             
-//            syLog(@"%@",content[@"data"][@"gameinfo"][@"vip"]);
+            syLog(@"%@",content[@"data"][@"gameinfo"]);
 
             self.likes = content[@"data"][@"like"];
             
@@ -302,6 +302,9 @@
     
     //设置游戏返利
     self.gameDetail.rebate = gameinfo[@"rebate"];
+    
+    //gif
+    self.gameDetail.gifUrl = gameinfo[@"gif"];
     
     //vip
     self.gameDetail.vip = gameinfo[@"vip"];

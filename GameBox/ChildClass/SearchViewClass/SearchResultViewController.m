@@ -49,7 +49,13 @@
             if (success) {
                 _showArray = content[@"data"];
                 [self.tableView reloadData];
-//                syLog(@"%@",content);
+                if (_showArray && _showArray.count > 0) {
+                    
+                } else {
+                    [GameRequest showAlertWithMessage:@"未找到相关信息" dismiss:nil];
+                }
+            } else {
+                [GameRequest showAlertWithMessage:REQUESTMSG dismiss:nil];
             }
         }];
     }

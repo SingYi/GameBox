@@ -10,6 +10,10 @@
 		5E8DE5471E9BD255007E719D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E8DE53B1E9BD255007E719D /* LaunchScreen.storyboard */; };
 		B506F26D1EC551B5005C1B2A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B506F26C1EC551B5005C1B2A /* Images.xcassets */; };
 		B50FD1901EB314AB00CA5E85 /* GameDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B50FD18E1EB314AB00CA5E85 /* GameDetailTableViewCell.xib */; };
+		B52C48391ED92EDF0054174A /* 33.gif in Resources */ = {isa = PBXBuildFile; fileRef = B52C48381ED92EDF0054174A /* 33.gif */; };
+		B52C48401ED96FBC0054174A /* FLAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = B52C483D1ED96FBC0054174A /* FLAnimatedImage.m */; };
+		B52C48411ED96FBC0054174A /* FLAnimatedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B52C483F1ED96FBC0054174A /* FLAnimatedImageView.m */; };
+		B52C48441ED973E10054174A /* GifTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B52C48431ED973E10054174A /* GifTableViewCell.m */; };
 		B52CC14A1EB857AA00A1A792 /* libChangyanSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B52CC1491EB857AA00A1A792 /* libChangyanSDK.a */; };
 		B52CC1501EB8581100A1A792 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B52CC14F1EB8581100A1A792 /* Security.framework */; };
 		B560ECB41EC0444C00F5C559 /* SearchCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B560ECB21EC0444C00F5C559 /* SearchCollectionCell.xib */; };
@@ -146,6 +150,13 @@
 		B52B2FD81EBC5A30002A572D /* GDCommentDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDCommentDetailController.m; sourceTree = "<group>"; };
 		B52B2FDA1EBC73B3002A572D /* GameRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameRequest.h; sourceTree = "<group>"; };
 		B52B2FDB1EBC73B3002A572D /* GameRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameRequest.m; sourceTree = "<group>"; };
+		B52C48381ED92EDF0054174A /* 33.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = 33.gif; path = ../../../../Downloads/33.gif; sourceTree = "<group>"; };
+		B52C483C1ED96FBC0054174A /* FLAnimatedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImage.h; sourceTree = "<group>"; };
+		B52C483D1ED96FBC0054174A /* FLAnimatedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImage.m; sourceTree = "<group>"; };
+		B52C483E1ED96FBC0054174A /* FLAnimatedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImageView.h; sourceTree = "<group>"; };
+		B52C483F1ED96FBC0054174A /* FLAnimatedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImageView.m; sourceTree = "<group>"; };
+		B52C48421ED973E10054174A /* GifTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GifTableViewCell.h; sourceTree = "<group>"; };
+		B52C48431ED973E10054174A /* GifTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GifTableViewCell.m; sourceTree = "<group>"; };
 		B52CC1491EB857AA00A1A792 /* libChangyanSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libChangyanSDK.a; sourceTree = "<group>"; };
 		B52CC14E1EB857BB00A1A792 /* ChangyanSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangyanSDK.h; sourceTree = "<group>"; };
 		B52CC14F1EB8581100A1A792 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -377,6 +388,7 @@
 				B59FEDA81E9C6DAB00A64D84 /* Other */,
 				B52CC14D1EB857BB00A1A792 /* ChangyanSDK */,
 				B5691C391EC1B8230094BE0F /* AFNetWorking */,
+				B52C483B1ED96FBC0054174A /* FLAnimatedImageView */,
 				5E8DE54C1E9BD35A007E719D /* SupportingFiles */,
 				B57C71001ECEEA1A00C7DE60 /* Assets.xcassets */,
 				5E8DE53B1E9BD255007E719D /* LaunchScreen.storyboard */,
@@ -466,6 +478,7 @@
 		5E8DE54C1E9BD35A007E719D /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				B52C48381ED92EDF0054174A /* 33.gif */,
 				5E8DE5501E9BD35A007E719D /* main.m */,
 			);
 			path = SupportingFiles;
@@ -506,6 +519,17 @@
 				B560ECB21EC0444C00F5C559 /* SearchCollectionCell.xib */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		B52C483B1ED96FBC0054174A /* FLAnimatedImageView */ = {
+			isa = PBXGroup;
+			children = (
+				B52C483C1ED96FBC0054174A /* FLAnimatedImage.h */,
+				B52C483D1ED96FBC0054174A /* FLAnimatedImage.m */,
+				B52C483E1ED96FBC0054174A /* FLAnimatedImageView.h */,
+				B52C483F1ED96FBC0054174A /* FLAnimatedImageView.m */,
+			);
+			path = FLAnimatedImageView;
 			sourceTree = "<group>";
 		};
 		B52CC14D1EB857BB00A1A792 /* ChangyanSDK */ = {
@@ -773,6 +797,8 @@
 				B59A76E61EBB21D200FE2B50 /* GDCommentTableViewCell.h */,
 				B59A76E71EBB21D200FE2B50 /* GDCommentTableViewCell.m */,
 				B59A76E81EBB21D200FE2B50 /* GDCommentTableViewCell.xib */,
+				B52C48421ED973E10054174A /* GifTableViewCell.h */,
+				B52C48431ED973E10054174A /* GifTableViewCell.m */,
 			);
 			path = ChildView;
 			sourceTree = "<group>";
@@ -944,6 +970,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B52C48391ED92EDF0054174A /* 33.gif in Resources */,
 				B5C5D4B51EA078BF008A46DE /* ActivityCell.xib in Resources */,
 				B5824FB91EA05B6800966640 /* NewServerTableViewCell.xib in Resources */,
 				B59FEDC41E9CC97600A64D84 /* GiftBagCell.xib in Resources */,
@@ -1050,7 +1077,9 @@
 				B5816EB91ED426B400E6149D /* DetailTableCell.m in Sources */,
 				B5816EBA1ED426B400E6149D /* DetialTableHeader.m in Sources */,
 				B5816EBB1ED426B400E6149D /* CustomLayout.m in Sources */,
+				B52C48441ED973E10054174A /* GifTableViewCell.m in Sources */,
 				B5816EBC1ED426B400E6149D /* GameDetailTableViewCell.m in Sources */,
+				B52C48411ED96FBC0054174A /* FLAnimatedImageView.m in Sources */,
 				B5816EBD1ED426B400E6149D /* GDLikesTableViewCell.m in Sources */,
 				B5816EBE1ED426B400E6149D /* GDCommentTableViewCell.m in Sources */,
 				B5816EBF1ED426B400E6149D /* DetailHeader.m in Sources */,
@@ -1082,6 +1111,7 @@
 				B5816ED91ED426B400E6149D /* LoginViewController.m in Sources */,
 				B5816EDA1ED426B400E6149D /* NewPassWordView.m in Sources */,
 				B5816EDB1ED426B400E6149D /* RegisterViewController.m in Sources */,
+				B52C48401ED96FBC0054174A /* FLAnimatedImage.m in Sources */,
 				B5816EDC1ED426B400E6149D /* MyGiftBagViewController.m in Sources */,
 				B5816EDD1ED426B400E6149D /* MyNewsView.m in Sources */,
 				B5816EDE1ED426B400E6149D /* MNCommentController.m in Sources */,

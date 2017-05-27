@@ -28,6 +28,9 @@
 /** 游戏返利 */
 @property (nonatomic, strong) NSString *rebate;
 
+/** gif */
+@property (nonatomic, strong) NSString *gifUrl;
+
 /** vip */
 @property (nonatomic, strong) NSString *vip;
 

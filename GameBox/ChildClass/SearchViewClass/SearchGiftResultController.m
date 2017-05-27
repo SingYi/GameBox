@@ -45,12 +45,15 @@
         [GiftRequest giftSearchWithkeyWord:keyword Completion:^(NSDictionary * _Nullable content, BOOL success) {
             if (success && REQUESTSUCCESS) {
                 _showArray = [content[@"data"][@"list"] mutableCopy];
+                if (_showArray && _showArray.count > 0) {
+                    
+                } else {
+                    [GiftRequest showAlertWithMessage:@"未找到相关信息" dismiss:nil];
+                }
             } else {
-                [GiftRequest showAlertWithMessage:@"未查询到相关礼包" dismiss:nil];
+                [GiftRequest showAlertWithMessage:REQUESTMSG dismiss:nil];
             }
             [self.tableView reloadData];
-
-            
         }];
     }
 }

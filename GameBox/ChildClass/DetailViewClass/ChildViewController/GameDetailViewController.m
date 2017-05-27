@@ -14,14 +14,30 @@
 #import "GameDetailTableViewCell.h"
 #import "GDLikesTableViewCell.h"
 #import "GDCommentTableViewCell.h"
+#import "GifTableViewCell.h"
 
 #import "GDCommentDetailController.h"
 
 #import "ChangyanSDK.h"
+#import <UIImage+GIF.h>
+#import <UIImageView+WebCache.h>
+
+#import <UIView+WebCache.h>
+
+
+#import <ImageIO/ImageIO.h>
+#import "objc/runtime.h"
+#import "NSImage+WebCache.h"
+
+
+
+
+
 
 #define DetailTableCellIDE @"GameDetailTableViewCell"
 #define GDLIKESCELL @"GDLikesTableViewCell"
 #define GDCOMMENTCELLIDE @"GDCommentTableViewCell"
+#define GIFCELLIDE @"GifTableViewCell"
 
 @interface GameDetailViewController ()<UITableViewDelegate,UITableViewDataSource,GDLikesTableViewCellDelegate>
 
@@ -180,6 +196,11 @@
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:(UITableViewRowAnimationNone)];
 }
 
+- (void)setGifUrl:(NSString *)gifUrl {
+    _gifUrl = gifUrl;
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:(UITableViewRowAnimationNone)];
+}
+
 // vip
 - (void)setVip:(NSString *)vip {
     NSMutableString *str = [vip mutableCopy];
@@ -273,15 +294,15 @@
         }
             //充值返利
         case 2: {
-            cell.detail.text = self.rebate;
-            cell.detail.bounds = CGRectMake(0, 0, kSCREEN_WIDTH, ((NSNumber *)_rowHeightArray[indexPath.section]).floatValue);
-            cell.isOpen = NO;
-            cell.tag = 10086;
-            if (cell.isOpen) {
-                cell.detail.lineBreakMode = NSLineBreakByWordWrapping;
-            } else {
-                cell.detail.lineBreakMode = NSLineBreakByTruncatingMiddle;
-            }
+#warning GIF
+            GifTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:GIFCELLIDE];
+            
+            cell.gifImageView.frame = CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_WIDTH * 0.618);
+            [cell.gifImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_gifUrl]]];
+            
+            
+            return cell;
+
             break;
         }
             //VIP价格
@@ -290,6 +311,7 @@
             cell.detail.bounds = CGRectMake(0, 0, kSCREEN_WIDTH, ((NSNumber *)_rowHeightArray[indexPath.section]).floatValue);
             cell.isOpen = NO;
             cell.tag = 10086;
+            
             if (cell.isOpen) {
                 cell.detail.lineBreakMode = NSLineBreakByWordWrapping;
             } else {
@@ -340,7 +362,16 @@
 #pragma mark - tableViewdelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section < 4) {
+    if (indexPath.section == 2) {
+        static BOOL animation;
+        GifTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+
+        cell.gifUrl = _gifUrl;
+        
+        animation = !animation;
+    }
+    
+    if (indexPath.section < 4 && indexPath.section != 2) {
         
         GameDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         
@@ -374,10 +405,15 @@
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.section == 2) {
+        return kSCREEN_WIDTH * 0.618;
+    }
+    
     switch (indexPath.section) {
         case 0:
         case 1:
-        case 2:
+//        case 2:
         case 3: {
             GameDetailTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             if (cell.isOpen) {
@@ -442,6 +478,8 @@
         [_tableView registerNib:[UINib nibWithNibName:@"GDLikesTableViewCell" bundle:nil] forCellReuseIdentifier:GDLIKESCELL];
         
         [_tableView registerNib:[UINib nibWithNibName:@"GDCommentTableViewCell" bundle:nil] forCellReuseIdentifier:GDCOMMENTCELLIDE];
+        
+        [_tableView registerClass:[GifTableViewCell class] forCellReuseIdentifier:GIFCELLIDE];
         
         
         _tableView.delegate = self;
@@ -508,6 +546,121 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark =================================================================
+- (float)sd_frameDurationAtIndex:(NSUInteger)index source:(CGImageSourceRef)source {
+    float frameDuration = 0.1f;
+    CFDictionaryRef cfFrameProperties = CGImageSourceCopyPropertiesAtIndex(source, index, nil);
+    NSDictionary *frameProperties = (__bridge NSDictionary *)cfFrameProperties;
+    NSDictionary *gifProperties = frameProperties[(NSString *)kCGImagePropertyGIFDictionary];
+    
+    NSNumber *delayTimeUnclampedProp = gifProperties[(NSString *)kCGImagePropertyGIFUnclampedDelayTime];
+    if (delayTimeUnclampedProp) {
+        frameDuration = [delayTimeUnclampedProp floatValue];
+    }
+    else {
+        
+        NSNumber *delayTimeProp = gifProperties[(NSString *)kCGImagePropertyGIFDelayTime];
+        if (delayTimeProp) {
+            frameDuration = [delayTimeProp floatValue];
+        }
+    }
+    
+    if (frameDuration < 0.011f) {
+        frameDuration = 0.100f;
+    }
+    
+    CFRelease(cfFrameProperties);
+    return frameDuration;
+}
+
+
+- (UIImage *)gifImage:(NSData *)data {
+    if (!data) {
+        return nil;
+    }
+    
+    CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
+    
+    size_t count = CGImageSourceGetCount(source);
+    
+    UIImage *animatedImage;
+    
+    if (count <= 1) {
+        animatedImage = [[UIImage alloc] initWithData:data];
+    }
+    else {
+        NSMutableArray *images = [NSMutableArray array];
+        
+        NSTimeInterval duration = 0.0f;
+        
+        for (size_t i = 0; i < count; i++) {
+            CGImageRef image = CGImageSourceCreateImageAtIndex(source, i, NULL);
+            
+            duration += [self sd_frameDurationAtIndex:i source:source];
+            
+            [images addObject:[UIImage imageWithCGImage:image scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp]];
+            
+            CGImageRelease(image);
+        }
+        
+        if (!duration) {
+            duration = (1.0f / 10.0f) * count;
+        }
+        
+        animatedImage = [UIImage animatedImageWithImages:images duration:duration];
+    }
+    
+    CFRelease(source);
+    
+    return animatedImage;
+}
+
+- (NSDictionary *)gifDict:(NSData *)data {
+    if (!data) {
+        return nil;
+    }
+    
+    CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
+    
+    size_t count = CGImageSourceGetCount(source);
+    
+    UIImage *animatedImage;
+    
+    NSDictionary *dict;
+    
+    if (count <= 1) {
+        animatedImage = [[UIImage alloc] initWithData:data];
+        dict = @{@"images":@[animatedImage],@"duration":@0};
+    }
+    else {
+        NSMutableArray *images = [NSMutableArray array];
+        
+        NSTimeInterval duration = 0.0f;
+        
+        for (size_t i = 0; i < count; i++) {
+            CGImageRef image = CGImageSourceCreateImageAtIndex(source, i, NULL);
+            
+            duration += [self sd_frameDurationAtIndex:i source:source];
+            
+            [images addObject:[UIImage imageWithCGImage:image scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp]];
+            
+            CGImageRelease(image);
+        }
+        
+        if (!duration) {
+            duration = (1.0f / 10.0f) * count;
+        }
+        
+        dict = @{@"images":images,@"duration":[NSNumber numberWithFloat:duration]};
+        
+        animatedImage = [UIImage animatedImageWithImages:images duration:duration];
+    }
+    
+    CFRelease(source);
+    
+    return dict;
 }
 
 
