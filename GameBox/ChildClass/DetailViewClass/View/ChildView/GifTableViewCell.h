@@ -19,5 +19,11 @@
 /** gif图片地址 */
 @property (nonatomic, strong) NSString *gifUrl;
 
+/** 是否加载 gif 图片 */
+@property (nonatomic, assign) BOOL isLoadGif;
+
+/** 提示字符 */
+@property (nonatomic, strong) UILabel *label;
+
 
 @end

@@ -165,6 +165,7 @@
 
 #pragma mark - setter
 - (void)setGameID:(NSString *)gameID {
+    
     self.detailFooter.delegate = nil;
     _gameID = gameID;
 
@@ -228,6 +229,7 @@
 
 /** 获取游戏评论 */
 - (void)getGameComments {
+    
     //获取游戏评论
     [ChangyanSDK loadTopic:@"" topicTitle:nil topicSourceID:[NSString stringWithFormat:@"game_%@",_gameID] pageSize:@"3" hotSize:nil orderBy:nil style:nil depth:nil subSize:nil completeBlock:^(CYStatusCode statusCode, NSString *responseStr) {
         
@@ -245,6 +247,7 @@
         }
     
     }];
+    
 }
 
 #pragma markg - gameInfo
@@ -305,6 +308,9 @@
     
     //gif
     self.gameDetail.gifUrl = gameinfo[@"gif"];
+    
+    //gifModel
+    self.gameDetail.gifModel = gameinfo[@"gif_model"];
     
     //vip
     self.gameDetail.vip = gameinfo[@"vip"];

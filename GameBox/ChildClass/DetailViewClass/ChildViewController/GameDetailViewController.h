@@ -31,6 +31,9 @@
 /** gif */
 @property (nonatomic, strong) NSString *gifUrl;
 
+/** gif 图模式 */
+@property (nonatomic, strong) NSString *gifModel;
+
 /** vip */
 @property (nonatomic, strong) NSString *vip;
 

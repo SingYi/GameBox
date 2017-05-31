@@ -31,9 +31,6 @@
 
 
 
-
-
-
 #define DetailTableCellIDE @"GameDetailTableViewCell"
 #define GDLIKESCELL @"GDLikesTableViewCell"
 #define GDCOMMENTCELLIDE @"GDCommentTableViewCell"
@@ -83,7 +80,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUserInterFace];
-    _sectionTitleArray = @[@"    游戏简介:",@"    游戏特征:",@"    游戏返利:",@"     VIP价格:",@"    猜你喜欢:",@"    用户评论:"];
+    _sectionTitleArray = @[@"    游戏简介:",@"    游戏特征:",@"    精彩时刻:",@"     VIP价格:",@"    猜你喜欢:",@"    用户评论:"];
     
     _rowHeightArray = [@[@100.f,@100.f,@100.f,@100.f] mutableCopy];
     _commentArray = @[];
@@ -196,8 +193,26 @@
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:(UITableViewRowAnimationNone)];
 }
 
+//gifUrl
 - (void)setGifUrl:(NSString *)gifUrl {
     _gifUrl = gifUrl;
+    
+//    GifTableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
+//    
+//    cell.isLoadGif = NO;
+    
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:(UITableViewRowAnimationNone)];
+}
+
+//gifModel
+- (void)setGifModel:(NSString *)gifModel {
+    _gifModel = gifModel;
+//    
+//    GifTableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
+//    
+//    cell.isLoadGif = NO;
+    
+
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:(UITableViewRowAnimationNone)];
 }
 
@@ -292,15 +307,43 @@
             }
             break;
         }
-            //充值返利
+            //GIF
         case 2: {
 #warning GIF
             GifTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:GIFCELLIDE];
             
-            cell.gifImageView.frame = CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_WIDTH * 0.618);
+            
+            if ([_gifModel isEqualToString:@"1"]) {
+                
+                cell.gifImageView.frame = CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_WIDTH * 0.618);
+                
+            } else {
+
+                cell.gifImageView.frame = CGRectMake(0, 0, kSCREEN_WIDTH * 0.618 * 0.618, kSCREEN_WIDTH * 0.618);
+                
+                cell.gifImageView.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_WIDTH * 0.618 / 2);
+            }
+            
+            
             [cell.gifImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_gifUrl]]];
             
+            cell.isLoadGif = NO;
             
+            NSData *length = UIImageJPEGRepresentation(cell.gifImageView.image,1);
+            
+            syLog(@"GIF图(静) = %lfM",length.length / 1024.f / 1024.f);
+            
+            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_gifUrl]] options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+                long len = data.length;
+                syLog(@"GIF图(动) = %lfM",len / 1024 / 1024.f);
+                
+            }];
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+            [cell.contentView addSubview:cell.label];
+            cell.label.text = @"GIF";
+        
             return cell;
 
             break;
@@ -348,7 +391,6 @@
             cell.time = [formatter stringFromDate:creatDate];
             
             
-            
             return cell;
         }
             break;
@@ -363,12 +405,16 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 2) {
-        static BOOL animation;
-        GifTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-
-        cell.gifUrl = _gifUrl;
         
-        animation = !animation;
+        GifTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        if (cell.isLoadGif) {
+            
+        } else {
+            
+            cell.gifUrl = _gifUrl;
+            cell.isLoadGif = YES;
+        }
+
     }
     
     if (indexPath.section < 4 && indexPath.section != 2) {
@@ -407,7 +453,12 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 2) {
-        return kSCREEN_WIDTH * 0.618;
+        switch (_gifModel.integerValue) {
+            case 0:
+                return 0;
+            default:
+                return kSCREEN_WIDTH * 0.618;
+        }
     }
     
     switch (indexPath.section) {
@@ -432,7 +483,16 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 30;
+    if (section == 2) {
+        switch (_gifModel.integerValue) {
+            case 0:
+                return 0;
+            default:
+                return 30;
+        }
+    } else {
+        return 30;
+    }
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {

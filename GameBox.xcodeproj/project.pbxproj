@@ -10,7 +10,6 @@
 		5E8DE5471E9BD255007E719D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E8DE53B1E9BD255007E719D /* LaunchScreen.storyboard */; };
 		B506F26D1EC551B5005C1B2A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B506F26C1EC551B5005C1B2A /* Images.xcassets */; };
 		B50FD1901EB314AB00CA5E85 /* GameDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B50FD18E1EB314AB00CA5E85 /* GameDetailTableViewCell.xib */; };
-		B52C48391ED92EDF0054174A /* 33.gif in Resources */ = {isa = PBXBuildFile; fileRef = B52C48381ED92EDF0054174A /* 33.gif */; };
 		B52C48401ED96FBC0054174A /* FLAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = B52C483D1ED96FBC0054174A /* FLAnimatedImage.m */; };
 		B52C48411ED96FBC0054174A /* FLAnimatedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B52C483F1ED96FBC0054174A /* FLAnimatedImageView.m */; };
 		B52C48441ED973E10054174A /* GifTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B52C48431ED973E10054174A /* GifTableViewCell.m */; };
@@ -150,7 +149,6 @@
 		B52B2FD81EBC5A30002A572D /* GDCommentDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDCommentDetailController.m; sourceTree = "<group>"; };
 		B52B2FDA1EBC73B3002A572D /* GameRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameRequest.h; sourceTree = "<group>"; };
 		B52B2FDB1EBC73B3002A572D /* GameRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameRequest.m; sourceTree = "<group>"; };
-		B52C48381ED92EDF0054174A /* 33.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = 33.gif; path = ../../../../Downloads/33.gif; sourceTree = "<group>"; };
 		B52C483C1ED96FBC0054174A /* FLAnimatedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImage.h; sourceTree = "<group>"; };
 		B52C483D1ED96FBC0054174A /* FLAnimatedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImage.m; sourceTree = "<group>"; };
 		B52C483E1ED96FBC0054174A /* FLAnimatedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImageView.h; sourceTree = "<group>"; };
@@ -478,7 +476,6 @@
 		5E8DE54C1E9BD35A007E719D /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
-				B52C48381ED92EDF0054174A /* 33.gif */,
 				5E8DE5501E9BD35A007E719D /* main.m */,
 			);
 			path = SupportingFiles;
@@ -970,7 +967,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B52C48391ED92EDF0054174A /* 33.gif in Resources */,
 				B5C5D4B51EA078BF008A46DE /* ActivityCell.xib in Resources */,
 				B5824FB91EA05B6800966640 /* NewServerTableViewCell.xib in Resources */,
 				B59FEDC41E9CC97600A64D84 /* GiftBagCell.xib in Resources */,

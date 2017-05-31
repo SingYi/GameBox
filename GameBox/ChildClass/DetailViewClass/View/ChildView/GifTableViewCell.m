@@ -14,7 +14,6 @@
 
 @interface GifTableViewCell ()
 
-@property (nonatomic, strong) UILabel *label;
 
 @end
 
@@ -33,45 +32,71 @@
 
 - (void)setGifUrl:(NSString *)gifUrl {
     _gifUrl = gifUrl;
-    NSString *imagePath = [NSString stringWithFormat:IMAGEURL,_gifUrl];
     
-    NSURL *url = [NSURL URLWithString:imagePath];
-    [self.contentView addSubview:self.label];
-    WeakSelf;
-    [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:url options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+    NSString *imagePath = [NSString stringWithFormat:IMAGEURL,_gifUrl];
 
+    //先从缓存中找 GIF 图,如果有就加载,没有就请求
+    NSData *gifImageData = [self imageDataFromDiskCacheWithKey:[imagePath stringByAppendingString:@"gif"]];
+    
+    
+    if (gifImageData) {
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            CGFloat progress = receivedSize * 1.f / expectedSize * 1.f;
+        self.gifImageView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:gifImageData];
+        [self.label removeFromSuperview];
+    } else {
+ 
+        NSURL *url = [NSURL URLWithString:imagePath];
+        
+        WeakSelf;
+        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:url options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
             
-            self.label.text = [NSString stringWithFormat:@"加载中 %.2lf %%",progress * 100];
-            self.label.backgroundColor = [UIColor blackColor];
-            if (progress >= 1) {
-                [self.label removeFromSuperview];
-            }
-        });
-        
-        
-        
-    }  completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
-        [[[SDWebImageManager sharedManager] imageCache] storeImage:image forKey:url.absoluteString toDisk:YES completion:^{
             
             dispatch_async(dispatch_get_main_queue(), ^{
+                CGFloat progress = receivedSize * 1.f / expectedSize * 1.f;
                 
-                weakSelf.gifImageView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:data];
-                
-                weakSelf.gifImageView.alpha = 0.f;
-                
-                [UIView animateWithDuration:1.f animations:^{
-                    
-                    weakSelf.gifImageView.alpha = 1.f;
-                }];
-    
+                self.label.text = [NSString stringWithFormat:@"加载中 %.2lf %%",progress * 100];
+                self.label.backgroundColor = [UIColor blackColor];
+                if (progress >= 1) {
+                    [self.label removeFromSuperview];
+                }
             });
-        
+            
+            
+            
+        }  completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+            [[[SDWebImageManager sharedManager] imageCache] storeImage:image forKey:url.absoluteString toDisk:YES completion:^{
+                
+//                [[[SDWebImageManager sharedManager] imageCache] storeImage:image imageData:data forKey:imagePath toDisk:YES completion:nil];
+                
+                //缓存 gif 图
+                [[[SDWebImageManager sharedManager] imageCache] storeImageDataToDisk:data forKey:[imagePath stringByAppendingString:@"gif"]];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    weakSelf.gifImageView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:data];
+                    
+                    //                weakSelf.gifImageView.alpha = 0.f;
+                    
+                    //                [UIView animateWithDuration:1.f animations:^{
+                    //
+                    //                    weakSelf.gifImageView.alpha = 1.f;
+                    //
+                    //
+                    //                }];
+                    
+                    syLog(@"height === %lf",weakSelf.gifImageView.image.size.height);
+                    syLog(@"width === %lf",weakSelf.gifImageView.image.size.width);
+                    syLog(@"screen_width ==== %lf",kSCREEN_WIDTH);
+                    syLog(@"cell_height === %lf",kSCREEN_WIDTH * 0.618);
+                    syLog(@"图片大小 ======== %lf",data.length / 1024.f / 1024.f);
+                });
+                
+            }];
+            
         }];
-        
-    }];
+
+    }
+    
     
 }
 
@@ -96,10 +121,18 @@
         
         _label.textColor = [UIColor whiteColor];
         
+        _label.text = @"GIF";
+        
         [self.contentView addSubview:_label];
     }
     return _label;
 }
+
+- (NSData *)imageDataFromDiskCacheWithKey:(NSString *)key {
+    NSString *path = [[[SDWebImageManager sharedManager] imageCache] defaultCachePathForKey:key];
+    return [NSData dataWithContentsOfFile:path];
+}
+
 
 
 
