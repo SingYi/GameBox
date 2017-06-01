@@ -33,7 +33,7 @@
 @property (nonatomic, strong) NSString * _Nullable email;
 
 /** 用户头像 */
-@property (nonatomic, strong) NSData * _Nullable avatar;
+@property (nonatomic, strong) NSString * _Nullable avatar;
 
 /** 用户昵称 */
 @property (nonatomic, strong) NSString * _Nullable nickName;

@@ -83,6 +83,11 @@ static UserModel *currentUser = nil;
     //通过通知中心发送通知
     [[NSNotificationCenter defaultCenter] postNotification:notification];
     
+    //删除头像
+    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    NSString *avatarPath = [path stringByAppendingPathComponent:@"avatar"];
+    [[NSData data] writeToFile:avatarPath atomically:YES];
+    
     
 }
 
@@ -342,6 +347,7 @@ static UserModel *currentUser = nil;
         }];
     });
 }
+
 
 @end
 

@@ -91,7 +91,7 @@
 
 - (void)isLogin:(NSNotification *)sender {
     [self loginInterface];
-//    syLog(@"-------接收到通知------");
+    syLog(@"-------接收到通知------");
 }
 
 - (void)initDataSource {
@@ -116,7 +116,37 @@
 - (void)loginInterface {
     if ([UserModel CurrentUser]) {
         
-        [self.avatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,[UserModel CurrentUser].avatar]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
+        syLog(@"%@",[UserModel CurrentUser].avatar);
+        
+        NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+        
+        NSString *avatarPath = [path stringByAppendingPathComponent:@"avatar"];
+        
+        
+        NSData *imageData = [NSData dataWithContentsOfFile:avatarPath];
+        
+        if (imageData) {
+            self.avatar.image = [UIImage imageWithData:imageData];
+        } else {
+            
+            [self.avatar sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,[UserModel CurrentUser].avatar]] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                
+                NSData *data = UIImagePNGRepresentation(image);
+                
+                [data writeToFile:avatarPath atomically:YES];
+                
+            }];
+            
+//            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,[UserModel CurrentUser].avatar]] options:SDWebImageDownloaderHighPriority progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+//                if (finished) {
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        [data writeToFile:avatarPath atomically:YES];
+//                        
+//                        self.avatar.image = image;
+//                    });
+//                }
+//            }];
+        }
         
         
         if ([UserModel CurrentUser].nickName == nil || [UserModel CurrentUser].nickName.length == 0) {
@@ -173,6 +203,7 @@
         } else {
             [UserModel showAlertWithMessage:@"网络不知道飞哪去了" dismiss:nil];
         }
+        
         [ControllerManager stopLoadingAnimation];
     }];
 }
@@ -244,9 +275,6 @@
         
         }];
         
-        
-        
-     
     } else {
         
     }

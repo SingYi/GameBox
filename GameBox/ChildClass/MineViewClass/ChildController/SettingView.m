@@ -21,6 +21,10 @@
 
 @property (nonatomic, strong) NSArray<NSArray *> *showArray;
 
+
+/** table Footer */
+@property (nonatomic, strong) UIView *tableFooter;
+
 /** 退出登录 */
 @property (nonatomic, strong) UIButton *logoutBtn;
 
@@ -40,7 +44,7 @@
     [super viewWillAppear:animated];
     //检查是否已经登录
     if ([UserModel CurrentUser]) {
-        self.tableView.tableFooterView = self.logoutBtn;
+        self.tableView.tableFooterView = self.tableFooter;
     } else {
         self.tableView.tableFooterView = [UIView new];
     }
@@ -95,7 +99,7 @@
 }
 
 //清楚缓存
--(void)clearCache:(NSString *)path {
+- (void)clearCache:(NSString *)path {
     NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
     
     cachePath = [cachePath stringByAppendingPathComponent:path];
@@ -167,10 +171,14 @@
 
     cell.textLabel.text = self.showArray[indexPath.section][indexPath.row];
     
+    cell.backgroundColor = RGBCOLOR(228, 217, 219);
+    
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             UISwitch *wifiSwitch = [[UISwitch alloc] init];
             [wifiSwitch addTarget:self action:@selector(respondsToWifiSwitch:) forControlEvents:(UIControlEventValueChanged)];
+            
+            wifiSwitch.onTintColor = [UIColor orangeColor];
             
             NSNumber *isOpen = OBJECT_FOR_USERDEFAULTS(WIFIDOWNLOAD);
 
@@ -217,7 +225,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 120, 30)];
     
-    label.backgroundColor = [UIColor lightGrayColor];
+    label.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
     
     label.font = [UIFont systemFontOfSize:13];
     
@@ -274,6 +282,8 @@
         _tableView.showsHorizontalScrollIndicator = NO;
         _tableView.scrollEnabled = NO;
         
+        _tableView.backgroundColor = RGBCOLOR(228, 217, 219);
+        
 //        [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CELLIDE];
         
         _tableView.tableFooterView = [UIView new];
@@ -285,14 +295,36 @@
     return _tableView;
 }
 
+- (UIView *)tableFooter {
+    if (!_tableFooter) {
+        _tableFooter = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 150)];
+        _tableFooter.backgroundColor = RGBCOLOR(228, 217, 219);
+        
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 1)];
+        line.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1];
+        
+        [_tableFooter addSubview:line];
+        
+        
+        [_tableFooter addSubview:self.logoutBtn];
+    }
+    return _tableFooter;
+}
+
 - (UIButton *)logoutBtn {
     if (!_logoutBtn) {
         _logoutBtn = [UIButton buttonWithType:(UIButtonTypeCustom)];
-        _logoutBtn.frame = CGRectMake(0, 0, kSCREEN_WIDTH, 44);
-        _logoutBtn.backgroundColor = RGBCOLOR(247, 247, 247);
+        _logoutBtn.frame = CGRectMake(kSCREEN_WIDTH * 0.1, 60, kSCREEN_WIDTH * 0.8, 44);
+        
+        _logoutBtn.backgroundColor = [UIColor orangeColor];
+        [_logoutBtn setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
         [_logoutBtn setTitle:@"退出登录" forState:(UIControlStateNormal)];
-        [_logoutBtn setTitleColor:[UIColor darkGrayColor] forState:(UIControlStateNormal)];
         [_logoutBtn addTarget:self action:@selector(respondsToLogoutBtn) forControlEvents:(UIControlEventTouchUpInside)];
+        
+        _logoutBtn.layer.cornerRadius = 8;
+        _logoutBtn.layer.masksToBounds = YES;
+        
+        
     }
     return _logoutBtn;
 }
