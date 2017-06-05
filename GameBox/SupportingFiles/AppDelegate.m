@@ -17,7 +17,7 @@
 #import "ExceptionHandlerTool.h"
 
 
-
+//#import "GeneralInstance.h"
 
 
 #define WEIXINAPPID @"wx7ec31aabe8cc710d"
@@ -31,6 +31,17 @@
 
 
 @implementation AppDelegate
+
+
+static int (*orig_gettimeofday)(struct timeval * __restrict, void * __restrict);
+static int mygettimeofday(struct timeval*tv,struct timezone *tz ) {
+    int ret = orig_gettimeofday(tv,tz);
+    if (ret == 0) {
+        tv->tv_usec *= 2;
+        tv->tv_sec *= 2;
+    }
+    return ret;
+}
 
 
 
@@ -154,12 +165,12 @@
                             //请求道的游戏信息保存到数据库
                             [GameRequest saveGameAtLocalWithDictionary:content[@"data"][@"gameinfo"]];
                             
-                            //缓存图片
-                            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,content[@"data"][@"gameinfo"][@"logo"]]] options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
-                                if (finished) {
-                                    [GameRequest saveGameLogoData:image WithGameID:obj[@"id"]];
-                                }
-                            }];
+//                            //缓存图片
+//                            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,content[@"data"][@"gameinfo"][@"logo"]]] options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+//                                if (finished) {
+//                                    [GameRequest saveGameLogoData:image WithGameID:obj[@"id"]];
+//                                }
+//                            }];
                             //所有游戏本地保存完毕,获取本地所有应用,比对,获取到本地的游戏
                             if (idx == array.count - 1) {
                                 //获取本地游戏保存
@@ -196,10 +207,27 @@
     
     
     syLog(@"diviceID ===== %@",[GameRequest DeviceID]);
+    
+//    MSHookFunction((voi(__bridge struct timezone *)(d *))MSFindSymbol(NULL,"_gettimeofday"), (void *)mygettimeofday, (void **)&orig_gettimeofday);
+    
+//    mygettimeofday(10, NULL);
+    
+//    [[GeneralInstance sharedInstance] showsuspension:YES];
+    
 
+
+    
+//    mygettimeofday(NULL, NULL);
+    
     
     return YES;
 }
+
+
+
+//%ctor {
+//    MSHookFunction((void *)MSFindSymbol(NULL,"_gettimeofday"), (void *)mygettimeofday, (void **)&orig_gettimeofday);
+//}
 
 //- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void(^)(BOOL succeeded))completionHandler {
 //    if ([shortcutItem.localizedTitle isEqualToString:@"分享"]) {

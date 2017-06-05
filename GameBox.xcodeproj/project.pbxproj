@@ -160,6 +160,8 @@
 		B52CC14F1EB8581100A1A792 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		B54378CB1EADD35200B25D47 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		B54378CC1EADD35200B25D47 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
+		B54C88761EE1196A0078B3E7 /* Game185_ 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Game185_ 3.xcdatamodel"; sourceTree = "<group>"; };
+		B54C88B61EE14A600078B3E7 /* lib185SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = lib185SDK.a; path = ../lib185SDK.a; sourceTree = "<group>"; };
 		B54FCA2D1EC94E9300BACAF7 /* NSTodayServerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTodayServerController.h; sourceTree = "<group>"; };
 		B54FCA2E1EC94E9300BACAF7 /* NSTodayServerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTodayServerController.m; sourceTree = "<group>"; };
 		B54FCA301EC94EAD00BACAF7 /* NSCommingServerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSCommingServerController.h; sourceTree = "<group>"; };
@@ -891,6 +893,7 @@
 		F4CDF0BFB766E73D87B7A702 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B54C88B61EE14A600078B3E7 /* lib185SDK.a */,
 				B5816D661ED296F500E6149D /* libz.tbd */,
 				B5816D641ED296E900E6149D /* libstdc++.tbd */,
 				B5816D621ED296DD00E6149D /* CoreTelephony.framework */,
@@ -1321,10 +1324,11 @@
 		B5816E2F1ED422D100E6149D /* Game185.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				B54C88761EE1196A0078B3E7 /* Game185_ 3.xcdatamodel */,
 				B58B6CD21ED689F600FF00FE /* Game185_2.xcdatamodel */,
 				B5816E301ED422D100E6149D /* Game185.xcdatamodel */,
 			);
-			currentVersion = B5816E301ED422D100E6149D /* Game185.xcdatamodel */;
+			currentVersion = B54C88761EE1196A0078B3E7 /* Game185_ 3.xcdatamodel */;
 			path = Game185.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

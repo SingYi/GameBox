@@ -921,6 +921,13 @@
     game.gameTypes = [NSString stringWithFormat:@"%@",dict[@"types"]];
     game.gameVsersion = [NSString stringWithFormat:@"%@",dict[@"version"]];
     
+    NSString *gif = dict[@"gif"];
+    if (gif) {
+        game.gif = [NSString stringWithFormat:@"%@",dict[@"gif"]];
+    }
+    
+    game.gif_model = [NSString stringWithFormat:@"%@",dict[@"gif_model"]];
+    
     NSError *error = nil;
     
     if ([[GameRequest context] save:&error] == NO) {
@@ -1097,6 +1104,14 @@
     game.gameTag = [NSString stringWithFormat:@"%@",dict[@"tag"]];
     game.gameTypes = [NSString stringWithFormat:@"%@",dict[@"types"]];
     game.gameVsersion = [NSString stringWithFormat:@"%@",dict[@"version"]];
+    
+    if (game.gif) {
+        
+        game.gif = [NSString stringWithFormat:@"%@",dict[@"gif"]];
+    }
+    game.gif_model = [NSString stringWithFormat:@"%@",dict[@"gif_model"]];
+    
+    
 }
 
 + (NSDictionary *)translateGameNetToDictionary:(GameNet *)game {
@@ -1107,6 +1122,7 @@
     [dict setObject:game.feature forKey:@"feature"];
     [dict setObject:game.gameName forKey:@"gamename"];
     [dict setObject:game.gameID forKey:@"id"];
+
     
     NSArray *array = (NSArray *)game.imgs;
     if (array) {
@@ -1122,6 +1138,9 @@
     [dict setObject:game.gameTag forKey:@"tag"];
     [dict setObject:game.gameTypes forKey:@"types"];
     [dict setObject:game.gameVsersion forKey:@"version"];
+    
+    [dict setObject:game.gif forKey:@"gif"];
+    [dict setObject:game.gif_model forKey:@"gif_model"];
 
 
     return dict;

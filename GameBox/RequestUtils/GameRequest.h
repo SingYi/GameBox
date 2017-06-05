@@ -267,6 +267,9 @@ typedef enum : NSUInteger {
 /** 获取所有游戏名称 */
 + (NSArray *_Nullable)getAllGameName;
 
+/** 获取网络状态 */
++ (NSString *_Nullable)getNetWorkStates;
+
 @end
 
 

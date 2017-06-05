@@ -54,8 +54,8 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 CGFloat progress = receivedSize * 1.f / expectedSize * 1.f;
                 
-                self.label.text = [NSString stringWithFormat:@"加载中 %.2lf %%",progress * 100];
-                self.label.backgroundColor = [UIColor blackColor];
+                weakSelf.label.text = [NSString stringWithFormat:@"加载中 %.2lf %%",progress * 100];
+                weakSelf.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.5];
                 if (progress >= 1) {
                     [self.label removeFromSuperview];
                 }
@@ -64,35 +64,17 @@
             
             
         }  completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
-            [[[SDWebImageManager sharedManager] imageCache] storeImage:image forKey:url.absoluteString toDisk:YES completion:^{
+
                 
-//                [[[SDWebImageManager sharedManager] imageCache] storeImage:image imageData:data forKey:imagePath toDisk:YES completion:nil];
-                
-                //缓存 gif 图
-                [[[SDWebImageManager sharedManager] imageCache] storeImageDataToDisk:data forKey:[imagePath stringByAppendingString:@"gif"]];
+            //缓存 gif 图
+            [[[SDWebImageManager sharedManager] imageCache] storeImageDataToDisk:data forKey:[imagePath stringByAppendingString:@"gif"]];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
                     weakSelf.gifImageView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:data];
-                    
-                    //                weakSelf.gifImageView.alpha = 0.f;
-                    
-                    //                [UIView animateWithDuration:1.f animations:^{
-                    //
-                    //                    weakSelf.gifImageView.alpha = 1.f;
-                    //
-                    //
-                    //                }];
-                    
-                    syLog(@"height === %lf",weakSelf.gifImageView.image.size.height);
-                    syLog(@"width === %lf",weakSelf.gifImageView.image.size.width);
-                    syLog(@"screen_width ==== %lf",kSCREEN_WIDTH);
-                    syLog(@"cell_height === %lf",kSCREEN_WIDTH * 0.618);
-                    syLog(@"图片大小 ======== %lf",data.length / 1024.f / 1024.f);
+
                 });
                 
-            }];
-            
         }];
 
     }
@@ -111,19 +93,19 @@
 
 - (UILabel *)label {
     if (!_label) {
-        _label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, 44)];
+        _label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_WIDTH * 0.618)];
         
-        _label.center = CGPointMake(kSCREEN_WIDTH / 2, 50);
+//        _label.center = CGPointMake(kSCREEN_WIDTH / 2, 50);
         
         _label.textAlignment = NSTextAlignmentCenter;
         
-        _label.backgroundColor = [UIColor blackColor];
+        _label.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.5];
         
         _label.textColor = [UIColor whiteColor];
         
         _label.text = @"GIF";
         
-        [self.contentView addSubview:_label];
+//        [self.contentView addSubview:_label];
     }
     return _label;
 }

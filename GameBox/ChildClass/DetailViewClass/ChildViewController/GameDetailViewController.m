@@ -69,7 +69,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+//    _gifModel = nil;
+//    _gifUrl = nil;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -207,6 +208,8 @@
 //gifModel
 - (void)setGifModel:(NSString *)gifModel {
     _gifModel = gifModel;
+    
+//    syLog(@"%@",_gifUrl);
 //    
 //    GifTableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
 //    
@@ -312,7 +315,7 @@
 #warning GIF
             GifTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:GIFCELLIDE];
             
-            
+            syLog(@"%@",_gifUrl);
             if ([_gifModel isEqualToString:@"1"]) {
                 
                 cell.gifImageView.frame = CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_WIDTH * 0.618);
@@ -323,25 +326,70 @@
                 
                 cell.gifImageView.center = CGPointMake(kSCREEN_WIDTH / 2, kSCREEN_WIDTH * 0.618 / 2);
             }
+        
+            NSString *states = [self getNetWorkStates];
             
             
-            [cell.gifImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_gifUrl]]];
+            
+            if ([states isEqualToString:@"wifi"]) {
+                
+                NSString *imagePath = [NSString stringWithFormat:IMAGEURL,_gifUrl];
+                
+                //先从缓存中找 GIF 图,如果有就加载,没有就请求
+                NSString *path = [[[SDWebImageManager sharedManager] imageCache] defaultCachePathForKey:[imagePath stringByAppendingString:@"gif"]];
+                NSData *gifImageData = [NSData dataWithContentsOfFile:path];
+                
+                if (gifImageData) {
+                    cell.gifImageView.image = [UIImage imageWithData:gifImageData];
+                } else {
+                    cell.gifImageView.image = nil;
+                    [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_gifUrl]] options:0 progress:nil completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+                        
+                        cell.gifImageView.image = image;
+                        //缓存 gif 图
+                        NSString *imagePath = [NSString stringWithFormat:IMAGEURL,_gifUrl];
+                        [[[SDWebImageManager sharedManager] imageCache] storeImageDataToDisk:data forKey:[imagePath stringByAppendingString:@"gif"]];
+                    }];
+                }
+                
+                
+                cell.gifImageView.animatedImage = nil;
+            
+            } else {
+                
+                NSString *imagePath = [NSString stringWithFormat:IMAGEURL,_gifUrl];
+                
+                //先从缓存中找 GIF 图,如果有就加载,没有就请求
+                NSString *path = [[[SDWebImageManager sharedManager] imageCache] defaultCachePathForKey:[imagePath stringByAppendingString:@"gif"]];
+                NSData *gifImageData = [NSData dataWithContentsOfFile:path];
+                
+                if (gifImageData) {
+                    cell.gifImageView.image = [UIImage imageWithData:gifImageData];
+                } else {
+                    [cell.gifImageView sd_setImageWithURL:nil];
+                    
+                }
+                cell.gifImageView.animatedImage = nil;
+            }
+            
             
             cell.isLoadGif = NO;
             
-            NSData *length = UIImageJPEGRepresentation(cell.gifImageView.image,1);
-            
-            syLog(@"GIF图(静) = %lfM",length.length / 1024.f / 1024.f);
-            
-            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,_gifUrl]] options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
-                long len = data.length;
-                syLog(@"GIF图(动) = %lfM",len / 1024 / 1024.f);
+            if (cell.isLoadGif) {
                 
-            }];
+            } else {
+                if (!_gifModel || [_gifModel isEqualToString:@"0"]) {
+                    [cell.label removeFromSuperview];
+                } else {
+                    [cell.contentView addSubview:cell.label];
+                    
+                }
+                
+            }
+            
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             
-            [cell.contentView addSubview:cell.label];
             cell.label.text = @"GIF";
         
             return cell;
@@ -722,6 +770,46 @@
     
     return dict;
 }
+
+- (NSString *)getNetWorkStates {
+    UIApplication *app = [UIApplication sharedApplication];
+    NSArray *children = [[[app valueForKeyPath:@"statusBar"]valueForKeyPath:@"foregroundView"]subviews];
+    NSString *state = [[NSString alloc]init];
+    int netType = 0;
+    //获取到网络返回码
+    for (id child in children) {
+        if ([child isKindOfClass:NSClassFromString(@"UIStatusBarDataNetworkItemView")]) {
+            //获取到状态栏
+            netType = [[child valueForKeyPath:@"dataNetworkType"]intValue];
+            
+            switch (netType) {
+                case 0:
+                    state = @"无网络";
+                    //无网模式
+                    break;
+                case 1:
+                    state =  @"2G";
+                    break;
+                case 2:
+                    state =  @"3G";
+                    break;
+                case 3:
+                    state =   @"4G";
+                    break;
+                case 5:
+                {
+                    state =  @"wifi";
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+        //根据状态选择
+    }
+    return state;
+}
+
 
 
 

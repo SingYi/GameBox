@@ -82,7 +82,7 @@
         [request setHTTPBody:[strP dataUsingEncoding:NSUTF8StringEncoding]];
     }
     
-    request.timeoutInterval = 10.f;
+    request.timeoutInterval = 8.f;
     
     [request setHTTPMethod:@"POST"];
     

@@ -140,7 +140,9 @@
     if (image) {
         cell.gameLogo.image = image;
     } else {
-        [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,game.logoUrl]] placeholderImage:[UIImage imageNamed:@"image_downloading"]];
+        [cell.gameLogo sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:IMAGEURL,game.logoUrl]] placeholderImage:[UIImage imageNamed:@"image_downloading"] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                [GameRequest saveGameLogoData:image WithGameID:game.gameID];
+        }];
     }
     
     cell.gameNameText = game.gameName;
