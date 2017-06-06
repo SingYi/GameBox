@@ -45,7 +45,9 @@
     if (keyword && ![keyword isEqualToString:_keyword]) {
         _showArray = nil;
         _keyword = keyword;
+        [ControllerManager starLoadingAnimation];
         [GameRequest searchGameWithKeyword:_keyword Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            [ControllerManager stopLoadingAnimation];
             if (success) {
                 _showArray = content[@"data"];
                 [self.tableView reloadData];
@@ -55,7 +57,11 @@
                     [GameRequest showAlertWithMessage:@"未找到相关信息" dismiss:nil];
                 }
             } else {
-                [GameRequest showAlertWithMessage:REQUESTMSG dismiss:nil];
+                if (content) {
+                    [GameRequest showAlertWithMessage:REQUESTMSG dismiss:nil];
+                } else {
+                    [GameRequest showAlertWithMessage:@"网络不知道飞哪里去了~" dismiss:nil];
+                }
             }
         }];
     }

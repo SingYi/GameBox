@@ -96,7 +96,10 @@
         [UserModel showAlertWithMessage:@"密码长度有误" dismiss:nil];
     }
     
+    
+    [ControllerManager starLoadingAnimation];
     [UserModel userLoginWithUserName:self.userName.text PassWord:self.passWord.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        [ControllerManager stopLoadingAnimation];
         if (success) {
             if (REQUESTSUCCESS) {
                 //登录成功
@@ -122,8 +125,12 @@
                 [UserModel logIn];
                 [UserModel showAlertWithMessage:@"登录成功" dismiss:nil];
             } else {
-                
-                [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
+                if (content) {
+                    
+                    [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
+                } else {
+                    [UserModel showAlertWithMessage:@"登录失败" dismiss:nil];
+                }
             }
         } else {
             [UserModel showAlertWithMessage:@"网络不知道飞哪去了" dismiss:nil];

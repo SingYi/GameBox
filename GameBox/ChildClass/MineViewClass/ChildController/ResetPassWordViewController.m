@@ -87,14 +87,18 @@
     
     [ControllerManager starLoadingAnimation];
     [UserModel userModifyPasswordWithUserID:[UserModel uid] OldPassword:self.oriPassWord.text NewPassword:self.reSetWord.text RePasswordk:self.affirmWord.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        [ControllerManager stopLoadingAnimation];
         if (success) {
             if (REQUESTSUCCESS) {
                 [ControllerManager stopLoadingAnimation];
                 [self.navigationController popToRootViewControllerAnimated:YES];
                 [UserModel showAlertWithMessage:@"密码修改成功" dismiss:nil];
             } else {
-                [ControllerManager stopLoadingAnimation];
-                [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
+                if (content) {
+                    [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
+                } else {
+                    [UserModel showAlertWithMessage:@"网络不知道飞哪里去了~" dismiss:nil];
+                }
             }
         } else {
             [ControllerManager stopLoadingAnimation];

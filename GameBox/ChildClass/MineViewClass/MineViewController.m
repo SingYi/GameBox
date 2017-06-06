@@ -193,18 +193,22 @@
     
     [ControllerManager starLoadingAnimation];
     [UserModel userModifyNicknameWithUserID:[UserModel uid] NickName:self.nickNameText.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        [ControllerManager stopLoadingAnimation];
         if (success) {
             if (REQUESTSUCCESS) {
                 [self.nickNameBtn setTitle:self.nickNameText.text forState:(UIControlStateNormal)];
                 SAVEOBJECT_AT_USERDEFAULTS(self.nickNameText.text, @"nickname");
                 [[NSUserDefaults standardUserDefaults] synchronize];
+            } else {
+                if (content) {
+                    [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
+                } else {
+                    [UserModel showAlertWithMessage:@"网络不知道飞哪里去了~" dismiss:nil];
+                }
             }
-            [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
         } else {
             [UserModel showAlertWithMessage:@"网络不知道飞哪去了" dismiss:nil];
         }
-        
-        [ControllerManager stopLoadingAnimation];
     }];
 }
 

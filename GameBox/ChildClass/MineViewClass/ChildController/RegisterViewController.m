@@ -47,7 +47,11 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.hidden = NO;
-
+    self.userName.text = @"";
+    self.passWord.text = @"";
+    self.phoneNumber.text = @"";
+    self.securityCode.text = @"";
+    self.email.text = @"";
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -123,11 +127,12 @@
         }
     }
     
+    [ControllerManager starLoadingAnimation];
     [UserModel userRegisterWithUserName:self.userName.text PassWord:self.passWord.text PhoneNumber:self.phoneNumber.text MsgCode:self.securityCode.text Email:self.email.text Completion:^(NSDictionary * _Nullable content, BOOL success) {
-    
+        [ControllerManager stopLoadingAnimation];
         if (success) {
             if (REQUESTSUCCESS) {
-                //登录成功
+
                 SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"avatar"], @"avatar");
                 SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"id"],     @"userID");
                 SAVEOBJECT_AT_USERDEFAULTS(content[@"data"][@"tel"],    @"phoneNumber");
@@ -152,7 +157,11 @@
 //                syLog(@"%@",content);
             } else {
                 
-                [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
+                if (content) {
+                    [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
+                } else {
+                    [UserModel showAlertWithMessage:@"网络不知道飞哪里去了~" dismiss:nil];
+                }
             }
         } else {
             [UserModel showAlertWithMessage:@"网络不知道飞哪去了" dismiss:nil];

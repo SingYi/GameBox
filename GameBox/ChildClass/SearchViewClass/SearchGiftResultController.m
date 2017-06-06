@@ -42,7 +42,9 @@
     if (keyword && ![keyword isEqualToString:_keyword]) {
         _showArray = nil;
         _keyword = keyword;
+        [ControllerManager starLoadingAnimation];
         [GiftRequest giftSearchWithkeyWord:keyword Completion:^(NSDictionary * _Nullable content, BOOL success) {
+            [ControllerManager stopLoadingAnimation];
             if (success && REQUESTSUCCESS) {
                 _showArray = [content[@"data"][@"list"] mutableCopy];
                 if (_showArray && _showArray.count > 0) {
@@ -51,7 +53,11 @@
                     [GiftRequest showAlertWithMessage:@"未找到相关信息" dismiss:nil];
                 }
             } else {
-                [GiftRequest showAlertWithMessage:REQUESTMSG dismiss:nil];
+                if (content) {
+                    [GiftRequest showAlertWithMessage:REQUESTMSG dismiss:nil];
+                } else {
+                    [GiftRequest showAlertWithMessage:@"网络不知道飞哪里去了~" dismiss:nil];
+                }
             }
             [self.tableView reloadData];
         }];

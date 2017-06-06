@@ -157,6 +157,7 @@ static UserModel *currentUser = nil;
     [dict setObject:passWord forKey:@"password"];
     [dict setObject:phoneNumber forKey:@"tel"];
     [dict setObject:msgCode forKey:@"msg_code"];
+    [dict setObject:CHANNELID forKey:@"channel_id"];
     
     if (email) {
         [dict setObject:email forKey:@"user_email"];

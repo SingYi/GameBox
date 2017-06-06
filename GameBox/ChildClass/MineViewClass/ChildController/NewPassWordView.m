@@ -60,11 +60,20 @@
         return;
     }
     
+    syLog(@"%@",self.userToken);
+    
     [UserModel userForgetPasswordWithUserID:self.userId Password:self.passWord.text RePassword:self.affimPassWord.text Token:self.userToken Completion:^(NSDictionary * _Nullable content, BOOL success) {
+        
         if (success) {
+            
             [self.navigationController popToRootViewControllerAnimated:YES];
+            [UserModel showAlertWithMessage:@"修改成功" dismiss:nil];
+        } else {
+            [UserModel showAlertWithMessage:@"修改失败" dismiss:nil];
         }
-        [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
+        
+        syLog(@"%@",content);
+        
     }];
     
 }

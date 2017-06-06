@@ -79,7 +79,11 @@
             self.newPassWordView.userToken = content[@"data"][@"token"];
             [self.navigationController pushViewController:self.newPassWordView animated:YES];
         } else {
-            [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
+            if (content) {
+                [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
+            } else {
+                [UserModel showAlertWithMessage:@"网络不知道飞哪里去了~" dismiss:nil];
+            }
         }
         
     }];
@@ -96,10 +100,20 @@
         return;
     }
     
+    [ControllerManager starLoadingAnimation];
     [UserModel userSendMessageWithPhoneNumber:self.phoneNumber.text IsVerify:@"1" Completion:^(NSDictionary * _Nullable content, BOOL success) {
         _currnetTime = 59;
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(refreshTime) userInfo:nil repeats:YES];
-        [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
+        [ControllerManager stopLoadingAnimation];
+        if (success && REQUESTSUCCESS) {
+            
+            self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(refreshTime) userInfo:nil repeats:YES];
+        } else {
+            if (content) {
+                [UserModel showAlertWithMessage:REQUESTMSG dismiss:nil];
+            } else {
+                [UserModel showAlertWithMessage:@"网络不知道飞哪里去了~" dismiss:nil];
+            }
+        }
     }];
 }
 
@@ -109,7 +123,7 @@
     if (_currnetTime <= 0) {
         [self stopTimer];
         [self.sendCodeBtn setUserInteractionEnabled:YES];
-        [self.sendCodeBtn setTitle:@"发送验证码" forState:(UIControlStateNormal)];
+        [self.sendCodeBtn setTitle:@"发送" forState:(UIControlStateNormal)];
     }
     _currnetTime--;
 }

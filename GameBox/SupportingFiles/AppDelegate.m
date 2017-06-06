@@ -20,6 +20,10 @@
 //#import "GeneralInstance.h"
 
 
+#import <sys/time.h>
+#import <unistd.h>
+
+
 #define WEIXINAPPID @"wx7ec31aabe8cc710d"
 #define QQAPPID @"1106099979"
 
@@ -30,19 +34,19 @@
 @end
 
 
+//struct timeval tv;
+//struct timezone tz;
+//
+//static int mygettimeofday(struct timeval*tv,struct timezone *tz ) {
+//    int ret = gettimeofday(tv,tz);
+//    if (ret == 0) {
+//        tv->tv_usec *= 2;
+//        tv->tv_sec *= 2;
+//    }
+//    return ret;
+//}
+
 @implementation AppDelegate
-
-
-static int (*orig_gettimeofday)(struct timeval * __restrict, void * __restrict);
-static int mygettimeofday(struct timeval*tv,struct timezone *tz ) {
-    int ret = orig_gettimeofday(tv,tz);
-    if (ret == 0) {
-        tv->tv_usec *= 2;
-        tv->tv_sec *= 2;
-    }
-    return ret;
-}
-
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -215,7 +219,9 @@ static int mygettimeofday(struct timeval*tv,struct timezone *tz ) {
 //    [[GeneralInstance sharedInstance] showsuspension:YES];
     
 
-
+    
+//    kSCREEN_WIDTH;kSCREEN_HEIGHT;
+    syLog(@"%lf,%lf",kSCREEN_WIDTH,kSCREEN_HEIGHT);
     
 //    mygettimeofday(NULL, NULL);
     
