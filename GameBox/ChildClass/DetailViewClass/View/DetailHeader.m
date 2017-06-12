@@ -17,6 +17,10 @@
 /**分割线*/
 @property (nonatomic, strong) UIView *lineView;
 
+/** QQ群按钮 */
+@property (nonatomic, strong) UIButton *qqGroupBtn;
+/** QQ 群标签 */
+@property (nonatomic, strong) UILabel *qqGroupLabel;
 
 /** 评分星级 */
 @property (nonatomic, strong) NSMutableArray<UIImageView *> *stars;
@@ -64,6 +68,13 @@
     }
 }
 
+#pragma mark - method
+- (void)clickQQGroupBtn {
+    if (_qqGroup && _qqGroup.length != 0) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_qqGroup]];
+    }
+}
+
 #pragma mark - setter 
 /** 选择标签 */
 - (void)setBtnArray:(NSArray *)btnArray {
@@ -91,6 +102,17 @@
     }
 }
 
+- (void)setQqGroup:(NSString *)qqGroup {
+    if (qqGroup && qqGroup.length != 0) {
+        _qqGroup = qqGroup;
+        [self addSubview:self.qqGroupBtn];
+        [self addSubview:self.qqGroupLabel];
+    } else {
+        _qqGroup = nil;
+        [self.qqGroupLabel removeFromSuperview];
+        [self.qqGroupBtn removeFromSuperview];
+    }
+}
 
 
 #pragma mark - getter
@@ -198,6 +220,31 @@
         [_typeLabels addObject:label];
         [self addSubview:label];
     }
+}
+
+- (UILabel *)qqGroupLabel {
+    if (!_qqGroupLabel) {
+        _qqGroupLabel = [[UILabel alloc] init];
+        _qqGroupLabel.textAlignment = NSTextAlignmentCenter;
+        _qqGroupLabel.frame = CGRectMake((CGRectGetMaxX(self.sizeLabel.frame) + 8), (CGRectGetMaxY(self.gameNameLabel.frame) + 20), (kSCREEN_WIDTH - CGRectGetMaxX(self.sizeLabel.frame)  - 8), 20);
+        _qqGroupLabel.font = [UIFont systemFontOfSize:14];
+        _qqGroupLabel.text = @"玩家QQ群";
+    }
+    return _qqGroupLabel;
+}
+
+- (UIButton *)qqGroupBtn {
+    if (!_qqGroupBtn) {
+        _qqGroupBtn = [[UIButton alloc] init];
+        _qqGroupBtn.bounds = CGRectMake(0, 0, 30, 30);
+        _qqGroupBtn.center = CGPointMake(self.qqGroupLabel.center.x, 35);
+        [_qqGroupBtn setImage:[UIImage imageNamed:@"detail_qqGroup"] forState:(UIControlStateNormal)];
+        [_qqGroupBtn addTarget:self action:@selector(clickQQGroupBtn) forControlEvents:(UIControlEventTouchUpInside)];
+        
+//        _qqGroupBtn.backgroundColor = [UIColor blackColor];
+        
+    }
+    return _qqGroupBtn;
 }
 
 

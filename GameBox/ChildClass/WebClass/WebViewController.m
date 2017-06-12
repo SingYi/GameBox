@@ -38,6 +38,7 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [self.webView loadRequest:request];
     
+//    webURL = @"http://qm.qq.com/cgi-bin/qm/qr?k=9ueFqAZ5F1V6TUpWi5y29htTh68b_Bpa";
     url = [NSURL URLWithString:webURL];
     request = [NSURLRequest requestWithURL:url];
     [self.webView loadRequest:request];

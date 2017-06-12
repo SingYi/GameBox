@@ -194,7 +194,7 @@
         if (success && REQUESTSUCCESS) {
             self.gameinfo = content[@"data"][@"gameinfo"];
             
-//            syLog(@"%@",content[@"data"][@"gameinfo"]);
+            syLog(@"%@",content[@"data"][@"gameinfo"]);
 
             self.likes = content[@"data"][@"like"];
             
@@ -294,6 +294,9 @@
     self.detailHeader.sizeLabel.text = [NSString stringWithFormat:@"%@M",_gameinfo[@"size"]];
     [self.detailHeader.sizeLabel sizeToFit];
     
+    //设置 QQ 群
+    self.detailHeader.qqGroup = gameinfo[@"qq_group"];
+    
     //设置游戏轮播图
     self.gameDetail.imagasArray = gameinfo[@"imgs"];
     
@@ -311,14 +314,9 @@
     
     //gif
     self.gameDetail.gifUrl = gameinfo[@"gif"];
-    
-    syLog(@"%@",gameinfo[@"gif"]);
-    syLog(@"%@",gameinfo[@"gif_model"]);
-    
+
     //vip
     self.gameDetail.vip = gameinfo[@"vip"];
-    
-//    syLog(@"%@",gameinfo[@"vip"]);
     
     //是否收藏
     NSString *isCollection = gameinfo[@"collect"];

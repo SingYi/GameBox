@@ -47,6 +47,9 @@
 /**选择标签*/
 @property (nonatomic, strong) HomeHeader *selectView;
 
+/** QQ群 */
+@property (nonatomic, strong) NSString *qqGroup;
+
 @end
 
 

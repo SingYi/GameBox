@@ -19,7 +19,6 @@
 		B563A3BD1EC5958E007D4142 /* MyGamesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B563A3BB1EC5958E007D4142 /* MyGamesCell.xib */; };
 		B57C70E71ECE98D700C7DE60 /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B57C70E61ECE98D700C7DE60 /* TencentOpenAPI.framework */; };
 		B57C70F91ECEAB4900C7DE60 /* libPods-GameBox.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0830EB8A36A7F8F58E00C379 /* libPods-GameBox.a */; };
-		B57C71011ECEEA1A00C7DE60 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B57C71001ECEEA1A00C7DE60 /* Assets.xcassets */; };
 		B5816D5B1ED296B300E6149D /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B5816D5A1ED296B300E6149D /* libiconv.tbd */; };
 		B5816D5D1ED296C000E6149D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5816D5C1ED296C000E6149D /* SystemConfiguration.framework */; };
 		B5816D5F1ED296CB00E6149D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5816D5E1ED296CB00E6149D /* CoreGraphics.framework */; };
@@ -117,6 +116,7 @@
 		B5C5D4AC1EA073AA008A46DE /* StrategyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5C5D4AA1EA073AA008A46DE /* StrategyCell.xib */; };
 		B5C5D4B51EA078BF008A46DE /* ActivityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5C5D4B31EA078BF008A46DE /* ActivityCell.xib */; };
 		B5C5D4D61EA0B6B3008A46DE /* DetailTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5C5D4D41EA0B6B3008A46DE /* DetailTableCell.xib */; };
+		B5D28FEB1EEE6CB6009D282A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5D28FEA1EEE6CB6009D282A /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -211,7 +211,6 @@
 		B5691C461EC1B8E70094BE0F /* AFSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSecurityPolicy.h; sourceTree = "<group>"; };
 		B5691C471EC1B8E70094BE0F /* AFSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSecurityPolicy.m; sourceTree = "<group>"; };
 		B57C70E61ECE98D700C7DE60 /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
-		B57C71001ECEEA1A00C7DE60 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = SupportingFiles/Assets.xcassets; sourceTree = "<group>"; };
 		B57DB6DA1EB08E9B00A0D8A0 /* SearchResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultViewController.h; sourceTree = "<group>"; };
 		B57DB6DB1EB08E9B00A0D8A0 /* SearchResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultViewController.m; sourceTree = "<group>"; };
 		B5816D571ED289D900E6149D /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
@@ -294,6 +293,8 @@
 		B5C5D4E11EA0C60F008A46DE /* CustomLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomLayout.m; sourceTree = "<group>"; };
 		B5C70F251EA9EA920073FDA4 /* RecommentTableHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecommentTableHeader.h; sourceTree = "<group>"; };
 		B5C70F261EA9EA920073FDA4 /* RecommentTableHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecommentTableHeader.m; sourceTree = "<group>"; };
+		B5D28FE91EEE45DD009D282A /* Game185_ 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Game185_ 4.xcdatamodel"; sourceTree = "<group>"; };
+		B5D28FEA1EEE6CB6009D282A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = SupportingFiles/Assets.xcassets; sourceTree = "<group>"; };
 		B5E2C7FE1E9E0AB2002CEC61 /* ForgetPassWordView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForgetPassWordView.h; sourceTree = "<group>"; };
 		B5E2C7FF1E9E0AB2002CEC61 /* ForgetPassWordView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForgetPassWordView.m; sourceTree = "<group>"; };
 		B5E2C8001E9E0AB2002CEC61 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
@@ -390,9 +391,9 @@
 				B5691C391EC1B8230094BE0F /* AFNetWorking */,
 				B52C483B1ED96FBC0054174A /* FLAnimatedImageView */,
 				5E8DE54C1E9BD35A007E719D /* SupportingFiles */,
-				B57C71001ECEEA1A00C7DE60 /* Assets.xcassets */,
 				5E8DE53B1E9BD255007E719D /* LaunchScreen.storyboard */,
 				5E8DE5571E9BD3D2007E719D /* Info.plist */,
+				B5D28FEA1EEE6CB6009D282A /* Assets.xcassets */,
 				B506F26C1EC551B5005C1B2A /* Images.xcassets */,
 			);
 			path = GameBox;
@@ -973,8 +974,8 @@
 				B5C5D4B51EA078BF008A46DE /* ActivityCell.xib in Resources */,
 				B5824FB91EA05B6800966640 /* NewServerTableViewCell.xib in Resources */,
 				B59FEDC41E9CC97600A64D84 /* GiftBagCell.xib in Resources */,
+				B5D28FEB1EEE6CB6009D282A /* Assets.xcassets in Resources */,
 				B563A3BD1EC5958E007D4142 /* MyGamesCell.xib in Resources */,
-				B57C71011ECEEA1A00C7DE60 /* Assets.xcassets in Resources */,
 				B50FD1901EB314AB00CA5E85 /* GameDetailTableViewCell.xib in Resources */,
 				B59FEDBD1E9C8AF300A64D84 /* SearchCell.xib in Resources */,
 				B506F26D1EC551B5005C1B2A /* Images.xcassets in Resources */,
@@ -1324,11 +1325,12 @@
 		B5816E2F1ED422D100E6149D /* Game185.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				B5D28FE91EEE45DD009D282A /* Game185_ 4.xcdatamodel */,
 				B54C88761EE1196A0078B3E7 /* Game185_ 3.xcdatamodel */,
 				B58B6CD21ED689F600FF00FE /* Game185_2.xcdatamodel */,
 				B5816E301ED422D100E6149D /* Game185.xcdatamodel */,
 			);
-			currentVersion = B54C88761EE1196A0078B3E7 /* Game185_ 3.xcdatamodel */;
+			currentVersion = B5D28FE91EEE45DD009D282A /* Game185_ 4.xcdatamodel */;
 			path = Game185.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

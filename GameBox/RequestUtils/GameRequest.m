@@ -926,6 +926,11 @@
         game.gif = [NSString stringWithFormat:@"%@",dict[@"gif"]];
     }
     
+    NSString *qq_group = dict[@"qq_group"];
+    if (qq_group && qq_group.length != 0) {
+        game.qqGroup = qq_group;
+    }
+    
     game.gif_model = [NSString stringWithFormat:@"%@",dict[@"gif_model"]];
     
     NSError *error = nil;
@@ -1106,9 +1111,13 @@
     game.gameVsersion = [NSString stringWithFormat:@"%@",dict[@"version"]];
     
     if (game.gif) {
-        
         game.gif = [NSString stringWithFormat:@"%@",dict[@"gif"]];
     }
+    
+    if (game.qqGroup) {
+        game.qqGroup = [NSString stringWithFormat:@"%@",dict[@"qq_group"]];
+    }
+    
     game.gif_model = [NSString stringWithFormat:@"%@",dict[@"gif_model"]];
     
     
@@ -1140,6 +1149,7 @@
     [dict setObject:game.gameVsersion forKey:@"version"];
     
     [dict setObject:game.gif forKey:@"gif"];
+    [dict setObject:game.qqGroup forKey:@"qq_group"];
     [dict setObject:game.gif_model forKey:@"gif_model"];
 
 
